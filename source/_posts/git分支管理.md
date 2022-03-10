@@ -22,6 +22,18 @@ git push --set-upstream origin hexo --force
 
 hexo的_config.yml将分支设置为master，而整个文件夹设置为hexo分支，这样就可以实现多设备共同维护博客了。
 
+## 写完博客后
+
+```sh
+hexo g -d
+#后三组可以设置为一个sh脚本，随时执行
+git add .
+git commit -m "a new file"
+git push
+```
+
+
+
 ## .gitignore文件内容
 
 ```sh
