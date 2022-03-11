@@ -17,3 +17,15 @@ tags: [Android,逆向]
 - 请求权限
 - 过滤意图
 - 应用组件
+
+```
+ u'broadcastreceiverlist_com.google.ads.conversiontracking.installreceiver',
+ u'contentproviderlist_kr.co.smartstudy.sspatcher.ssinterprocessdataprovider$sscontentproviderimpl',
+ u'requestedpermissionlist_android.permission.change_network_state',
+ u'broadcastreceiverlist_.contact.service.synchronizationtask',
+ u'activitylist_com.cmm.worldartapk.activity.searchactivity',
+ u'requestedpermissionlist_com.google.android.providers.gsf.permission.read_gservices',
+ u'activitylist_.wxapi.wxentryactivity',
+ u'intentfilterlist_com.aio.apphypnotist.update_widget',
+```
+

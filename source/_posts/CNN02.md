@@ -4,6 +4,8 @@ date: 2022-03-07 20:43:22
 categories: 机器学习 #
 tags: [CNN]
 ---
+> [CNN_EXAMPLE](https://www.bilibili.com/video/BV1e54y1b7uk?p=10)
+
 ## 1. pooling layer
 
 >减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。
@@ -12,10 +14,12 @@ tags: [CNN]
 
 - f: filter size
 - s: stride
-- Max or average pooling
+- type:Max or average pooling
 - 用的很少的：p=0--padding
 
-一个确定的函数，手动输入或者交叉检验，不需要学习获得。
+这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。
+
+<!-- more -->
 
 <img src="CNN02/image-20220304145228545.png" alt="image-20220304145228545" style="zoom:50%;" />
 
@@ -26,6 +30,8 @@ tags: [CNN]
 近似于把高、宽均缩小了两倍以上；
 
 收集后的特征表明该特诊原来存在于原来的特征集合；没有收集到的表明特征可能不存在或者比较小。
+
+### 输出大小
 
 - Ouputsize: (n+2p-f)/s+1
 
@@ -46,12 +52,12 @@ Hyperparameter:
 
 ![image-20220304160534107](CNN02/image-20220304160534107.png)
 
-高、宽减小，而通道数增加。
+a随着层数的加深，高、宽减小，而通道数增加。
 ![image-20220304161730310](CNN02/image-20220304161730310.png)
 
 激活的输入量在减少。
 
-参数的计算
+### 参数的计算
 
 5*5的filter+1个bias=26；26x8=208;
 
@@ -75,5 +81,3 @@ Hyperparameter:
 
 
 
-
-https://www.bilibili.com/video/BV1e54y1b7uk?p=10

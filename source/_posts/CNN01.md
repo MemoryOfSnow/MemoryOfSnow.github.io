@@ -1,10 +1,10 @@
 ---
-title: CNN02
+title: CNN01
 date: 2022-03-07 20:43:22
 categories: 机器学习 #
 tags: [CNN]
 ---
-> https://www.bilibili.com/video/BV1e54y1b7uk?p=4
+> [吴恩达深度学习-卷积神经网络](https://www.bilibili.com/video/BV1e54y1b7uk?p=4)
 
 ## 1.介绍
 
@@ -24,6 +24,8 @@ image-->filter--->image
 nn.Conv2d#conv-forward
 ```
 
+<!-- more -->
+
 ### 垂直边缘检测器
 
 ![image-20220304135446332](CNN01/image-20220304135446332.png)
@@ -36,11 +38,11 @@ nn.Conv2d#conv-forward
 
 ### Pading
 
-f总是奇数，方便对称填充，有个特殊点。
+f(filter的长和宽）总是奇数，方便对称填充，有个特殊点。
 
-n+2p-f+1===n;
+n+2p-f+1===n; 使得Padding后的图形，在做卷积操作后的输出维度保持不变
 
-p=(f-1)/2
+此时p=(f-1)/2
 
 ## 3.Strided Convolution
 
