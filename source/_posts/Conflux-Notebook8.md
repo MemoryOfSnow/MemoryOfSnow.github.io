@@ -21,7 +21,7 @@ PoW(H)=MpEthash(H) ≡ MpEthash(KEC(RLP(H_{-n})),H_{n},d) ≡ KEC(s_{h} ◦ m_{c
 $$
 ![image-20201215161152365](Conflux-Notebook8/image-20201215161152365.png)
 
-
+<!--more-->
 
 其中，[RLP](http://www.memoryofsnow.xyz/2020/11/17/Conflux-Notebook4/)函数把区块头去除nonce部分**H-n**序列化为字节数组，之后用Keccak哈希算法求取值，与**nonce**（工作量证明的256位的值）和从H中推导出的**dataset**一道作为输入。
 

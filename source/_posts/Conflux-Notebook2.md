@@ -23,6 +23,8 @@ Conflux中的智能合约：
 
 接入存储（访问状态）的同时更有效的利用内存(delta tree)
 
+<!--more-->
+
 ## 2.对交易id的编码
 
 有效利用带宽进行交易广播（transaction relay protocol）

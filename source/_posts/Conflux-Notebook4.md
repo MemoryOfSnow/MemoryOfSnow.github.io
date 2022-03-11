@@ -29,6 +29,8 @@ Account=(αaddr,αstate)；**α**addr=4+公钥哈希值的大端排序的低位1
 
 ### 1.2 RLP structure
 
+<!--more-->
+
 对三种类型的数据的编码，最终都转化为对字节数组的编码；
 
 > 参考[以太坊黄页](https://ethereum.github.io/yellowpaper/paper.pdf)附录B

@@ -9,7 +9,7 @@
     {%- endif %}
   </div>
 {%- endif %}
-
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <div class="copyright">
   {% set copyright_year = date(null, 'YYYY') %}
   &copy; {% if theme.footer.since and theme.footer.since != copyright_year %}{{ theme.footer.since }} – {% endif %}
@@ -51,6 +51,7 @@
     {{- __('footer.powered', next_url('https://hexo.io', 'Hexo', {class: 'theme-link'}) + ' & ' + next_url(next_site, 'NexT.' + theme.scheme, {class: 'theme-link'})) }}
   </div>
 {%- endif %}
+<div class="powered-by">	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">		本站访客数:<span id="busuanzi_value_site_uv"></span>	</span></div>
 
 {%- if theme.add_this_id %}
   <div class="addthis_inline_share_toolbox">

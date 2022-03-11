@@ -18,6 +18,8 @@ tags: [Android,逆向]
 
 其他可选组件，jd-gui，dex2jar。
 
+<!--more-->
+
 ## 2.AndroidStduio开发工具
 
 提供AVD和SDK。

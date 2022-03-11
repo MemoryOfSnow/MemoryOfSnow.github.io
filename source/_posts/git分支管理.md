@@ -25,6 +25,8 @@ git checkout -b hexo
 
 hexo的_config.yml将分支设置为master，而整个文件夹设置为hexo分支，这样就可以实现多设备共同维护博客了。
 
+<!--more-->
+
 ## 写完博客后
 
 ```sh

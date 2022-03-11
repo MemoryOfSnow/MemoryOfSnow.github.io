@@ -21,5 +21,5 @@ tags: [OralEnglish,笔记]
 
 8.cushions the blow.把打击变得和缓（降维打击？？）
 
-
+<!--more-->
 

@@ -1,5 +1,5 @@
 ---
-title: about
+title: About
 date: 2022-02-08 22:01:56
 type: about
 ---

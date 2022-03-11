@@ -11,8 +11,9 @@ mathjax: true
 二分类算法；
 
 - image-->matrices-->feature vector-->{0,1}；
-
 - many images-->X-->Y；
+
+<!--more-->
 
 ## 1.Notation
 

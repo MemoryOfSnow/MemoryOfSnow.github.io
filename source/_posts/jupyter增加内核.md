@@ -23,6 +23,8 @@ C:\Users[用户名].jupyter\jupyter_notebook_config.py
 
 2.1 在python2下安装ipykernel
 
+<!--more-->
+
 ```bash
 python2 -m pip install ipykernel
 ```

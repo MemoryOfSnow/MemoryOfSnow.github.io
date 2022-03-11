@@ -8,6 +8,8 @@ tags: [sh脚本,mysql]
 
 服务器类型：SMP Debian 4.9.189-3+deb9u2 (2019-11-11) x86_64 GNU/Linux
 
+<!--more-->
+
 ```bash
 #下载对应的deb-bundle包
  wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-server_8.0.19-1debian9_amd64.deb-bundle.tar

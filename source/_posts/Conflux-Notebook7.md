@@ -19,6 +19,8 @@ tags: [Conflux]
 
 **25s以内，实际只有几秒，在confluxscan中甚至是1s中7个epoch。**
 
+<!--more-->
+
 > 为抵抗Dos攻击：瞬时释放大量的块。
 
 5.Conflux不使用flooding，而是SipHash(SHA3(Tx))+nonce。

@@ -28,6 +28,8 @@ $ cargo build --release
 
 468MB,git 34MB,clone repo 85.31MB.
 
+<!--more-->
+
 
 ---
 Windows,Too difficult to configure
@@ -134,6 +136,8 @@ error: failed to resolve patches for `https://github.com/rust-lang/crates.io-ind
 包含595个crates。Downloaded,Compile,
 
 #### 遇到问题4：找不到编译平台
+
+<!--more-->
 
 ```
 error: failed to run custom build command for `snappy-sys v0.1.0 (https://github.com/busyjay/rust-snappy.git?branch=static-link#8c12738b)`
