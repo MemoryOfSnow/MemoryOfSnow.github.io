@@ -1,8 +1,8 @@
 ---
 title: jupyter增加内核
 date: 2020-03-17 14:19:49
-categories: Python #Tools
-tags: [Jupyter,python]
+categories: Tools
+tags: [python,jupyter]
 ---
 
 在Python3下安装好jupyter后

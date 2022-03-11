@@ -1,8 +1,8 @@
 ---
 title: Conflux_rust_code13
 date: 2021-03-10 06:56:26
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 > 参考部分见https://developer.conflux-chain.org/docs/conflux-doc/docs/

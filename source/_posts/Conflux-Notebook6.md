@@ -1,8 +1,8 @@
 ---
 title: Conflux-Notebook6
 date: 2020-12-01 21:49:46
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 > 从12月起，这个命名格式用于保存老师提出的问题和解答

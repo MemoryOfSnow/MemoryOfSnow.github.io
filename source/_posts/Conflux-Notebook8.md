@@ -1,8 +1,8 @@
 ---
 title: Conflux-Notebook8
 date: 2020-12-15 22:38:32
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 > 本文参考[Conflux白皮书](https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf)，Conflux的安全性证明论文[GHAST](https://arxiv.org/abs/2006.01072)

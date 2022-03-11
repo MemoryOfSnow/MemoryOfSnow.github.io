@@ -1,8 +1,8 @@
 ---
 title: Conflux-Notebook3
 date: 2020-11-09 15:20:38
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 [TOC]

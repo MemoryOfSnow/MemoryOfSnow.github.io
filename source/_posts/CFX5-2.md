@@ -1,8 +1,8 @@
 ---
 title: CFX5-2
 date: 2020-11-28 22:59:42
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 本文参考文件为：[CFX黄皮书导读](https://blog.csdn.net/weixin_44282220/article/details/109759233)  

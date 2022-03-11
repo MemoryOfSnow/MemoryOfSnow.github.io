@@ -1,8 +1,8 @@
 ---
 title: Conflux-Notebook4
 date: 2020-11-17 15:20:38
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 > 本文参考文件为：[Conflux白皮书](https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf)，试图解决blockID的计算，并了解Conflux具体结构和数据。

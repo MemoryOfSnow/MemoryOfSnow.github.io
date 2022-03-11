@@ -1,8 +1,8 @@
 ---
 title: 根据deb-bundle安装MySQL
 date: 2020-03-17 14:19:49
-categories: 运维 #Mysql
-tags: [Linux,Mysql]
+categories: Linux #Mysql
+tags: [sh脚本,mysql]
 ---
 ## 根据deb-bundle安装MySQL
 

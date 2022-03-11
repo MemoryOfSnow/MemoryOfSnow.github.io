@@ -1,8 +1,8 @@
 ---
 title: md5加密
 date: 2020-03-17 14:19:49
-categories: Python #Code
-tags: [Crypt,python]
+categories: CTF #Code
+tags: [python,Crypt]
 ---
 
 

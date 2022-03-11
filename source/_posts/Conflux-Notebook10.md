@@ -1,8 +1,8 @@
 ---
 title: Conflux-Notebook10
 date: 2021-01-04 20:00:02
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 ```

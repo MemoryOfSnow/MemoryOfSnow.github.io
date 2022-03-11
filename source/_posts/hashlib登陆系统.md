@@ -1,9 +1,10 @@
 ---
 title: hashlib实现的登录系统
 date: 2020-03-17 14:19:49
-categories: Python #Code
-tags: [Crypt,python]
+categories: CTF #Code
+tags: [python,Crypt]
 ---
+```python
 import hashlib
 #hashlib简单使用
 def md5(arg):#这是加密函数，将传进来的函数加密
@@ -22,7 +23,7 @@ def register(user,pwd):#注册的时候把用户名和加密的密码写进文�
     with open('db','a',encoding='utf-8') as f:
         temp = user+'|'+md5(pwd)
         f.write(temp)
- 
+
 i=input('1表示登陆，2表示注册：')
 if i=='2':
     user = input('用户名：')
@@ -38,3 +39,5 @@ elif i=='1':
         print('登陆失败')
 else:
     print('系统不存在此功能模块')
+```
+

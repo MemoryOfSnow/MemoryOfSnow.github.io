@@ -1,8 +1,8 @@
 ---
 title: Conflux-Notebook7
 date: 2020-12-08 19:38:43
-categories: 笔记 #
-tags: [区块链]
+categories: 区块链 #
+tags: [Conflux]
 ---
 
 > 本文参考[A Decentralized Blockchain with High Throughput and Fast Confirmation](https://www.usenix.org/conference/atc20/presentation/li-chenxing)，7.15.2020

@@ -1,8 +1,8 @@
 ---
 title: Android_Rev01
 date: 2022-02-10 11:00:12
-categories: 安卓逆向 #
-tags: Android #
+categories: CTF #
+tags: [Android,逆向]
 ---
 
 ## App的特征

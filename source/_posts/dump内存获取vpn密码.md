@@ -1,7 +1,7 @@
 ---
 title: dump内存获取vpn密码
 date: 2020-03-01 14:19:49
-categories: 笔记 #try
+categories: CTF #try
 tags: [逆向]
 ---
 

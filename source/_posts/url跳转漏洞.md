@@ -1,8 +1,8 @@
 ---
 title: 常见的Bypass
 date: 2020-02-01 14:19:49
-categories: 网络安全 #笔记
-tags: [网络安全,笔记]
+categories: CTF
+tags: [Web]
 ---
 ## Bypass
 
