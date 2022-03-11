@@ -77,9 +77,7 @@ Web的Burpsuite、Wireshark、caidao；
 
 (3) **修改开源代码** | 修改Conflux的rust代码；在本地两部机器上共运行20个节点进行对比实验
 
-**成果：**
-
-毕业设计打分86分
+**成果：**毕业设计打分86分
 
 
 
@@ -87,7 +85,7 @@ Web的Burpsuite、Wireshark、caidao；
 
 时间：2022年2月至今
 
-内容：云主机安全+机器学习
+分属：网络安全部
 
 
 
@@ -95,4 +93,4 @@ Web的Burpsuite、Wireshark、caidao；
 
 Email:  2215489940@qq.com
 
-Github:  MemoryOfSnow
+Github:  [MemoryOfSnow](https://github.com/memoryofsnow)
