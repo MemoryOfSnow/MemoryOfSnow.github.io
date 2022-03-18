@@ -23,3 +23,22 @@ tags: [OralEnglish,笔记]
 
 <!--more-->
 
+9.Look out,kids!Cars are coming.
+
+10.That makes sense.那也对
+
+11.I don't have a lead.我还没有进展
+
+12.This is my week notice. 我正式辞职
+
+13.暴躁语录：Well ,you know what,Never mind!知道吗，算了！
+
+14.I don't mean to be so emotional.
+
+15.That's crap.(不要随便用) 胡扯
+
+16.Good going.做的好
+
+17.That's not how that was supposed to come out.本想安慰你，话说出来却变了味道。
+
+18.If there's two people like us trust each other,then there is no reason for jealous.
