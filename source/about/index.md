@@ -23,9 +23,9 @@ Web的Burpsuite、Wireshark、caidao；
 | 3.[Diary](../categories/Diary)                             | 一些分享的话；自己的豪言壮语                           |
 | 4.[Linux](../categories/Linux)                             | sh脚本、python、Linux命令；SystemTap；mysql；kali      |
 | 5.[Tools](../categories/Tools)                             | dos命令、一些工具的用法和安装流程记录、Windows一些玩法 |
-| 6.[区块链](../categories/区块链)                           | Conflux、Bitcoin、Ethereum                             |
-| 7.[机器学习](../categories/机器学习)                       | DL,CNN,RNN,LSTM,XGBoost,SVM,随机森林。                 |
-| 8.[笔记](../categories/笔记)                               | 笔记 ； 一些暂无分类的文件存放位置，之后会做归类处理   |
+| 6.[区块链](../categories/BlockChain)                       | Conflux、Bitcoin、Ethereum                             |
+| 7.[机器学习](../categories/ML)                             | DL,CNN,RNN,LSTM,XGBoost,SVM,随机森林。                 |
+| 8.[笔记](../categories/Notes)                              | 笔记 ； 一些暂无分类的文件存放位置，之后会做归类处理   |
 
 
 
