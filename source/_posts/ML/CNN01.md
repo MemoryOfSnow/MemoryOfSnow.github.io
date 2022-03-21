@@ -1,6 +1,6 @@
 ---
 title: CNN01
-date: 2022-03-07 20:43:22
+date: 2022-03-06 20:43:22
 categories: 机器学习 #
 tags: [CNN]
 ---

@@ -43,11 +43,11 @@ counter:
   tag_cloud:
     zero: No tags
     one: 1 tag in total
-    other: "%d tags in total"
+    other: Check These Tags! #"%d tags in total"
   categories:
     zero: No categories
     one: 1 category in total
-    other: "%d categories in total"
+    other: "博客共有以下 %d 个分类 "
   archive_posts:
     zero: No posts.
     one: 1 post.
@@ -61,11 +61,11 @@ search:
 cheers:
   um: Um..
   ok: OK
-  nice: Nice
+  nice: 加油哇
   good: Good
   great: Great
   excellent: Excellent
-keep_on: Keep on posting.
+keep_on: 每天进步一点点!
 symbol:
   comma: ", "
   period: ". "

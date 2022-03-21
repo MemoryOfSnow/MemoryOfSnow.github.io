@@ -48,17 +48,17 @@ counter:
   tag_cloud:
     zero: No tags
     one: 1 tag in total
-    other: "%d tags in total"
+    other: Check These Tags!
 
   categories:
     zero: No categories
     one: 1 category in total
-    other: "%d categories in total"
+    other: "博客共有以下 %d 个分类 "
 
   archive_posts:
     zero: No posts.
     one: 1 post.
-    other: "%d posts in total."
+    other: "进度：(%d/70)。" #"%d posts in total."
 
 state:
   posts: posts
@@ -71,12 +71,12 @@ search:
 cheers:
   um: Um..
   ok: OK
-  nice: Nice
-  good: Good
-  great: Great
-  excellent: Excellent
+  nice: 加油哇
+  good: 你可以的
+  great: 太棒了
+  excellent: 起飞
 
-keep_on: Keep on posting.
+keep_on: 好好干!
 
 symbol:
   comma: ", "
