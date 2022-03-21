@@ -14,7 +14,7 @@ timezone: ''
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://blueinyou.com
-permalink: :year/:month/:day/:title/
+permalink: categories/:title/ #:year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -66,8 +66,19 @@ index_generator:
   order_by: -date
 
 # Category & Tag
-default_category: uncategorized
-category_map:
+default_category: '笔记' #uncategorized
+category_map: 
+  '算法': Algo
+  '区块链': BlockChain
+  'CTF': CTF
+  '日记': Diary
+  'Linux': Linux
+  '机器学习': ML
+  '笔记' : Notes
+  '工具': Tools
+  
+  
+
 tag_map:
 
 # Metadata elements
