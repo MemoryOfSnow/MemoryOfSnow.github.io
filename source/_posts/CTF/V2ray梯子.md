@@ -8,16 +8,15 @@ tags: [Web]
 ```sh
 ssh -t root@149.28.228.xxx
 // 安裝執行檔和 .dat 資料檔
-bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 ```
 
 
 
-
+>https://www.bokezhu.com/2019/12/28/521.html
 
 ```sh
-wget https://github.com/v2fly/v2ray-examples/blob/master/VMess-TCP/config_server.json
-cp -rf config_server.json /usr/local/etc/v2ray/config.json
+curl blueinyou.com/photos/server_config.txt
+cp -rf server_config.txt /usr/local/etc/v2ray/config.json
 vim /usr/local/etc/v2ray/config.json
 
 ```
