@@ -58,7 +58,7 @@ counter:
   archive_posts:
     zero: No posts.
     one: 1 post.
-    other: "进度：(%d/70)。" #"%d posts in total."
+    other: "进度：(%d/100)。" #"%d posts in total."
 
 state:
   posts: posts

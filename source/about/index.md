@@ -18,7 +18,7 @@ Web的Burpsuite、Wireshark、caidao；
 
 | 目录                                                       | 标签                                                   |
 | :--------------------------------------------------------- | :----------------------------------------------------- |
-| 1.[Algorithm](https://blueinyou.com/categories/Algorithm/) | 算法；pitia题库；leetcode  (Code)                      |
+| 1.[Algorithm](https://blueinyou.com/categories/Algorit hm/) | 算法；pitia题库；leetcode  (Code)                      |
 | 2.[CTF](https://blueinyou.com/categories/CTF/)             | 逆向 、Android ；Web； Misc ；CVE； Crypt   密码学     |
 | 3.[Diary](../categories/Diary)                             | 一些分享的话；自己的豪言壮语                           |
 | 4.[Linux](../categories/Linux)                             | sh脚本、python、Linux命令；SystemTap；mysql；kali      |
