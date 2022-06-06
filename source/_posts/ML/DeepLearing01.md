@@ -47,6 +47,20 @@ Y.shape
 
 ![sigmoid_demo](DeepLearing01/sigmoid_demo.png)
 
+### **tanh**
+
+过原点的单调递增曲线，值域为[-1,1]
+
+![img](DeepLearing01/756575ff6707586237e253a65d751d21.svg)
+
+> [激活函数](https://m.thepaper.cn/baijiahao_11444171)
+
+和Sigmoid对比：
+
+![img](DeepLearing01/445.jpg)
+
+
+
 ### Relu激活函数
 
 <img src="DeepLearing01/image-20220311151441590.png" alt="image-20220311151441590" style="zoom:50%;" />
