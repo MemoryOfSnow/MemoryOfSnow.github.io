@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从12月起，这个命名格式用于保存老师提出的问题和解答  12345678910110.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。1.确认一个块，等待多少个epoch，是6吗？这个时候的安全性是多少。2.每笔交易大小3.安全性系数出自哪篇论文4.生成一个epoch的时间是多久？5.矿工打包时做的具体校验工作6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conflux-Notebook6">
+<meta property="og:url" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="从12月起，这个命名格式用于保存老师提出的问题和解答  12345678910110.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。1.确认一个块，等待多少个epoch，是6吗？这个时候的安全性是多少。2.每笔交易大小3.安全性系数出自哪篇论文4.生成一个epoch的时间是多久？5.矿工打包时做的具体校验工作6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。7">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202094455038.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202094148217.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202093426906.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202092756596.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202021925446.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202022253862.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202020612334.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202011524602.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202023837225.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202023851441.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202023913682.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202100114341.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202101315384.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202101505099.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202105603490.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202100850831.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202103702559.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202103640188.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202095643119.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202104438932.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202100229180.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202100659174.png">
+<meta property="article:published_time" content="2020-12-01T13:49:46.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.283Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Conflux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/image-20201202094455038.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Conflux-Notebook6 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Conflux-Notebook6
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-12-01 21:49:46" itemprop="dateCreated datePublished" datetime="2020-12-01T21:49:46+08:00">2020-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BlockChain/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>从12月起，这个命名格式用于保存老师提出的问题和解答</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">0.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。</span><br><span class="line">1.确认一个块，等待多少个epoch，是6吗？这个时候的安全性是多少。</span><br><span class="line">2.每笔交易大小</span><br><span class="line">3.安全性系数出自哪篇论文</span><br><span class="line">4.生成一个epoch的时间是多久？</span><br><span class="line">5.矿工打包时做的具体校验工作</span><br><span class="line">6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。</span><br><span class="line">7.cfx的一个块的广播时间，指的是它被多少比例的节点收到。</span><br><span class="line">8.块怎么算无效，无效怎么办</span><br><span class="line">9.一个代码的合约里，一个交易是多大。</span><br><span class="line">10.保留哪些块，丢了哪些块。</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">0.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。</span><br><span class="line">1.确认一个块，等待多少个epoch，是6吗？这个时候的安全性是多少，证明过程。</span><br><span class="line"></span><br><span class="line">2.每笔交易大小</span><br><span class="line">3.安全性系数出自哪篇论文</span><br><span class="line">4.生成一个epoch的时间是多久，一个block是0.25s，大概包括1500笔交易，更具体？</span><br><span class="line">5.矿工打包时做的具体校验工作</span><br><span class="line">6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。</span><br><span class="line">7.cfx的一个块的广播时间，指的是它被多少比例的节点收到。</span><br><span class="line">8.块怎么算无效，无效怎么办</span><br><span class="line">9.一个代码的合约里，一个交易是多大。</span><br><span class="line">10.id到底是怎么确立的？</span><br><span class="line">11.保留哪些块，丢了哪些块，先不看数学证明。回答：不删除无效块。</span><br><span class="line">其中，2和9可以合并；</span><br><span class="line">0和8、11有关联，问题4、10未解决</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>主要参考Conflux Specification中的第四章,以及[A Decentralized Blockchain with High Throughput and Fast Confirmation]</p>
+</blockquote>
+<p>[TOC]</p>
+<h2 id="0-延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。"><a href="#0-延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。" class="headerlink" title="0.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。"></a>0.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。</h2><p>矿工奖励包括<strong>区块奖励</strong>和<strong>交易奖励</strong>+<strong>存储维护奖励</strong>（存储押金的利息）</p>
+<script type="math/tex; mode=display">
+区块奖励 = 基础区块奖励 × （1 – 惩罚系数）</script><p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202094455038.png" alt="image-20201202094455038"></p>
+<p>1.基础区块奖励的数值由 Conflux 系统生成的总区块数量确定。系统运行时间越长，基础区块奖励越低。</p>
+<p>2.惩罚系数由<strong>光锥外区块数</strong>决定。</p>
+<p>Conflux不希望看到，由于激励机制没有对未遂的攻击行为做出任何惩罚，导致矿工随意违反共识规则甚至尝试发起攻击。惩罚传播不及时的区块——无论这个区块是生成以后<strong>没有被及时广播</strong>，还是生成的时候故意<strong>无视</strong>了一部分已经收到的区块。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202094148217.png" alt="image-20201202094148217"></p>
+<p>3.<strong>交易奖励</strong>+<strong>存储维护奖励</strong>的总思路：<strong>整体计算，按比例分发。</strong></p>
+<p>每个 epoch 中所有产生的存储押金利息，将在同 epoch 的区块之间，以各区块的基础奖励为权重平分。也就是说，如果一个区块受到了来自光锥外区块的惩罚，这个惩罚同样会影响它第二部分存储抵押利息奖励的分配。</p>
+<p>对于交易奖励和存储维护奖励，无效交易被忽略、被跳过，在相同块中的其他交易可以仍然有效。而在以太坊中，无效交易导致整个块无效。</p>
+<p>T被首次成功执行时，T被分发给EPOCHi（交易T被首次执行时的epoch）中所有合适地包括了T的块。T <em>∈</em> B and B belongs to EPOCH<em>i</em></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202093426906.png" alt="image-20201202093426906"></p>
+<p>T的分发根据B’在epochB中的基础块收益占比计算。</p>
+<ul>
+<li><p>冲突和重复执行的交易在最后总排序后丢弃即可。</p>
+<p>对于存储维护奖励，这和基础奖励有关。和这个块的块奖励占这个块所处epoch的的奖励比例有关。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202092756596.png" alt="image-20201202092756596"></p>
+</li>
+</ul>
+<h2 id="1-0-25-s一个块，300KB的最大块限制下，确认一个块，等待多少个epoch？"><a href="#1-0-25-s一个块，300KB的最大块限制下，确认一个块，等待多少个epoch？" class="headerlink" title="1.0.25 s一个块，300KB的最大块限制下，确认一个块，等待多少个epoch？"></a>1.0<em>.</em>25 s一个块，300KB的最大块限制下，确认一个块，等待多少个epoch？</h2><p>等待一个权重差，或者慢确认下的6个块，不等epoch。</p>
+<p>确认策略：</p>
+<p>获得和区块链中等6个块同样的安全性。</p>
+<ul>
+<li><p>相应子树的总权重比其同级兄弟的所有子树大一个系数；这个系数根据协议状态，不是预设的。在实验中，采取的是20~30；</p>
+</li>
+<li><p>如果在慢确认体制下，等6个大权重的块。</p>
+</li>
+</ul>
+<p>确认时间影响因素：带宽、节点数、出块速度（出块间隔）、块大小。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202021925446.png" alt="image-20201202021925446"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202022253862.png" alt="image-20201202022253862"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202020612334.png" alt="image-20201202020612334"></p>
+<p>当T被执行的第一个块最终确认时，一个交易被最终确认。充分不必要条件</p>
+<ul>
+<li><p>反过来，一个交易可能早于T被执行的第一个块的确认。例如：交易T的执行不会影响到pivot chain的协商时。更具体的，在竞争的块里不存在与T相矛盾的或者依赖于T的交易。</p>
+</li>
+<li><p>第一个包含T的块被最终确认是不充分条件，因为<strong>Conflux允许无效交易？</strong></p>
+</li>
+</ul>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202011524602.png" alt="image-20201202011524602"></p>
+<p><strong>例如，确认epochB里的B’时，对B‘的最终确认归纳为对B的确认。</strong></p>
+<p>前提假设，实验结论：</p>
+<p>1.t时刻块生成，那么d=10s后所有诚实节点收到块，没有收到块的被认为是恶意节点。</p>
+<p>2.早于B的pivot chain上的块已经被确认。</p>
+<p>3.在2d的时间，也就是20s以前C就已经在pivot chain了  ？？？这一步是为什么？</p>
+<p>没有攻击存在(q&lt;=0.2)时，快确认阶段，即自从A创建后，在P(B)=A的子树上的8000个块的产生过程中，GHAST的权重调整未激活。</p>
+<p>一种简化的风险计算方法，这种方法得到的确认时间值比真实值更长。</p>
+<p>-</p>
+<h4 id="2018年8月论文数据，"><a href="#2018年8月论文数据，" class="headerlink" title="2018年8月论文数据，"></a>2018年8月论文数据，</h4><p> 40M带宽下， 4.5-7.4 minutes确认交易。一个块4MB，2.5s,q&lt;0.25，攻击者有小于0.01%的概率逆转交易时，平均5.68分钟确认一笔交易。5.76GB/h=1.6MB/s；</p>
+<p>4M/5s时，2.88GB/h ， 3200bps，平均10分钟确认一个块。</p>
+<p>当改为4M/10s时，2W用户下，确认时间&lt;10.7分钟；720MB/h，780bps;</p>
+<h4 id="2020年4月论文数据，"><a href="#2020年4月论文数据，" class="headerlink" title="2020年4月论文数据，"></a>2020年4月论文数据，</h4><p>20Mbps，</p>
+<p><strong>300KB×4block/s，9.6Mbps的数据量，23s的延迟，47.75-51.54 s的确认速度</strong>，即在一分钟以内</p>
+<p>1392，3480bps</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202023837225.png" alt="image-20201202023837225"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202023851441.png" alt="image-20201202023851441"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202023913682.png" alt="image-20201202023913682">想·</p>
+<h3 id="New-Question-Conflux允许无效交易？"><a href="#New-Question-Conflux允许无效交易？" class="headerlink" title="New Question Conflux允许无效交易？"></a>New Question <strong>Conflux允许无效交易？</strong></h3><p>获得不可逆信心需要的<code>等待时间</code>，<code>攻击者掌握算力</code>和<code>用户愿意承受风险</code>三者之间的关系。</p>
+<ul>
+<li>随时间降低，但是&gt;0</li>
+<li></li>
+</ul>
+<h2 id="2-每笔交易大小"><a href="#2-每笔交易大小" class="headerlink" title="2.每笔交易大小"></a>2.每笔交易大小</h2><p>平均每笔250bytes；6400bps的由来；</p>
+<p>Conflux 创建的合约代码上限是 49152 字节=48KB  &lt;200KB的块（336bytes会被块头占用）大小，比以太坊多一倍。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202100114341.png" alt="image-20201202100114341"></p>
+<h2 id="3-安全系数的由来"><a href="#3-安全系数的由来" class="headerlink" title="3.安全系数的由来"></a>3.安全系数的由来</h2><p>安全性系数 = 平均生成一个区块的时间 / 区块广播时间。</p>
+<p><strong>安全性系数</strong>出自 Rafael Pass, Lior Seeman, and Abhi Shelat. “Analysis of the Blockchain Protocol in Asynchronous Networks.” EUROCRYPT 2017.</p>
+<p><a target="_blank" rel="noopener" href="https://link.springer.com/content/pdf/10.1007%2F978-3-319-56614-6_22.pdf">论文下载链接</a></p>
+<h2 id="4-生成一个epoch的时间是多久，一个block是0-25s，大概包括1500笔交易，更具体？"><a href="#4-生成一个epoch的时间是多久，一个block是0-25s，大概包括1500笔交易，更具体？" class="headerlink" title="4.生成一个epoch的时间是多久，一个block是0.25s，大概包括1500笔交易，更具体？"></a>4.生成一个epoch的时间是多久，一个block是0.25s，大概包括1500笔交易，更具体？</h2><h2 id="5-块的具体校验工作"><a href="#5-块的具体校验工作" class="headerlink" title="5.块的具体校验工作"></a>5.块的具体校验工作</h2><p>块的校验有4种结果：悬挂状态（部分无效和TimerDis(B;<strong>G</strong>) <em>&lt;</em> 240，），接受，拒绝，待定（引用的块还没出现）。</p>
+<blockquote>
+<p>引入计时器链，估计过去的时间。直观地讲，计时器链是（如果块生成速度较慢或等效地仅考虑高质量块时）   将生成的最长链。</p>
+<p>B成为timer block条件：本身是完全有效的块+QUALITY(B) <em>≥</em> 180 <em>·</em>Bd</p>
+</blockquote>
+<p>块通过工作量证明校验和引用块校验（等待所有过去的块被执行）后，就赋给它权重。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202101315384.png" alt="image-20201202101315384"></p>
+<p>其中，<img src="/categories/BlockChain/Conflux-Notebook6/image-20201202101505099.png" alt="image-20201202101505099"></p>
+<p>校验有4个部分：校验步骤可调换可并发</p>
+<h3 id="1-校验块头"><a href="#1-校验块头" class="headerlink" title="1.校验块头"></a>1.校验块头</h3><p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202105603490.png" alt="image-20201202105603490"></p>
+<p>校验块时没被校验的四个域在blaming机制中被校验。对无须状态的承诺的责备，会导致失去奖励，不会影响块的有效性。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202100850831.png" alt="image-20201202100850831"></p>
+<h3 id="2-引用的块的校验"><a href="#2-引用的块的校验" class="headerlink" title="2.引用的块的校验"></a>2.引用的块的校验</h3><h3 id="3-容量-块大小校验"><a href="#3-容量-块大小校验" class="headerlink" title="3.容量/块大小校验"></a>3.容量/块大小校验</h3><h3 id="4-块头与交易一致-每个交易本地合法（形式审查）"><a href="#4-块头与交易一致-每个交易本地合法（形式审查）" class="headerlink" title="4.块头与交易一致+每个交易本地合法（形式审查）"></a>4.块头与交易一致+每个交易本地合法（形式审查）</h3><p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202103702559.png" alt="image-20201202103702559"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202103640188.png" alt="image-20201202103640188"></p>
+<h2 id="6-cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。"><a href="#6-cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。" class="headerlink" title="6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。"></a>6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。</h2><p>20Mbps+，NKU的网速大致是10Mbps。</p>
+<p>采取了短ID， 对于交易的SHA-3值做SipHash，得到一个3位长值再加一个1位的nonce。</p>
+<p>具体参考CFX5-3\交易转发中的带宽优化。</p>
+<p>Aumasson JP. and Bernstein D.J. Siphash: Afast short-input prf. <em>Progress in Cryptology - IN**DOCRYPT</em>, 2012.</p>
+<h2 id="7-cfx的一个块的广播时间，指的是它被多少比例的节点收到。"><a href="#7-cfx的一个块的广播时间，指的是它被多少比例的节点收到。" class="headerlink" title="7.cfx的一个块的广播时间，指的是它被多少比例的节点收到。"></a>7.cfx的一个块的广播时间，指的是它被多少比例的节点收到。</h2><p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202095643119.png" alt="image-20201202095643119"></p>
+<p>d大约20s左右，到达50的节点不足10s。</p>
+<p><strong>d指全部的块到达大于99%的节点；</strong></p>
+<p>每个全节点，平均有10个邻居。</p>
+<h2 id="8-有效、部分有效和无效"><a href="#8-有效、部分有效和无效" class="headerlink" title="8.有效、部分有效和无效"></a>8.有效、部分有效和无效</h2><h3 id="8-1-通过所有校验就有效"><a href="#8-1-通过所有校验就有效" class="headerlink" title="8.1 通过所有校验就有效"></a>8.1 通过所有校验就有效</h3><h3 id="8-2-部分有效"><a href="#8-2-部分有效" class="headerlink" title="8.2 部分有效"></a>8.2 部分有效</h3><p>两种情况：P(B)部分有效；B的Header除了下面的这些项外，通过了对header的所有校验：    </p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202104438932.png" alt="image-20201202104438932"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202100229180.png" alt="image-20201202100229180"></p>
+<p>H是否有效只与块总顺序共识的建立有关，不依赖</p>
+<p><strong>deferredStateRoot, deferredReceiptsRoot, deferredLogsBloomHash and blame</strong></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook6/image-20201202100659174.png" alt="image-20201202100659174"></p>
+<h3 id="8-3-无效是指没有通过4步校验，将被丢弃"><a href="#8-3-无效是指没有通过4步校验，将被丢弃" class="headerlink" title="8.3 无效是指没有通过4步校验，将被丢弃"></a>8.3 无效是指没有通过4步校验，将被丢弃</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Conflux/" rel="tag"># Conflux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/CFX5-3/" rel="prev" title="CFX5-3">
+      <i class="fa fa-chevron-left"></i> CFX5-3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/Conflux-Notebook7/" rel="next" title="Conflux-Notebook7">
+      Conflux-Notebook7 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E5%BB%B6%E8%BF%9F%E6%89%A7%E8%A1%8C%EF%BC%8C%E5%AF%BC%E8%87%B4%E7%9F%BF%E5%B7%A5%E6%89%93%E5%8C%85%E8%80%81%E9%BC%A0%E5%B1%8E%EF%BC%8C%E8%BF%99%E4%B8%AA%E6%97%B6%E5%80%99%E7%9A%84%E7%9F%BF%E5%B7%A5%E5%A5%96%E5%8A%B1%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">0.延迟执行，导致矿工打包老鼠屎，这个时候的矿工奖励。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-0-25-s%E4%B8%80%E4%B8%AA%E5%9D%97%EF%BC%8C300KB%E7%9A%84%E6%9C%80%E5%A4%A7%E5%9D%97%E9%99%90%E5%88%B6%E4%B8%8B%EF%BC%8C%E7%A1%AE%E8%AE%A4%E4%B8%80%E4%B8%AA%E5%9D%97%EF%BC%8C%E7%AD%89%E5%BE%85%E5%A4%9A%E5%B0%91%E4%B8%AAepoch%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">1.0.25 s一个块，300KB的最大块限制下，确认一个块，等待多少个epoch？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2018%E5%B9%B48%E6%9C%88%E8%AE%BA%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%8C"><span class="nav-number">2.0.1.</span> <span class="nav-text">2018年8月论文数据，</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2020%E5%B9%B44%E6%9C%88%E8%AE%BA%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%8C"><span class="nav-number">2.0.2.</span> <span class="nav-text">2020年4月论文数据，</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#New-Question-Conflux%E5%85%81%E8%AE%B8%E6%97%A0%E6%95%88%E4%BA%A4%E6%98%93%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">New Question Conflux允许无效交易？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%AF%8F%E7%AC%94%E4%BA%A4%E6%98%93%E5%A4%A7%E5%B0%8F"><span class="nav-number">3.</span> <span class="nav-text">2.每笔交易大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%89%E5%85%A8%E7%B3%BB%E6%95%B0%E7%9A%84%E7%94%B1%E6%9D%A5"><span class="nav-number">4.</span> <span class="nav-text">3.安全系数的由来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAepoch%E7%9A%84%E6%97%B6%E9%97%B4%E6%98%AF%E5%A4%9A%E4%B9%85%EF%BC%8C%E4%B8%80%E4%B8%AAblock%E6%98%AF0-25s%EF%BC%8C%E5%A4%A7%E6%A6%82%E5%8C%85%E6%8B%AC1500%E7%AC%94%E4%BA%A4%E6%98%93%EF%BC%8C%E6%9B%B4%E5%85%B7%E4%BD%93%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">4.生成一个epoch的时间是多久，一个block是0.25s，大概包括1500笔交易，更具体？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%9D%97%E7%9A%84%E5%85%B7%E4%BD%93%E6%A0%A1%E9%AA%8C%E5%B7%A5%E4%BD%9C"><span class="nav-number">6.</span> <span class="nav-text">5.块的具体校验工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A0%A1%E9%AA%8C%E5%9D%97%E5%A4%B4"><span class="nav-number">6.1.</span> <span class="nav-text">1.校验块头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BC%95%E7%94%A8%E7%9A%84%E5%9D%97%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="nav-number">6.2.</span> <span class="nav-text">2.引用的块的校验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%B9%E9%87%8F-%E5%9D%97%E5%A4%A7%E5%B0%8F%E6%A0%A1%E9%AA%8C"><span class="nav-number">6.3.</span> <span class="nav-text">3.容量&#x2F;块大小校验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%9D%97%E5%A4%B4%E4%B8%8E%E4%BA%A4%E6%98%93%E4%B8%80%E8%87%B4-%E6%AF%8F%E4%B8%AA%E4%BA%A4%E6%98%93%E6%9C%AC%E5%9C%B0%E5%90%88%E6%B3%95%EF%BC%88%E5%BD%A2%E5%BC%8F%E5%AE%A1%E6%9F%A5%EF%BC%89"><span class="nav-number">6.4.</span> <span class="nav-text">4.块头与交易一致+每个交易本地合法（形式审查）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-cfx%E5%AF%B9%E5%BA%95%E5%B1%82%E7%BD%91%E7%BB%9C%E5%B8%A6%E5%AE%BD%E7%9A%84%E8%A6%81%E6%B1%82%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%8E%E5%B8%A6%E5%AE%BD%E8%BF%98%E8%83%BD%E8%8E%B7%E5%BE%97%E9%AB%98tps%EF%BC%8C%E5%9C%A8%E4%BF%9D%E8%AF%81%E5%AE%89%E5%85%A8%E6%80%A7%E7%9A%84%E5%90%8C%E6%97%B6%E3%80%82"><span class="nav-number">7.</span> <span class="nav-text">6.cfx对底层网络带宽的要求，为什么低带宽还能获得高tps，在保证安全性的同时。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-cfx%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%97%E7%9A%84%E5%B9%BF%E6%92%AD%E6%97%B6%E9%97%B4%EF%BC%8C%E6%8C%87%E7%9A%84%E6%98%AF%E5%AE%83%E8%A2%AB%E5%A4%9A%E5%B0%91%E6%AF%94%E4%BE%8B%E7%9A%84%E8%8A%82%E7%82%B9%E6%94%B6%E5%88%B0%E3%80%82"><span class="nav-number">8.</span> <span class="nav-text">7.cfx的一个块的广播时间，指的是它被多少比例的节点收到。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E6%9C%89%E6%95%88%E3%80%81%E9%83%A8%E5%88%86%E6%9C%89%E6%95%88%E5%92%8C%E6%97%A0%E6%95%88"><span class="nav-number">9.</span> <span class="nav-text">8.有效、部分有效和无效</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E9%80%9A%E8%BF%87%E6%89%80%E6%9C%89%E6%A0%A1%E9%AA%8C%E5%B0%B1%E6%9C%89%E6%95%88"><span class="nav-number">9.1.</span> <span class="nav-text">8.1 通过所有校验就有效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E9%83%A8%E5%88%86%E6%9C%89%E6%95%88"><span class="nav-number">9.2.</span> <span class="nav-text">8.2 部分有效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-%E6%97%A0%E6%95%88%E6%98%AF%E6%8C%87%E6%B2%A1%E6%9C%89%E9%80%9A%E8%BF%874%E6%AD%A5%E6%A0%A1%E9%AA%8C%EF%BC%8C%E5%B0%86%E8%A2%AB%E4%B8%A2%E5%BC%83"><span class="nav-number">9.3.</span> <span class="nav-text">8.3 无效是指没有通过4步校验，将被丢弃</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="12340.比特币的安全性证明1.ethash基本原理，2.ETH的工作量证明3.CFX,ETH的POW基本介绍 [TOC] 术语统一： T0 至 T2 的时间一般是秒级，TPS 跑满时，CFX的T2 到 T3 的时间间隔也会在 1 分钟以内。 延迟包括：块确认延迟（指T3到T5），交易确认延迟（比特币中和块确认延迟一致，但是CFX中是延迟确认），块广播延迟，交易广播延迟。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conflux-Notebook10">
+<meta property="og:url" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="12340.比特币的安全性证明1.ethash基本原理，2.ETH的工作量证明3.CFX,ETH的POW基本介绍 [TOC] 术语统一： T0 至 T2 的时间一般是秒级，TPS 跑满时，CFX的T2 到 T3 的时间间隔也会在 1 分钟以内。 延迟包括：块确认延迟（指T3到T5），交易确认延迟（比特币中和块确认延迟一致，但是CFX中是延迟确认），块广播延迟，交易广播延迟。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105160925258.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210104212023255.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/Users/Paul%20C/AppData/Roaming/Typora/typora-user-images/image-20210314155146330.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210104213135965.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105163821401.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210104214708081.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105164808430.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105193713220.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105192907470.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105193214798.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105205133543.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105205152469.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105205355278.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105205913808.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105201701509.png">
+<meta property="article:published_time" content="2021-01-04T12:00:02.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.252Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Conflux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/image-20210105160925258.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Conflux-Notebook10 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Conflux-Notebook10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 20:00:02" itemprop="dateCreated datePublished" datetime="2021-01-04T20:00:02+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BlockChain/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0.比特币的安全性证明</span><br><span class="line">1.ethash基本原理，</span><br><span class="line">2.ETH的工作量证明</span><br><span class="line">3.CFX,ETH的POW基本介绍</span><br></pre></td></tr></table></figure>
+<p>[TOC]</p>
+<h2 id="术语统一："><a href="#术语统一：" class="headerlink" title="术语统一："></a>术语统一：</h2><p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105160925258.png" alt="image-20210105160925258" style="zoom:50%;"></p>
+<p>T0 至 T2 的时间一般是<strong>秒级</strong>，TPS 跑满时，CFX的T2 到 T3 的时间间隔也会在 1 分钟以内。</p>
+<p>延迟包括：块确认延迟（指T3到T5），交易确认延迟（比特币中和块确认延迟一致，但是CFX中是延迟确认），块广播延迟，交易广播延迟。</p>
+<span id="more"></span>
+<p><strong>GHAST这篇论文数学性太强，太抽象，无法看懂，还是以CFX的黄皮书为准进行研究。</strong></p>
+<h2 id="0-比特币安全性证明"><a href="#0-比特币安全性证明" class="headerlink" title="0.比特币安全性证明"></a>0.比特币安全性证明</h2><p>为什么比特币确认交易时等待6个块就足够安全？</p>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="http://bitcoin.org/bitcoin.pdf">《Bitcoin: A Peer-to-Peer Electronic Cash System》</a>第11节</p>
+</blockquote>
+<h3 id="0-1二项随机漫步"><a href="#0-1二项随机漫步" class="headerlink" title="0.1二项随机漫步"></a>0.1二项随机漫步</h3><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/fireguard/article/details/16111603">https://blog.csdn.net/fireguard/article/details/16111603</a></p>
+</blockquote>
+<h3 id="0-2-赌徒破产问题"><a href="#0-2-赌徒破产问题" class="headerlink" title="0.2 赌徒破产问题"></a>0.2 赌徒破产问题</h3><blockquote>
+</blockquote>
+<p>诚实节点和攻击节点是互斥的，每10分钟只能有其中之一节点发现一个区块，即使他们可能在两个分叉上。</p>
+<h3 id="Nakamoto共识机制的前提预设"><a href="#Nakamoto共识机制的前提预设" class="headerlink" title="Nakamoto共识机制的前提预设"></a>Nakamoto共识机制的前提预设</h3><ul>
+<li><p>诚实节点不接受包含无效交易的块，即块一旦包含无效交易，则这个块也无效</p>
+</li>
+<li><p>攻击者与诚实者的链的竞争可以用二项随机漫步（ Binomial Random Walk）来刻画，成功事件为诚实链lead+1,失败事件为攻击者链加1，即gap-1。</p>
+</li>
+<li><p>攻击者赶上诚实者链长等价为赌徒破产问题(Gambler’s Ruin Problem)。</p>
+</li>
+<li>攻击者产生下一个块的概率为q,诚实节点找到下一个块的概率为p,p&gt;q，否则攻击者的链肯定能赶上诚实者的链。</li>
+<li>假设首个包含交易的块出现后，z个块链接其后。</li>
+<li>设事件X|Y,为落后z个块后，攻击者赶上的概率为：<ul>
+<li><img src="/categories/BlockChain/Conflux-Notebook10/image-20210104212023255.png" alt="image-20210104212023255"></li>
+</ul>
+</li>
+</ul>
+<h3 id="攻击办法"><a href="#攻击办法" class="headerlink" title="攻击办法"></a>攻击办法</h3><p>交易发起者即为攻击者，在收款人产生新的公钥发给攻击者后，攻击者在<strong>含有相矛盾的交易（如双花，把这笔钱给自己）</strong>的并行的链上挖块，试图让该链长于主链。</p>
+<blockquote>
+<p>中本聪从固定时间间隔的角度出发，他认为，诚实节点T0内挖出一个区块的概率是p，那么平均而言，T0 / p 的时间间隔肯定能挖出一个区块，那么诚实节点挖出z块，共消耗了To <em> z / p的时间间隔。攻击节点T0内挖出一个区块的概率是q，那么T0 </em> z / p的时间间隔内，平均而言肯定能挖出q <em> z / p块，而且每个T0 </em>z / p的时间间隔内，挖出的块数差不多。将T0 <em> z / p当做一个单位时间间隔，那么求解的问题是：单位时间内随机事件发生的次数的概率分布。而泊松分布就是描述这个概率的工具。λ 表示单位时间间隔内发生的次数，即为q </em> z / p。</p>
+</blockquote>
+<p>攻击者赶上诚实者块差的概率和为<img src="/categories/BlockChain/Conflux-Notebook10/Users\Paul C\AppData\Roaming\Typora\typora-user-images\image-20210314155146330.png" alt="image-20210314155146330"></p>
+<p>利用概率和为1，把z块后的概率和变为1-z块以前的块的概率和。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210104213135965.png" alt="image-20210104213135965"></p>
+<p>攻击者攻击成功的概率如上图所示，表示成代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">AttackerSuccessProbability</span><span class="params">(<span class="type">double</span> q, <span class="type">int</span> z)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="type">double</span> p = <span class="number">1.0</span> - q;</span><br><span class="line"> <span class="type">double</span> lambda = z * (q / p);</span><br><span class="line"> <span class="type">double</span> sum = <span class="number">1.0</span>;</span><br><span class="line"> <span class="type">int</span> i, k;</span><br><span class="line"> <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt;= z; k++)</span><br><span class="line"> &#123;</span><br><span class="line">     <span class="type">double</span> poisson = <span class="built_in">exp</span>(-lambda);</span><br><span class="line">     <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= k; i++)</span><br><span class="line">     &#123;</span><br><span class="line">         poisson *= lambda / i;</span><br><span class="line">     &#125;</span><br><span class="line">     sum -= poisson * (<span class="number">1</span> - <span class="built_in">pow</span>(q / p, z - k));</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> main&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf&quot;</span>,<span class="built_in">AttackerSuccessProbability</span>(<span class="number">0.10</span>,<span class="number">5</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105163821401.png" alt="image-20210105163821401"></p>
+<p>在攻击成功概率&lt;0.1%时，在足够远离q=0.10的情况下，z=6;</p>
+<p><strong>总结：比特币的“6个区块确认最长链”的准则是基于攻击节点拥有10%的算力假设</strong>。指的是在打包了交易的块后再接续5个块。</p>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5effdcf79114">比特币最长链共识为什么是6个块确认???4个,8个,11个不行吗???</a>，<a target="_blank" rel="noopener" href="http://m.elecfans.com/article/713369.html">比特币51%攻击是什么？比特币6个确认数是怎么得到的</a></p>
+</blockquote>
+<p>其他时候，比如攻击者算力占45%时，需要等340个块接到含交易的块之后。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210104214708081.png" alt="image-20210104214708081"></p>
+<p>在 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1402.2009.pdf?">Analysis of hashrate-based double-spending </a>和</p>
+<blockquote>
+<p>GARAY, J., KIAYIAS, A., AND LEONARDOS, N. The bitcoin backbone protocol: Analysis and applications. In <em>Annual International</em> <em>Conference on the Theory and Applications of Cryptographic Techniques</em> (2015), Springer, pp. 281–310.，提供同步网络模型下的比特币的严格安全分析 </p>
+</blockquote>
+<p>中有对区块链共识机制的更完备的证明</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105164808430.png" alt="image-20210105164808430" style="zoom: 67%;"></p>
+<h3 id="难度值"><a href="#难度值" class="headerlink" title="难度值"></a>难度值</h3><p>在每个区块头中都有一个“Bits”字段，被称为“目标位”，也就是所谓的难度值。如下所示：</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105193713220.png" alt="image-20210105193713220"></p>
+<p><strong>难度目标值（target）计算公式</strong></p>
+<p>target以指数形式存在，以十六进制表示，总共有8位，前2位为指数，后6位为系数。</p>
+<p>所以上图中，指数为0x17，系数为0x1320bc</p>
+<p>计算公式为：</p>
+<p><strong>难度值（target） = 系数 * 2^(8 * (指数 - 3))</strong></p>
+<p>因此上图中的难度值为：</p>
+<p>难度值（target） = 0x1320bc <em> 2^(8 </em> (0x17 - 3))</p>
+<p>这个算出来是个很大的数，结果为：</p>
+<p>十进制为：1832085838499075985755083973639154607251969422303166464</p>
+<p>十六进制为：0x1320bc0000000000000000000000000000000000000000</p>
+<p>在比特币系统中，难度值越小，挖矿难度就越大，因为哈希值可落的范围会越小；反之难度值越大，挖矿难度就越小。</p>
+<h2 id="1-Ethash算法"><a href="#1-Ethash算法" class="headerlink" title="1.Ethash算法"></a>1.Ethash算法</h2><p>以太坊的挖矿算法，它的前身是Dagger Hashimoto算法。；</p>
+<h3 id="1-1-Dagger-Hashimoto"><a href="#1-1-Dagger-Hashimoto" class="headerlink" title="1.1 Dagger Hashimoto"></a>1.1 Dagger Hashimoto</h3><p>Dagger Hashimoto的目的是：</p>
+<ul>
+<li>抵制矿机（ASIC，专门用于挖矿的芯片）<ul>
+<li>塞一堆数据到内存中，让多核平行处理发挥不出来，降低硬件的运算优势，只与内存大小有关，这样无论是PC机还是ASIC、GPU以及FPGAs，都可达到平等挖矿的诉求，这也是ASIC-resistant原理</li>
+</ul>
+</li>
+<li>轻客户端验证</li>
+<li>全链数据存储</li>
+</ul>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/vloong/article/details/79947625，">https://blog.csdn.net/vloong/article/details/79947625，</a></p>
+</blockquote>
+<h3 id="1-2-Ethash基本原理"><a href="#1-2-Ethash基本原理" class="headerlink" title="1.2 Ethash基本原理"></a>1.2 Ethash基本原理</h3><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136159331">https://zhuanlan.zhihu.com/p/136159331</a></p>
+</blockquote>
+<p>以太坊中共识设计的主要思想是设计一大一小的2个数据集，初始大小是：</p>
+<p>小：16M的cache 大：1G的dataset（DAG）</p>
+<p>设计一大一小的目的是：大的数据集是小的cahce通过计算生成的，矿工为了能更快的挖矿只能保存大的dataset，以免重复计算耽误时间，而轻节点只需保存保存小的cache即可验证。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105192907470.png" alt="image-20210105192907470"></p>
+<p><strong>小cache：</strong></p>
+<p>初始大小为16M，容量大小以后每3W个区块会更改一次。</p>
+<p>通过Seed种子进行一些运算得到第一个数，之后在小cache中的每个数都是前一个数取哈希后得到的。</p>
+<p>一般轻节点存储此小cache。</p>
+<p><strong>大DAG：</strong></p>
+<p>大的数据集中的元素都是通过小的cahe计算得到的，小cache中通过伪随机顺序先得到一个位置的元素A的值，再通过A计算哈希得到B位置的值，循环迭代256次后得到了大数据集中的第一个元素，依次类推直到得到全部的DAG元素。</p>
+<p><strong>挖矿过程</strong></p>
+<p>在以太坊中挖矿成功的条件跟比特币一样，找到一个nonce值，需要满足H(header) &lt;= target.</p>
+<p>尝试一个随机数nonce时，在大的DAG中，通过header及nonce计算出一个初始的哈希值映射到初始位置A，然后读取A位置元素和A的相邻后一个位置A’的元素，再通过（A和A’）计算出位置（B和B’），依次类推，迭代64次后，一共读取出128个数，最后计算这128个数的哈希值与目标值target比较，若满足&lt;=target，则挖矿成功；否则重新尝试nonce。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105193214798.png" alt="image-20210105193214798"></p>
+<h2 id="5-CFX安全性证明"><a href="#5-CFX安全性证明" class="headerlink" title="5.CFX安全性证明"></a>5.CFX安全性证明</h2><h3 id="基础假设："><a href="#基础假设：" class="headerlink" title="基础假设："></a>基础假设：</h3><p><em>λ</em>，d, β。</p>
+<ul>
+<li>所有参与者的块产生速率是<em>λ</em>.</li>
+<li>攻击者算力占总算力的比例是 β，攻击者的产生块的速度是 βλ.</li>
+<li>一个块传输给所有诚实节点存在一个最大延迟d（T4）（<strong>block propagation delay <em>d，一个块传输给P2P网络中的所有参与者</em></strong>）</li>
+<li>攻击者能力描述：最大有49%的算力，在d以内任意操纵任意块到任意参与者的延迟</li>
+</ul>
+<h3 id="CFX的前提预设："><a href="#CFX的前提预设：" class="headerlink" title="CFX的前提预设："></a>CFX的前提预设：</h3><p>1.抵抗存活性攻击，不是无效化攻击者的块，而是放慢出块速度。</p>
+<p>2.什么时候放慢？参考第4点。策略位是强迫选择，节点无法自己设置，只能根据过去的视图设置。<strong>策略位和过去视图不符的被视为无效块，被所有诚实节点丢弃。</strong></p>
+<p>攻击者只能通过假装没有看到一些块，即修改自己的过去视图来改变自己的策略。</p>
+<p>3.怎么放慢？<strong>On trees, chains and fast transactions in the blockchain.</strong> 证明了在<strong>同步网络模型</strong>下慢的块产生速率下GHOST无存活性缺陷，设置一个权重η，将权重低于这个阈值的块都忽略，则此时块的产生速率相当于被放慢了η倍，CFX采取的是<strong>部分同步网络模型</strong>？？？，借助第5点</p>
+<p>4。存活性攻击的认定：</p>
+<ul>
+<li>一个块无子块具有明显优势；</li>
+<li>这个块足够老，产生已经有相当长的时间。认定块足够老借助第5点</li>
+</ul>
+<p>5.把区块链协议拿过来作为一个timer chain，提供服务，只用来认定一个块是否足够老。</p>
+<p>Tree-Graph结构中的每个块都包含计时器链中最长分支叶块的哈希值，</p>
+<p>根据这个哈希值找到计时器块，计时器块的高度不精确的表明了时间戳。所以有了本地视图G和一个给定的块，</p>
+<p>如果该块的时间戳和本地视图的最大时间戳（最新区块）相差过大，这个块就足够老。</p>
+<p>6.为实现第5点，把时钟链嵌入树图结构，所以GHAST共识协议有两个工作量证明任务。</p>
+<p>为防止攻击者专注于其中一个任务，影响链的安全性，要求参与者同时进行两项任务。</p>
+<p>即根据得到的块hash值决定该块的类型（树图块或者计时器块，其中，计时器块也被GHAST认作有效的树图块）。</p>
+<blockquote>
+<p>第5点可参见：A  Analysis of the blockchain protocol in asynchronous networks</p>
+</blockquote>
+<h3 id="CFX的模型"><a href="#CFX的模型" class="headerlink" title="CFX的模型"></a>CFX的模型</h3><ul>
+<li><p>Model=(一组算法，已排序的块)，</p>
+</li>
+<li><p>允许每个节点（诚实或损坏）每轮查询宏 H一次，H包括四个算法，分别是求hash，校验一组哈希值【hash(x)=y】,求weight和timer。</p>
+</li>
+<li><p>本地状态B，C确定性地将B中的块排序</p>
+</li>
+</ul>
+<p>一个块开挖前的结构：<img src="/categories/BlockChain/Conflux-Notebook10/image-20210105205133543.png" alt="image-20210105205133543">，<img src="/categories/BlockChain/Conflux-Notebook10/image-20210105205152469.png" alt="image-20210105205152469"></p>
+<p>在算出nonce值s后，计算前四项的hash值得到h，若<img src="/categories/BlockChain/Conflux-Notebook10/image-20210105205355278.png" alt="image-20210105205355278">，其中<img src="/categories/BlockChain/Conflux-Notebook10/image-20210105205913808.png" alt="image-20210105205913808">是谜题困难参数，挖矿成功。</p>
+<ul>
+<li><p>块被认为有效：1.父区块非空 2.hash值与其他组件一致3.解出难题；</p>
+</li>
+<li><p>有效视图：块集合中的各个块的依赖块都在这个集合里。</p>
+</li>
+</ul>
+<h3 id="证明骨架"><a href="#证明骨架" class="headerlink" title="证明骨架"></a>证明骨架</h3><p>e=(r,b,t)，在第r轮，对于一个块r，发生了一个事件t。当这样一个元组e发生后，攻击者的状态S变化。</p>
+<p>事件t有四类：</p>
+<ul>
+<li>诚实节点生成块并广播</li>
+<li>恶意节点生成块</li>
+<li>恶意节点把块广播给第一个诚实节点</li>
+<li>块被所有诚实节点收到</li>
+</ul>
+<h3 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h3><p>在等待<em>O</em>(<em>d</em> <em>·</em>log(1<em>/ε</em>))后，confidence <em>≥</em> 1 -ε；</p>
+<p>在攻击成功概率&lt;0.1%时，GHAST在无攻击情形下确认需要等3d，比特币中约为360d。而比特币是等6个块，60min*60/360=10s，所以这里的d大约是10s？GHAST等待确认时间为30s?</p>
+<hr>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h2 id="2-ETH的工作量证明"><a href="#2-ETH的工作量证明" class="headerlink" title="2.ETH的工作量证明"></a>2.ETH的工作量证明</h2><p>ETH有两个共识算法，一个是权益证明的<a target="_blank" rel="noopener" href="https://yangzhe.me/2019/02/01/ethereum-clique/">clique</a>，另一个是POW的ethash</p>
+<blockquote>
+<p>以太坊源码解析：共识算法之ethash（理论介绍篇）<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0b0ff481bcb3">https://www.jianshu.com/p/0b0ff481bcb3</a></p>
+</blockquote>
+<h2 id="5-CFX的工作量证明"><a href="#5-CFX的工作量证明" class="headerlink" title="5.CFX的工作量证明"></a>5.CFX的工作量证明</h2><p>比特币中使用SHA256作为工作量证明函数。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook10/image-20210105201701509.png" alt="image-20210105201701509"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>比对项\币种</th>
+<th>Bitcoin</th>
+<th>ETH</th>
+<th>CFX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Block Header Size</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Transaction Size</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Block Size/ Block generation interval</td>
+<td>1MB/10min</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Transaction Delay</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Confirmation Speed</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Broadcast Delay</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Incentive</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>安全性证明过程介绍；完整</p>
+<h2 id="GHAST论文里的一些常识"><a href="#GHAST论文里的一些常识" class="headerlink" title="GHAST论文里的一些常识"></a>GHAST论文里的一些常识</h2><p>1.网络延迟的影响取决于协议参数；</p>
+<p>2.只要协议消息能够被即使传达，参与者无需知道其他参与者的存在。</p>
+<p>3.调整预设难度就可以调整块产生速率；</p>
+<p>4.块得到确认等价于，块被从历史中剔除的可能性低于阈值。</p>
+<p>4.比特币中块的确认，意味着其中的交易不可逆。</p>
+<p>5.比特币里要求T4&lt;1/λ，传输延迟要足够小，块产生间隔(1/λ)要远大于传输延迟，确保块传输过程中不会有大量的块生成。</p>
+<h3 id="GHAST做的事情"><a href="#GHAST做的事情" class="headerlink" title="GHAST做的事情"></a>GHAST做的事情</h3><ul>
+<li>减少中本聪共识机制里的确认延迟：低确认延迟</li>
+<li>解决GHSOT里的存活性攻击(liveness issue）问题，对数的活性保证</li>
+</ul>
+<h3 id="提高块生成速率带来的影响？"><a href="#提高块生成速率带来的影响？" class="headerlink" title="提高块生成速率带来的影响？"></a>提高块生成速率带来的影响？</h3><p>不理解的GHAST论文里的表述：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">If the block generation interval is much higher than the time propagating a message in network, with a high probability, no one will generate a new block when the participants</span><br><span class="line">have inconsistent local blocks.</span><br></pre></td></tr></table></figure>
+<p>直译：块的产生间隔不能过大，即超出网络上传播消息的时间太多，否则会由于参与者不具有一致的本地块视图而使整个链无法生成新块。</p>
+<ul>
+<li>块生成速度块，在固定时间内的吞吐量高；</li>
+<li><p>块生成速度高，块确认延迟低。</p>
+</li>
+<li><p>块产生速度块，带来视图不一致性问题。</p>
+</li>
+</ul>
+<p>为什么矿工愿意加入？激励机制研究</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Conflux/" rel="tag"># Conflux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/Diary/2021%E8%AE%A1%E5%88%92/" rel="prev" title="2021年的几件事">
+      <i class="fa fa-chevron-left"></i> 2021年的几件事
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/Conflux-Notebook11/" rel="next" title="Conflux-Notebook11">
+      Conflux-Notebook11 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AF%E8%AF%AD%E7%BB%9F%E4%B8%80%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">术语统一：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AE%89%E5%85%A8%E6%80%A7%E8%AF%81%E6%98%8E"><span class="nav-number">2.</span> <span class="nav-text">0.比特币安全性证明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-1%E4%BA%8C%E9%A1%B9%E9%9A%8F%E6%9C%BA%E6%BC%AB%E6%AD%A5"><span class="nav-number">2.1.</span> <span class="nav-text">0.1二项随机漫步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0-2-%E8%B5%8C%E5%BE%92%E7%A0%B4%E4%BA%A7%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">0.2 赌徒破产问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nakamoto%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6%E7%9A%84%E5%89%8D%E6%8F%90%E9%A2%84%E8%AE%BE"><span class="nav-number">2.3.</span> <span class="nav-text">Nakamoto共识机制的前提预设</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E5%8A%9E%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">攻击办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%BE%E5%BA%A6%E5%80%BC"><span class="nav-number">2.5.</span> <span class="nav-text">难度值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Ethash%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">1.Ethash算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Dagger-Hashimoto"><span class="nav-number">3.1.</span> <span class="nav-text">1.1 Dagger Hashimoto</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Ethash%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">1.2 Ethash基本原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-CFX%E5%AE%89%E5%85%A8%E6%80%A7%E8%AF%81%E6%98%8E"><span class="nav-number">4.</span> <span class="nav-text">5.CFX安全性证明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%81%87%E8%AE%BE%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">基础假设：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CFX%E7%9A%84%E5%89%8D%E6%8F%90%E9%A2%84%E8%AE%BE%EF%BC%9A"><span class="nav-number">4.2.</span> <span class="nav-text">CFX的前提预设：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CFX%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.</span> <span class="nav-text">CFX的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%81%E6%98%8E%E9%AA%A8%E6%9E%B6"><span class="nav-number">4.4.</span> <span class="nav-text">证明骨架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%EF%BC%9A"><span class="nav-number">4.5.</span> <span class="nav-text">结论：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ETH%E7%9A%84%E5%B7%A5%E4%BD%9C%E9%87%8F%E8%AF%81%E6%98%8E"><span class="nav-number">6.</span> <span class="nav-text">2.ETH的工作量证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-CFX%E7%9A%84%E5%B7%A5%E4%BD%9C%E9%87%8F%E8%AF%81%E6%98%8E"><span class="nav-number">7.</span> <span class="nav-text">5.CFX的工作量证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GHAST%E8%AE%BA%E6%96%87%E9%87%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%AF%86"><span class="nav-number">8.</span> <span class="nav-text">GHAST论文里的一些常识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GHAST%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85"><span class="nav-number">8.1.</span> <span class="nav-text">GHAST做的事情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%AB%98%E5%9D%97%E7%94%9F%E6%88%90%E9%80%9F%E7%8E%87%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%BD%B1%E5%93%8D%EF%BC%9F"><span class="nav-number">8.2.</span> <span class="nav-text">提高块生成速率带来的影响？</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

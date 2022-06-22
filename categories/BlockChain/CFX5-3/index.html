@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文参考文件为：CFX黄皮书导读  ，交易转发中的带宽优化 [TOC] 第十章 激励机制对于每一种数字货币，存在以下人群：  直接建设者：创始团队和基金、开发者、  系统维护者：大矿工、散户；  生态建设者：持币者、社区用户。  钱包、托管商、去中心化交易平台  公链一般通过通胀的方式间接对所有的持币用户收税，以此补贴给矿工来为网络提供数据安全性。对于一个公链生态，给矿工补贴多少才算合理值得思考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CFX5-3">
+<meta property="og:url" content="https://blueinyou.com/categories/BlockChain/CFX5-3/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="本文参考文件为：CFX黄皮书导读  ，交易转发中的带宽优化 [TOC] 第十章 激励机制对于每一种数字货币，存在以下人群：  直接建设者：创始团队和基金、开发者、  系统维护者：大矿工、散户；  生态建设者：持币者、社区用户。  钱包、托管商、去中心化交易平台  公链一般通过通胀的方式间接对所有的持币用户收税，以此补贴给矿工来为网络提供数据安全性。对于一个公链生态，给矿工补贴多少才算合理值得思考。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/CFX5-3/image-20201201193846290.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/CFX5-3/Cfx5-3/image-20201201193738996.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/CFX5-3/image-20201201205015234.png">
+<meta property="article:published_time" content="2020-12-01T09:07:02.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.248Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Conflux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/BlockChain/CFX5-3/image-20201201193846290.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/BlockChain/CFX5-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>CFX5-3 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/BlockChain/CFX5-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CFX5-3
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-12-01 17:07:02" itemprop="dateCreated datePublished" datetime="2020-12-01T17:07:02+08:00">2020-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BlockChain/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文参考文件为：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44282220/article/details/109759233">CFX黄皮书导读</a>  ，<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44282220/article/details/104285739">交易转发中的带宽优化</a></p>
+<p>[TOC]</p>
+<h2 id="第十章-激励机制"><a href="#第十章-激励机制" class="headerlink" title="第十章 激励机制"></a>第十章 激励机制</h2><p>对于每一种数字货币，存在以下人群：</p>
+<ul>
+<li><p>直接建设者：创始团队和基金、开发者、</p>
+</li>
+<li><p>系统维护者：大矿工、散户；</p>
+</li>
+<li><p>生态建设者：持币者、社区用户。</p>
+</li>
+<li>钱包、托管商、去中心化交易平台</li>
+</ul>
+<p><strong>公链一般通过通胀的方式间接对所有的持币用户收税，以此补贴给矿工来为网络提供数据安全性。对于一个公链生态，给矿工补贴多少才算合理值得思考。如果补贴太少，难以保障矿工的参与度和系统的安全性；如果补贴太多，难以保障生态开发者的积极性。</strong></p>
+<p>着重介绍 Conflux 网络的矿工费产生、计算与分配的原则，以及挖矿奖励以何种方式进行递减，何种情况下会没有矿工费等情况。</p>
+<p>Conflux的创世通证总量是50亿CFX。16%给投资者+36%给研发+8%社区基金+40%生态基金（给DApp的开发者），都设置了2~4年的解锁年限。</p>
+<blockquote>
+<p>参考<a href="mp.weixin.qq.com/s/AlFlnhjt1qzeACo_ouFGVg">《矿工激励模型的区块奖励》</a>，<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/8MDxHcbFgJoStCIJplLQWQ">《比特币、以太坊经济模型概览》</a>，<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/7SJY4BfbQu-td_6FVCmmUg">比特币、以太坊的矿工激励模型</a></p>
+</blockquote>
+<span id="more"></span>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>DeFi Coin</th>
+<th>出块大小</th>
+<th>交易速度</th>
+<th>确认速度</th>
+<th>经济模型</th>
+<th>价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>比特币</td>
+<td>1MB</td>
+<td>每 10 分钟 3500 笔交易</td>
+<td>&gt;=10分钟</td>
+<td>发行总量限制在 2100 万，采用的是通缩的经济模型</td>
+<td>18000美金</td>
+</tr>
+<tr>
+<td>ETH</td>
+<td></td>
+<td>每秒 15-17 笔交易</td>
+<td></td>
+<td>通胀的经济模型，以定量的增发率给矿工提供持续激励。</td>
+<td>620美金</td>
+</tr>
+<tr>
+<td>CFX</td>
+<td>200 KB</td>
+<td></td>
+<td>在没有坏人攻击的情况下，5s 一个 4MB 大小的区块，确认时间约 8 分钟。在有 30% 算力攻击的情况下，确认时间约 16 分钟。？</td>
+<td>备注：秒级上链，分钟级确认。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="10-1-以太坊无维护费"><a href="#10-1-以太坊无维护费" class="headerlink" title="10.1 以太坊无维护费"></a>10.1 以太坊无维护费</h3><p>以太坊依然存在手续费过高的问题，限制了开发者和用户的进入。同时，用户仅通过<strong>一次性支付手续费</strong>就可以将交易数据存储在链上，而以太坊上的全节点要储存所有账本状态，状态储存没有上限，用户也无需支付维护费，对矿工占据存储资源的激励模式不具备可持续性。不仅如此，以太坊大部分状态空间都被无效的智能合约占据，不但浪费存储空间，也减慢了系统速度，造成了网络延迟。</p>
+<h3 id="10-2-比特币-ETH的矿工激励模型"><a href="#10-2-比特币-ETH的矿工激励模型" class="headerlink" title="10.2  比特币/ETH的矿工激励模型"></a>10.2  比特币/ETH的矿工激励模型</h3><p>POW 系统的主要维护者——矿工，主要负责验证并记录系统中的交易，是保障系统稳定的重要角色。</p>
+<p>按照比特币的激励机制，矿工每挖出一个最长链上的区块，就可以获得一定数额的比特币作为<strong>区块奖励</strong>。最开始这个奖励数额是 50 BTC, 之后每挖出 21 万个区块，比特币的区块奖励就减半。截止 2020 年 5 月 12 日，比特币已经历了第三次区块奖励减半，目前比特币的区块奖励是 6.25 BTC。</p>
+<p>除了区块奖励，比特币矿工的另一个收入来源是<strong>交易费</strong>。每个用户在发起一笔交易时，需要支付一笔交易费。每个比特币区块中<strong>所有的交易费</strong>会付给挖出这一区块的矿工。在比特币的设计中，早期的交易不多，区块奖励是矿工主要的收入来源；随着时间推移，<strong>当比特币的用户越来越多，区块奖励也经过多次减半后，交易费将取代区块奖励成为矿工收入的主要部分。</strong>例如，在比特币区块 500439 中，交易费超过 13 BTC，高于该区块的区块奖励 12.5 BTC。</p>
+<hr>
+<p>2.ETH的奖励也是出块奖励（叔块）和交易费。</p>
+<p>以太坊的基础区块奖励没有比特币的定期减半计划。在初始阶段，以太坊的基础区块奖励是 5 ETH。在 2017 年名为拜占庭的硬分叉中，649 号提案被激活，基础区块奖励调整为 3 ETH。随后，1234 号提案将基础奖励进一步降低至 2 ETH。</p>
+<p>为了<strong>给智能合约消耗的计算资源定价</strong>，用户在以太坊中发起交易时，不直接指定交易费，而是指定一个交易费单价，被称为燃料价格(gas price)。交易实际执行时按照计算量的多寡消耗燃料，燃料用量乘以燃料价格就是以太坊最终向每笔交易收取的交易费。</p>
+<hr>
+<p><strong>CFX检测并惩罚疑似“未遂攻击”的行为</strong></p>
+<p>Conflux不希望看到，由于激励机制没有对未遂的攻击行为做出任何惩罚，导致矿工随意违反共识规则甚至尝试发起攻击。惩罚传播不及时的区块——无论这个区块是生成以后<strong>没有被及时广播</strong>，还是生成的时候故意<strong>无视</strong>了一部分已经收到的区块。</p>
+<h3 id="10-3-Conflux-的矿工奖励"><a href="#10-3-Conflux-的矿工奖励" class="headerlink" title="10.3 Conflux 的矿工奖励"></a>10.3 Conflux 的矿工奖励</h3><p>包括<strong>区块奖励</strong>和<strong>交易奖励</strong>+<strong>存储维护奖励</strong>（存储押金的利息）</p>
+<script type="math/tex; mode=display">
+区块奖励 = 基础区块奖励 × （1 – 惩罚系数）</script><p>基础区块奖励的数值由 Conflux 系统生成的总区块数量确定。系统运行时间越长，基础区块奖励越低。</p>
+<p>分叉攻击与自私挖矿在树图结构上无法区分，表现出来都是<strong>有一些区块似乎广播得特别慢，有很多光锥外区块。</strong></p>
+<p><img src="/categories/BlockChain/CFX5-3/image-20201201193846290.png" alt="image-20201201193846290"></p>
+<p>我们通过实验验证了在攻击者进行分叉攻击时，区块奖励收益随藏块时间增加而受到的影响。在下图中，横轴代表了攻击者在这一攻击中的藏块时间，纵轴代表了攻击者“实际收益”与“诚实行为收益”的比值，四种颜色对应攻击者控制全网 10%, 20%, 30%, 40% 算力的情况。可以看出，随着藏块时间的增加，攻击者获得的区块奖励会随着藏块时间增加而迅速降低，最终在一分钟到一分半的时候降为 0。</p>
+<p><img src="/categories/BlockChain/CFX5-3/Cfx5-3\image-20201201193738996.png" alt="image-20201201193738996"></p>
+<h3 id="10-4-存储抵押利息奖励"><a href="#10-4-存储抵押利息奖励" class="headerlink" title="10.4 存储抵押利息奖励"></a>10.4 <strong>存储抵押利息奖励</strong></h3><blockquote>
+<p>参考<a href="mp.weixin.qq.com/s/6RPLr-VQ0GNIHdx1_amI6A">存储抵押利息奖励</a></p>
+</blockquote>
+<p>在 Conflux 中，<strong>用户可以主动将代币以活期的方式存起来（Staking），并获得年化大约 4.08% 的利息。</strong>这些利息是通过增发来完成的。</p>
+<p>利息的计算以区块为颗粒度。</p>
+<p>具体来说，Conflux 每秒生成 2 个区块，每年生成大约 63072000 个区块。每个区块产生的利息就是 </p>
+<p>4% / 63072000。考虑上复利，一年的综合利率约为 4.08%。</p>
+<h4 id="哪些数据是收取存储费的？"><a href="#哪些数据是收取存储费的？" class="headerlink" title="哪些数据是收取存储费的？"></a><strong>哪些数据是收取存储费的</strong>？</h4><p> 对于存储数据，1 CFX/KB。存储押金的价格是 1/1024 CFX/byte。每个存储单元计 64 字节。除此之外，合约创建后，代码也要收存储押金。</p>
+<p>如果一个交易在附言栏（input）部分填入了大量的数据，这个<strong>大交易会使区块丢失一些打包其他交易的机会</strong>，因为区块大小有上限。但在大约一天过后，交易本身会被全节点删除，只有档案节点可以查到。</p>
+<p>因此，这些数据是不收取存储押金的，因为它对全节点存储空间的占用是短期的。或者可以理解成，<strong>在交易费中，已经涵盖了在未来一天时间内全节点的存储费用</strong>。如果一个智能合约维护了一个数组，并且在数组里存入了大量的数据。那么这些数据需要被所有节点永久地保存下来（除非被删除），以保证无论何时调用合约，合约都可以正常被执行。 </p>
+<p>每个 epoch 中所有产生的存储押金利息，将在同 epoch 的区块之间，以各区块的基础奖励为权重平分。也就是说，如果一个区块受到了来自光锥外区块的惩罚，这个惩罚同样会影响它第二部分存储抵押利息奖励的分配。</p>
+<h4 id="社区-生态治理模型"><a href="#社区-生态治理模型" class="headerlink" title="社区-生态治理模型"></a>社区-生态治理模型</h4><p>DAO（去中心化自治）治理，Conflux的社区成员锁定一点期限一定数量的token来获得vote。</p>
+<p>投票权=锁定时长（季度结算）×通证数量×0.25</p>
+<p>3月，6月和1年为限，分割锁定时长。</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="11-1-Conflux-的-CVM-和-EVM-虚拟机层的主要区别"><a href="#11-1-Conflux-的-CVM-和-EVM-虚拟机层的主要区别" class="headerlink" title="11.1 Conflux 的 CVM 和 EVM 虚拟机层的主要区别"></a>11.1 Conflux 的 CVM 和 EVM 虚拟机层的主要区别</h3><h4 id="区块高度和区块哈希相关的指令"><a href="#区块高度和区块哈希相关的指令" class="headerlink" title="区块高度和区块哈希相关的指令"></a>区块高度和区块哈希相关的指令</h4><p>Conflux 采用了树图结构，当区块排序后，每一个区块会产生一个排序编号，这个排序编号不同于区块高度。因为树图结构排序后，相邻的两个区块可能没有父子关系，所以编号为 <strong><code>n-1</code></strong><code>`的区块不一定是编号为  **</code> n <code>**</code> `区块的父亲区块。</p>
+<p><img src="/categories/BlockChain/CFX5-3/image-20201201205015234.png" alt="image-20201201205015234" style="zoom:50%;"></p>
+<h4 id="交易中的信息填写"><a href="#交易中的信息填写" class="headerlink" title="交易中的信息填写"></a><strong>交易中的信息填写</strong></h4><p>一般由RPC 和 SDK 会替开发者和用户做好这件事情。</p>
+<ul>
+<li><strong>Chain ID:</strong> 区块链编号。规定可以执行这笔交易的区块链编号，避免有人将测试网的交易拿到主网上重放。目前，测试网的 Chain ID 是 1，主网的 Chain ID 是 2。这是主网地址：<a target="_blank" rel="noopener" href="https://confluxscan.io/">https://confluxscan.io/</a></li>
+</ul>
+<p><strong>Epoch 编号增长 100000 的时间在半天到几天不等；</strong></p>
+<ul>
+<li><p><strong>Epoch Height:</strong> 交易执行时的（大概的）epoch。如果交易执行时实际的 Epoch 与交易填写的 Epoch Height 相差 100000 以上（Epoch 编号增长 100000 的时间在半天到几天不等），交易将执行失败。也就是说，<strong>过长时间未被打包的交易将无法执行。</strong></p>
+<h4 id="合约代码上限"><a href="#合约代码上限" class="headerlink" title="合约代码上限"></a>合约代码上限</h4></li>
+<li></li>
+</ul>
+<h3 id="eum-网络中，每个区块能处理多少指令是有上限的，即我们所说的-Block-Gas-Limit。限制-Block-Gas-Limit-的主要初衷之一，是当它高于一个阈值之后，可能会造成-Ethereum-FullNode-同步区块的速度赶不上区块生成速度的情况，导致网络逐渐不可用。"><a href="#eum-网络中，每个区块能处理多少指令是有上限的，即我们所说的-Block-Gas-Limit。限制-Block-Gas-Limit-的主要初衷之一，是当它高于一个阈值之后，可能会造成-Ethereum-FullNode-同步区块的速度赶不上区块生成速度的情况，导致网络逐渐不可用。" class="headerlink" title="eum 网络中，每个区块能处理多少指令是有上限的，即我们所说的 Block Gas Limit。限制 Block Gas Limit 的主要初衷之一，是当它高于一个阈值之后，可能会造成 Ethereum FullNode 同步区块的速度赶不上区块生成速度的情况，导致网络逐渐不可用。"></a>eum 网络中，每个区块能处理多少指令是有上限的，即我们所说的 Block Gas Limit。限制 Block Gas Limit 的主要初衷之一，是当它高于一个阈值之后，可能会造成 Ethereum FullNode 同步区块的速度赶不上区块生成速度的情况，导致网络逐渐不可用。</h3><p>在 Ethereum 网络中，每个区块能处理多少指令是有上限的，即我们所说的 Block Gas Limit。限制 Block Gas Limit 的主要初衷之一，是当它高于一个阈值之后，可能会造成 Ethereum FullNode <strong>同步区块的速度赶不上区块生成速度的情况</strong>，导致网络逐渐不可用。</p>
+<p>EIP-1559 是由以太坊联合创始人 Vitalik Buterin 和 ethhub_io 创始人 Eric Conner 合作提出的以太坊交易费机制改进提案，其核心思路很简单——<strong>在网络交易需求量大的时候，增大 Block Gas Limit，在需求少的时候，减少 Block Gas Limit，让一段时间内的平均 Block Gas Limit 不变，但能动态应付短时的需求峰值。</strong></p>
+<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p><strong>这里的增大，是指增大上限，让交易发起人的指令消耗得到满足？还是加大限制，本来网络就堵，你一个人就不要需求那么大了？</strong></p>
+<p>我想应该是后者。</p>
+<hr>
+<p>在 EIP-1559 中，交易手续费被分为两部分，一部分为全网约定的基础手续费，一部分为用户自己指定的小费。当一个区块的 Block Gas Limit 的利用率高于 50% 时，<strong>基础手续费 Gas Price 会升高为原来的 112.5%</strong>；相反，如果利用率低于 50%，<strong>基础手续费 Gas Price 会降低为原来的 87.5%</strong>。</p>
+<p>每一笔交易基础手续费的产生都是 Ethereum 生态繁荣的一部分，所有参与者应该共同享受这部分收益，所以在 EIP-1559 中，所有基础手续费都会直接烧毁，减少全网 ETH 供给量。由于基础手续费被烧掉会导致矿工没有意愿去打包交易，所有着急发送交易上链的用户，可以提升交易里的小费，激励矿工尽快打包自己的交易。</p>
+<h2 id="交易转发中的带宽优化"><a href="#交易转发中的带宽优化" class="headerlink" title="交易转发中的带宽优化"></a>交易转发中的带宽优化</h2><p>交易广播是在区块链上<strong>达成共识的第一步</strong>。每当用户发起一笔交易时，这笔交易从客户端程序出发，被发往一个或几个全节点。之后，全节点之间通过点对点网络将交易转发给各自的邻居节点，直到最终所有的全节点都收到这笔交易。</p>
+<p>区块链的吞吐量越大则每个节点需要转发的交易数量也就越多。因此，在区块链的吞吐量和网络带宽处于相同的数量级时，交易转发过程的带宽利用率将直接影响了整个区块链系统最终的吞吐性能。</p>
+<p><strong>方案一</strong>：每当一个全节点收到一笔新的交易时，该全节点就将这笔交易发送给它的所有邻居节点。浪费</p>
+<p><strong>比特币的方案</strong>是，当一个比特币节点 A 第一次收到这笔交易时，它将这笔交易的哈希值（32字节）发送<strong>给所有的邻居节点</strong>(除了发给它交易的节点)。邻居节点 B 收到哈希值后查看自己已经收到的交易中有没有哈希值一样的。如果有，就说明 B 已经收到过这笔交易，不需要再接收一次；如果没有，B 就向 A 请求这笔交易的完整内容。</p>
+<p>方案三：将 announcement 环节产生的数据发送量压缩至八分之一。</p>
+<p>为了将 announcement 环节广播的交易哈希值与应用层面（钱包/智能合约）所使用的 32 字节交易哈希值区分，我们将应用层面交易的哈希值称为交易的 ID, 转发中 announcement 环节用到的短哈希值称为交易的 FID (Forwarding ID).</p>
+<p>如果我们将 FID 设为 ID 值的前 4 个字节，就可以达到降低数据发送量的目标。</p>
+<p>然而，更短的交易 FID 在节省带宽的同时也会带来安全性上的隐患。如果两笔不同的交易 Tx1 和 Tx2 有相同的交易 FID ，一个节点收到第一笔交易 Tx1 后，在邻居节点发来第二笔交易 Tx2 的 FID 时，会因为 FID 冲突误认为自己已经收到了这笔交易，从而不再请求 Tx2 的完整内容。这样将阻塞第二笔交易 Tx2 在网络中的广播。</p>
+<p>假设交易的生成速率是每秒 6000 笔交易，每个全节点收到一笔交易 FID 时，会将它和过去 5 分钟内收到的 FID 对比，来判断是否请求这笔交易的完整内容。这样，一笔交易的 FID 和已经存在的交易 FID 冲突的概率是 6000 * 300 / 232，大约是 0.04 ％。这意味着每秒平均有 2.4 笔交易会因为 FID 值冲突而无法广播。</p>
+<p>虽然 0.04% 的冲突概率看似不是很高，但这只是没有攻击的正常情况。利用特定的攻击策略，一个攻击者可以阻塞任意一笔交易的广播，从而实现阻止特定交易的目的。</p>
+<h4 id="方案三的改进："><a href="#方案三的改进：" class="headerlink" title="方案三的改进："></a>方案三的改进：</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44282220/article/details/104404122">带宽优化-动态FID</a></p>
+<p><strong>为了解决静态 FID 易被攻击阻塞的问题，我们将 FID 的取值由静态转变成动态的。</strong>因为 FID 只是在节点与节点之间转发交易时的临时取值，与共识逻辑无关也不需要被记录在区块链上，所以 FID 值没有必要是一个不变的数值。</p>
+<p>每个节点在计算 FID 时，并不仅仅由交易的 ID （交易的 32 字节哈希值）计算，而是选择一个随机数 r，通过 ID 和 r 共同计算出一个 4 字节的 FID，并将r 与 FID一同发送。这样，当随机数 r 改变时，交易的 FID 也会随之发生改变，收到 FID 和 r 的节点需要根据 r 重新计算已有交易的 FID 来完成对比，并确定需要请求哪些 FID 对应的完整交易。因为一次转发的多笔交易可以共享同一个随机数 r， 所以这个随机数 r 几乎不会在带宽上带来额外的负担。</p>
+<p>由于 r 的随机性，攻击者并不能预计一笔交易在每次转发时选择的 r 和由此算出的 FID 分别是多少，自然也就无法预先构造冲突的交易了。</p>
+<p>这个设计的另一个好处是，即便节点 B 给节点 A 发送交易时发生了 FID 值冲突，导致某笔交易没有成功发送给节点 A，另一个节点 C 发送这笔交易给 A 时，大概率将采用不同的随机数 r 计算 FID，相当于增加了一次把这笔交易发给 A 的机会。</p>
+<p>只要计算 FID 的过程足够随机（如使用伪随机函数），则 B 发送成功和 C 发送成功可看作是两个独立的事件。根据我们之前的计算，一笔交易因为 FID 值冲突而发送失败的概率是 0.04%，而节点 B 和 C 两次独立发送都失败的概率是 0.04% × 0.04%，失败率大大降低。</p>
+<p>然而，从随机数计算 FID 的设计也有一个缺点：每当节点收到一个新的随机数 r 时，就要为所有已经收到的交易（根据上一期的假设，全节点会将过去 5 分钟内收到的 180 万条交易和刚刚收到的 FID 对比）重新算一遍 FID，这会带来了<strong>极大的计算负担</strong>。</p>
+<p>这样，根据交易 ID 的前 3 字节，我们把所有的交易放在了 224 个“桶”里。每次一个节点收到其他节点发来的 FID 和 r 时，先根据 FID 的前 3 字节判断交易所在的桶，再将自己已经收到的，落在这个桶里交易根据 r 重新计算 FID 值并比对。</p>
+<p>简单地计算可以发现，对于 180 万条随机生成的交易，平均每个桶里只有 0.1 笔交易，即使是含有交易最多的桶里也不会超过10 条。重新计算一个桶里交易的 FID 所需花费的成本远远低于重新计算所有交易的 FID。</p>
+<p>在上面这个 3+1 动静结合的方案下，攻击者其实仍然可以重复类似的攻击策略。之前的攻击策略中，攻击者为每一个静态的 FID 准备一笔交易。在这一策略中，攻击者为每个桶预先准备一些交易。当受害者的交易出现后，攻击者在短时间内大量广播与受害者交易在同一个桶里的交易，就能够降低受害者交易被转发到其他节点的概率。即使同一笔交易每次转发时采用一个完全随机的动态字节，但是这个动态字节只有 256 种可能的取值，所以一个桶中的交易越多，冲突概率也会越高。</p>
+<p>如果一个节点收到一个 FID 时，发现这个 FID 对应的桶里已经有不少于 10 条交易，就不再使用 FID 来判断，而是直接请求完整的 32 字节交易哈希值来对比是否接受过这笔交易。这样，攻击者就不能再通过制造冲突的 FID 来阻塞交易广播了，因为冲突过多的时候反而无法起到阻塞的作用。</p>
+<p>这条额外的规则触发时会让交易转发<strong>退化到没有使用 FID 优化的情况</strong>。但是因为正常情况下每个桶里期望只有 0.1 笔交易，几乎不可能发生超过 10 笔交易落在同一个桶里的情况，所以这条额外的规则在系统没有遭到攻击时并不会被触发。而当系统真的遭到攻击的情况下，保护系统的安全性和稳定性才是最重要的，即便为此而降低系统的吞吐量也是可以接受的妥协。</p>
+<h2 id="跨链方案"><a href="#跨链方案" class="headerlink" title="跨链方案"></a>跨链方案</h2><p>实现资产的跨链交易</p>
+<p>跨链原子交换：哈希时间内的合约锁定，并由交易双方在线完成交易。</p>
+<p><strong>跨链原子映射</strong>：将一条链上的资产锁定，1:1铸造等量的资产到另外一条链上。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Conflux/" rel="tag"># Conflux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/Notes/Social-Insurance-Worker/" rel="prev" title="Social Insurance of Worker">
+      <i class="fa fa-chevron-left"></i> Social Insurance of Worker
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/Conflux-Notebook6/" rel="next" title="Conflux-Notebook6">
+      Conflux-Notebook6 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E6%BF%80%E5%8A%B1%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">第十章 激励机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%97%A0%E7%BB%B4%E6%8A%A4%E8%B4%B9"><span class="nav-number">1.1.</span> <span class="nav-text">10.1 以太坊无维护费</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%AF%94%E7%89%B9%E5%B8%81-ETH%E7%9A%84%E7%9F%BF%E5%B7%A5%E6%BF%80%E5%8A%B1%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">10.2  比特币&#x2F;ETH的矿工激励模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-Conflux-%E7%9A%84%E7%9F%BF%E5%B7%A5%E5%A5%96%E5%8A%B1"><span class="nav-number">1.3.</span> <span class="nav-text">10.3 Conflux 的矿工奖励</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-4-%E5%AD%98%E5%82%A8%E6%8A%B5%E6%8A%BC%E5%88%A9%E6%81%AF%E5%A5%96%E5%8A%B1"><span class="nav-number">1.4.</span> <span class="nav-text">10.4 存储抵押利息奖励</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E6%95%B0%E6%8D%AE%E6%98%AF%E6%94%B6%E5%8F%96%E5%AD%98%E5%82%A8%E8%B4%B9%E7%9A%84%EF%BC%9F"><span class="nav-number">1.4.1.</span> <span class="nav-text">哪些数据是收取存储费的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BE%E5%8C%BA-%E7%94%9F%E6%80%81%E6%B2%BB%E7%90%86%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.4.2.</span> <span class="nav-text">社区-生态治理模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-1-Conflux-%E7%9A%84-CVM-%E5%92%8C-EVM-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%B1%82%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB"><span class="nav-number">2.1.</span> <span class="nav-text">11.1 Conflux 的 CVM 和 EVM 虚拟机层的主要区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%BA%E5%9D%97%E9%AB%98%E5%BA%A6%E5%92%8C%E5%8C%BA%E5%9D%97%E5%93%88%E5%B8%8C%E7%9B%B8%E5%85%B3%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.1.</span> <span class="nav-text">区块高度和区块哈希相关的指令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E4%B8%AD%E7%9A%84%E4%BF%A1%E6%81%AF%E5%A1%AB%E5%86%99"><span class="nav-number">2.1.2.</span> <span class="nav-text">交易中的信息填写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E4%BB%A3%E7%A0%81%E4%B8%8A%E9%99%90"><span class="nav-number">2.1.3.</span> <span class="nav-text">合约代码上限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eum-%E7%BD%91%E7%BB%9C%E4%B8%AD%EF%BC%8C%E6%AF%8F%E4%B8%AA%E5%8C%BA%E5%9D%97%E8%83%BD%E5%A4%84%E7%90%86%E5%A4%9A%E5%B0%91%E6%8C%87%E4%BB%A4%E6%98%AF%E6%9C%89%E4%B8%8A%E9%99%90%E7%9A%84%EF%BC%8C%E5%8D%B3%E6%88%91%E4%BB%AC%E6%89%80%E8%AF%B4%E7%9A%84-Block-Gas-Limit%E3%80%82%E9%99%90%E5%88%B6-Block-Gas-Limit-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%88%9D%E8%A1%B7%E4%B9%8B%E4%B8%80%EF%BC%8C%E6%98%AF%E5%BD%93%E5%AE%83%E9%AB%98%E4%BA%8E%E4%B8%80%E4%B8%AA%E9%98%88%E5%80%BC%E4%B9%8B%E5%90%8E%EF%BC%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E9%80%A0%E6%88%90-Ethereum-FullNode-%E5%90%8C%E6%AD%A5%E5%8C%BA%E5%9D%97%E7%9A%84%E9%80%9F%E5%BA%A6%E8%B5%B6%E4%B8%8D%E4%B8%8A%E5%8C%BA%E5%9D%97%E7%94%9F%E6%88%90%E9%80%9F%E5%BA%A6%E7%9A%84%E6%83%85%E5%86%B5%EF%BC%8C%E5%AF%BC%E8%87%B4%E7%BD%91%E7%BB%9C%E9%80%90%E6%B8%90%E4%B8%8D%E5%8F%AF%E7%94%A8%E3%80%82"><span class="nav-number">2.2.</span> <span class="nav-text">eum 网络中，每个区块能处理多少指令是有上限的，即我们所说的 Block Gas Limit。限制 Block Gas Limit 的主要初衷之一，是当它高于一个阈值之后，可能会造成 Ethereum FullNode 同步区块的速度赶不上区块生成速度的情况，导致网络逐渐不可用。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Question"><span class="nav-number">3.</span> <span class="nav-text">Question</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E8%BD%AC%E5%8F%91%E4%B8%AD%E7%9A%84%E5%B8%A6%E5%AE%BD%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">交易转发中的带宽优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%E7%9A%84%E6%94%B9%E8%BF%9B%EF%BC%9A"><span class="nav-number">4.0.1.</span> <span class="nav-text">方案三的改进：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E9%93%BE%E6%96%B9%E6%A1%88"><span class="nav-number">5.</span> <span class="nav-text">跨链方案</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CNN_EXAMPLE  1. pooling layer 减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。  Hyper parameter f: filter size s: stride type:Max or average pooling 用的很少的：p&#x3D;0—padding  这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN02">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/CNN02/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="CNN_EXAMPLE  1. pooling layer 减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。  Hyper parameter f: filter size s: stride type:Max or average pooling 用的很少的：p&#x3D;0—padding  这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304145228545.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304160534107.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304161730310.png">
+<meta property="article:published_time" content="2022-03-07T12:43:22.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.335Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="CNN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304145228545.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/CNN02/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>CNN02 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/CNN02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CNN02
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-07 20:43:22" itemprop="dateCreated datePublished" datetime="2022-03-07T20:43:22+08:00">2022-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1e54y1b7uk?p=10">CNN_EXAMPLE</a></p>
+</blockquote>
+<h2 id="1-pooling-layer"><a href="#1-pooling-layer" class="headerlink" title="1. pooling layer"></a>1. pooling layer</h2><blockquote>
+<p>减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。</p>
+</blockquote>
+<h3 id="Hyper-parameter"><a href="#Hyper-parameter" class="headerlink" title="Hyper parameter"></a>Hyper parameter</h3><ul>
+<li>f: filter size</li>
+<li>s: stride</li>
+<li>type:Max or average pooling</li>
+<li>用的很少的：p=0—padding</li>
+</ul>
+<p>这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。</p>
+<span id="more"></span>
+<p><img src="/categories/ML/CNN02/image-20220304145228545.png" alt="image-20220304145228545" style="zoom:50%;"></p>
+<p>相当于f=2,stride=2（Maxpooling的超参数）的一个过滤器；</p>
+<p>独立作用于各个<code>channel</code></p>
+<p>近似于把高、宽均缩小了两倍以上；</p>
+<p>收集后的特征表明该特诊原来存在于原来的特征集合；没有收集到的表明特征可能不存在或者比较小。</p>
+<h3 id="输出大小"><a href="#输出大小" class="headerlink" title="输出大小"></a>输出大小</h3><ul>
+<li>Ouputsize: (n+2p-f)/s+1</li>
+</ul>
+<h3 id="层数惯例"><a href="#层数惯例" class="headerlink" title="层数惯例"></a>层数惯例</h3><p>惯例一：因为池化层没有权重和参数，所以<strong>把卷积层和池化合一块称为一层</strong>。</p>
+<h2 id="2-Fully-connected-layer"><a href="#2-Fully-connected-layer" class="headerlink" title="2. Fully connected layer"></a>2. Fully connected layer</h2><p>就是神经网络的单层网络而已；被叫做全连接是因为输入的每一个分量都与该层的所有结点相连。</p>
+<p>Hyperparameter:</p>
+<ul>
+<li>W=[w1,w2,…wm]</li>
+<li>bias</li>
+</ul>
+<h3 id="一张图——-gt-识别出一个数字"><a href="#一张图——-gt-识别出一个数字" class="headerlink" title="一张图——&gt;识别出一个数字"></a>一张图——&gt;识别出一个数字</h3><p><img src="/categories/ML/CNN02/image-20220304160534107.png" alt="image-20220304160534107"></p>
+<p>a随着层数的加深，高、宽减小，而通道数增加。<br><img src="/categories/ML/CNN02/image-20220304161730310.png" alt="image-20220304161730310"></p>
+<p>激活的输入量在减少。</p>
+<h3 id="参数的计算"><a href="#参数的计算" class="headerlink" title="参数的计算"></a>参数的计算</h3><p>5*5的filter+1个bias=26；26x8=208;</p>
+<h3 id="参数的选择"><a href="#参数的选择" class="headerlink" title="参数的选择"></a>参数的选择</h3><p>抄别人文献里的。</p>
+<h3 id="为什么卷积网络可以减少参数"><a href="#为什么卷积网络可以减少参数" class="headerlink" title="为什么卷积网络可以减少参数"></a>为什么卷积网络可以减少参数</h3><ul>
+<li>参数共享：一个卷积核可以做很多次运算</li>
+<li></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CNN/" rel="tag"># CNN</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/NAS/" rel="prev" title="NAS">
+      <i class="fa fa-chevron-left"></i> NAS
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/Tools/git%E6%94%B9%E7%9B%AE%E5%BD%95%E6%95%B0%E7%9B%AE/" rel="next" title="git分支管理">
+      git分支管理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-pooling-layer"><span class="nav-number">1.</span> <span class="nav-text">1. pooling layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hyper-parameter"><span class="nav-number">1.1.</span> <span class="nav-text">Hyper parameter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E5%A4%A7%E5%B0%8F"><span class="nav-number">1.2.</span> <span class="nav-text">输出大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82%E6%95%B0%E6%83%AF%E4%BE%8B"><span class="nav-number">1.3.</span> <span class="nav-text">层数惯例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Fully-connected-layer"><span class="nav-number">2.</span> <span class="nav-text">2. Fully connected layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%BC%A0%E5%9B%BE%E2%80%94%E2%80%94-gt-%E8%AF%86%E5%88%AB%E5%87%BA%E4%B8%80%E4%B8%AA%E6%95%B0%E5%AD%97"><span class="nav-number">2.1.</span> <span class="nav-text">一张图——&gt;识别出一个数字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">2.2.</span> <span class="nav-text">参数的计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">2.3.</span> <span class="nav-text">参数的选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E5%8F%AF%E4%BB%A5%E5%87%8F%E5%B0%91%E5%8F%82%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">为什么卷积网络可以减少参数</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

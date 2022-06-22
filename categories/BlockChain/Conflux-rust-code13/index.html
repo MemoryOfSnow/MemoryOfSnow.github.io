@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="参考部分见https:&#x2F;&#x2F;developer.conflux-chain.org&#x2F;docs&#x2F;conflux-doc&#x2F;docs&#x2F; 代码部分见https:&#x2F;&#x2F;github.com&#x2F;Conflux-Chain&#x2F;conflux-rust&#x2F;  UBuntu 123456789101112$ sudo apt-get install clang libsqlite3-dev pkg-config libss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conflux_rust_code13">
+<meta property="og:url" content="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="参考部分见https:&#x2F;&#x2F;developer.conflux-chain.org&#x2F;docs&#x2F;conflux-doc&#x2F;docs&#x2F; 代码部分见https:&#x2F;&#x2F;github.com&#x2F;Conflux-Chain&#x2F;conflux-rust&#x2F;  UBuntu 123456789101112$ sudo apt-get install clang libsqlite3-dev pkg-config libss">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/Users/Paul%20C/AppData/Roaming/Typora/typora-user-images/image-20210311223518451.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/Users/Paul%20C/AppData/Roaming/Typora/typora-user-images/image-20210311223700427.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/image-20210310090718145.png">
+<meta property="article:published_time" content="2021-03-09T22:56:26.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.309Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Conflux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/Users/Paul%20C/AppData/Roaming/Typora/typora-user-images/image-20210311223518451.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Conflux_rust_code13 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/BlockChain/Conflux-rust-code13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Conflux_rust_code13
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-10 06:56:26" itemprop="dateCreated datePublished" datetime="2021-03-10T06:56:26+08:00">2021-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BlockChain/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>参考部分见<a target="_blank" rel="noopener" href="https://developer.conflux-chain.org/docs/conflux-doc/docs/">https://developer.conflux-chain.org/docs/conflux-doc/docs/</a></p>
+<p>代码部分见<a target="_blank" rel="noopener" href="https://github.com/Conflux-Chain/conflux-rust/">https://github.com/Conflux-Chain/conflux-rust/</a></p>
+</blockquote>
+<p>UBuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install clang libsqlite3-dev pkg-config libssl-dev cmake</span><br><span class="line">$ apt install git</span><br><span class="line">$ git config --global http.proxy http://127.0.0.1:1080</span><br><span class="line">$ git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line"># download Conflux code</span><br><span class="line">$ git clone https://github.com/Conflux-Chain/conflux-rust</span><br><span class="line">$ cd conflux-rust</span><br><span class="line">$ git checkout v1.1.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># build in release mode</span><br><span class="line">$ cargo build --release</span><br></pre></td></tr></table></figure>
+<p>468MB,git 34MB,clone repo 85.31MB.</p>
+<span id="more"></span>
+<hr>
+<p>Windows,Too difficult to configure</p>
+<h2 id="3、卸载rust"><a href="#3、卸载rust" class="headerlink" title="-3、卸载rust"></a>-3、卸载rust</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Paul C&gt;rustup self uninstall</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thanks for hacking in Rust!</span><br><span class="line"></span><br><span class="line">This will uninstall all Rust toolchains and data, and remove</span><br><span class="line">%USERPROFILE%\.cargo/bin from your PATH environment variable.</span><br><span class="line"></span><br><span class="line">Continue? (y/N) y</span><br><span class="line"></span><br><span class="line">info: removing rustup home</span><br><span class="line">info: removing cargo home</span><br><span class="line">info: removing rustup binaries</span><br><span class="line">info: rustup is uninstalled</span><br></pre></td></tr></table></figure>
+<h2 id="2-Visual-Studio-2015-with-C-support-installed"><a href="#2-Visual-Studio-2015-with-C-support-installed" class="headerlink" title="-2.Visual Studio 2015 with C++ support installed"></a>-2.Visual Studio 2015 with C++ support installed</h2><h2 id="Rusr-cargo和git走代理"><a href="#Rusr-cargo和git走代理" class="headerlink" title="Rusr cargo和git走代理"></a>Rusr cargo和git走代理</h2><p>在 <code>C:\Users\用户名\.cargo</code> 下创建 <code>config</code> 文件<br>内容为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[http]</span><br><span class="line">proxy = &quot;127.0.0.1:1080&quot;</span><br><span class="line"></span><br><span class="line">[https]</span><br><span class="line">proxy = &quot;127.0.0.1:1080&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#走代理</span></span><br><span class="line"><span class="comment">#没有作用的语句 </span></span><br><span class="line">netsh winhttp <span class="built_in">set</span> proxy 127.0.0.1:1080 <span class="string">&quot;localhost;&quot;</span></span><br><span class="line">netsh winhttp reset proxy</span><br><span class="line"><span class="comment">#有用的</span></span><br><span class="line">git config --global http.proxy http://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">1080,http和https</span><br><span class="line">8088，socks</span><br><span class="line"><span class="comment">#直接连接</span></span><br><span class="line"></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.proxy </span><br><span class="line"></span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy </span><br></pre></td></tr></table></figure>
+<h2 id="Build-from-Source-Code"><a href="#Build-from-Source-Code" class="headerlink" title="Build from Source Code"></a>Build from Source Code</h2><p>为了从代码编译运行conflux，需要三个条件：rust、clang和conflux_rust源码。</p>
+<h3 id="0-clone"><a href="#0-clone" class="headerlink" title="0.clone"></a>0.clone</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/Conflux-Chain/conflux-rust</span><br><span class="line">$ cd conflux-rust</span><br><span class="line">$ git checkout v1.1.0</span><br></pre></td></tr></table></figure>
+<h3 id="1-cargo-clean"><a href="#1-cargo-clean" class="headerlink" title="1.cargo clean"></a>1.cargo clean</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Caused by:</span><br><span class="line">  拒绝访问。 (os error 5)</span><br></pre></td></tr></table></figure>
+<p>用powershell出现以上错误，而用cmd却没有。</p>
+<h3 id="2-cargo-update"><a href="#2-cargo-update" class="headerlink" title="2.cargo update"></a>2.cargo update</h3><h4 id="遇到问题3"><a href="#遇到问题3" class="headerlink" title="遇到问题3"></a>遇到问题3</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PS F:\Senior01\DiplomaPro\Code\conflux-rust&gt; cargo update</span><br><span class="line">    Updating git repository `https://github.com/Conflux-Chain/sqlite3-sys.git`</span><br><span class="line">error: failed to resolve patches for `https://github.com/rust-lang/crates.io-index`</span><br><span class="line">...</span><br><span class="line">  fatal: unable to access &#x27;https://github.com/Conflux-Chain/sqlite3-sys.git/&#x27;: OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>问题原因：<a target="_blank" rel="noopener" href="https://www.kanzhun.com/jiaocheng/171998.html，主机解析为IPV6影响。">https://www.kanzhun.com/jiaocheng/171998.html，主机解析为IPV6影响。</a></p>
+<p>在MAC上可以<strong><code>networksetup -setv6off Wi-Fi</code></strong>，在Win10上，我把v2ray代理配置文件的服务器地址从IPV6改回IPV4地址即可。</p>
+</blockquote>
+<p>更新成功后的文件变化可以参考(info\18.cargo_update后的内容.txt)</p>
+<h3 id="3-cargo-build-—-release"><a href="#3-cargo-build-—-release" class="headerlink" title="3.cargo build — release"></a>3.cargo build — release</h3><p>包含595个crates。Downloaded,Compile,</p>
+<h4 id="遇到问题4：找不到编译平台"><a href="#遇到问题4：找不到编译平台" class="headerlink" title="遇到问题4：找不到编译平台"></a>遇到问题4：找不到编译平台</h4><!--more-->
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">error: failed to run custom build command for `snappy-sys v0.1.0 (https://github.com/busyjay/rust-snappy.git?branch=static-link#8c12738b)`</span><br><span class="line">--- stdout</span><br><span class="line"> running: &quot;cmake&quot; &quot;C:\\Users\\Paul C\\.cargo\\git\\checkouts\\rust-snappy-0ed33e4b7b96fc57\\8c12738\\snappy-sys\\snappy&quot; &quot;-G&quot; &quot;Visual Studio 16 2019&quot; &quot;-Thost=x64&quot; &quot;-Ax64&quot; &quot;-DCMAKE_INSTALL_PREFIX=F:\\Senior01\\DiplomaPro\\Code\\conflux-rust\\target\\release\\build\\snappy-sys-c118e1192ebdfdf1\\out&quot; &quot;-DCMAKE_C_FLAGS= -nologo -MD -Brepro&quot; &quot;-DCMAKE_C_FLAGS_RELEASE= -nologo -MD -Brepro&quot; &quot;-DCMAKE_CXX_FLAGS= -nologo -MD -Brepro&quot; &quot;-DCMAKE_CXX_FLAGS_RELEASE= -nologo -MD -Brepro&quot; &quot;-DCMAKE_ASM_FLAGS= -nologo -MD -Brepro&quot; &quot;-DCMAKE_ASM_FLAGS_RELEASE= -nologo -MD -Brepro&quot; &quot;-DCMAKE_BUILD_TYPE=Release&quot;</span><br><span class="line">-- Configuring incomplete, errors occurred!</span><br><span class="line"> --- stderr</span><br><span class="line">  CMake Error at CMakeLists.txt:2 (project):</span><br><span class="line">    Generator</span><br><span class="line"></span><br><span class="line">      Visual Studio 16 2019</span><br><span class="line"></span><br><span class="line">    could not find any instance of Visual Studio.</span><br></pre></td></tr></table></figure>
+<p>可能是缺组件，或者是缺少环境变量配置。</p>
+<p><img src="/categories/BlockChain/Conflux-rust-code13/Users\Paul C\AppData\Roaming\Typora\typora-user-images\image-20210311223518451.png" alt="image-20210311223518451"></p>
+<p>环境变量没有问题，安装组件：</p>
+<p><img src="/categories/BlockChain/Conflux-rust-code13/Users\Paul C\AppData\Roaming\Typora\typora-user-images\image-20210311223700427.png" alt="image-20210311223700427"></p>
+<h4 id="遇到问题5："><a href="#遇到问题5：" class="headerlink" title="遇到问题5："></a>遇到问题5：</h4><p><code>-- The C compiler identification is unknown</code></p>
+<p>1.安装LLVM并添加到PATH，</p>
+<blockquote>
+<p>理解LLVM：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1367dad95445">https://www.jianshu.com/p/1367dad95445</a></p>
+</blockquote>
+<p><img src="/categories/BlockChain/Conflux-rust-code13/image-20210310090718145.png" alt="image-20210310090718145" style="zoom:50%;"></p>
+<ul>
+<li>LLVM现在被作为实现各种静态和运行时编译语言的通用基础结构(GCC家族、Java、.NET、Python、Ruby、Scheme、Haskell、D等)</li>
+</ul>
+<h2 id="1-测试"><a href="#1-测试" class="headerlink" title="1.测试"></a>1.测试</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.5.7/installing-solidity.html">https://docs.soliditylang.org/en/v0.5.7/installing-solidity.html</a></p>
+</blockquote>
+<p>官方提供的单元测试用rust编写，完整性测试用 Python3 (version&gt;=3.6)编写。借助这些测试可以测试修改代码的成功性。</p>
+<p>完整性测试依赖<code>eth_utils</code>、<code>sha3</code>、<code>jsonrpcclient</code>、<code>rlp</code>。</p>
+<p>为了运行测试，需要下载solidity compiler version 0.5.2,为了下载solidity，需要VS2019安装v141组件和SDK8.1（官网下载安装）.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装solidity及其依赖</span></span><br><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/ethereum/solidity.git</span><br><span class="line"><span class="built_in">cd</span> solidity</span><br><span class="line">scripts\install_deps.bat</span><br></pre></td></tr></table></figure>
+<p>之后，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake -G <span class="string">&quot;Visual Studio 15 2017 Win64&quot;</span> ..</span><br></pre></td></tr></table></figure>
+<p>之后，生成sln文件，双击在其中生成release版本文件即可。</p>
+<p>也可以<code>cmake --build . --config Release</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">crash_test.py</span><br><span class="line">commission_privilege_test.py</span><br><span class="line">erc20_test.py</span><br><span class="line">blame_test.py</span><br><span class="line">network_tests\node_db_ip_limit_test.py</span><br><span class="line">light\get_storage_root_test.py</span><br><span class="line">network_tests\session_subnet_limit_test.py</span><br><span class="line">rpc_test.py</span><br><span class="line">sync_test.py</span><br><span class="line">network_tests\discovery_test.py</span><br><span class="line">admin_control_test.py</span><br><span class="line">expire_block_test.py</span><br><span class="line">tx_consistency_test.py</span><br><span class="line">crash_archive_test.py</span><br><span class="line">fixed_supply_token_test.py</span><br><span class="line">log_filtering_test.py</span><br><span class="line">reorg_test.py</span><br><span class="line">latest_confirmed_test.py</span><br><span class="line">sponsored_tx_test.py</span><br><span class="line">secondary_reward_test.py</span><br><span class="line">fork_same_height_hiding_test.py</span><br><span class="line">transaction_test.py</span><br><span class="line">light\rpc_test.py</span><br><span class="line">throttle_test.py</span><br><span class="line">network_tests\session_ip_limit_test.py</span><br><span class="line">transaction_epoch_bound_test.py</span><br><span class="line">ghast_consensus_test.py</span><br><span class="line">full_node_tests\remove_old_eras_test.py</span><br><span class="line">light\tx_relay_test.py</span><br><span class="line">issue1303_test.py</span><br><span class="line">network_tests\node_reputation_test.py</span><br><span class="line">message_test.py</span><br><span class="line">light\sync_test.py</span><br><span class="line">pubsub\epochs_test.py</span><br><span class="line">full_node_tests\issue1513_test.py</span><br><span class="line">crash_archive_era150_test.py</span><br><span class="line">light\log_filtering_test.py</span><br><span class="line">pubsub\newHeads_test.py</span><br><span class="line">ghast_test.py</span><br><span class="line">consensus_test.py</span><br><span class="line">storage_rpc_test.py</span><br><span class="line">state_maintain_test.py</span><br><span class="line">full_node_tests\p2p_era_test.py</span><br><span class="line">admin_at_creation_test.py</span><br><span class="line">example_test.py</span><br><span class="line">invalid_message_test.py</span><br><span class="line">contract_bench_test.py</span><br><span class="line">issue988_test.py</span><br><span class="line">storage_root_test.py</span><br><span class="line">vote_token_test.py</span><br><span class="line">network_tests\p2p_throttling_test.py</span><br><span class="line">pubsub\logs_test.py</span><br><span class="line">withdraw_deposit_test.py</span><br><span class="line">reentrancy_test.py</span><br><span class="line">full_node_tests\sync_checkpoint_test.py</span><br></pre></td></tr></table></figure>
+<p>2.代码运行在CFX的测试网上，所以下载的程序后缀为testnet，与tethy的区别是启动节点、链id和toml文件的不同。</p>
+<p>代码逻辑部分看的是：<a target="_blank" rel="noopener" href="https://github.com/Conflux-Chain/conflux-rust/archive/v1.0.2-testnet.zip">v1.0.2-testnet</a>，而实际运行时运行的是<a target="_blank" rel="noopener" href="https://github.com/Conflux-Chain/conflux-rust/archive/v1.1.2-testnet.zip">v1.1.2</a></p>
+<h2 id="2-编译源代码时"><a href="#2-编译源代码时" class="headerlink" title="2.编译源代码时"></a>2.编译源代码时</h2><p>这一项会卡住：Compiling librocksdb_sys v0.1.0</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: failed to run custom build command for `librocksdb_sys v0.1.0 (https://github.com/Conflux-Chain/rust-rocksdb.git?rev=586f186974a6083268fee95d72ffb2b0f2a9333b#586f1869)`</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --add remote.origin.proxy &quot;&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="3-代码解读"><a href="#3-代码解读" class="headerlink" title="3.代码解读"></a>3.代码解读</h2><p>cors\src\consensus\consensus_inner\mod.rs</p>
+<ul>
+<li>struct ConsensusGraphInner</li>
+<li>struct ConsensusGraphNode</li>
+<li>struct ConsensusGraphNodeData</li>
+</ul>
+<p>每个节点都有一个内部索引，借助</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//12+1个成员</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">ConsensusGraphNode</span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> hash: H256,</span><br><span class="line">    <span class="keyword">pub</span> height: <span class="type">u64</span>,</span><br><span class="line">    <span class="keyword">pub</span> parent: <span class="type">usize</span>,</span><br><span class="line">    difficulty: U256,</span><br><span class="line">    is_heavy: <span class="type">bool</span>,</span><br><span class="line">    is_timer: <span class="type">bool</span>,</span><br><span class="line">    <span class="comment">/// The total number of *executed* blocks in its past (not including self)</span></span><br><span class="line">    past_num_blocks: <span class="type">u64</span>,</span><br><span class="line">    adaptive: <span class="type">bool</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">/// The genesis arena index of the era that `self` is in.</span></span><br><span class="line">    <span class="comment">///</span></span><br><span class="line">    <span class="comment">/// It is `NULL` if `self` is not in the subtree of `cur_era_genesis`.</span></span><br><span class="line">    era_block: <span class="type">usize</span>,</span><br><span class="line">    children: <span class="type">Vec</span>&lt;<span class="type">usize</span>&gt;,</span><br><span class="line">    referrers: <span class="type">Vec</span>&lt;<span class="type">usize</span>&gt;,</span><br><span class="line">    referees: <span class="type">Vec</span>&lt;<span class="type">usize</span>&gt;,</span><br><span class="line">	<span class="comment">/// Unlike the</span></span><br><span class="line">    <span class="comment">/// above fields, this information will only be available after the</span></span><br><span class="line">    <span class="comment">/// block is *preactivated* (after calling preactivate_block().</span></span><br><span class="line">    <span class="keyword">pub</span> data: ConsensusGraphNodeData,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">ConsensusGraphNodeData</span> &#123;</span><br><span class="line"><span class="comment">//包含一个块随着共识图状态的发展而改变的所有额外信息</span></span><br><span class="line">    <span class="keyword">pub</span> epoch_number: <span class="type">u64</span>,</span><br><span class="line">    partial_invalid: <span class="type">bool</span>,</span><br><span class="line">	pending: <span class="type">bool</span>,</span><br></pre></td></tr></table></figure>
+<ul>
+<li>struct ConsensusGraphPivotData</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Conflux/" rel="tag"># Conflux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/DAGofConsensus-%E7%AC%AC17%E5%91%A8/" rel="prev" title="DAGofConsensus17">
+      <i class="fa fa-chevron-left"></i> DAGofConsensus17
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/DAGofConsensus18/" rel="next" title="DAGofConsensus18">
+      DAGofConsensus18 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E5%8D%B8%E8%BD%BDrust"><span class="nav-number">1.</span> <span class="nav-text">-3、卸载rust</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Visual-Studio-2015-with-C-support-installed"><span class="nav-number">2.</span> <span class="nav-text">-2.Visual Studio 2015 with C++ support installed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rusr-cargo%E5%92%8Cgit%E8%B5%B0%E4%BB%A3%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">Rusr cargo和git走代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-from-Source-Code"><span class="nav-number">4.</span> <span class="nav-text">Build from Source Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-clone"><span class="nav-number">4.1.</span> <span class="nav-text">0.clone</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-cargo-clean"><span class="nav-number">4.2.</span> <span class="nav-text">1.cargo clean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-cargo-update"><span class="nav-number">4.3.</span> <span class="nav-text">2.cargo update</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%983"><span class="nav-number">4.3.1.</span> <span class="nav-text">遇到问题3</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-cargo-build-%E2%80%94-release"><span class="nav-number">4.4.</span> <span class="nav-text">3.cargo build — release</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%984%EF%BC%9A%E6%89%BE%E4%B8%8D%E5%88%B0%E7%BC%96%E8%AF%91%E5%B9%B3%E5%8F%B0"><span class="nav-number">4.4.1.</span> <span class="nav-text">遇到问题4：找不到编译平台</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%985%EF%BC%9A"><span class="nav-number">4.4.2.</span> <span class="nav-text">遇到问题5：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B5%8B%E8%AF%95"><span class="nav-number">5.</span> <span class="nav-text">1.测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%BC%96%E8%AF%91%E6%BA%90%E4%BB%A3%E7%A0%81%E6%97%B6"><span class="nav-number">6.</span> <span class="nav-text">2.编译源代码时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB"><span class="nav-number">7.</span> <span class="nav-text">3.代码解读</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

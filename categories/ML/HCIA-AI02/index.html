@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="数据转换数据进行初步预处理后(清洗[异常值处理，噪声的去除])，将数据变为规格化的形式。 并在归一化和标准化后，进行组合或者转换扩充出新的特征。  1.分类问题中的，对类别编码为数值表示(哑编码）。 哑编码: onehot编码+00…0(全0的编码) 2.连续数据转化为离散值，通过分段。 3.文本数据 wordbag(词袋法)，word2vec(体现词的上下文结构，word—&gt;一串数字)或者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HCIA-AI02">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/HCIA-AI02/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="数据转换数据进行初步预处理后(清洗[异常值处理，噪声的去除])，将数据变为规格化的形式。 并在归一化和标准化后，进行组合或者转换扩充出新的特征。  1.分类问题中的，对类别编码为数值表示(哑编码）。 哑编码: onehot编码+00…0(全0的编码) 2.连续数据转化为离散值，通过分段。 3.文本数据 wordbag(词袋法)，word2vec(体现词的上下文结构，word—&gt;一串数字)或者">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/HCIA-AI02/image-20220323170606872.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/HCIA-AI02/image-20220323204651810.png">
+<meta property="article:published_time" content="2022-03-21T06:12:58.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.345Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="概述">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/HCIA-AI02/image-20220323170606872.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/HCIA-AI02/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>HCIA-AI02 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/HCIA-AI02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HCIA-AI02
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-21 14:12:58" itemprop="dateCreated datePublished" datetime="2022-03-21T14:12:58+08:00">2022-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="数据转换"><a href="#数据转换" class="headerlink" title="数据转换"></a>数据转换</h2><p>数据进行初步预处理后(清洗[异常值处理，噪声的去除])，将数据变为规格化的形式。</p>
+<p>并在归一化和标准化后，进行组合或者转换扩充出新的特征。</p>
+<ul>
+<li>1.分类问题中的，对类别编码为数值表示(<a target="_blank" rel="noopener" href="https://www.deeplearn.me/1393.html">哑编码</a>）。</li>
+<li>哑编码: onehot编码+00…0(全0的编码)</li>
+<li>2.连续数据转化为离散值，通过分段。</li>
+<li><p>3.文本数据 wordbag(词袋法)，word2vec(体现词的上下文结构，word—&gt;一串数字)或者TF-IDF(词频*逆文档频率)</p>
+<ul>
+<li>(IDF给常见的词较小的权重，帮助获得关键信息)</li>
+<li>TF-IDF与一个词在文档中的出现次数成正比，与该词在整个语言（语料库）中的出现次数成反比。</li>
+<li>通过计算文章中各个词的TF-IDF，降序排序，排在最前面的几个词，就是该文章的关键词。</li>
+</ul>
+<span id="more"></span></li>
+<li>4.图像数据  (颜色空间，灰度处理，几何变化, haar特征(通过特征原型在图像窗口上的滑动得到的矩形特征的值），图像增强)</li>
+</ul>
+<p><img src="/categories/ML/HCIA-AI02/image-20220323170606872.png" alt="image-20220323170606872"></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/henuliulei/p/10589211.html">haar特征</a>的四种形式的特征模板，边缘特征、线性特征、中心特征和对角线特征。</p>
+<blockquote>
+<p>积分图</p>
+<p>AdaBoost算法</p>
+</blockquote>
+<h2 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h2><h3 id="带来的好处"><a href="#带来的好处" class="headerlink" title="带来的好处"></a>带来的好处</h3><p>1.避免维度爆炸，</p>
+<p>2.减少训练时间</p>
+<p>3.简化模型，使得模型更容易被解释???</p>
+<p>4.提升模型的泛化性(关键特征的样本是可以迁移的)，避免过拟合。</p>
+<h3 id="1-过滤法-Filter"><a href="#1-过滤法-Filter" class="headerlink" title="1.过滤法(Filter):"></a>1.过滤法(Filter):</h3><p>选择特征的时候是独立的，与模型本身无关。</p>
+<ul>
+<li>通过评估每个特征和目标属性之间的相关性<ul>
+<li>皮尔逊相关系数</li>
+<li>卡方系数</li>
+<li>互信息</li>
+</ul>
+</li>
+<li>过滤法的局限性：倾向于选择冗余的变量(互相依赖的一圈特征都会被选择出来），因为它们没有考虑特征之间的关系。</li>
+</ul>
+<h3 id="2-包装器-wapper"><a href="#2-包装器-wapper" class="headerlink" title="2.包装器(wapper)"></a>2.包装器(wapper)</h3><p>用于评估特征的组合。使用一个预测模型来对特征子集进行评分。</p>
+<p><img src="/categories/ML/HCIA-AI02/image-20220323204651810.png" alt="image-20220323204651810" style="zoom:50%;"></p>
+<ul>
+<li><p>常见方法：特征递归消除法</p>
+</li>
+<li><p>局限性：包装器方法会为每个特征子集训练一个新模型，所以它的计算量非常大。</p>
+</li>
+<li>它会为特定模型选出最好的特征集，导致模型的泛化能力不足。</li>
+</ul>
+<h3 id="3-嵌入法-Embedded"><a href="#3-嵌入法-Embedded" class="headerlink" title="3.嵌入法(Embedded)"></a>3.嵌入法(Embedded)</h3><p>将特征选择作为模型构建的一部分。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A6%82%E8%BF%B0/" rel="tag"># 概述</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/C4-5/" rel="prev" title="C4.5">
+      <i class="fa fa-chevron-left"></i> C4.5
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/ML/HCIA-AI01/" rel="next" title="HCIA-AI01">
+      HCIA-AI01 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">数据转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9"><span class="nav-number">2.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">2.1.</span> <span class="nav-text">带来的好处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%BF%87%E6%BB%A4%E6%B3%95-Filter"><span class="nav-number">2.2.</span> <span class="nav-text">1.过滤法(Filter):</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8C%85%E8%A3%85%E5%99%A8-wapper"><span class="nav-number">2.3.</span> <span class="nav-text">2.包装器(wapper)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B5%8C%E5%85%A5%E6%B3%95-Embedded"><span class="nav-number">2.4.</span> <span class="nav-text">3.嵌入法(Embedded)</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

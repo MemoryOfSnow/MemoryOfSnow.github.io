@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文参考文件为：Conflux白皮书，CFX黄皮书导读     直观地理解共识机制带来的tps、存储上的消耗，以及conflux中block和trans的具体执行时间差异。  CFX声称在共识层面提升区块链的吞吐率，减少区块确认的等待时间， Conflux 的网络参数 参考《如何存储历史数据》   Q1:Conflux的TPS能跑到多少 ? 全节点验证 部分节点验证,交易分片  ​    在比特">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conflux-Notebook5">
+<meta property="og:url" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook5/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="本文参考文件为：Conflux白皮书，CFX黄皮书导读     直观地理解共识机制带来的tps、存储上的消耗，以及conflux中block和trans的具体执行时间差异。  CFX声称在共识层面提升区块链的吞吐率，减少区块确认的等待时间， Conflux 的网络参数 参考《如何存储历史数据》   Q1:Conflux的TPS能跑到多少 ? 全节点验证 部分节点验证,交易分片  ​    在比特">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook5/image-20201125002857777.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook5/image-20201127225414896.png">
+<meta property="article:published_time" content="2020-11-24T16:00:40.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.280Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Conflux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook5/image-20201125002857777.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Conflux-Notebook5 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Conflux-Notebook5
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-25 00:00:40" itemprop="dateCreated datePublished" datetime="2020-11-25T00:00:40+08:00">2020-11-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BlockChain/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>本文参考文件为：<a target="_blank" rel="noopener" href="https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf">Conflux白皮书</a>，<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44282220/article/details/109759233">CFX黄皮书导读</a>     直观地理解共识机制带来的tps、存储上的消耗，以及conflux中block和trans的具体执行时间差异。</p>
+</blockquote>
+<p>CFX声称在共识层面提升区块链的吞吐率，减少区块确认的等待时间，</p>
+<h2 id="Conflux-的网络参数"><a href="#Conflux-的网络参数" class="headerlink" title="Conflux 的网络参数"></a>Conflux 的网络参数</h2><blockquote>
+<p>参考<a href="mp.weixin.qq.com/s/ro-z-9FEv7gYjZ_mbYrj7A">《如何存储历史数据》 </a></p>
+</blockquote>
+<h3 id="Q1-Conflux的TPS能跑到多少"><a href="#Q1-Conflux的TPS能跑到多少" class="headerlink" title="Q1:Conflux的TPS能跑到多少 ?"></a><strong>Q1:Conflux的TPS能跑到多少 ?</strong></h3><ul>
+<li>全节点验证</li>
+<li>部分节点验证,交易分片</li>
+</ul>
+<p>​    在比特币中，每一个区块都需要广播给所有矿工，每一笔交易都被所有人验证过，我们称之为一个交易得到的“全节点验证”。在一些 Sharding方案的实验中，所有的交易被分成 30 份, 每个节点可能只验证其中一份。这样的交易称为“部分节点验证”。很显然，“部分节点验证”交易的总 TPS 是可以成倍于 “全节点验证” 的。</p>
+<p>Conflux 在共识层面可以做到 <strong>4000-6000</strong> TPS 的“全节点验证”, 如果考虑合约执行、状态读写等因素，实际部署可能会低一些。Sharding 技术是共识层技术一个很好的补充，Conflux 有计划在未来实现 Sharding, 提供更高的 “部分节点验证” TPS。</p>
+<span id="more"></span>
+<h3 id="为什么快？"><a href="#为什么快？" class="headerlink" title="为什么快？"></a>为什么快？</h3><p>更充分地利用网络中分叉区块对系统安全性和吞吐率的贡献</p>
+<!--more-->
+<h3 id="Q2-Conflux的一个块多大"><a href="#Q2-Conflux的一个块多大" class="headerlink" title="Q2:Conflux的一个块多大 ?"></a><strong>Q2:Conflux的一个块多大 ?</strong></h3><p>200~300KB。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Block time</td>
+<td>0<em>.</em>5 s</td>
+</tr>
+<tr>
+<td>Maximum block size bound</td>
+<td>200 KB</td>
+</tr>
+<tr>
+<td>Starting coinbase award</td>
+<td>7 CFX</td>
+</tr>
+<tr>
+<td>Starting diffificulty (<strong>d</strong>0)</td>
+<td>3<em>×</em>10(4) = 30000</td>
+</tr>
+<tr>
+<td>Starting block gas limit</td>
+<td>3<em>×</em>107 = 30000000</td>
+</tr>
+<tr>
+<td>Anti-cone penalty factor (<em>γ</em>)</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Deferred execution</td>
+<td>5 epochs</td>
+</tr>
+<tr>
+<td>Mining reward freezing time</td>
+<td>12 epochs</td>
+</tr>
+<tr>
+<td>Snapshot period</td>
+<td>100000 epochs</td>
+</tr>
+<tr>
+<td>AdminControl Contract Address</td>
+<td>0x0888000000000000000000000000000000000000</td>
+</tr>
+<tr>
+<td>SponsorControl Contract Address</td>
+<td>0x0888000000000000000000000000000000000001</td>
+</tr>
+<tr>
+<td>Staking Contract Address</td>
+<td>0x0888000000000000000000000000000000000002</td>
+</tr>
+<tr>
+<td>tps</td>
+<td>4000~6000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>比特币一个区块大小为1MB，比特币对每笔交易的大小没有限制，一个区块一般可包含2000~3000笔交易。</p>
+<blockquote>
+<p>当前正在运行的CFX网络，平均每秒生成 4 个区块，每个块中大约有1600个交易，每个区块大小约为 300KB。</p>
+<p>但是，对于交易的确认，在没有坏人攻击的情况下，5s 一个 4MB 大小的区块，确认时间约 8 分钟。在有 30% 算力攻击的情况下，确认时间约 16 分钟。</p>
+</blockquote>
+<p>那么在满载的情况下，一秒的吞吐量为 1.2MB，一天约 100GB，每年新增的交易历史数据可达 30TB。</p>
+<ul>
+<li>确认交易的TPS：实验数据4000~6000tps；<strong>实际能达到3000+</strong></li>
+<li>GPU挖矿，Pow证明</li>
+</ul>
+<p>对于在 Conflux 上运行的 DApp 来说，如果其本身需要保存和随时访问的数据量不是很大 —— 比如说每年新增 1MB 数据，则这些业务数据完全可以存储在<strong>智能合约的内部状态</strong>里。存储于合约内部状态的数据会作为世界状态的一部分被每一个全节点保存和同步，无需自己运行档案节点也可以保证最高程度的可用性。</p>
+<h3 id="Q3：Conflux的一个交易记录多大？"><a href="#Q3：Conflux的一个交易记录多大？" class="headerlink" title="Q3：Conflux的一个交易记录多大？"></a><strong>Q3：Conflux的一个交易记录多大</strong>？</h3><h3 id="Q4-Conflux的一个块中最多可包括多少笔交易"><a href="#Q4-Conflux的一个块中最多可包括多少笔交易" class="headerlink" title="Q4:Conflux的一个块中最多可包括多少笔交易 ?"></a><strong>Q4:Conflux的一个块中最多可包括多少笔交易 ?</strong></h3><p>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_34262482/article/details/88705392">Conflux伍鸣：用DAG结构提升中本聪共识的吞吐率</a></p>
+<h3 id="Q5：CFX对存储空间消耗"><a href="#Q5：CFX对存储空间消耗" class="headerlink" title="Q5：CFX对存储空间消耗"></a>Q5：CFX对存储空间消耗</h3><p><strong>认证数据存储（CFX的创新点）</strong></p>
+<h3 id="Q6：CFX对算力消耗（能耗）"><a href="#Q6：CFX对算力消耗（能耗）" class="headerlink" title="Q6：CFX对算力消耗（能耗）"></a>Q6：CFX对算力消耗（能耗）</h3><h3 id="Q7：CFX对带宽消耗"><a href="#Q7：CFX对带宽消耗" class="headerlink" title="Q7：CFX对带宽消耗"></a>Q7：CFX对带宽消耗</h3><p>整个网络中有多个区块在并发地广播</p>
+<p><strong>交易转发协议（CFX的创新点）</strong></p>
+<h3 id="Q8：id是怎么确立的？"><a href="#Q8：id是怎么确立的？" class="headerlink" title="Q8：id是怎么确立的？"></a>Q8：id是怎么确立的？</h3><h3 id="Q8：哪些块有效"><a href="#Q8：哪些块有效" class="headerlink" title="Q8：哪些块有效"></a>Q8：哪些块有效</h3><h3 id="Q9：部分有效块内的交易执行吗？"><a href="#Q9：部分有效块内的交易执行吗？" class="headerlink" title="Q9：部分有效块内的交易执行吗？"></a>Q9：部分有效块内的交易执行吗？</h3><p>执行。</p>
+<h3 id="Q10：blaming机制什么时候启动？"><a href="#Q10：blaming机制什么时候启动？" class="headerlink" title="Q10：blaming机制什么时候启动？"></a>Q10：blaming机制什么时候启动？</h3><h3 id="Q11：启动后被标记的块有效吗？其中的交易呢？"><a href="#Q11：启动后被标记的块有效吗？其中的交易呢？" class="headerlink" title="Q11：启动后被标记的块有效吗？其中的交易呢？"></a>Q11：启动后被标记的块有效吗？其中的交易呢？</h3><h3 id="Q12：CFX的交易类型"><a href="#Q12：CFX的交易类型" class="headerlink" title="Q12：CFX的交易类型"></a>Q12：CFX的交易类型</h3><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wanghui-garcia/p/9646508.html">secp256k1</a></p>
+</blockquote>
+<p>交易是一个签名数据包，用于从一个账户向另一个账户或者向一个合约转以太币、调用合约方法或者部署一个新合约。</p>
+<h2 id="2-CFX预防双花攻击"><a href="#2-CFX预防双花攻击" class="headerlink" title="2.CFX预防双花攻击"></a>2.CFX预防双花攻击</h2><p><img src="/categories/BlockChain/Conflux-Notebook5/image-20201125002857777.png" alt="image-20201125002857777"></p>
+<p>在这个图中，我们首先来看一下一个攻击者如何能够逆转在账本中的一个交易，比如交易4。为了做到这一点，一个攻击者需要产生一个交易4的双花交易，打包到一个区块里面，并且将这个区块在区块的全序中插入到区块B的前面。</p>
+<p>但攻击者很难做到这一点，主要有两个原因。第一个就是除非攻击者能够改变主链，不然他不能够逆转交易，因为交易的顺序是由主链来决定的。比如一个攻击者想把一个块插在靠前的位置，他能做就是在一个很早的Epoch里面的区块后面接着产生新块。<strong>但是只要这个块不在主链上，它就最终还是会属于一个很晚的Epoch。因为当一个诚实的新块产生以后，它会通过引用边把这个攻击者的区块给拉到新的Epoch里面。</strong></p>
+<h3 id="2-2-CFX为什么采用PoW"><a href="#2-2-CFX为什么采用PoW" class="headerlink" title="2.2 CFX为什么采用PoW"></a>2.2 CFX为什么采用PoW</h3><p>引入了很多新的攻击情形和安全性威胁。针对PoS的攻击有，无利害攻击（Nothing-at-Stake Attack）长程攻击（Long-Range Attack）</p>
+<p>所以CFX的性能提升还是靠DAG，而非不用PoW。</p>
+<h2 id="第三章-基本组件"><a href="#第三章-基本组件" class="headerlink" title="第三章 基本组件"></a>第三章 基本组件</h2><p><a href="mp.weixin.qq.com/s/P2NYTqmouY8MRppZnnN1yA">树图上的轻节点设计（1）</a></p>
+<p>轻节点没有能力维护当前整个共识系统里所有账户的状态，比特币以SPV验证受双花攻击的代价为限制，使得轻节点不用担心在金额不太大的交易中因为采用 SPV 确认规则而被骗。</p>
+<p>对于状态根的判断比较容易理解：<strong>打包新区块的矿工节点需要沿着枢轴链执行每个 Epoch 中的交易，</strong>在这个过程中自然会知道<strong>每个处在枢轴链上的“主链区块”应该有什么样的状态根</strong>，因此就可以判断出实际处在枢轴链上的区块是否填对了这一项。而且因为按照枢轴链指定的顺序执行所有交易本来就是每个全节点都应该做的，所以上述检查并不带来额外的负担。</p>
+<p>由于 Blaming 域是在每个区块的区块头部分的，所以轻节点也可以很容易看到矿工们对于其它区块的状态根是否正确的看法。根据这些信息，轻节点就可以比较容易地判断哪些区块的状态根是值得信任的，哪些区块的状态根有问题了。然后只需选择相信基于值得信任的状态根做出的证明即可。</p>
+<h3 id="3-2网络延迟执行策略"><a href="#3-2网络延迟执行策略" class="headerlink" title="3.2网络延迟执行策略"></a>3.2网络延迟执行策略</h3><p><a href="mp.weixin.qq.com/s/IjdruLxaWDmchLC6hEj1QA">网络延迟执行策略</a></p>
+<p><strong>打包、执行、回滚、Stateroot</strong></p>
+<blockquote>
+<p>交易吞吐量提高后，让节点更有效率地执行交易</p>
+</blockquote>
+<ul>
+<li><p>Conflux 的共识：<strong>交易的执行和打包相分离</strong>。即矿工在打包新区块的时候只需要验证被打包的交易<strong>形式上合法</strong>即可，而<strong>不需要实际执行</strong>这些交易。</p>
+</li>
+<li><p>在传统的区块链系统中，打包即执行。矿工往往需要执行自己打包的区块中的所有交易，再将执行交易以后的状态根（State root）一并放在区块头里。</p>
+</li>
+</ul>
+<p>首先，任何区块链都难免出现回滚的现象，<strong>出块速度越快则回滚也越容易发生</strong>。</p>
+<p>诚然，长度比较短的回滚并不会对区块链的安全性构成任何威胁。但是每次回滚发生的时候，都意味着当前的世界<strong>状态也要跟着回滚</strong>，之前执行过一遍的<strong>交易在回滚后都要重新执行</strong>。这无疑会<strong>浪费计算资源</strong>。</p>
+<p>CFX网络的<strong>并发区块对应的区块链历史往往是互不包含的</strong>，因此，验证每个区块内状态根的正确性也将是一件非常耗费计算资源的任务。</p>
+<p>与其在打包的时候就执行所有交易，不如“让子弹先飞一会儿”，等到<strong>区块稍微稳定一点（甚至被初步确认以后）再执行更有效率</strong>。实际上，最有效率的执行方式无疑是等一个区块被确认以后再执行区块里面的交易，这样可以保证不会因为回滚而重复执行交易；但是考虑到，通常我们<strong>都希望尽早确定交易执行的结果</strong>，执行的步骤可以稍微提前一点，<strong>保证在区块被最终确认的时候可以拿到区块内交易执行的结果</strong>，这样就不会耽误任何后续的使用。</p>
+<p>例如，<strong>延迟5个epoch区块执行</strong>。根据测试网的实验结果，<strong>Conflux 中的枢轴链时不时会回滚两到三个区块</strong>，但是鲜少出现连续回滚四个或更多区块的情况</p>
+<p>另一方面，为了减少检查每个区块内的状态根带来的计算负担，Conflux 采用了一种比较“节俭”的检测规则，即<strong>只检查位于枢轴链（主链）上的区块的状态根是否正确</strong>。对于别的区块，<strong>除非它们因为某次回滚而落在新的枢轴链上，</strong>否则就不检查其状态根是否正确。这样就大大减少了单纯为了检查正确性而花费计算资源执行交易的情况，将宝贵的计算资源用在执行影响共识状态的有用的交易上<strong>（交易决定状态）</strong>，同时也让<strong>区块回归其最初的“打包交易”的作用</strong>。</p>
+<p>至于安全性方面，即便有一部分矿工偷懒填了错误的状态根，也不会影响别的全节点对于当前共识状态的判断。只要这些矿工依然遵照共识协议<strong>检查区块间的引用关系和正确地选择引用的区块</strong>，他们的算力依然为系统的安全性作出贡献。</p>
+<p>总结来说，Conflux 通过将交易的打包与交易的执行相分离的方式，避免了短回滚和重复执行交易造成的浪费，实现了更高的计算资源利用率。这也是 Conflux 在提高交易执行效率的方面除了重写 Solidity 虚拟机以外做出的最重要的改进。</p>
+<h2 id="第四章-共识协议"><a href="#第四章-共识协议" class="headerlink" title="第四章 共识协议"></a>第四章 共识协议</h2><p><strong>关键词：DAG,GHAST,CheckPoint，Confirmation Rule</strong></p>
+<h3 id="检查内容？"><a href="#检查内容？" class="headerlink" title="检查内容？"></a>检查内容？</h3><p>1.区块间的引用关系和正确地选择引用的区块</p>
+<p>2.Nonce</p>
+<p>3.Stateroot</p>
+<h3 id="4-1最长链规则的优势与不足"><a href="#4-1最长链规则的优势与不足" class="headerlink" title="4.1最长链规则的优势与不足"></a>4.1最长链规则的优势与不足</h3><blockquote>
+<p>mp.weixin.qq.com/s/cf6uODQDCN_wj6Db9m6-pQ</p>
+</blockquote>
+<p>从比特币开始，无论是最初的只是改改参数的莱特币，还是后来提出的 Bitcoin-NG [1], 以及采用了 DAG 结构的 OHIE [2]，众多公链共识算法的核心理念都是最长链规则。</p>
+<p>OHIE 的论文 [2] 提到了很重要的一点：对于一个区块链系统<strong>，最重要的是一个“端到端”的安全性证明</strong></p>
+<p>被研究最多的最长链规则，其安全性的<strong>完整证明</strong>也要晚至 2016 年 9 月才由康奈尔大学的密码学教授 Rafael Pass 等人首次完成 [3]</p>
+<p>相比之下，其它的共识算法包括最重链规则在 2019 年以前都没有一个完整的安全性证明，甚至有些共识算法连在限定条件下的安全性证明都没有。</p>
+<p>“孤块”是指那些形式上合法但是最终没有进入主链（最长链）的区块。在理想的情况下，诚实节点每次生成区块都会将最长链的长度增加一。但是，如果两个诚实节点近乎同时挖出了两个区块，互相都没有引用对方作为父亲区块，那么这两个区块就形成<strong>竞争关系</strong>。相互竞争的区块最终至多只有一个进入最长链中，其余的都会成为不对最长链做出任何贡献的“孤块”。</p>
+<p>一旦系统中的“孤块”过多，最长链的增长速率就会受到影响，进而给攻击者可乘之机。例如在 50% 的诚实区块成为“孤块”的情况下，最长链的平均增长速度就只有诚实节点出块速度的一半，此时攻击者只需要 34% 的总算力（<strong>多于诚实算力的一半</strong>）就可以对任意早的交易发起双花攻击。</p>
+<p>孤块”的出现频率与一个比值有关：平均生成一个区块所需的时间 / 区块在点对点网络中广播需要的时间，我们暂且称为安全性系数。这个比值越高，则孤块出现的频率越少，相应的也就更安全。根据文章 [3] 中的分析，在这个比值大于 7 时，双花攻击所需算力的理论阈值是 45% 左右；比值大于 60 时，双花攻击所需算力的理论阈值是 49.5% 左右。目前比特币的比值在 60 左右。</p>
+<ol>
+<li><p>安全性系数 = 平均生成一个区块的时间 / 区块广播时间</p>
+</li>
+<li><p>网络带宽系数 =区块大小 / 区块广播时间   多少时间内广播一定大小的块</p>
+</li>
+<li><p>单笔交易负载 = 区块大小 / 每个区块交易数量</p>
+</li>
+<li><p>TPS = 每个区块交易数量 / 平均生成一个区块的时间</p>
+</li>
+</ol>
+<p>也就是说，</p>
+<p>安全性比值 <em> 单笔交易负载 </em> TPS = 网络带宽系数 </p>
+<h4 id="在最长链规则下提高-TPS-的切入点"><a href="#在最长链规则下提高-TPS-的切入点" class="headerlink" title="在最长链规则下提高 TPS 的切入点"></a>在最长链规则下提高 TPS 的切入点</h4><p>\1. 降低安全性系数：简单地改比特币的参数，牺牲一部分安全性以换取更高的效率。例如缩短出块时间或者增大区块尺寸（相当于增加区块广播时间）。</p>
+<p>\2. 降低单笔交易负载：使用致密区块（compact block）技术，把完整传输每笔交易（约数百 KB）变成传输交易的短 ID（4～6 B）。</p>
+<p>\3. 提高网络带宽系数：提高共识节点的加入门槛，牺牲去中心化程度以换取更高的效率。极端情况下可以只保留少量光纤直连的超级节点（比如说 21 个）。</p>
+<p>在提高 TPS 这条路上，尽管最长链规则受到以上分析的制约，但通过合理的设计，这个天花板还是可以绕开的。</p>
+<h4 id="最长链规则的不足"><a href="#最长链规则的不足" class="headerlink" title="最长链规则的不足"></a>最长链规则的不足</h4><p>最长链规则最大的弱点，是区块的确认时间。</p>
+<p>如果把安全性系数设为 10，则等待 6 个确认区块的平均时间是 60 * 区块广播需要的时间；如果需要在两分钟内确认一笔交易，就需要把区块广播时间控制在 2 秒内。</p>
+<p>实际上，在区块广播中的每一跳，每个节点都需要进行验证和执行等一系列操作之后才能向下一跳转发。在节点数较多的时候，即使是不大的区块想要在 2 秒内传遍全网所有（或绝大多数）节点也是一件非常困难的事情。从目前的网络环境来看，3 到 5 分钟的确认时间基本上已经是最长链规则的极限。</p>
+<p>Conflux 的原型版本（也即目前公开的版本，新版本的文章和技术规范尚未公开发布）中区块的确认时间是 4 到 7 分钟，看起来也没有做得更好。实际上，随着我们对最重链规则进行更深入的研究并进一步发掘其特有的潜力，在 PoW 链的确认时间这点上CFX已经取得了惊人的突破，实现了远超最长链规则的确认速度…… </p>
+<h3 id="4-2-最重链规则的优势与隐患（1）"><a href="#4-2-最重链规则的优势与隐患（1）" class="headerlink" title="4.2 最重链规则的优势与隐患（1）"></a>4.2 最重链规则的优势与隐患（1）</h3><p>如果孤块出现过于频繁，最长链增长的速率就会降低。一旦这个速率低于攻击者生成区块的速率，攻击者就可以从任意早的地方发起攻击，最终追上最长链，从而改写区块链上的历史。</p>
+<hr>
+<p>最重链规则在设计的时候，刻意削弱了“孤块”的影响。</p>
+<p>在最重链规则下，如果从某一时刻开始，所有诚实者生成的区块都将一个区块 A 作为自己的祖先。</p>
+<p>也就是说，这些新区块都在以区块 A 为根节点的子树中。那么，无论这些新生成的块中有多少“孤块”，区块 A 的子树权重增长的速率都不会打折扣。</p>
+<p>对于区块 A 所有兄弟区块，只要攻击者的总算力低于诚实者的总算力，那么无论攻击者做什么，它的子树权重增长速率都很难赶上子树 A 的权重增长速率。最终攻击者没有能力改变 “区块 A 打败了它的所有兄弟” 这一事实。</p>
+<p>对于 A的父亲区块、祖父区块等等，类似的结论同样成立。这样，区块 A 就成为了一个进入“最重链”的区块，且这个事实无法被攻击者逆转。</p>
+<p>从以上分析可以看出，最重链规则完全不关心新生成的区块中有多少孤块，并具有这样的性质：“无论出块速度多快，最重链规则的攻击阈值都是&gt;50%（即通常说的51%）”。</p>
+<hr>
+<h4 id="交易确认时间"><a href="#交易确认时间" class="headerlink" title="交易确认时间"></a>交易确认时间</h4><h5 id="1-假设了诚实节点新生成的区块都在区块-A-的子树中"><a href="#1-假设了诚实节点新生成的区块都在区块-A-的子树中" class="headerlink" title="1.假设了诚实节点新生成的区块都在区块 A 的子树中"></a>1.假设了诚实节点新生成的区块都在区块 A 的子树中</h5><p>交易确认与抛硬币的例子非常相似：硬币抛出正面对应着诚实节点生成了一个区块，抛出反面对应着攻击者生成了一个区块。如果攻击者和诚实节点生活在一个没有网络延迟的世界中，区块 A 以多大概率被确认完全取决于：</p>
+<p><strong>区块A的子树权重 - 区块A竞争兄弟的子树权重</strong></p>
+<p>(更严格的说，在“最重链规则”里，对于区块 A 到创世块这条链上的每一个区块，它和它的竞争兄弟的权重差值都会影响确认概率)</p>
+<p>考虑网络延迟，</p>
+<p><strong>交易区块的子树权重† - 竞争兄弟的子树权重† - 还没有传遍全网的区块</strong></p>
+<blockquote>
+<p>† 计算子树权重时，只考虑已经被所有节点收到的区块</p>
+</blockquote>
+<p>CFX在论文和实验中确认，在出块速度为 4 区块/秒 时，Conflux 可以在 30 秒之内得到等同于比特币 6 个确认块的安全性！<strong>将 PoW 链确认时间压缩进一分钟内</strong></p>
+<hr>
+<p>2.诚实节点新生成的区块不一定在区块 A 的子树中</p>
+<h3 id="4-3最重链规则缺陷1：“公共祖先区块”的“王储之争”"><a href="#4-3最重链规则缺陷1：“公共祖先区块”的“王储之争”" class="headerlink" title="4.3最重链规则缺陷1：“公共祖先区块”的“王储之争”"></a>4.3最重链规则缺陷1：“公共祖先区块”的“王储之争”</h3><p> 在树图结构中，我们不要求待确认区块是公共祖先，但要求待确认区块所在epoch中的主链区块是公共祖先。</p>
+<p>以太坊采用了最重链规则的一个变种，我们就将以太坊当做最重链规则一个实际部署的例子。</p>
+<p>在以太坊中，我们可以看到，多数区块都进入了主链，然后只需等待几分钟甚至更短的时间，所有新生成的诚实区块都会出现在这个区块的子树中。也就是说，这个区块成为了公共祖先。然后所有新的诚实区块齐心协力增加它的子树权重。<strong>使得占有少数算力的攻击者无法再“扶植”一个兄弟作为竞争者</strong>。</p>
+<h4 id="存活性攻击中的平衡攻击"><a href="#存活性攻击中的平衡攻击" class="headerlink" title="存活性攻击中的平衡攻击"></a>存活性攻击中的平衡攻击</h4><p>通过一些分析可以得到，在出块速度足够快的时候，哪怕算力很小的攻击者，都有一定的概率让诚实节点永远无法打破这个困局。</p>
+<p>如果攻击者只平衡两棵子树的算力和网络，不进行“藏块”的操作，诚实节点还是有能力打破这个困局的。</p>
+<p>而如果攻击者还会在每个分支上挖一些块藏起来，那么每次诚实节点即将打破困局的时候，攻击者可以“主动干预”，放出一些藏在弱势分支上的区块，来继续维持平衡（就像三国杀里的内奸一样）。</p>
+<h3 id="4-4-最重链规则缺陷2：你的主链我做主"><a href="#4-4-最重链规则缺陷2：你的主链我做主" class="headerlink" title="4.4 最重链规则缺陷2：你的主链我做主"></a>4.4 最重链规则缺陷2：你的主链我做主</h3><p><strong>分割攻击</strong></p>
+<p>40%，20%，20%，20%。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook5/image-20201127225414896.png" alt="image-20201127225414896"></p>
+<h2 id="第六章-交易处理"><a href="#第六章-交易处理" class="headerlink" title="第六章 交易处理"></a>第六章 交易处理</h2><p>介绍了 Conflux 网络的交易执行流程。</p>
+<p>Conflux 网络兼容以太坊虚拟机（EVM），在确定所有交易的全序并移除无效交易之后，余下的所有合法交易将如同以太坊链上的打包顺序一样在以太坊虚拟机上执行。Conflux 虚拟机 CVM 与 EVM 最大的不同点在于 Conflux 支持代付费机制。</p>
+<h3 id="6-2-代付费机制"><a href="#6-2-代付费机制" class="headerlink" title="6.2 代付费机制"></a>6.2 代付费机制</h3><p>方便新用户体验区块链，特别是让账户余额为 0 的新用户也可以使用链上的智能合约。CFX省却了发起交易前必须先把账户余额从 0 变成 1 这一步，让Sponsor为调用智能合约的交易<strong>代付交易费</strong>，从而允许余额为 0 的账户直接调用智能合约。</p>
+<blockquote>
+<p>羊毛出在猪身上狗来买单</p>
+</blockquote>
+<p>互联网应用获客的最大秘诀：尽量降低用户的使用成本，尤其是新用户第一次使用的成本。</p>
+<p><strong>多次小额付费给人带来的痛苦感往往远超过实际付费的金额。</strong></p>
+<p>区块链的认知成本：</p>
+<ul>
+<li>首先需要了解一些基本的密码学知识和区块链原理，</li>
+<li>用户管理账户地址和密钥</li>
+<li>熟悉基础操作</li>
+<li>支付交易费</li>
+</ul>
+<p>用户在链上的是活动，无论是转账还是调用智能合约，都要发起交易然后由矿工去打包和执行之后才能生效。用户想要自己的交易生效，就必须支付给矿工<strong>打包</strong>和<strong>执行交易</strong>的费用。</p>
+<h4 id="合约钱包"><a href="#合约钱包" class="headerlink" title="合约钱包"></a>合约钱包</h4><p>简化合约手续。</p>
+<p>目前市场上对于初次使用区块链的用户最友好的应该算是合约钱包了。例如以太坊上的 Argent 钱包，EOS 上的 Mykey 钱包，就可以帮助用户摆脱“私钥”、“助记词”、“手续费”等脑细胞杀手，通过钱包内深度集成的接口与区块链上的 Compound 和 Kyber 等 DeFi（去中心化金融）应用交互，且由 Argent/Mykey 公司承担这些交互产生的手续费。</p>
+<p>但另一方面，合约钱包在<strong>集成特定应用</strong>的同时也限制了用户自由<strong>访问各类智能合约</strong>，使“智能钱包”变得不再智能。在遇到拥堵时，合约钱包不透明的交易处理机制也降低了用户对交易的控制能力。例如前段时间 3 月 13 日以太坊交易费率暴涨，Argent 为用户代发交易的账户有一笔交易的费率设置得过低，以致于通过这个账户代发的后续交易被阻塞了两个多小时。</p>
+<p>此外，通过合约钱包进行交易比通过普通钱包直接进行要多一个步骤，因此消耗更大、成本也更高，进一步降低了整个网络的效率。</p>
+<p>更重要的是，合约钱包支持的 DApp 也非常有限，用户想要使用更多 DApp ，操作也有诸多不便。</p>
+<h4 id="CFX的Sponsorship"><a href="#CFX的Sponsorship" class="headerlink" title="CFX的Sponsorship"></a>CFX的Sponsorship</h4><p>每个智能合约的（关于交易费的）赞助情况可以由如下几个参数描述：</p>
+<p><strong>·</strong> <strong>赞助者（Sponsor）</strong>：记录提供了当前赞助金的提供者；</p>
+<p><strong>·</strong> <strong>赞助金余额（Sponsor balance）</strong>：记录了当前赞助金的余额；</p>
+<p><strong>·</strong> <strong>单笔交易资助金额上限（Sponsor limit per transaction）</strong>：这是赞助者愿意为每笔交易提供的资助上限；</p>
+<p><strong>·</strong> <strong>用户白名单（Whitelist）</strong>：这个名单记录了合约愿意资助的账户列表，也可以设置为资助所有账户。</p>
+<p>用户 A 发起了一笔调用合约 C 的交易，交易费的来源将是合约 C 的赞助金。矿工检查C是否愿意（白名单、上限）且有能力（余额）；C的赞助金来自DApp的开发者和Conflux 生态基金。</p>
+<p>赞助者和赞助金的管理：任何人只要肯出钱就可以成为新的赞助者。用户可以向任何合约捐一笔赞助金并声明愿为每笔交易提供的资助上限，只要<strong>捐的钱超过该合约当前的赞助金余额</strong>且<strong>单笔交易资助上限不减少</strong>，则合约的赞助者就会被替换成新的金主——之前的赞助金余额会被原路退回给上一个赞助者。</p>
+<p><strong>更详细情况见CFX5-2</strong></p>
+<p>单笔交易资助金额的<strong>上限只有在当前资助金余额已经小于单笔交易资助上限的情况才可以减少</strong>。</p>
+<h2 id="第七章-存储抵押"><a href="#第七章-存储抵押" class="headerlink" title="第七章 存储抵押"></a>第七章 存储抵押</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Conflux/" rel="tag"># Conflux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/Conflux-Notebook4/" rel="prev" title="Conflux-Notebook4">
+      <i class="fa fa-chevron-left"></i> Conflux-Notebook4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/CFX5-1/" rel="next" title="CFX5-1">
+      CFX5-1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Conflux-%E7%9A%84%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">Conflux 的网络参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q1-Conflux%E7%9A%84TPS%E8%83%BD%E8%B7%91%E5%88%B0%E5%A4%9A%E5%B0%91"><span class="nav-number">1.1.</span> <span class="nav-text">Q1:Conflux的TPS能跑到多少 ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%AB%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">为什么快？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q2-Conflux%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%97%E5%A4%9A%E5%A4%A7"><span class="nav-number">1.3.</span> <span class="nav-text">Q2:Conflux的一个块多大 ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q3%EF%BC%9AConflux%E7%9A%84%E4%B8%80%E4%B8%AA%E4%BA%A4%E6%98%93%E8%AE%B0%E5%BD%95%E5%A4%9A%E5%A4%A7%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">Q3：Conflux的一个交易记录多大？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q4-Conflux%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%97%E4%B8%AD%E6%9C%80%E5%A4%9A%E5%8F%AF%E5%8C%85%E6%8B%AC%E5%A4%9A%E5%B0%91%E7%AC%94%E4%BA%A4%E6%98%93"><span class="nav-number">1.5.</span> <span class="nav-text">Q4:Conflux的一个块中最多可包括多少笔交易 ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q5%EF%BC%9ACFX%E5%AF%B9%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E6%B6%88%E8%80%97"><span class="nav-number">1.6.</span> <span class="nav-text">Q5：CFX对存储空间消耗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q6%EF%BC%9ACFX%E5%AF%B9%E7%AE%97%E5%8A%9B%E6%B6%88%E8%80%97%EF%BC%88%E8%83%BD%E8%80%97%EF%BC%89"><span class="nav-number">1.7.</span> <span class="nav-text">Q6：CFX对算力消耗（能耗）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q7%EF%BC%9ACFX%E5%AF%B9%E5%B8%A6%E5%AE%BD%E6%B6%88%E8%80%97"><span class="nav-number">1.8.</span> <span class="nav-text">Q7：CFX对带宽消耗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q8%EF%BC%9Aid%E6%98%AF%E6%80%8E%E4%B9%88%E7%A1%AE%E7%AB%8B%E7%9A%84%EF%BC%9F"><span class="nav-number">1.9.</span> <span class="nav-text">Q8：id是怎么确立的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q8%EF%BC%9A%E5%93%AA%E4%BA%9B%E5%9D%97%E6%9C%89%E6%95%88"><span class="nav-number">1.10.</span> <span class="nav-text">Q8：哪些块有效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q9%EF%BC%9A%E9%83%A8%E5%88%86%E6%9C%89%E6%95%88%E5%9D%97%E5%86%85%E7%9A%84%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E5%90%97%EF%BC%9F"><span class="nav-number">1.11.</span> <span class="nav-text">Q9：部分有效块内的交易执行吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q10%EF%BC%9Ablaming%E6%9C%BA%E5%88%B6%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%90%AF%E5%8A%A8%EF%BC%9F"><span class="nav-number">1.12.</span> <span class="nav-text">Q10：blaming机制什么时候启动？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q11%EF%BC%9A%E5%90%AF%E5%8A%A8%E5%90%8E%E8%A2%AB%E6%A0%87%E8%AE%B0%E7%9A%84%E5%9D%97%E6%9C%89%E6%95%88%E5%90%97%EF%BC%9F%E5%85%B6%E4%B8%AD%E7%9A%84%E4%BA%A4%E6%98%93%E5%91%A2%EF%BC%9F"><span class="nav-number">1.13.</span> <span class="nav-text">Q11：启动后被标记的块有效吗？其中的交易呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q12%EF%BC%9ACFX%E7%9A%84%E4%BA%A4%E6%98%93%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.14.</span> <span class="nav-text">Q12：CFX的交易类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-CFX%E9%A2%84%E9%98%B2%E5%8F%8C%E8%8A%B1%E6%94%BB%E5%87%BB"><span class="nav-number">2.</span> <span class="nav-text">2.CFX预防双花攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-CFX%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%87%E7%94%A8PoW"><span class="nav-number">2.1.</span> <span class="nav-text">2.2 CFX为什么采用PoW</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">第三章 基本组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2%E7%BD%91%E7%BB%9C%E5%BB%B6%E8%BF%9F%E6%89%A7%E8%A1%8C%E7%AD%96%E7%95%A5"><span class="nav-number">3.1.</span> <span class="nav-text">3.2网络延迟执行策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">第四章 共识协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E5%86%85%E5%AE%B9%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">检查内容？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1%E6%9C%80%E9%95%BF%E9%93%BE%E8%A7%84%E5%88%99%E7%9A%84%E4%BC%98%E5%8A%BF%E4%B8%8E%E4%B8%8D%E8%B6%B3"><span class="nav-number">4.2.</span> <span class="nav-text">4.1最长链规则的优势与不足</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E6%9C%80%E9%95%BF%E9%93%BE%E8%A7%84%E5%88%99%E4%B8%8B%E6%8F%90%E9%AB%98-TPS-%E7%9A%84%E5%88%87%E5%85%A5%E7%82%B9"><span class="nav-number">4.2.1.</span> <span class="nav-text">在最长链规则下提高 TPS 的切入点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E9%93%BE%E8%A7%84%E5%88%99%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="nav-number">4.2.2.</span> <span class="nav-text">最长链规则的不足</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%9C%80%E9%87%8D%E9%93%BE%E8%A7%84%E5%88%99%E7%9A%84%E4%BC%98%E5%8A%BF%E4%B8%8E%E9%9A%90%E6%82%A3%EF%BC%881%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">4.2 最重链规则的优势与隐患（1）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E7%A1%AE%E8%AE%A4%E6%97%B6%E9%97%B4"><span class="nav-number">4.3.1.</span> <span class="nav-text">交易确认时间</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%81%87%E8%AE%BE%E4%BA%86%E8%AF%9A%E5%AE%9E%E8%8A%82%E7%82%B9%E6%96%B0%E7%94%9F%E6%88%90%E7%9A%84%E5%8C%BA%E5%9D%97%E9%83%BD%E5%9C%A8%E5%8C%BA%E5%9D%97-A-%E7%9A%84%E5%AD%90%E6%A0%91%E4%B8%AD"><span class="nav-number">4.3.1.1.</span> <span class="nav-text">1.假设了诚实节点新生成的区块都在区块 A 的子树中</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3%E6%9C%80%E9%87%8D%E9%93%BE%E8%A7%84%E5%88%99%E7%BC%BA%E9%99%B71%EF%BC%9A%E2%80%9C%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88%E5%8C%BA%E5%9D%97%E2%80%9D%E7%9A%84%E2%80%9C%E7%8E%8B%E5%82%A8%E4%B9%8B%E4%BA%89%E2%80%9D"><span class="nav-number">4.4.</span> <span class="nav-text">4.3最重链规则缺陷1：“公共祖先区块”的“王储之争”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E6%B4%BB%E6%80%A7%E6%94%BB%E5%87%BB%E4%B8%AD%E7%9A%84%E5%B9%B3%E8%A1%A1%E6%94%BB%E5%87%BB"><span class="nav-number">4.4.1.</span> <span class="nav-text">存活性攻击中的平衡攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E6%9C%80%E9%87%8D%E9%93%BE%E8%A7%84%E5%88%99%E7%BC%BA%E9%99%B72%EF%BC%9A%E4%BD%A0%E7%9A%84%E4%B8%BB%E9%93%BE%E6%88%91%E5%81%9A%E4%B8%BB"><span class="nav-number">4.5.</span> <span class="nav-text">4.4 最重链规则缺陷2：你的主链我做主</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E4%BA%A4%E6%98%93%E5%A4%84%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">第六章 交易处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E4%BB%A3%E4%BB%98%E8%B4%B9%E6%9C%BA%E5%88%B6"><span class="nav-number">5.1.</span> <span class="nav-text">6.2 代付费机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E9%92%B1%E5%8C%85"><span class="nav-number">5.1.1.</span> <span class="nav-text">合约钱包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CFX%E7%9A%84Sponsorship"><span class="nav-number">5.1.2.</span> <span class="nav-text">CFX的Sponsorship</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%AD%98%E5%82%A8%E6%8A%B5%E6%8A%BC"><span class="nav-number">6.</span> <span class="nav-text">第七章 存储抵押</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

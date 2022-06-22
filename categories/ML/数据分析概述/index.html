@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.相关库 2.数据等级 非结构化—&gt;结构化数据  结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除) 3.数据分析1.数据质量分析缺失值  80%数据全部丢失，30%的缺失（做填充） 异常值  均值填充 一致性分析    （训练集和测试集的逻辑分布要是一致的） 2.数据特征分析 分布分析     数据要选分布宽度比较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paul C&#39;s Blog">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="1.相关库 2.数据等级 非结构化—&gt;结构化数据  结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除) 3.数据分析1.数据质量分析缺失值  80%数据全部丢失，30%的缺失（做填充） 异常值  均值填充 一致性分析    （训练集和测试集的逻辑分布要是一致的） 2.数据特征分析 分布分析     数据要选分布宽度比较">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321102046509.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321205617659.png">
+<meta property="article:published_time" content="2022-06-22T09:10:31.009Z">
+<meta property="article:modified_time" content="2022-06-22T09:10:31.009Z">
+<meta property="article:author" content="Paul C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-22 17:10:31" itemprop="dateCreated datePublished" datetime="2022-06-22T17:10:31+08:00">2022-06-22</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-相关库"><a href="#1-相关库" class="headerlink" title="1.相关库"></a>1.相关库</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png" alt="image-20220321094551847"></p>
+<h2 id="2-数据等级"><a href="#2-数据等级" class="headerlink" title="2.数据等级"></a>2.数据等级</h2><ul>
+<li>非结构化—&gt;结构化数据</li>
+</ul>
+<p>结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除)</p>
+<h2 id="3-数据分析"><a href="#3-数据分析" class="headerlink" title="3.数据分析"></a>3.数据分析</h2><h3 id="1-数据质量分析"><a href="#1-数据质量分析" class="headerlink" title="1.数据质量分析"></a>1.数据质量分析</h3><p>缺失值  80%数据全部丢失，30%的缺失（做填充）</p>
+<p>异常值  均值填充</p>
+<p>一致性分析    （训练集和测试集的逻辑分布要是一致的）</p>
+<h3 id="2-数据特征分析"><a href="#2-数据特征分析" class="headerlink" title="2.数据特征分析"></a>2.数据特征分析</h3><ul>
+<li>分布分析     数据要选分布宽度比较低的</li>
+<li>对比分析     均值、方差</li>
+<li>统计量分析  sum</li>
+<li>周期性分析   一般用在时间序列上</li>
+<li>贡献度分析  </li>
+<li>相关度分析  </li>
+</ul>
+<h3 id="3-函数工具"><a href="#3-函数工具" class="headerlink" title="3.函数工具"></a>3.函数工具</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数功能</th>
+<th>所属扩展库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>interpolate</td>
+<td>一维、高维数据插值</td>
+<td>Scipy</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>去除数据中的重复元素，得到单值元素列表，它是对象的方法名（此功能可以用集合的办法去重）</td>
+<td>Pandas/Numpy</td>
+</tr>
+<tr>
+<td>isnull</td>
+<td>判断是否空值</td>
+<td>Pandas</td>
+</tr>
+<tr>
+<td>notnull</td>
+<td>判断是否为非空值</td>
+<td>Pandas</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>对指标变量矩阵进行主成分分析</td>
+<td>Scikit-Learn</td>
+</tr>
+<tr>
+<td>random</td>
+<td>生成随机矩阵</td>
+<td>Numpy</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="4-数据规约"><a href="#4-数据规约" class="headerlink" title="4.数据规约"></a>4.数据规约</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321102046509.png" alt="image-20220321102046509"></p>
+<h3 id="属性规约"><a href="#属性规约" class="headerlink" title="属性规约"></a>属性规约</h3><p>属性的合并、提取和删除、归纳、主成分分析</p>
+<ul>
+<li>合并  {A1,A2,A3}—-&gt;{A};{B1,B2.B3}—-&gt;{B}  <strong>数据降维</strong></li>
+<li>逐步向前选择   从空属性集开始 ，每次从原属性集中选一个当前最优的属性加到现在的集合中，直到无法选择出最优属性或满足一定阈值约束为止。</li>
+<li>逐步向后删除  从全属性集开始，…(与逐步向前选择恰好相反)</li>
+<li>决策树归纳  用决策树对初始数据进行分类归纳学习，决策树上没有的属性可以认为是无关属性，删除之。</li>
+<li>PCA，用较少的变量去解释原始数据中的大部分变量，即将很多相关性很高的变量降低相关性，变为不相关或者独立的变量</li>
+</ul>
+<h3 id="数值规约"><a href="#数值规约" class="headerlink" title="数值规约"></a>数值规约</h3><p>​    数据标准化</p>
+<h2 id="5-数据变换"><a href="#5-数据变换" class="headerlink" title="5.数据变换"></a>5.数据变换</h2><ul>
+<li>简单函数变换</li>
+<li>规范化   把数据变成0，1，数据标准化减少噪声的影响</li>
+<li>连续属性离散化</li>
+<li>属性构造</li>
+<li>小波变换</li>
+<li>傅里叶变换</li>
+</ul>
+<h2 id="6-数据集成"><a href="#6-数据集成" class="headerlink" title="6.数据集成"></a>6.数据集成</h2><p>合并多个数据源的数据，让数据没有偏见</p>
+<ul>
+<li>实体属性识别</li>
+<li>冗余属性识别</li>
+</ul>
+<h2 id="7-数据清洗"><a href="#7-数据清洗" class="headerlink" title="7.数据清洗"></a>7.数据清洗</h2><p>删除原始数据集中的无关数据、重复数据，平滑噪声数据，筛选值与挖掘主题无关的数据，处理缺失值、异常值等。</p>
+<p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321205617659.png" alt="image-20220321205617659"></p>
+<h3 id="缺失值处理"><a href="#缺失值处理" class="headerlink" title="缺失值处理"></a>缺失值处理</h3><ul>
+<li>均值、中位数、众数</li>
+<li>使用固定值</li>
+<li>最近邻插补</li>
+<li>回归方法</li>
+<li><p>插值法</p>
+<ul>
+<li>拉格朗日插值                                                                                                                                                                                                                                                                                                                                                                          </li>
+<li>牛顿插值<h3 id="异常值处理"><a href="#异常值处理" class="headerlink" title="异常值处理"></a>异常值处理</h3></li>
+</ul>
+</li>
+<li><p>删除</p>
+</li>
+<li>视为缺失</li>
+<li>平均值</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/Notes/TaxLaw/" rel="prev" title="税法相关">
+      <i class="fa fa-chevron-left"></i> 税法相关
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%9B%B8%E5%85%B3%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">1.相关库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E7%AD%89%E7%BA%A7"><span class="nav-number">2.</span> <span class="nav-text">2.数据等级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">3.数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-number">3.1.</span> <span class="nav-text">1.数据质量分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E7%89%B9%E5%BE%81%E5%88%86%E6%9E%90"><span class="nav-number">3.2.</span> <span class="nav-text">2.数据特征分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%87%BD%E6%95%B0%E5%B7%A5%E5%85%B7"><span class="nav-number">3.3.</span> <span class="nav-text">3.函数工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E8%A7%84%E7%BA%A6"><span class="nav-number">4.</span> <span class="nav-text">4.数据规约</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E8%A7%84%E7%BA%A6"><span class="nav-number">4.1.</span> <span class="nav-text">属性规约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E8%A7%84%E7%BA%A6"><span class="nav-number">4.2.</span> <span class="nav-text">数值规约</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%95%B0%E6%8D%AE%E5%8F%98%E6%8D%A2"><span class="nav-number">5.</span> <span class="nav-text">5.数据变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%95%B0%E6%8D%AE%E9%9B%86%E6%88%90"><span class="nav-number">6.</span> <span class="nav-text">6.数据集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="nav-number">7.</span> <span class="nav-text">7.数据清洗</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E5%A4%B1%E5%80%BC%E5%A4%84%E7%90%86"><span class="nav-number">7.1.</span> <span class="nav-text">缺失值处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86"><span class="nav-number">7.2.</span> <span class="nav-text">异常值处理</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

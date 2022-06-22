@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文参考Conflux白皮书，Conflux的安全性证明论文GHAST  [TOC] 1.PoW problem（Puzzle） 参考Conflux白皮书第9节以及附录F  1.1 简介MpEthash:Multi Point Ethash，只拿块头做输入值。  PoW(H)&#x3D;MpEthash(H) ≡ MpEthash(KEC(RLP(H_{-n})),H_{n},d) ≡ KEC(s_{h}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conflux-Notebook8">
+<meta property="og:url" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="本文参考Conflux白皮书，Conflux的安全性证明论文GHAST  [TOC] 1.PoW problem（Puzzle） 参考Conflux白皮书第9节以及附录F  1.1 简介MpEthash:Multi Point Ethash，只拿块头做输入值。  PoW(H)&#x3D;MpEthash(H) ≡ MpEthash(KEC(RLP(H_{-n})),H_{n},d) ≡ KEC(s_{h}">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215161152365.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215164119710.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215163020811.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216103052864.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216100130002.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216095835025.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216101048873.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216093947488.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216094206516.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216094547931.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216094800484.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216095200833.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215173824782.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215181848968.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215182248395.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215182408998.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215172628459.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215171945238.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201216010717430.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215224150291.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215230156930.png">
+<meta property="og:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215214104468.png">
+<meta property="article:published_time" content="2020-12-15T14:38:32.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.299Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Conflux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/image-20201215161152365.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Conflux-Notebook8 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/BlockChain/Conflux-Notebook8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Conflux-Notebook8
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-12-15 22:38:32" itemprop="dateCreated datePublished" datetime="2020-12-15T22:38:32+08:00">2020-12-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BlockChain/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>本文参考<a target="_blank" rel="noopener" href="https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf">Conflux白皮书</a>，Conflux的安全性证明论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.01072">GHAST</a></p>
+</blockquote>
+<p>[TOC]</p>
+<h2 id="1-PoW-problem（Puzzle）"><a href="#1-PoW-problem（Puzzle）" class="headerlink" title="1.PoW problem（Puzzle）"></a>1.PoW problem（Puzzle）</h2><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf">Conflux白皮书</a>第9节以及附录F</p>
+</blockquote>
+<h3 id="1-1-简介"><a href="#1-1-简介" class="headerlink" title="1.1 简介"></a>1.1 简介</h3><p>MpEthash:Multi Point Ethash，<strong>只拿块头做输入值。</strong></p>
+<script type="math/tex; mode=display">
+PoW(H)=MpEthash(H) ≡ MpEthash(KEC(RLP(H_{-n})),H_{n},d) ≡ KEC(s_{h} ◦ m_{c})</script><p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215161152365.png" alt="image-20201215161152365"></p>
+<span id="more"></span>
+<p>其中，<a target="_blank" rel="noopener" href="http://www.memoryofsnow.xyz/2020/11/17/Conflux-Notebook4/">RLP</a>函数把区块头去除nonce部分<strong>H-n</strong>序列化为字节数组，之后用Keccak哈希算法求取值，与<strong>nonce</strong>（工作量证明的256位的值）和从H中推导出的<strong>dataset</strong>一道作为输入。</p>
+<p>MpEthash的输出值等于一个KEC256值时，校验成功。512位长的种子哈希<strong>s</strong>h和256位长的压缩混淆数的连结的KEC256值。</p>
+<h4 id="1-1-2-KEC256的安全性"><a href="#1-1-2-KEC256的安全性" class="headerlink" title="1.1.2 KEC256的安全性"></a>1.1.2 KEC256的安全性</h4><p>找到一次随机碰撞需要2的128次尝试，找到特定碰撞需要2的256次方的尝试次数。</p>
+<h3 id="1-2-PoW-Quality"><a href="#1-2-PoW-Quality" class="headerlink" title="1.2 PoW Quality"></a>1.2 PoW Quality</h3><p>一个区块的工作量证明质量指找到这样一个块的<strong>期待工作量</strong>。</p>
+<p><strong>OFFSET(H)</strong>是一个256位的标量，用一个区块头的nonce 的第1到第127位（序列索引值从0开始）后加128个0，即乘上2的128次。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215164119710.png" alt="image-20201215164119710"></p>
+<p>表示工作量证明验证的偏移量。</p>
+<p>区块B的质量指找到一个满足条件的新区块<strong>B’</strong>预期尝试次数，新区块的工作量证明值<strong>PoW(H’)</strong>在<strong>OFFSET(H)</strong>和<strong>PoW(H)</strong>之间。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215163020811.png" alt="image-20201215163020811"></p>
+<h3 id="1-3-细则"><a href="#1-3-细则" class="headerlink" title="1.3 细则"></a>1.3 细则</h3><p><strong>MpEthash算法路线图</strong></p>
+<ul>
+<li>存在一个种子seed，通过扫描块头为每个块计算出来那个点。</li>
+<li>根据这个种子seed，可以计算一个<strong>Csize</strong>的伪随机缓存cache，客户端存储这个缓存。</li>
+<li>从这个缓存cache中，我们能够生成一个<strong>dsize</strong>的数据集，该数据集中的每一项都取决于缓存中的一小部分。完整客户端和矿工存储了这个数据集，数据集随着时间线性增长。</li>
+<li>挖矿工作包含了抓取数据集的随机片以及运用哈希函数计算他们。校验工作能够在低内存的环境下完成，通过使用缓存再次生成所需的特性数据集的片段，所以你只需要存储缓存cache即可。</li>
+</ul>
+<p>使用256字节的顺序访问，以便算法的每一轮总是从RAM获取整页</p>
+<h4 id="0-EFNV压缩函数"><a href="#0-EFNV压缩函数" class="headerlink" title="0.EFNV压缩函数"></a>0.EFNV压缩函数</h4><p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216103052864.png" alt="image-20201216103052864"></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216100130002.png" alt="image-20201216100130002"></p>
+<p>N64 <em>×</em>N64 <em>→</em> N64</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216095835025.png" alt="image-20201216095835025"></p>
+<p>(N32)<em>∗</em> <em>×</em>N <em>→</em> N64</p>
+<h4 id="3-计算mp和p"><a href="#3-计算mp和p" class="headerlink" title="3.计算mp和p"></a>3.计算mp和p</h4><p><strong>H-n</strong>可以表达成一个4元素的N64数组，借助H-n得到a、b、c、w。</p>
+<p>借助<strong>Hn</strong>得到<strong>nhigh</strong>和<strong>nlow</strong></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216101048873.png" alt="image-20201216101048873"></p>
+<h4 id="4-半混淆数的计算"><a href="#4-半混淆数的计算" class="headerlink" title="4.半混淆数的计算"></a>4.半混淆数的计算</h4><p><strong>半混淆sh</strong>是一个64字节bytes,B512。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216093947488.png" alt="image-20201216093947488"></p>
+<p>借助第3步算出的<strong>mp</strong>得到sh。</p>
+<h4 id="5-压缩混淆数的计算"><a href="#5-压缩混淆数的计算" class="headerlink" title="5.压缩混淆数的计算"></a>5.压缩混淆数的计算</h4><p>借助第4步的sh、d、p。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216094206516.png" alt="image-20201216094206516"></p>
+<p>mc的计算可从m0开始</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216094547931.png" alt="image-20201216094547931"></p>
+<p><strong>mj是由mj-1得到</strong></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216094800484.png" alt="image-20201216094800484"></p>
+<p>3.Ecompress将64字的<strong>m32</strong>（256bytes）压缩到8字的数组。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216095200833.png" alt="image-20201216095200833"></p>
+<h3 id="1-4-举例"><a href="#1-4-举例" class="headerlink" title="1.4 举例"></a>1.4 举例</h3><p>例如，在ConfluxScan.io上找到的一个区块的哈希值为&gt;0x8d3496f8181414015c6a156b1fb2b028b6583a29845fcd51c35231078ef630be,高度为3,904,120</p>
+<p>它的难度是462,593,993,012，它找到的随机数是0xeea21f8e877b294c。</p>
+<p><strong>它的父区块的随机数是0x28ec2a9e387d6bf2，只有64比特？？？</strong></p>
+<p>是用64位长的16进制数表示。</p>
+<p>即PoW(H)=0x2c7794a005924727112ebb0ad66a55f30625435013b2058ba85fbd524e9bed33</p>
+<h2 id="2-Difficulty-Adjustment"><a href="#2-Difficulty-Adjustment" class="headerlink" title="2.Difficulty Adjustment"></a>2.Difficulty Adjustment</h2><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf">Conflux白皮书</a>第9节</p>
+</blockquote>
+<p>调整困难性的目的是维持块出块速率符合预期，比如半秒一个块。</p>
+<h3 id="2-1-困难度的预设值"><a href="#2-1-困难度的预设值" class="headerlink" title="2.1 困难度的预设值"></a>2.1 困难度的预设值</h3><ul>
+<li>开始困难性Starting diffificulty (d0)为3×10^(4) = 30000，即创世块到高度为5000的块（包含高度为5000的块），困难性都设置为30000。</li>
+<li>高度为<strong>j</strong>属于<strong>[5000i+1,5000i+5000]的块设置为di</strong>，其中di是一个256位以内的整数值</li>
+<li>区块的块头的困难度表示成公式：</li>
+</ul>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215173824782.png" alt="image-20201215173824782"></p>
+<p><strong>注：高度h（height）为该块到达创世块所经历的parent edge边数</strong>，所以主链上的块height=epoch值。但是被引用的不在主链上的块，它和epoch的值不一样，会相差0~4，但是可以肯定的是<strong>h一定小于等于epoch值</strong>。</p>
+<p>下图是例图，是根据confluxscan上的3904116以后的块绘制的树图。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215181848968.png" alt="image-20201215181848968"></p>
+<h4 id="epoch困难度"><a href="#epoch困难度" class="headerlink" title="epoch困难度"></a>epoch困难度</h4><p>只要<img src="/categories/BlockChain/Conflux-Notebook8/image-20201215182248395.png" alt="image-20201215182248395" style="zoom:80%;">被确定下来，epoch的困难度也就确定了下来。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215182408998.png" alt="image-20201215182408998"></p>
+<h3 id="2-2-理想的困难度估计值"><a href="#2-2-理想的困难度估计值" class="headerlink" title="2.2 理想的困难度估计值"></a>2.2 理想的困难度估计值</h3><p><strong>总结：出块速度与困难度设置成正比。</strong></p>
+<p>理论办法：<strong>di’/di-1=0.5blockps/实际出块速率；</strong></p>
+<p>实际算法：</p>
+<p><strong>过去5000个epoch的出块数量+开始和结束时期的块的平均时间戳——&gt;估计当前所有矿工的算力——&gt;设置接下来5000个epoch的目标困难度。</strong></p>
+<p>这里的计算<strong>基于本地视图，即当前块B的PAST(B)视图</strong>，即先于B的所有块组成的树图，<strong>PAST（B）不包括B本身</strong>。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215172628459.png" alt="image-20201215172628459"></p>
+<p>上一阶段的困难度 × <strong>500ms（一个块的生成时间）</strong>× 过去5000个epoch的出块数量÷  <strong>上一阶段花的时间</strong>（上一阶段的最后一个块的时间戳-上一阶段的块的时间戳的最小值）</p>
+<p>其中，减去1是为了得到区块产生速率的<strong>无偏估计值</strong>。</p>
+<h3 id="2-3对于特定高度的块的难度调整"><a href="#2-3对于特定高度的块的难度调整" class="headerlink" title="2.3对于特定高度的块的难度调整"></a>2.3对于特定高度的块的难度调整</h3><p><strong>算法思想：</strong></p>
+<p><strong>困难度要调整以使出块速度和0.5s一块的预期速度吻合；但是，困难度不能太小，每次调整幅度不能过大，最多调整上个阶段困难度的一半。</strong></p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215171945238.png" alt="image-20201215171945238"></p>
+<ul>
+<li><p>如果上一阶段<strong>di-1</strong>的难度值太小(小于理想的困难度<strong>di’</strong>的2/3)，当前设置困难度时就用<strong>di-1</strong>乘上1.5；</p>
+</li>
+<li><p><strong>di-1</strong>的难度值太大，就乘上0.5。</p>
+</li>
+<li><p>困难度最小不能小于初始困难度，</p>
+</li>
+<li><p>如果上一阶段的困难度和理想困难度吻合的比较好，这次的困难度调整就采用理想困难度即可。</p>
+</li>
+</ul>
+<h2 id="3-Storage"><a href="#3-Storage" class="headerlink" title="3.Storage"></a>3.Storage</h2><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf">Conflux白皮书</a>第4.3节、第7节和第10.2节</p>
+</blockquote>
+<p>其中，第4.3节是第三周报告内容，见于<a target="_blank" rel="noopener" href="http://www.memoryofsnow.xyz/2020/11/17/Conflux-Notebook4/">Notebook4</a>。</p>
+<p><strong>理论值：</strong></p>
+<ul>
+<li><p>一秒的吞吐量为 1.2MB，一天约 100GB，每年新增的交易历史数据可达 30TB。</p>
+</li>
+<li><p>若全部同步，则新节点加入的时候，同步已有的数据时间过长。</p>
+</li>
+</ul>
+<p><strong>存储单元：</strong> every entry of storage is 64B， a single key/value pair in the world-state.</p>
+<p>Φ(<strong>σ</strong>,a, <strong>k</strong>, <em>v<strong>,</strong>o</em>),将帐户a的存储条目k设置为值v，而地址o是存储所有者。</p>
+<h3 id="3-1-CheckPoint机制"><a href="#3-1-CheckPoint机制" class="headerlink" title="3.1 CheckPoint机制"></a>3.1 CheckPoint机制</h3><p>抛弃旧块中的内容。啥叫旧块？为啥能丢内容？</p>
+<p>Conflux是账本模型，Conflux全局状态在帐户模型中描述，基本存储组件称为帐户，(<em>α<strong>addr</strong>,<strong>α</strong>state</em>)。</p>
+<p>之前的转账交易信息不是处理新交易所必须的信息。所以转账记录在足够长时间后，转账记录会被全节点删去，只留下相应区块的哈希值。</p>
+<p>执行交易时所必须读取的信息：账户余额信息+智能合约的<strong>变量信息</strong>。</p>
+<p>Conflux使用通读回写缓存，在epoch执行末更新MPT。</p>
+<p>规定50000个epoch是一个era，era的创世块稳定，也就是不可逆转，设置一个checkpoint点。</p>
+<p><strong>Stable Era Genesis</strong> G的递归定义</p>
+<ul>
+<li>1.创世块是第一个有效的era genesis</li>
+<li>2.G稳定的条件<ul>
+<li>G在上一个稳定的era genesis的子树上</li>
+<li>G的子树有240个连续的计时器块，记最终的那个计时器块为B</li>
+<li>B之后有240个连续的计时器块（这些块不一定在G的子树上）</li>
+</ul>
+</li>
+<li>3.在稳定的era genesis前的era genesis一定稳定</li>
+</ul>
+<p>PAST(StableEraGenesis(<strong>G</strong>))的块头保留，块体删去。</p>
+<p><strong>B’≡ StableEraGenesis(G)</strong> </p>
+<p><strong>B ‘’ <em>≡</em> StableEraGenesis(PAST(B‘ ))</strong></p>
+<p>一个块可能被丢弃或者部分无效。</p>
+<ul>
+<li>B ∉ FUTURE(<strong>B’</strong>;<strong>G</strong>)        丢弃</li>
+<li>B ∈ FUTURE(<strong>B’</strong>;<strong>G</strong>)，<strong>P(B)</strong> ∉ Subtree(<strong>B’’</strong>;<strong>G</strong>) 部分无效</li>
+<li>B ∈ FUTURE(<strong>B’’</strong>;<strong>G</strong>)\FUTURE(<strong>B’</strong>;<strong>G</strong>) 部分无效</li>
+</ul>
+<p>部分无效的三个后果：</p>
+<ul>
+<li>不被引用</li>
+<li><p>权重为0</p>
+</li>
+<li><p>交易仍然有效</p>
+</li>
+</ul>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201216010717430.png" alt="image-20201216010717430"></p>
+<p><strong>安全性</strong>：只保留这些块头也足够安全，因为攻击者如果想改写历史，就必须付出与“历史累计工作量”相当的代价。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果某个用户想要获得较早的交易数据和执行结果，则他可以从“档案节点”那里查询，并通过比对区块头中的哈希值来判断档案节点提供的数据是否正确。（这里每一个哈希值本质上都是一个 Merkle Tree 的 Root Hash，所以档案节点只需提供被查询数据的默克尔证明 Merkle Proof 就可以了，而不用传输整个区块。）</span><br></pre></td></tr></table></figure>
+<p>由于哈希函数可以抗碰撞的特点，档案节点无法为一笔不存在的<strong>交易伪造</strong>一个能通过检测的证明。</p>
+<h3 id="3-2-节点存储分类：档案节点，全节点，轻节点。"><a href="#3-2-节点存储分类：档案节点，全节点，轻节点。" class="headerlink" title="3.2 节点存储分类：档案节点，全节点，轻节点。"></a>3.2 节点存储分类：档案节点，全节点，轻节点。</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44282220/article/details/107828811">https://blog.csdn.net/weixin_44282220/article/details/107828811</a></p>
+</blockquote>
+<p>1.Archive Node不需要去中心化，因为对于档案节点来说，唯一的攻击方式是拒绝提供交易数据，由此带来的后果至多也只是影响到历史交易的可查询性。即使没有任何一个诚实的节点保存较早的历史交易，那些交易也只会被遗忘而不会被篡改，<strong>交易的不可篡改性</strong>依然可以得到保证。</p>
+<p>2.Light Node 对于所有区块都是只存储区块头。轻节点不参与挖矿，可以验证 Conflux 网络中的数据。</p>
+<p>借助blaming机制，选择值得信任的区块的状态根作出的证明。</p>
+<p>3.Full Node 对于 Checkpoint 前的区块，只需存储区块头而不用存储区块内的具体交易信息；Checkpoint 后的区块存储方式会和 Archive Node 一致。Full Node 挖矿时，需要同步数据的时间相对于 Archive Node 时间比较短，占用的空间比较小。</p>
+<p><strong>4.Boot Node（启动节点）</strong></p>
+<p>Boot Node 是节点启动的时候最先连接的节点，也会从 Boot Node 获得其他节点的信息，从而连上更多的节点。目前 Boot Node 主要有 Conflux 基金会提供，社区也可以提供更多的 Boot Node。</p>
+<p>5.Conflux 中的 Trustnode（信任节点）的概念是相对的，我们可以说一个节点是另一个节点的 Trustnode。一个节点可以成为其他节点的 Trustnode 前提是<strong>他主动连接其他节点，并保持长期（72小时以上）稳定的连接。</strong></p>
+<p>例如：节点 A 连接节点 B，并保持长期（72 小时以上）稳定的连接，节点 A 将成为节点 B 的 Trustnode，节点 B 会将节点 A 的 ip 地址广播出去，让更多的节点连接，从而提高整个网络的安全性。</p>
+<p>存储内容分类：合约变量、代码、数据、交易记录、区块信息，占据世界状态的存储空间。世界状态。</p>
+<p>Notebook7:存储snapshot，从10000个epoch(<strong>[Tethys v1.0.0]</strong>)间隔调整到20000个epoch（<strong>v1.1.0</strong>）的是交易历史，</p>
+<h2 id="4-交易校验的瓶颈"><a href="#4-交易校验的瓶颈" class="headerlink" title="4.交易校验的瓶颈"></a>4.交易校验的瓶颈</h2><p>conflux的瓶颈在网络带宽，这是所有区块链共有的特点，以及慢确认时为安全性考虑不得不慢下来。</p>
+<p>SECP-256k1 curve</p>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://confluxnetwork.org/files/Conflux_Protocol_Specification_20201020.pdf">Conflux白皮书</a>第5章和第6章</p>
+</blockquote>
+<p>Conflux 网络兼容以太坊虚拟机（EVM），在确定所有交易的全序并移除无效交易之后，余下的所有合法交易将如同以太坊链上的打包顺序一样在以太坊虚拟机上执行</p>
+<p>先有排好序的连续的块L和枢轴链上的区块集合P。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215224150291.png" alt="image-20201215224150291"></p>
+<h3 id="4-0-第一次校验-v-r-s，以及数据格式校验"><a href="#4-0-第一次校验-v-r-s，以及数据格式校验" class="headerlink" title="4.0 第一次校验(v,r,s，以及数据格式校验)"></a>4.0 第一次校验(v,r,s，以及数据格式校验)</h3><p>在将对应的块接受到Conflux Tree-Graph中之前。</p>
+<p>收到交易后做基本校验并把它加入交易池。如果有明显错误，如RLP解码错误，签名校验错误，立刻被拒绝。</p>
+<p>这是<a target="_blank" rel="noopener" href="http://www.memoryofsnow.xyz/2020/12/01/Conflux-Notebook6/">Notebook6</a>中这句话正确性的来源：虽然当T被执行的第一个块最终确认时，一个交易被最终确认，但是<strong>一个交易可能早于T被执行的第一个块的确认。</strong></p>
+<h3 id="4-1-预执行校验-第二次校验（线性时间）"><a href="#4-1-预执行校验-第二次校验（线性时间）" class="headerlink" title="4.1 预执行校验-第二次校验（线性时间）"></a>4.1 预执行校验-第二次校验（线性时间）</h3><p>1.epochHeight，T<em>e</em> 在[<em>e</em>100000<em>,</em>T<em>e</em> +100000]内。</p>
+<p>2.nonce有效，这个交易号和发送者发送的总交易量相同。</p>
+<p>3.action的前四位是否是[0000],[0001]和[0002]中的一个。</p>
+<p>这两个阶段的世界状态不变化。</p>
+<h3 id="4-2-预处理"><a href="#4-2-预处理" class="headerlink" title="4.2 预处理"></a>4.2 预处理</h3><p>确保钱到位。S（T）或者sponsor的赞助金余额够。任何一步失败，交易T的执行终止。</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215230156930.png" alt="image-20201215230156930"></p>
+<p>balance校验中，Tn，<strong>Tp,Tg,value,StorageLimit,</strong></p>
+<p><strong>1.S（T）的活动数加一</strong>。</p>
+<p>2.Gas花费校验，有赞助者验证赞助者。balance&gt;T<em>g</em> <em>×</em>T<em>p</em> +T<em>v</em>  否则<strong>a <em>not enough balance exception</em></strong></p>
+<p>3.StorageLimit校验，balance<em>&lt;</em> T<em>v</em> +Tl <em>×</em>10^(18)<em>/</em>1024，<strong>a <em>not enough balance exception</em></strong></p>
+<p>4.处理前面提到的异常。</p>
+<p>四种状态的逆转。</p>
+<h3 id="4-3-执行子状态"><a href="#4-3-执行子状态" class="headerlink" title="4.3 执行子状态"></a>4.3 执行子状态</h3><h3 id="4-4-类型依赖执行"><a href="#4-4-类型依赖执行" class="headerlink" title="4.4 类型依赖执行"></a>4.4 类型依赖执行</h3><h3 id="4-5-推迟执行"><a href="#4-5-推迟执行" class="headerlink" title="4.5 推迟执行"></a>4.5 推迟执行</h3><p><strong>在挖矿环节，矿工要监听 P2P 网络中广播的区块，</strong></p>
+<p>每当用户发起一笔交易时，这笔交易从客户端程序出发，被发往一个或几个全节点。之后，全节点之间通过点对点网络将交易转发给各自的邻居节点，直到最终所有的全节点都收到这笔交易。</p>
+<p>如果每笔交易的 FID 固定不变，则攻击者可以用不高的成本阻塞特定交易的广播。基本方法是攻击者先构造一个覆盖所有 2的32次方 个可能的 FID 的交易库，当受害者发出一笔交易时，攻击者从交易库里选择具有相同 FID 的交易并抢先发送给其他节点，从而使其他节点都误以为已经收到了受害者交易，而选择不接收完整交易。</p>
+<p><strong>为了解决静态 FID 易被攻击阻塞的问题，我们将 FID 的取值由静态转变成动态的。</strong>因为 FID 只是在节点与节点之间转发交易时的临时取值，与共识逻辑无关也不需要被记录在区块链上，所以 FID 值没有必要是一个不变的数值。</p>
+<p> 考虑如下方案：</p>
+<p>每个节点在计算 FID 时，并不仅仅由交易的 ID （交易的 32 字节哈希值）计算，而是选择一个随机数 r，通过 ID 和 r 共同计算出一个 4 字节的 FID，并将r 与 FID一同发送。这样，当随机数 r 改变时，交易的 FID 也会随之发生改变，<strong>收到 FID 和 r 的节点需要根据 r 重新计算已有交易的 FID 来完成对比</strong>，并确定需要请求哪些 FID 对应的完整交易。因为一次转发的多笔交易可以共享同一个随机数 r， 所以这个随机数 r 几乎不会在带宽上带来额外的负担。</p>
+<p>由于 r 的随机性，攻击者并不能预计一笔交易在每次转发时选择的 r 和由此算出的 FID 分别是多少，自然也就无法预先构造冲突的交易了。</p>
+<p>这个设计的另一个好处是，即便节点 B 给节点 A 发送交易时发生了 FID 值冲突，导致某笔交易没有成功发送给节点 A，另一个节点 C 发送这笔交易给 A 时，大概率将采用不同的随机数 r 计算 FID，相当于增加了一次把这笔交易发给 A 的机会。</p>
+<p>只要计算 FID 的过程足够随机（如使用伪随机函数），则 B 发送成功和 C 发送成功可看作是两个独立的事件。根据我们之前的计算，一笔交易因为 FID 值冲突而发送失败的概率是 0.04%，而节点 B 和 C 两次独立发送都失败的概率是 0.04% × 0.04%，<strong>失败率大大降低</strong>。</p>
+<p>然而，从随机数计算 FID 的设计也有一个缺点：每当节点收到一个新的随机数 r 时，就要为所有已经收到的交易（根据上一期的假设，全节点会将过去 5 分钟内收到的 180 万条交易和刚刚收到的 FID 对比）重新算一遍 FID，这会带来了极大的计算负担。</p>
+<p> 现在我们有两种不甚满意的方案：</p>
+<p><strong>静态的 FID 方案在一些攻击策略下有安全性问题，而完全随机的动态的 FID 方案又有计算负担过大的问题。</strong>如何同时解决两边的问题呢？</p>
+<p><strong>我们选择了一种静态和动态相结合的方案：</strong> FID 由 3 个静态字节和 1 个动态字节构成。其中静态字节部分直接取交易 ID (即交易 32 字节的完整哈希值)的前 3 字节，动态字节由交易 ID 和 r 共同计算得出。</p>
+<p>这样，根据交易 ID 的前 3 字节，我们把所有的交易放在了 2的24次 个“桶”里。每次一个节点收到其他节点发来的 FID 和 r 时，先根据 FID 的前 3 字节判断交易所在的桶，再将自己已经收到的，落在这个桶里交易根据 r 重新计算 FID 值并比对。</p>
+<p>简单地计算可以发现，对于 180 万条随机生成的交易，平均每个桶里只有 0.1 笔交易，即使是含有交易最多的桶里也不会超过10 条。重新计算一个桶里交易的 FID 所需花费的成本远远低于重新计算所有交易的 FID。</p>
+<p>在上面这个 3+1 动静结合的方案下，攻击者其实仍然可以重复类似的攻击策略。之前的攻击策略中，攻击者为每一个静态的 FID 准备一笔交易。在这一策略中，攻击者为每个桶预先准备一些交易。当受害者的交易出现后，攻击者在短时间内大量广播与受害者交易在同一个桶里的交易，就能够降低受害者交易被转发到其他节点的概率。即使同一笔交易每次转发时采用一个完全随机的动态字节，但是这个动态字节只有 256 种可能的取值，所以一个桶中的交易越多，冲突概率也会越高。</p>
+<p><strong>为了应对上述攻击，我们引入了一个额外的规则：</strong>如果一个节点收到一个 FID 时，发现这个 FID 对应的桶里已经有不少于 10 条交易，就不再使用 FID 来判断，而是<strong>直接请求完整的 32 字节交易哈希值</strong>来对比是否接受过这笔交易。这样，攻击者就不能再通过制造冲突的 FID 来阻塞交易广播了，因为冲突过多的时候反而无法起到阻塞的作用。</p>
+<p>这条额外的规则触发时会让交易转发退化到没有使用 FID 优化的情况。但是因为正常情况下每个桶里期望只有 0.1 笔交易，几乎不可能发生超过 10 笔交易落在同一个桶里的情况，所以这条额外的规则在系统没有遭到攻击时并不会被触发。而当系统真的遭到攻击的情况下，保护系统的安全性和稳定性才是最重要的，即便为此而降低系统的吞吐量也是可以接受的妥协。</p>
+<p>宏观场景是用钱包，转移代币，部署智能合约。</p>
+<p>有引导节点：bootnodes， 星型discovery protocol。cfxnode://NODEID@PUBLICIP:PORT</p>
+<p>节点运行时，有几种选项，可以选择挖矿，可以选择轻节点，但是要先同步所有的块。</p>
+<p>NODEID是节点的公钥。</p>
+<p>13分钟同步了54000个epoch，113984个块。69epoch/s，146个块/s,2个块/epoch。</p>
+<h3 id="5-1-进行交易"><a href="#5-1-进行交易" class="headerlink" title="5.1 进行交易"></a>5.1 进行交易</h3><p>1.收到交易后做基本校验并把它加入交易池。如果有明显错误，如RLP解码错误，签名校验错误，立刻被拒绝；</p>
+<p>否则，加入交易池等待挖矿，并返回发送者一个交易哈希值。</p>
+<ul>
+<li>账户余额要足够支付：value + gas <em> gasPrice + storage_limit </em> (10^18/1024)</li>
+</ul>
+<ol>
+<li><p>Stuck in the transaction pool</p>
+</li>
+<li><p>Mined but skipped</p>
+</li>
+<li><p>Mined and executed with some error outcome</p>
+</li>
+<li><p>Mined and executed with no error outcome</p>
+</li>
+</ol>
+<p>附录：</p>
+<p>确定完块的全序（pivot chain也早已确定）后，区块链的执行逐epoch进行。</p>
+<p>1.区块执行ψblock(<strong>σ</strong>,<em>B</em>,<strong>L</strong>)包含两步：</p>
+<p>1.1更新累积利率：</p>
+<p><img src="/categories/BlockChain/Conflux-Notebook8/image-20201215214104468.png" alt="image-20201215214104468"></p>
+<p>执行后世界状态变为：σ*，</p>
+<p>1.2交易执行ϒ(<strong>σ</strong>,<em>T</em>,<strong>*L</strong>) = (<em>σ<strong>0</strong>,</em>R),每执行一个交易就会使得世界状态发生变化并产生一个收据R。</p>
+<p> 执行完所有块包含的交易后，世界状态变为：σ’。</p>
+<p>2.奖励分发，挖矿奖励的分发推迟12epoch，在epochk执行结束后，epochk-12中的块的挖矿奖励才分发。</p>
+<p>在交易的执行后和块的执行后，都会变更世界状态<strong>σ</strong>。</p>
+<p>执行后世界状态变为：σ**。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Conflux/" rel="tag"># Conflux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/Conflux-Notebook7/" rel="prev" title="Conflux-Notebook7">
+      <i class="fa fa-chevron-left"></i> Conflux-Notebook7
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/BlockChain/Conflux-Notebook9/" rel="next" title="Conflux-Notebook9">
+      Conflux-Notebook9 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-PoW-problem%EF%BC%88Puzzle%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">1.PoW problem（Puzzle）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-KEC256%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1.2 KEC256的安全性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-PoW-Quality"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 PoW Quality</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E7%BB%86%E5%88%99"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 细则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-EFNV%E5%8E%8B%E7%BC%A9%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">0.EFNV压缩函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%AE%A1%E7%AE%97mp%E5%92%8Cp"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.计算mp和p</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%8D%8A%E6%B7%B7%E6%B7%86%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.3.</span> <span class="nav-text">4.半混淆数的计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E5%8E%8B%E7%BC%A9%E6%B7%B7%E6%B7%86%E6%95%B0%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.4.</span> <span class="nav-text">5.压缩混淆数的计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E4%B8%BE%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Difficulty-Adjustment"><span class="nav-number">2.</span> <span class="nav-text">2.Difficulty Adjustment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9B%B0%E9%9A%BE%E5%BA%A6%E7%9A%84%E9%A2%84%E8%AE%BE%E5%80%BC"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 困难度的预设值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#epoch%E5%9B%B0%E9%9A%BE%E5%BA%A6"><span class="nav-number">2.1.1.</span> <span class="nav-text">epoch困难度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%90%86%E6%83%B3%E7%9A%84%E5%9B%B0%E9%9A%BE%E5%BA%A6%E4%BC%B0%E8%AE%A1%E5%80%BC"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 理想的困难度估计值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E5%AF%B9%E4%BA%8E%E7%89%B9%E5%AE%9A%E9%AB%98%E5%BA%A6%E7%9A%84%E5%9D%97%E7%9A%84%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4"><span class="nav-number">2.3.</span> <span class="nav-text">2.3对于特定高度的块的难度调整</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Storage"><span class="nav-number">3.</span> <span class="nav-text">3.Storage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-CheckPoint%E6%9C%BA%E5%88%B6"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 CheckPoint机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%8A%82%E7%82%B9%E5%AD%98%E5%82%A8%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%A3%E6%A1%88%E8%8A%82%E7%82%B9%EF%BC%8C%E5%85%A8%E8%8A%82%E7%82%B9%EF%BC%8C%E8%BD%BB%E8%8A%82%E7%82%B9%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 节点存储分类：档案节点，全节点，轻节点。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BA%A4%E6%98%93%E6%A0%A1%E9%AA%8C%E7%9A%84%E7%93%B6%E9%A2%88"><span class="nav-number">4.</span> <span class="nav-text">4.交易校验的瓶颈</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-0-%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%A0%A1%E9%AA%8C-v-r-s%EF%BC%8C%E4%BB%A5%E5%8F%8A%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E6%A0%A1%E9%AA%8C"><span class="nav-number">4.1.</span> <span class="nav-text">4.0 第一次校验(v,r,s，以及数据格式校验)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E9%A2%84%E6%89%A7%E8%A1%8C%E6%A0%A1%E9%AA%8C-%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%A0%A1%E9%AA%8C%EF%BC%88%E7%BA%BF%E6%80%A7%E6%97%B6%E9%97%B4%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">4.1 预执行校验-第二次校验（线性时间）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">4.3.</span> <span class="nav-text">4.2 预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%89%A7%E8%A1%8C%E5%AD%90%E7%8A%B6%E6%80%81"><span class="nav-number">4.4.</span> <span class="nav-text">4.3 执行子状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E7%B1%BB%E5%9E%8B%E4%BE%9D%E8%B5%96%E6%89%A7%E8%A1%8C"><span class="nav-number">4.5.</span> <span class="nav-text">4.4 类型依赖执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E6%8E%A8%E8%BF%9F%E6%89%A7%E8%A1%8C"><span class="nav-number">4.6.</span> <span class="nav-text">4.5 推迟执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E8%BF%9B%E8%A1%8C%E4%BA%A4%E6%98%93"><span class="nav-number">4.7.</span> <span class="nav-text">5.1 进行交易</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

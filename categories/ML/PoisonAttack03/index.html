@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="创新点扩展攻击对象原来：针对图片，给图片增加扰动；  该图来源网络   若是扩展到文件，无法修改样本标签，因为对于可执行文件，存在大量的检测平台，恢复样本标签。 现在：针对安卓样本分类检测模型的攻击。办法是不去修改apk文件的标签。  编写python脚本完成毒饵文件制作过程。 改进后门攻击原来：需要控制样本标签；攻击难度高  修改后：无需控制样本标签；降低攻击难度，这套策略拿来就可以用  改进对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PoisonAttack03">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/PoisonAttack03/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="创新点扩展攻击对象原来：针对图片，给图片增加扰动；  该图来源网络   若是扩展到文件，无法修改样本标签，因为对于可执行文件，存在大量的检测平台，恢复样本标签。 现在：针对安卓样本分类检测模型的攻击。办法是不去修改apk文件的标签。  编写python脚本完成毒饵文件制作过程。 改进后门攻击原来：需要控制样本标签；攻击难度高  修改后：无需控制样本标签；降低攻击难度，这套策略拿来就可以用  改进对">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311164125110.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311163815562.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311163848193.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311160926060.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311161750735.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/clip_image002-1646987063446.gif">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311163419377.png">
+<meta property="article:published_time" content="2019-03-24T08:14:53.000Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:56.408Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="PoisonAttack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/PoisonAttack03/image-20220311164125110.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/PoisonAttack03/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>PoisonAttack03 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/PoisonAttack03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PoisonAttack03
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-24 16:14:53" itemprop="dateCreated datePublished" datetime="2019-03-24T16:14:53+08:00">2019-03-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="创新点"><a href="#创新点" class="headerlink" title="创新点"></a>创新点</h1><h2 id="扩展攻击对象"><a href="#扩展攻击对象" class="headerlink" title="扩展攻击对象"></a>扩展攻击对象</h2><h3 id="原来："><a href="#原来：" class="headerlink" title="原来："></a>原来：</h3><p>针对图片，给图片增加扰动；</p>
+<blockquote>
+<p>该图来源<a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1646884927969073605">网络</a></p>
+</blockquote>
+<p><img src="/categories/ML/PoisonAttack03/image-20220311164125110.png" alt="image-20220311164125110" style="zoom:50%;"></p>
+<p>若是扩展到文件，无法修改样本标签，因为对于可执行文件，存在大量的检测平台，恢复样本标签。</p>
+<h3 id="现在："><a href="#现在：" class="headerlink" title="现在："></a>现在：</h3><p>针对安卓样本分类检测模型的攻击。办法是不去修改apk文件的标签。</p>
+<p><img src="/categories/ML/PoisonAttack03/image-20220311163815562.png" alt="image-20220311163815562"></p>
+<p>编写python脚本完成毒饵文件制作过程。<img src="/categories/ML/PoisonAttack03/image-20220311163848193.png" alt="image-20220311163848193"></p>
+<h2 id="改进后门攻击"><a href="#改进后门攻击" class="headerlink" title="改进后门攻击"></a>改进后门攻击</h2><h3 id="原来：-1"><a href="#原来：-1" class="headerlink" title="原来："></a>原来：</h3><p>需要控制样本标签；攻击难度高</p>
+<p><img src="/categories/ML/PoisonAttack03/image-20220311160926060.png" alt="image-20220311160926060"></p>
+<h3 id="修改后："><a href="#修改后：" class="headerlink" title="修改后："></a>修改后：</h3><p>无需控制样本标签；降低攻击难度，这套策略拿来就可以用</p>
+<p><img src="/categories/ML/PoisonAttack03/image-20220311161750735.png" alt="image-20220311161750735"></p>
+<h2 id="改进对抗攻击"><a href="#改进对抗攻击" class="headerlink" title="改进对抗攻击"></a>改进对抗攻击</h2><h3 id="原来：-2"><a href="#原来：-2" class="headerlink" title="原来："></a>原来：</h3><p>黑盒环境下时，由于原始特征集的缺失，攻击效果下降；</p>
+<p>需要攻击者在目标模型上<strong>进行大量的查询</strong>来获得<strong>大量反馈</strong>。</p>
+<h3 id="现在：-1"><a href="#现在：-1" class="headerlink" title="现在："></a>现在：</h3><p><img src="/categories/ML/PoisonAttack03/clip_image002-1646987063446.gif" alt="img"></p>
+<p>采用了<code>Conformal Prediction</code>统计学习算法计算，得到容易影响子模型的边缘样本，借助边缘样本获取关键特征，借助样本的可迁移性，<strong>极少的查询</strong>便可偷取目标模型的决策方式。</p>
+<h2 id="项目技术路线"><a href="#项目技术路线" class="headerlink" title="项目技术路线"></a>项目技术路线</h2><p><img src="/categories/ML/PoisonAttack03/image-20220311163419377.png" alt="image-20220311163419377"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PoisonAttack/" rel="tag"># PoisonAttack</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/PoisonAttack02/" rel="prev" title="PoisonAttack02">
+      <i class="fa fa-chevron-left"></i> PoisonAttack02
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/%E8%AE%B2%E5%BA%A7%E5%86%85%E5%AE%B9/" rel="next" title="CTF培训讲座">
+      CTF培训讲座 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E6%96%B0%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">创新点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E6%94%BB%E5%87%BB%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text">扩展攻击对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E6%9D%A5%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">原来：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">现在：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E5%90%8E%E9%97%A8%E6%94%BB%E5%87%BB"><span class="nav-number">1.2.</span> <span class="nav-text">改进后门攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E6%9D%A5%EF%BC%9A-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">原来：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%90%8E%EF%BC%9A"><span class="nav-number">1.2.2.</span> <span class="nav-text">修改后：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E5%AF%B9%E6%8A%97%E6%94%BB%E5%87%BB"><span class="nav-number">1.3.</span> <span class="nav-text">改进对抗攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E6%9D%A5%EF%BC%9A-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">原来：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%EF%BC%9A-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">现在：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF"><span class="nav-number">1.4.</span> <span class="nav-text">项目技术路线</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
