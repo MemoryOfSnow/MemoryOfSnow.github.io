@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="12ssh -t root@149.28.228.xxx&#x2F;&#x2F; 安裝執行檔和 .dat 資料檔  https:&#x2F;&#x2F;www.bokezhu.com&#x2F;2019&#x2F;12&#x2F;28&#x2F;521.html  1234curl blueinyou.com&#x2F;photos&#x2F;server_config.txtcp -rf server_config.txt &#x2F;usr&#x2F;local&#x2F;etc&#x2F;v2ray&#x2F;config.jsonvim">
+  <meta name="description" content="SGD(stochastic gradient descent)  随机梯度下降 SGD with momentum Adagrad RMSProp Adam  Notation参数： θt， 梯度： ∇ L(θt)， 动量：m_{t+1} Problem SimplicationOff-line Learning Generalization  ，即SGDM收敛性一般优于Adam，而Adam训">
 <meta property="og:type" content="article">
-<meta property="og:title" content="V2ray搭建流程">
-<meta property="og:url" content="https://blueinyou.com/categories/CTF/V2ray%E6%A2%AF%E5%AD%90/index.html">
+<meta property="og:title" content="Optimizer">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/Optimizer/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="12ssh -t root@149.28.228.xxx&#x2F;&#x2F; 安裝執行檔和 .dat 資料檔  https:&#x2F;&#x2F;www.bokezhu.com&#x2F;2019&#x2F;12&#x2F;28&#x2F;521.html  1234curl blueinyou.com&#x2F;photos&#x2F;server_config.txtcp -rf server_config.txt &#x2F;usr&#x2F;local&#x2F;etc&#x2F;v2ray&#x2F;config.jsonvim">
+<meta property="og:description" content="SGD(stochastic gradient descent)  随机梯度下降 SGD with momentum Adagrad RMSProp Adam  Notation参数： θt， 梯度： ∇ L(θt)， 动量：m_{t+1} Problem SimplicationOff-line Learning Generalization  ，即SGDM收敛性一般优于Adam，而Adam训">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-03-17T06:19:49.000Z">
-<meta property="article:modified_time" content="2022-06-03T19:03:56.316Z">
+<meta property="article:published_time" content="2019-03-11T07:05:45.000Z">
+<meta property="article:modified_time" content="2022-08-14T10:23:29.753Z">
 <meta property="article:author" content="Paul C">
-<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Pytorch">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueinyou.com/categories/CTF/V2ray%E6%A2%AF%E5%AD%90/">
+<link rel="canonical" href="https://blueinyou.com/categories/ML/Optimizer/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>V2ray搭建流程 | Paul C's Blog</title>
+  <title>Optimizer | Paul C's Blog</title>
   
 
 
@@ -162,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/V2ray%E6%A2%AF%E5%AD%90/">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Optimizer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
@@ -175,7 +175,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          V2ray搭建流程
+          Optimizer
         </h1>
 
         <div class="post-meta">
@@ -185,14 +185,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2020-03-17 14:19:49" itemprop="dateCreated datePublished" datetime="2020-03-17T14:19:49+08:00">2020-03-17</time>
+              <time title="Created: 2019-03-11 15:05:45" itemprop="dateCreated datePublished" datetime="2019-03-11T15:05:45+08:00">2019-03-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+                <time title="Modified: 2022-08-14 18:23:29" itemprop="dateModified" datetime="2022-08-14T18:23:29+08:00">2022-08-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -200,7 +200,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
                 </span>
             </span>
 
@@ -215,15 +215,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -t root@149.28.228.xxx</span><br><span class="line">// 安裝執行檔和 .dat 資料檔</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.bokezhu.com/2019/12/28/521.html">https://www.bokezhu.com/2019/12/28/521.html</a></p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl blueinyou.com/photos/server_config.txt</span><br><span class="line"><span class="built_in">cp</span> -rf server_config.txt /usr/local/etc/v2ray/config.json</span><br><span class="line">vim /usr/local/etc/v2ray/config.json</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>输入以下信息：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">service v2ray status</span><br><span class="line">systemctl <span class="built_in">enable</span> v2ray</span><br><span class="line">systemctl start v2ray</span><br></pre></td></tr></table></figure>
-<p>更新dat和geoip</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 只更新 .dat 資料檔</span><br><span class="line"># bash &lt;(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)</span><br></pre></td></tr></table></figure>
+        <ul>
+<li>SGD(stochastic gradient descent)  随机梯度下降</li>
+<li>SGD with momentum</li>
+<li>Adagrad</li>
+<li>RMSProp</li>
+<li>Adam</li>
+</ul>
+<h2 id="Notation"><a href="#Notation" class="headerlink" title="Notation"></a>Notation</h2><p>参数： θ<em>t，</em></p>
+<p>梯度： ∇ L(θ<em>t)，</em></p>
+<p>动量：m_{t+1}</p>
+<h2 id="Problem-Simplication"><a href="#Problem-Simplication" class="headerlink" title="Problem Simplication"></a>Problem Simplication</h2><p>Off-line Learning</p>
+<p>Generalization  ，即SGDM收敛性一般优于Adam，而Adam训练起来比较快。可以设置Learning rate range，即upbound和lower bound，设置好stepsize，动态一大一小地设置学习率。</p>
 
     </div>
 
@@ -233,7 +236,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Web/" rel="tag"># Web</a>
+              <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
           </div>
 
         
@@ -242,12 +245,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/CTF/base64%E8%A7%A3%E7%A0%81/" rel="prev" title="Base64解码">
-      <i class="fa fa-chevron-left"></i> Base64解码
+    <a href="/categories/CTF/2017HCTF01/" rel="prev" title="2017HCTF01">
+      <i class="fa fa-chevron-left"></i> 2017HCTF01
     </a></div>
       <div class="post-nav-item">
-    <a href="/categories/CTF/BubbleBabble%E8%A7%A3%E5%AF%86/" rel="next" title="BubbleBabble解密">
-      BubbleBabble解密 <i class="fa fa-chevron-right"></i>
+    <a href="/categories/ML/PoisonAttack01/" rel="next" title="PoisonAttack01">
+      PoisonAttack01 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -307,6 +310,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Notation"><span class="nav-number">1.</span> <span class="nav-text">Notation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-Simplication"><span class="nav-number">2.</span> <span class="nav-text">Problem Simplication</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
