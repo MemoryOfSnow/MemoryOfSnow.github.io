@@ -156,6 +156,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/GAN01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/GAN01/" class="post-title-link" itemprop="url">GAN01</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-09-08 20:43:22 / Modified: 17:54:54" itemprop="dateCreated datePublished" datetime="2022-09-08T20:43:22+08:00">2022-09-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h2><p>输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。</p>
+<p>例如语音聊天机器人，需要一个范围。</p>
+<h2 id="Generative-Adversarial-Network-GAN"><a href="#Generative-Adversarial-Network-GAN" class="headerlink" title="Generative Adversarial Network(GAN)"></a>Generative Adversarial Network(GAN)</h2><p>以生成动漫头像为例。</p>
+<p>Generator和Discriminator互相对抗。</p>
+<p>Generator</p>
+<p>Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能是一张动漫图片。</p>
+<blockquote>
+<p>用来分辨Generator的输出与真正的图片有何不同。</p>
+</blockquote>
+<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>1.G初始化参数，生成杂讯。</p>
+<p>2.固定G，更新D；（经过训练，D学到真正的和生成的之间的差异：把真正的人脸当做1,把训练出的图片当做0；或者是回归问题)</p>
+<p>3.固定D(鉴别器)，更新G(生成器生成在D中得分高的样本)</p>
+<p>重复步骤2,3</p>
+<h2 id="Progressive-GAN可以产生人脸"><a href="#Progressive-GAN可以产生人脸" class="headerlink" title="Progressive GAN可以产生人脸"></a>Progressive GAN可以产生人脸</h2><p>Interpolation内插可以融合两张图片，做男女性别互转的照片。</p>
+<h2 id="Divergence"><a href="#Divergence" class="headerlink" title="Divergence"></a>Divergence</h2><p>散度 表征空间各点矢量场发散的强弱程度 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/MLBasic/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1033,97 +1115,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">走代理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-26 14:19:49" itemprop="dateCreated datePublished" datetime="2022-04-26T14:19:49+08:00">2022-04-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-08-27 11:23:36" itemprop="dateModified" datetime="2022-08-27T11:23:36+08:00">2022-08-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这部分内容常用，所以做了一个系统整理；之后会陆续增加点其他内容</p>
-<p>查看左边栏的目录进行快速跳转。</p>
-<p>防火墙ban了大部分国外服务器的IP，可以轻易检测出没有伪装过的vmess流量，考虑效益，我购买了某机场的会员，价格为30元一个季度，每个月200GB流量。</p>
-<p><img src="/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/image-20220426160329651.png" alt="image-20220426160329651"></p>
-<p>我的真机系统为Win11，使用v2rayN管理连接的服务器和代理端口。</p>
-<p>如图所示，我的socks代理端口为10808，http端口为10809。这两种端口，http端口使用的最为频繁。</p>
-<ul>
-<li>设置v2rayNG-&gt;系统代理-&gt;清除系统代理；</li>
-<li>设置v2rayNG-&gt;路由-&gt;PAC分流模式。</li>
-</ul>
-<h2 id="虚拟机走代理"><a href="#虚拟机走代理" class="headerlink" title="虚拟机走代理"></a>虚拟机走代理</h2><p>百度都是直接关闭防火墙，这样不安全，所以写下这一部分内容记录一下步骤。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1195,7 +1186,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">87</span>
+          <span class="site-state-item-count">88</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1304,6 +1295,61 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

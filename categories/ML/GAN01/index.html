@@ -20,29 +20,20 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="神经网络结构搜索 厦大-纪荣嵘教授   主要流程 1.基于细胞的： 谷歌2018年的策略，把公共结构做成cell，借助这些cell组合出需要的模型。 Zoph, Barret, et al. “Learning transferable architectures for scalable image recognition.”Proceedings of the IEEE conference">
+  <meta name="description" content="生成模型输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。 例如语音聊天机器人，需要一个范围。 Generative Adversarial Network(GAN)以生成动漫头像为例。 Generator和Discriminator互相对抗。 Generator Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NAS">
-<meta property="og:url" content="https://blueinyou.com/categories/ML/NAS/index.html">
+<meta property="og:title" content="GAN01">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/GAN01/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="神经网络结构搜索 厦大-纪荣嵘教授   主要流程 1.基于细胞的： 谷歌2018年的策略，把公共结构做成cell，借助这些cell组合出需要的模型。 Zoph, Barret, et al. “Learning transferable architectures for scalable image recognition.”Proceedings of the IEEE conference">
+<meta property="og:description" content="生成模型输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。 例如语音聊天机器人，需要一个范围。 Generative Adversarial Network(GAN)以生成动漫头像为例。 Generator和Discriminator互相对抗。 Generator Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510201253099.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510201331612.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510202140341.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510202439208.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510202643036.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510203014458.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510203153112.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510204255094.png">
-<meta property="article:published_time" content="2022-03-07T12:43:22.000Z">
-<meta property="article:modified_time" content="2022-06-03T19:03:56.347Z">
+<meta property="article:published_time" content="2022-09-08T12:43:22.000Z">
+<meta property="article:modified_time" content="2022-09-08T09:54:54.636Z">
 <meta property="article:author" content="Paul C">
-<meta property="article:tag" content="NAS">
+<meta property="article:tag" content="DeepLearning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueinyou.com/categories/ML/NAS/image-20220510201253099.png">
 
-<link rel="canonical" href="https://blueinyou.com/categories/ML/NAS/">
+<link rel="canonical" href="https://blueinyou.com/categories/ML/GAN01/">
 
 
 <script id="page-configurations">
@@ -55,7 +46,7 @@
   };
 </script>
 
-  <title>NAS | Paul C's Blog</title>
+  <title>GAN01 | Paul C's Blog</title>
   
 
 
@@ -171,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/NAS/">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/GAN01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
@@ -184,7 +175,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          NAS
+          GAN01
         </h1>
 
         <div class="post-meta">
@@ -193,16 +184,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2022-03-07 20:43:22" itemprop="dateCreated datePublished" datetime="2022-03-07T20:43:22+08:00">2022-03-07</time>
+              <time title="Created: 2022-09-08 20:43:22 / Modified: 17:54:54" itemprop="dateCreated datePublished" datetime="2022-09-08T20:43:22+08:00">2022-09-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -224,27 +209,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="神经网络结构搜索"><a href="#神经网络结构搜索" class="headerlink" title="神经网络结构搜索"></a>神经网络结构搜索</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18Y4y1r7tb">厦大-纪荣嵘教授</a></p>
+        <h2 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h2><p>输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。</p>
+<p>例如语音聊天机器人，需要一个范围。</p>
+<h2 id="Generative-Adversarial-Network-GAN"><a href="#Generative-Adversarial-Network-GAN" class="headerlink" title="Generative Adversarial Network(GAN)"></a>Generative Adversarial Network(GAN)</h2><p>以生成动漫头像为例。</p>
+<p>Generator和Discriminator互相对抗。</p>
+<p>Generator</p>
+<p>Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能是一张动漫图片。</p>
+<blockquote>
+<p>用来分辨Generator的输出与真正的图片有何不同。</p>
 </blockquote>
-<p><img src="/categories/ML/NAS/image-20220510201253099.png" alt="image-20220510201253099"></p>
-<h3 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h3><p><img src="/categories/ML/NAS/image-20220510201331612.png" alt="image-20220510201331612"></p>
-<p>1.基于细胞的：</p>
-<p>谷歌2018年的策略，把公共结构做成cell，借助这些cell组合出需要的模型。</p>
-<p>Zoph, Barret, et al. “Learning transferable architectures for scalable image recognition.”Proceedings of the IEEE conference on computer vision and pattern recognition.2018.</p>
-<p>2。基于链式的：</p>
-<p><img src="/categories/ML/NAS/image-20220510202140341.png" alt="image-20220510202140341"></p>
-<p><img src="/categories/ML/NAS/image-20220510202439208.png" alt="image-20220510202439208"></p>
-<hr>
-<p>全局视角：</p>
-<p><img src="/categories/ML/NAS/image-20220510202643036.png" alt="image-20220510202643036"></p>
-<p><img src="/categories/ML/NAS/image-20220510203014458.png" alt="image-20220510203014458"></p>
-<p><img src="/categories/ML/NAS/image-20220510203153112.png" alt="image-20220510203153112"></p>
-<h2 id="NAS的进化计算"><a href="#NAS的进化计算" class="headerlink" title="NAS的进化计算"></a>NAS的进化计算</h2><p>从种群出发，然后一定概率进行变异，杂交，交给环境，利用环境去做出选择，然后再进行迭代。</p>
-<p><img src="/categories/ML/NAS/image-20220510204255094.png" alt="image-20220510204255094"></p>
-<p>Genetic CNN</p>
-<p>搜索策略:进化算法，将网络结构编码为01序列的基因，通过俄罗斯转盘选择、复制、交叉、变异产生后代.</p>
-<p>当搜索变深时，内存开销增大，要裁剪掉大量操作。</p>
+<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>1.G初始化参数，生成杂讯。</p>
+<p>2.固定G，更新D；（经过训练，D学到真正的和生成的之间的差异：把真正的人脸当做1,把训练出的图片当做0；或者是回归问题)</p>
+<p>3.固定D(鉴别器)，更新G(生成器生成在D中得分高的样本)</p>
+<p>重复步骤2,3</p>
+<h2 id="Progressive-GAN可以产生人脸"><a href="#Progressive-GAN可以产生人脸" class="headerlink" title="Progressive GAN可以产生人脸"></a>Progressive GAN可以产生人脸</h2><p>Interpolation内插可以融合两张图片，做男女性别互转的照片。</p>
+<h2 id="Divergence"><a href="#Divergence" class="headerlink" title="Divergence"></a>Divergence</h2><p>散度 表征空间各点矢量场发散的强弱程度 </p>
 
     </div>
 
@@ -254,7 +233,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/NAS/" rel="tag"># NAS</a>
+              <a href="/tags/DeepLearning/" rel="tag"># DeepLearning</a>
           </div>
 
         
@@ -263,13 +242,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/ML/CNN01/" rel="prev" title="CNN01">
-      <i class="fa fa-chevron-left"></i> CNN01
+    <a href="/categories/ML/MLBasic/" rel="prev" title="机器学习基础">
+      <i class="fa fa-chevron-left"></i> 机器学习基础
     </a></div>
-      <div class="post-nav-item">
-    <a href="/categories/ML/CNN02/" rel="next" title="CNN02">
-      CNN02 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -328,7 +304,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E6%90%9C%E7%B4%A2"><span class="nav-number">1.</span> <span class="nav-text">神经网络结构搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">主要流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAS%E7%9A%84%E8%BF%9B%E5%8C%96%E8%AE%A1%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">NAS的进化计算</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">生成模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generative-Adversarial-Network-GAN"><span class="nav-number">2.</span> <span class="nav-text">Generative Adversarial Network(GAN)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">算法：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Progressive-GAN%E5%8F%AF%E4%BB%A5%E4%BA%A7%E7%94%9F%E4%BA%BA%E8%84%B8"><span class="nav-number">3.</span> <span class="nav-text">Progressive GAN可以产生人脸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Divergence"><span class="nav-number">4.</span> <span class="nav-text">Divergence</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -453,6 +429,61 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
