@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&amp;Securitty,April,2021. 用多原型模型做未知家族识别的全新小样本恶意代码分类方法  下载链接   概念基础知识多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/Few-Shot03/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&amp;Securitty,April,2021. 用多原型模型做未知家族识别的全新小样本恶意代码分类方法  下载链接   概念基础知识多">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot03/1664020542600.png">
+<meta property="article:published_time" content="2022-09-23T12:43:22.000Z">
+<meta property="article:modified_time" content="2022-09-26T08:24:10.018Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="FSL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/Few-Shot03/1664020542600.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/Few-Shot03/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-23 20:43:22" itemprop="dateCreated datePublished" datetime="2022-09-23T20:43:22+08:00">2022-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-26 16:24:10" itemprop="dateModified" datetime="2022-09-26T16:24:10+08:00">2022-09-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&amp;Securitty,April,2021. 用多原型模型做未知家族识别的全新小样本恶意代码分类方法</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/350960578">下载链接</a> </p>
+</blockquote>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>多序列比对Multiple Sequence Alignment</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>meta learning based few-shot learning (FSL)基于元学习的小样本学习</p>
+<p>模型名：SIMPLE (Supervised Infifinite Mixture Prototypes LEarning)监督无限混合原型系统</p>
+<p><strong>设计：</strong>基于从动态分析中获得的API调用序列（API invocation sequences），引入多原型建模来为每个家族生成多个原型。以增强泛化能力。</p>
+<p><strong>idea来源：</strong>同家族的行为有相同，也有不同，即经常会匹配多个子模式并满足多模态数据分布。</p>
+<h2 id="模型结构："><a href="#模型结构：" class="headerlink" title="模型结构："></a>模型结构：</h2><p>API invocation sequences—-&gt;word embedding—-&gt;LSTM（保留序列信息）——&gt; clustering（聚类）—-&gt;每个恶意家族的多原型表示。</p>
+<p>​                                                                        少量样本的监督标签信息<br>                                                                                 ↓<br><a href="K. R. Allen, E. Shelhamer, H. Shin, J. B. Tenenbaum, Infifinite mixture prototypes for few-shot learning, in: 36th International Conference on Machine Learning, ICML 2019, Vol. 2019-June, 2019, pp. 348–357. arXiv:1902.04552.">无限混合原型IMP(infifinite mixture prototypes)</a>：聚类数目无需事先确定，模型容量能够根据任务数据自适应推断以平衡简单和复杂的数据分布。↓</p>
+<p>​                                                                            更合理的恶意样本家族的原型</p>
+<span id="more"></span>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>每个家族5个样例，在新样本家族的5种分类任务上都达到了90%的准确率(accuracy)。</p>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><h3 id="传统学习方法的挑战"><a href="#传统学习方法的挑战" class="headerlink" title="传统学习方法的挑战"></a>传统学习方法的挑战</h3><ul>
+<li>scarce samples：新发现家族的样本收集困难，而用小批量样本，模型会过拟合，或者激烈振荡（ oscillate drastically）不收敛；</li>
+<li>dynamic recognition：动态识别问题，旧分类器缺乏增量识别新家族的能力，要求从头开始重训练。</li>
+<li>signature-based analysis：需要专家设计签名，无法识别变形或者多态的样本（polymorphic or metamorphic）</li>
+<li>Open Set Recognition Problem (OSR)开放集识别问题，对新样本需要保持快速响应能力，从已经收集的样本中构建对应的分类器。</li>
+</ul>
+<h3 id="元学习框架"><a href="#元学习框架" class="headerlink" title="元学习框架"></a>元学习框架</h3><p>（在嵌入层）能够学习到关于恶意软件的高级的先验知识并基于少量样本和多原型的比较构建特定于任务的分类器。</p>
+<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1.Introduction"></a>1.Introduction</h2><p>SIMPLE:无需额外参数，实施简单，准确率高于其他baseline model.</p>
+<h3 id="创新点："><a href="#创新点：" class="headerlink" title="创新点："></a>创新点：</h3><p>1.借助元学习解决稀缺恶意样本和动态恶意家族识别难题，在推理(inference)过程中仅需要一次转发(one-time forward)</p>
+<p>2.原型(prototypes)灵活产生</p>
+<p>3.大量实验，优于传统的动态识别方法和已有的小样本分类模型。</p>
+<h2 id="2-Related-Work"><a href="#2-Related-Work" class="headerlink" title="2.Related Work"></a>2.Related Work</h2><h3 id="1-恶意软件分类："><a href="#1-恶意软件分类：" class="headerlink" title="1.恶意软件分类："></a>1.恶意软件分类：</h3><p>1.是否2.贴家族标签</p>
+<p>静态检测对于 encryption, packing, polymorphism, obfuscation, meta-morphism会出错。</p>
+<p>动态检测对于反沙箱、诱导执行的软件成功率减弱。</p>
+<h3 id="2-小样本学习"><a href="#2-小样本学习" class="headerlink" title="2.小样本学习"></a>2.小样本学习</h3><p>度量学习 metric based</p>
+<ul>
+<li>Matching Networks</li>
+<li>Prototypical Networks</li>
+<li>Induction Networks</li>
+<li>Hybrid Attention-Based Prototypical Networks(HABPN) </li>
+<li>ConvProtoNet</li>
+<li>FEAT</li>
+<li>IMP（Infifinite mixture prototypes）</li>
+<li><strong>MAML</strong><ul>
+<li>Inner loop  使用少量样本经过几个优化步骤快速适应新任务</li>
+<li>Outer loop  在元学习阶段优化meta loss（计算高阶导数）</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-小样本做恶意代码分类"><a href="#3-小样本做恶意代码分类" class="headerlink" title="3.小样本做恶意代码分类"></a>3.小样本做恶意代码分类</h3><p>《MANNWARE: A malware classifification approach with a few samples using a memory augmented neural network, 》用MANN的FSL架构做恶意代码分类</p>
+<p>《 ConvProtoNet: Deep prototype induction towards better class representation for few-shot malware classifification》：考虑恶意软件的多模态分布+CNN提取聚类原型</p>
+<h2 id="3-Preprocessing-amp-Fearure-Extraction"><a href="#3-Preprocessing-amp-Fearure-Extraction" class="headerlink" title="3.Preprocessing &amp;Fearure Extraction"></a>3.Preprocessing &amp;Fearure Extraction</h2><h3 id="3-1数据集"><a href="#3-1数据集" class="headerlink" title="3.1数据集"></a>3.1数据集</h3><p>打标签方法：VT+<a target="_blank" rel="noopener" href="https://software.imdea.org/~juanca/papers/avclass_raid16.pdf">AVclass</a></p>
+<ul>
+<li><p>VirusShare No177 的二进制文件，127个家族，每个家族随机取20个。</p>
+<p>​        训练集按照<strong>家族</strong>划分<em>D</em> <em>train</em> : <em>D</em> <em>val</em> : <em>D</em> <em>test</em> = 73 : 20 : 20 </p>
+</li>
+<li><p>APIMDS的API序列,102个家族，每个家族随机取20个。</p>
+<pre><code>    ​         训练集按照家族划分*D* *train* : *D* *val* : *D* *test* = 62 : 20 : 20 
+</code></pre></li>
+</ul>
+<h3 id="我的问题"><a href="#我的问题" class="headerlink" title="我的问题"></a>我的问题</h3><p>元学习是为了在未知类上获得好的分类结果，那么他在已知类上的效果如何呢？？？</p>
+<h3 id="3-2-API-Sequence-Extraction"><a href="#3-2-API-Sequence-Extraction" class="headerlink" title="3.2 API Sequence Extraction"></a>3.2 API Sequence Extraction</h3><p>Cuckoo 沙箱，又遇见了，说明它对于elf文件执行确实好。</p>
+<ul>
+<li>只保留API名，而丢弃了参数和返回值；</li>
+<li>同一个进程的调用序列，拼接到成线性序列。</li>
+<li>个人定制报告模块</li>
+<li>丢弃<strong>序列长度小于10</strong>的样本，比如得到结果Segmentation fault，实际上是执行失败</li>
+</ul>
+<h3 id="3-3-API-Preprocessing-amp-Word-Embedding"><a href="#3-3-API-Preprocessing-amp-Word-Embedding" class="headerlink" title="3.3 API Preprocessing &amp;Word Embedding"></a>3.3 API Preprocessing &amp;Word Embedding</h3><ul>
+<li><p>去除冗余调用。<strong>对于同样的API多次出现，只保留两次。</strong></p>
+</li>
+<li><p>采用[N-gram](<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/32829048），增加了序列表示的多样性。从m（原来不同的序列个数）--&gt;m^n">https://zhuanlan.zhihu.com/p/32829048），增加了序列表示的多样性。从m（原来不同的序列个数）--&gt;m^n</a></p>
+</li>
+<li>计算每个n元组合的Term Frequency - Inverse Document Frequency (TF-IDF) ，<strong>只保留前l的TF-IDF的的n-gram项，减少总体序列长度。</strong></li>
+</ul>
+<p><img src="/categories/ML/Few-Shot03/1664020542600.png" alt="1664020542600"></p>
+<ul>
+<li>所有的n-gram项用词典索引代替。</li>
+<li><strong>截断序列长度</strong>到t，以保证矩阵的对齐和运算的方便，由此带来的影响-&gt;<ul>
+<li>t越长，可能越精确，处理越慢；也可能模型负担重，精确率下降—-&gt;速度和精确率的权衡—&gt;合适的t值—&gt;APIMDS中就隐含透露了t&gt;500无用；本实验中的最佳t值是200.</li>
+</ul>
+</li>
+<li>在词嵌入阶段使用预训练模型,而非随机初始化，以获得语义信息，加速训练过程；GloVe。</li>
+</ul>
+<h2 id="研究方向"><a href="#研究方向" class="headerlink" title="研究方向"></a>研究方向</h2><p>仅仅序列作为输入是不足的—&gt;静态的统计特征，文件头大小，输入表信息，PE文件不同节表的熵值；动态的执行信息：调流执文</p>
+<p>2.家族内样本的增加带来更多先验知识，家族数量的增加更贴近工业界应用。</p>
+<p>3.样本规模增加后，嵌入层可以变复杂。</p>
+<p>4.如何更简单的拿到大量有代表意义的特征？</p>
+<p>概括上面的内容，<strong>未来工作即增加对样本的个人研究，增加对样本的收集，增加对样本有效信息的提取。</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FSL/" rel="tag"># FSL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/GAN01/" rel="prev" title="GAN01">
+      <i class="fa fa-chevron-left"></i> GAN01
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/" rel="next" title="wslubuntu的cuda安装">
+      wslubuntu的cuda安装 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">模型结构：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">5.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">6.</span> <span class="nav-text">Abstract</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">6.1.</span> <span class="nav-text">传统学习方法的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6"><span class="nav-number">6.2.</span> <span class="nav-text">元学习框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Introduction"><span class="nav-number">7.</span> <span class="nav-text">1.Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E6%96%B0%E7%82%B9%EF%BC%9A"><span class="nav-number">7.1.</span> <span class="nav-text">创新点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Related-Work"><span class="nav-number">8.</span> <span class="nav-text">2.Related Work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-number">8.1.</span> <span class="nav-text">1.恶意软件分类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0"><span class="nav-number">8.2.</span> <span class="nav-text">2.小样本学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%81%9A%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E7%B1%BB"><span class="nav-number">8.3.</span> <span class="nav-text">3.小样本做恶意代码分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Preprocessing-amp-Fearure-Extraction"><span class="nav-number">9.</span> <span class="nav-text">3.Preprocessing &amp;Fearure Extraction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">9.1.</span> <span class="nav-text">3.1数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">9.2.</span> <span class="nav-text">我的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-API-Sequence-Extraction"><span class="nav-number">9.3.</span> <span class="nav-text">3.2 API Sequence Extraction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-API-Preprocessing-amp-Word-Embedding"><span class="nav-number">9.4.</span> <span class="nav-text">3.3 API Preprocessing &amp;Word Embedding</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E6%96%B9%E5%90%91"><span class="nav-number">10.</span> <span class="nav-text">研究方向</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
