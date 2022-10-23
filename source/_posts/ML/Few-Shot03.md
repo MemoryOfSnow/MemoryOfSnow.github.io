@@ -1,16 +1,16 @@
 ---
-title: A Novel Few-Shot Malware Classification Approach for Unknown Family
-Recognition with Multi-Prototype Modeling
+title: A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling
 date: 2022-09-23 20:43:22
 categories: 机器学习 #
 tags: [FSL]
 mathjax: true
 ---
 
-Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family
-Recognition with Multi-Prototype Modeling》,Compyter&Securitty,April,2021.
 
-> [下载链接](https://www.researchgate.net/publication/350960578) 
+
+> [下载链接](https://www.researchgate.net/publication/350960578) 用多原型模型做未知家族识别的全新小样本恶意代码分类方法
+
+Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&Securitty,April,2021. 
 
 ## 概念
 
