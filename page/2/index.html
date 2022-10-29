@@ -156,256 +156,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/Cuckoo%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/Cuckoo%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-25 23:51:47" itemprop="dateCreated datePublished" datetime="2022-09-25T23:51:47+08:00">2022-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-09-26 00:03:45" itemprop="dateModified" datetime="2022-09-26T00:03:45+08:00">2022-09-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <hr>
-<h2 id="安装Cuckoo"><a href="#安装Cuckoo" class="headerlink" title="安装Cuckoo"></a>安装Cuckoo</h2><h3 id="m2crypto"><a href="#m2crypto" class="headerlink" title="m2crypto"></a>m2crypto</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/include/x86_64-linux-gnu/openssl/opensslconf.h /usr/include/openssl/opensslconf.h</span><br><span class="line">pip install --global-option=build_ext --global-option=&quot;-I/usr/include/x86_64-linux-gnu&quot; m2crypto</span><br></pre></td></tr></table></figure>
-<h2 id="2-安装Py36支持的组件"><a href="#2-安装Py36支持的组件" class="headerlink" title="2.安装Py36支持的组件"></a>2.安装Py36支持的组件</h2><h3 id="Volatility"><a href="#Volatility" class="headerlink" title="Volatility"></a>Volatility</h3><h2 id="3-可选项安装"><a href="#3-可选项安装" class="headerlink" title="3.可选项安装"></a>3.可选项安装</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install libfuzzy-dev</span><br></pre></td></tr></table></figure>
-<h3 id="guacd"><a href="#guacd" class="headerlink" title="guacd"></a>guacd</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd</span><br></pre></td></tr></table></figure>
-<h2 id="4-安装Cuckoo"><a href="#4-安装Cuckoo" class="headerlink" title="4.安装Cuckoo"></a>4.安装Cuckoo</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libx11-dev</span><br><span class="line">#apt-file search Intrinsic.h apt-file可以根据缺少的文件找对应需要安装的库</span><br><span class="line">pip install -U cuckoo</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot04/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot04/" class="post-title-link" itemprop="url">Task-Aware Meta Learning-based Siamese Neural Network for Classifying Control Flow Obfuscated Malware</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-25 15:43:22" itemprop="dateCreated datePublished" datetime="2022-09-25T15:43:22+08:00">2022-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-02 13:31:06" itemprop="dateModified" datetime="2022-10-02T13:31:06+08:00">2022-10-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2110.13409&amp;usg=AOvVaw0q_jW9kL_Td8wyHwDgsnBy">下载链接</a>，用于分类混淆恶意软件的基于任务感知的元学习孪生网络，2021</p>
-</blockquote>
-<p>Zhu, Jinting &amp; Jang-Jaccard, Julian &amp; Singh, Amardeep &amp; Watters, Paul &amp; Camtepe, Seyit. (2021). Task-Aware Meta Learning-based Siamese Neural Network for Classifying Obfuscated Malware. </p>
-<blockquote>
-<p><a href="..\Few-Shot06">相关论文</a>A Few-Shot Meta-Learning based Siamese Neural Network using Entropy Features for Ransomware Classification</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">wslubuntu的cuda安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-09-25 14:19:49 / Modified: 23:51:43" itemprop="dateCreated datePublished" datetime="2022-09-25T14:19:49+08:00">2022-09-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Ashken/article/details/108974058">https://blog.csdn.net/Ashken/article/details/108974058</a></p>
-</blockquote>
-<h2 id="1-安装wsl子系统"><a href="#1-安装wsl子系统" class="headerlink" title="1.安装wsl子系统"></a>1.安装wsl子系统</h2><p>1.安装如下的两个Windows功能，重启系统。</p>
-<p><img src="/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/1664118004637.png" alt="1664118004637"></p>
-<p>2.dos命令行，列出可以安装的子系统类型</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$:wsl -l -o</span><br><span class="line">NAME            FRIENDLY NAME</span><br><span class="line">Ubuntu          Ubuntu</span><br><span class="line">Debian          Debian GNU/Linux</span><br><span class="line">kali-linux      Kali Linux Rolling</span><br><span class="line">openSUSE-42     openSUSE Leap 42</span><br><span class="line">SLES-12         SUSE Linux Enterprise Server v12</span><br><span class="line">Ubuntu-16.04    Ubuntu 16.04 LTS</span><br><span class="line">Ubuntu-18.04    Ubuntu 18.04 LTS</span><br><span class="line">Ubuntu-20.04    Ubuntu 20.04 LTS</span><br></pre></td></tr></table></figure>
-<p>3.下载Ubuntu18.04子系统</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install -d Ubuntu-18.04</span><br></pre></td></tr></table></figure>
-<h2 id="2-在Windows上安装CUDA-on-WSL驱动"><a href="#2-在Windows上安装CUDA-on-WSL驱动" class="headerlink" title="2.在Windows上安装CUDA on WSL驱动"></a>2.在Windows上安装CUDA on WSL驱动</h2><p>1.打开INVIDA-<a target="_blank" rel="noopener" href="https://www.nvidia.com/Download/index.aspx?lang=en-us">wsl驱动下载界面</a></p>
-<p>2.输入你的配置，下载对应的驱动程序。</p>
-<p>3.我下载的是<a target="_blank" rel="noopener" href="https://www.nvidia.com/content/DriverDownload-March2009/confirmation.php?url=/Windows/516.94/516.94-notebook-win10-win11-64bit-international-dch-whql.exe&amp;lang=us&amp;type=geforcem">这个</a></p>
-<p>4.双击程序安装。</p>
-<h2 id="3-wsl安装cuda-Toolkit"><a href="#3-wsl安装cuda-Toolkit" class="headerlink" title="3.wsl安装cuda Toolkit"></a>3.wsl安装cuda Toolkit</h2><p>在dos命令行输入wsl，会自动启动之前安装的子系统。</p>
-<p>在子系统的命令行里，一个一个执行下面的语句。</p>
-<p>这里我使用了cuda11.3，因为<a target="_blank" rel="noopener" href="https://pytorch.org/get-started/locally/">pytorch官网</a>目前给出的cuda版本有10.2，11.3,11.6.取最新版的前一版用就可以。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#这里需要导入两个pubkey；</span><br><span class="line">sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub</span><br><span class="line"></span><br><span class="line">sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub</span><br><span class="line"></span><br><span class="line">sudo sh -c &#x27;echo &quot;deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /&quot; &gt; /etc/apt/sources.list.d/cuda.list&#x27;</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y cuda-toolkit-11-3 </span><br><span class="line"></span><br><span class="line">#网上其他教程缺少下面的步骤</span><br><span class="line">sudo apt --fix-broken install</span><br></pre></td></tr></table></figure>
-<h2 id="4-安装Pytorch"><a href="#4-安装Pytorch" class="headerlink" title="4.安装Pytorch"></a>4.安装Pytorch</h2><p>1.下载conda。</p>
-<p>在子系统的命令行里执行，安装Miniconda</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/$(whoami)/Downloads</span><br><span class="line">cd /home/$(whoami)/Downloads</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh</span><br><span class="line">sudo ./Miniconda3-latest-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
-<p>2.给conda建立软链接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /root/Miniconda3/bin/conda /usr/bin/conda</span><br></pre></td></tr></table></figure>
-<p>3.下载cuda11.3版本的pytorch</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch</span><br></pre></td></tr></table></figure>
-<p>5.验证安装是否成功</p>
-<p>在子系统里执行下面的语句。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#给root改名</span><br><span class="line">sudo passwd root</span><br><span class="line">#切换到root用户</span><br><span class="line">su</span><br><span class="line">#执行python</span><br><span class="line">python</span><br><span class="line">#判断cuda安装成功与否</span><br><span class="line">(base) root@BlackGame:~# python</span><br><span class="line">Python 3.9.12 (main, Apr  5 2022, 06:56:58)</span><br><span class="line">[GCC 7.5.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import torch as t</span><br><span class="line">&gt;&gt;&gt; t.cuda.is_available()</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
-<h2 id="diskpart"><a href="#diskpart" class="headerlink" title="diskpart"></a>diskpart</h2><blockquote>
-<p>新建和隐藏分区符</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">list disk</span><br><span class="line">sel disk 0</span><br><span class="line">list vol</span><br><span class="line">sel vol 2</span><br><span class="line">assign letter=Z</span><br><span class="line">remove Z</span><br></pre></td></tr></table></figure>
-<h2 id="wls子系统"><a href="#wls子系统" class="headerlink" title="wls子系统"></a>wls子系统</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure>
-<h2 id="grub界面恢复到win11启动"><a href="#grub界面恢复到win11启动" class="headerlink" title="grub界面恢复到win11启动"></a>grub界面恢复到win11启动</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">insmod part_gpt</span><br><span class="line">insmod chain</span><br><span class="line">set root=(hd0,gpt1)</span><br><span class="line">chainloader /EFI/Microsoft/Boot/bootmgfw.efi</span><br><span class="line">boot</span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br><span class="line">wsl --shutdown Ubuntu18.04</span><br><span class="line">sudo service ssh start</span><br><span class="line">cd /mnt/c/Users/22154/Downloads </span><br><span class="line">cd ~/Downloads</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot03/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -986,6 +736,404 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">数据分析概述</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-07 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-07T14:17:22+08:00">2022-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-14 19:28:05" itemprop="dateModified" datetime="2022-07-14T19:28:05+08:00">2022-07-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-相关库"><a href="#1-相关库" class="headerlink" title="1.相关库"></a>1.相关库</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png" alt="image-20220321094551847"></p>
+<h2 id="2-数据等级"><a href="#2-数据等级" class="headerlink" title="2.数据等级"></a>2.数据等级</h2><ul>
+<li>非结构化—&gt;结构化数据</li>
+</ul>
+<p>结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除)</p>
+<h2 id="3-数据分析"><a href="#3-数据分析" class="headerlink" title="3.数据分析"></a>3.数据分析</h2><h3 id="1-数据质量分析"><a href="#1-数据质量分析" class="headerlink" title="1.数据质量分析"></a>1.数据质量分析</h3><p>缺失值  80%数据全部丢失，30%的缺失（做填充）</p>
+<p>异常值  均值填充</p>
+<p>一致性分析    （训练集和测试集的逻辑分布要是一致的）</p>
+<h3 id="2-数据特征分析"><a href="#2-数据特征分析" class="headerlink" title="2.数据特征分析"></a>2.数据特征分析</h3><ul>
+<li>分布分析     数据要选分布宽度比较低的</li>
+<li>对比分析     均值、方差</li>
+<li>统计量分析  sum</li>
+<li>周期性分析   一般用在时间序列上</li>
+<li>贡献度分析  </li>
+<li>相关度分析  </li>
+</ul>
+<h3 id="3-函数工具"><a href="#3-函数工具" class="headerlink" title="3.函数工具"></a>3.函数工具</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数功能</th>
+<th>所属扩展库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>interpolate</td>
+<td>一维、高维数据插值</td>
+<td>Scipy</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>去除数据中的重复元素，得到单值元素列表，它是对象的方法名（此功能可以用集合的办法去重）</td>
+<td>Pandas/Numpy</td>
+</tr>
+<tr>
+<td>isnull</td>
+<td>判断是否空值</td>
+<td>Pandas</td>
+</tr>
+<tr>
+<td>notnull</td>
+<td>判断是否为非空值</td>
+<td>Pandas</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>对指标变量矩阵进行主成分分析</td>
+<td>Scikit-Learn</td>
+</tr>
+<tr>
+<td>random</td>
+<td>生成随机矩阵</td>
+<td>Numpy</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="4-数据规约"><a href="#4-数据规约" class="headerlink" title="4.数据规约"></a>4.数据规约</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321102046509.png" alt="image-20220321102046509"></p>
+<h3 id="属性规约"><a href="#属性规约" class="headerlink" title="属性规约"></a>属性规约</h3><p>属性的合并、提取和删除、归纳、主成分分析</p>
+<ul>
+<li>合并  {A1,A2,A3}—-&gt;{A};{B1,B2.B3}—-&gt;{B}  <strong>数据降维</strong></li>
+<li>逐步向前选择   从空属性集开始 ，每次从原属性集中选一个当前最优的属性加到现在的集合中，直到无法选择出最优属性或满足一定阈值约束为止。</li>
+<li>逐步向后删除  从全属性集开始，…(与逐步向前选择恰好相反)</li>
+<li>决策树归纳  用决策树对初始数据进行分类归纳学习，决策树上没有的属性可以认为是无关属性，删除之。</li>
+<li>PCA，用较少的变量去解释原始数据中的大部分变量，即将很多相关性很高的变量降低相关性，变为不相关或者独立的变量</li>
+</ul>
+<h3 id="数值规约"><a href="#数值规约" class="headerlink" title="数值规约"></a>数值规约</h3><p>​    数据标准化</p>
+<h2 id="5-数据变换"><a href="#5-数据变换" class="headerlink" title="5.数据变换"></a>5.数据变换</h2><ul>
+<li>简单函数变换</li>
+<li>规范化   把数据变成0，1，数据标准化减少噪声的影响</li>
+<li>连续属性离散化</li>
+<li>属性构造</li>
+<li>小波变换</li>
+<li>傅里叶变换</li>
+</ul>
+<h2 id="6-数据集成"><a href="#6-数据集成" class="headerlink" title="6.数据集成"></a>6.数据集成</h2><p>合并多个数据源的数据，让数据没有偏见</p>
+<ul>
+<li>实体属性识别</li>
+<li>冗余属性识别</li>
+</ul>
+<h2 id="7-数据清洗"><a href="#7-数据清洗" class="headerlink" title="7.数据清洗"></a>7.数据清洗</h2><p>删除原始数据集中的无关数据、重复数据，平滑噪声数据，筛选值与挖掘主题无关的数据，处理缺失值、异常值等。</p>
+<p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321205617659.png" alt="image-20220321205617659"></p>
+<h3 id="缺失值处理"><a href="#缺失值处理" class="headerlink" title="缺失值处理"></a>缺失值处理</h3><ul>
+<li>均值、中位数、众数</li>
+<li>使用固定值</li>
+<li>最近邻插补</li>
+<li>回归方法</li>
+<li><p>插值法</p>
+<ul>
+<li>拉格朗日插值                                                                                                                                                                                                                                                                                                                                                                          </li>
+<li>牛顿插值<h3 id="异常值处理"><a href="#异常值处理" class="headerlink" title="异常值处理"></a>异常值处理</h3></li>
+</ul>
+</li>
+<li><p>删除</p>
+</li>
+<li>视为缺失</li>
+<li>平均值</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/LSTM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/LSTM/" class="post-title-link" itemprop="url">LSTM</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-18 09:57:22" itemprop="dateCreated datePublished" datetime="2022-05-18T09:57:22+08:00">2022-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-16 19:29:06" itemprop="dateModified" datetime="2022-06-16T19:29:06+08:00">2022-06-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>RNN是一个链式结构，每个<strong>时间片</strong>使用的是<strong>相同的参数</strong>。常用的是LSTM和GLU。</p>
+<p>输入数据要序列化；</p>
+<p>具有记忆性、时间维度上权值共享且图灵完备，能够以极高的效率学习序列中的非线性特征。</p>
+<p><img src="/categories/ML/LSTM/image-20220518102240209.png" alt="image-20220518102240209" style="zoom:50%;"></p>
+<p>​                                                                            1-1   循环神经网络示例</p>
+<p><img src="/categories/ML/LSTM/image-20220518102352284.png" alt="image-20220518102352284"></p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h<span class="built_in">_</span>&#123;t&#125;=<span class="keyword">\sigma</span><span class="keyword">\left</span>(x<span class="built_in">_</span>&#123;t&#125; <span class="keyword">\times</span> w<span class="built_in">_</span>&#123;x t&#125;+h<span class="built_in">_</span>&#123;t-1&#125; <span class="keyword">\times</span> w<span class="built_in">_</span>&#123;h t&#125;+b<span class="keyword">\right</span>)</span><br></pre></td></tr></table></figure>
+<p>其中，w_{h t}，为状态权重。</p>
+<h3 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h3><p><strong>长期依赖问题</strong>：</p>
+<p>隐藏状态h_t只能存储有限的信息，当记忆单元存储内容多时，它会逐渐以往之前所学到的知识（着数据时间片的增加，RNN丧失了连接相隔较远的层之间信息的能力）。</p>
+<p>长期依赖的现象也会产生很小的梯度。</p>
+<p><strong>梯度消失。梯度爆炸</strong></p>
+<p>权值矩阵循环相乘导致。因为RNN中每个时间片使用相同的权值矩阵，相同函数的多次组合会导致极端的非线性行为。</p>
+<ul>
+<li>处理梯度爆炸可以采用梯度截断的方法。所谓梯度截断是指将梯度值超过阈值\theta的梯度手动降到\theta 。虽然梯度截断会一定程度上改变梯度的方向，但梯度截断的方向依旧是朝向损失函数减小的方向。</li>
+<li>处理梯度消失？？</li>
+</ul>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>引入门控机制，选择性遗忘一些无用信息，从而控制信息的累积。</p>
+<h2 id="LSTM总结"><a href="#LSTM总结" class="headerlink" title="LSTM总结"></a>LSTM总结</h2><blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/lstm/">https://easyai.tech/ai-definition/lstm/</a></p>
+</blockquote>
+<p>1997年由Hochreiter &amp; Schmidhuber提出</p>
+<blockquote>
+<p>Hochreiter, S, and J. Schmidhuber. “Long short-term memory.” Neural Computation 9.8(1997):1735-1780.</p>
+</blockquote>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><p><img src="/categories/ML/LSTM/image-20220526171733768.png" alt="image-20220526171733768"></p>
+<p><img src="/categories/ML/LSTM/image-20220526174100054.png" alt="image-20220526174100054"></p>
+<h2 id="LSTM详细内容"><a href="#LSTM详细内容" class="headerlink" title="LSTM详细内容"></a>LSTM详细内容</h2><p>5月26日</p>
+<h3 id="1-门-F、I、O"><a href="#1-门-F、I、O" class="headerlink" title="1.门(F、I、O)"></a>1.门(F、I、O)</h3><p>LSTM 可以通过所谓“门”的精细结构向细胞状态添加或移除信息。</p>
+<p><img src="/categories/ML/LSTM/2019-07-05-men.png" alt="LSTM 可以通过所谓“门”的精细结构向细胞状态添加或移除信息"></p>
+<p>门可以<strong>选择性地以让信息通过</strong>。它们由 S 形神经网络层和逐点乘法运算组成。</p>
+<p>S 形网络的输出值介于 0 和 1 之间，表示有多大比例的信息通过。0 值表示“没有信息通过”，1 值表示“所有信息通过”。</p>
+<p>一个 LSTM 有三种这样的门用来保持和控制细胞状态。</p>
+<ul>
+<li>忘记门(Forget gate)：将值朝0减少。</li>
+<li>输入门(Input gate)：决定是否忽略掉输入数据；</li>
+<li>输出门(Output gate)：决定是否使用隐状态；</li>
+</ul>
+<p><img src="/categories/ML/LSTM/image-20220526173429277.png" alt="image-20220526173429277"></p>
+<p><img src="/categories/ML/LSTM/image-20220526173647329.png" alt="image-20220526173647329"></p>
+<h3 id="2-候选记忆单元（增加的部分）"><a href="#2-候选记忆单元（增加的部分）" class="headerlink" title="2.候选记忆单元（增加的部分）"></a>2.候选记忆单元（增加的部分）</h3><p><strong>没有用到任何Gate</strong></p>
+<p>读法：C_tilda</p>
+<p><img src="/categories/ML/LSTM/image-20220526173509561.png" alt="image-20220526173509561"></p>
+<p><img src="/categories/ML/LSTM/image-20220526173323589.png" alt="image-20220526173323589"></p>
+<h3 id="3-记忆单元Ct"><a href="#3-记忆单元Ct" class="headerlink" title="3.记忆单元Ct"></a>3.<strong>记忆单元</strong>Ct</h3><p><img src="/categories/ML/LSTM/2019-07-05-xibao.png" alt="LSTM 的关键是细胞状态，即图中上方的水平线" style="zoom:50%;"></p>
+<p>Ct的范围比较大，需要tanh规范到-1到1之间。</p>
+<p>LSTM 的关键是细胞状态，即图中上方的水平线。</p>
+<p>细胞状态有点像传送带。它贯穿整个链条，只有一些次要的线性交互作用。信息很容易以不变的方式流过。</p>
+<p><img src="/categories/ML/LSTM/image-20220526172126536.png" alt="image-20220526172126536"></p>
+<h3 id="4-隐状态Ht"><a href="#4-隐状态Ht" class="headerlink" title="4.隐状态Ht"></a>4.隐状态Ht</h3><p>让隐藏状态放在+1到-1之间，避免梯度爆炸，降低模型复杂度。</p>
+<p><img src="/categories/ML/LSTM/image-20220526173904253.png" alt="image-20220526173904253"></p>
+<p><img src="/categories/ML/LSTM/image-20220526174148608.png" alt="image-20220526174148608"></p>
+<h2 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h2><h3 id="1-计算模型占用显存"><a href="#1-计算模型占用显存" class="headerlink" title="1.计算模型占用显存"></a>1.计算模型占用显存</h3><p>取决于调用的库，对框架的优化，所以最好直接查看实际GPU占用；</p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">最优化问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-18 09:57:22" itemprop="dateCreated datePublished" datetime="2022-05-18T09:57:22+08:00">2022-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-22 17:10:30" itemprop="dateModified" datetime="2022-06-22T17:10:30+08:00">2022-06-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>subject to  s.t.  约束为</p>
+<p><strong>最优化问题= 目标函数+约束函数</strong></p>
+<p>运筹学里的一种</p>
+<ul>
+<li><p>无约束优化/约束优化 </p>
+</li>
+<li><p>线性/非线性优化   目标函数+约束函数有非线性函数</p>
+</li>
+<li><p>连续优化（股票投资比例）/离散优化 （如整数规化：路径选择、生产车辆）</p>
+</li>
+<li><p>单目标优化/多目标优化（考虑多个方面，比如租房）</p>
+</li>
+<li><p>动态规划</p>
+</li>
+<li><p>随机规划</p>
+</li>
+<li><p>鲁棒优化</p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1057,7 +1205,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -22,7 +22,7 @@
 
   <meta name="description" content="页面解析之数据提取一般来讲对我们而言，需要抓取的是某个网站或者某个应用的内容，提取有用的价值，内容一般分为两部分，非结构化的文本，或结构化的文本。 关于结构化的数据JSON、XML 关于非结构化的数据关于HTML文本（包含JavaScript代码）HTML文本（包含JavaScript代码）是最常见的数据格式，理应属于结构化的文本组织，但因为一般我们需要的关键信息并非直接可以得到，需要进行对HTM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Paul C&#39;s Blog">
+<meta property="og:title" content="爬虫1">
 <meta property="og:url" content="https://blueinyou.com/categories/Notes/4%E7%88%AC%E8%99%AB%E9%9D%99%E6%80%81%E6%8F%90%E5%8F%96/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
 <meta property="og:description" content="页面解析之数据提取一般来讲对我们而言，需要抓取的是某个网站或者某个应用的内容，提取有用的价值，内容一般分为两部分，非结构化的文本，或结构化的文本。 关于结构化的数据JSON、XML 关于非结构化的数据关于HTML文本（包含JavaScript代码）HTML文本（包含JavaScript代码）是最常见的数据格式，理应属于结构化的文本组织，但因为一般我们需要的关键信息并非直接可以得到，需要进行对HTM">
@@ -34,9 +34,10 @@
 <meta property="og:image" content="https://piaosanlang.gitbooks.io/spiders/content/photos/json2.png">
 <meta property="og:image" content="https://piaosanlang.gitbooks.io/spiders/content/photos/json.png">
 <meta property="og:image" content="https://piaosanlang.gitbooks.io/spiders/content/photos/02_json.png">
-<meta property="article:published_time" content="2022-10-29T13:47:51.767Z">
-<meta property="article:modified_time" content="2022-10-28T08:32:24.790Z">
+<meta property="article:published_time" content="2022-04-26T06:19:49.000Z">
+<meta property="article:modified_time" content="2022-10-29T13:49:32.133Z">
 <meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Web">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://piaosanlang.gitbooks.io/spiders/content/photos/02-Xpath_Helper.bmp">
 
@@ -53,7 +54,7 @@
   };
 </script>
 
-  <title> | Paul C's Blog</title>
+  <title>爬虫1 | Paul C's Blog</title>
   
 
 
@@ -182,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          爬虫1
         </h1>
 
         <div class="post-meta">
@@ -192,15 +193,24 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-10-29 21:47:51" itemprop="dateCreated datePublished" datetime="2022-10-29T21:47:51+08:00">2022-10-29</time>
+              <time title="Created: 2022-04-26 14:19:49" itemprop="dateCreated datePublished" datetime="2022-04-26T14:19:49+08:00">2022-04-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-28 16:32:24" itemprop="dateModified" datetime="2022-10-28T16:32:24+08:00">2022-10-28</time>
+                <time title="Modified: 2022-10-29 21:49:32" itemprop="dateModified" datetime="2022-10-29T21:49:32+08:00">2022-10-29</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
 
           
 
@@ -506,9 +516,7 @@
 <p>6.索引</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//div/input[2]</span><br><span class="line"></span><br><span class="line">//div[@id=&#x27;position&#x27;]/span[3]</span><br><span class="line"></span><br><span class="line">//div[@id=&#x27;position&#x27;]/span[position()=3]</span><br><span class="line"></span><br><span class="line">//div[@id=&#x27;position&#x27;]/span[position()&gt;3]</span><br><span class="line"></span><br><span class="line">//div[@id=&#x27;position&#x27;]/span[position()&lt;3]</span><br><span class="line"></span><br><span class="line">//div[@id=&#x27;position&#x27;]/span[last()]</span><br><span class="line"></span><br><span class="line">//div[@id=&#x27;position&#x27;]/span[last()-1]</span><br></pre></td></tr></table></figure>
 <p>7.substring 截取判断</p>
-<div data-for="result" id="swfEveryCookieWrap"></div>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//*[substring(@id,4,5)=&#x27;Every&#x27;]/@id  截取该属性 定位3,取长度5的字符 </span><br><span class="line"></span><br><span class="line">//*[substring(@id,4)=&#x27;EveryCookieWrap&#x27;]  截取该属性从定位3 到最后的字符 </span><br><span class="line"></span><br><span class="line">//*[substring-before(@id,&#x27;C&#x27;)=&#x27;swfEvery&#x27;]/@id   属性 &#x27;C&#x27;之前的字符匹配</span><br><span class="line"></span><br><span class="line">//*[substring-after(@id,&#x27;C&#x27;)=&#x27;ookieWrap&#x27;]/@id   属性&#x27;C之后的字符匹配</span><br></pre></td></tr></table></figure>
+<p><div data-for="result" id="swfEveryCookieWrap"></div><br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//*[substring(@id,4,5)=&#x27;Every&#x27;]/@id  截取该属性 定位3,取长度5的字符 </span><br><span class="line"></span><br><span class="line">//*[substring(@id,4)=&#x27;EveryCookieWrap&#x27;]  截取该属性从定位3 到最后的字符 </span><br><span class="line"></span><br><span class="line">//*[substring-before(@id,&#x27;C&#x27;)=&#x27;swfEvery&#x27;]/@id   属性 &#x27;C&#x27;之前的字符匹配</span><br><span class="line"></span><br><span class="line">//*[substring-after(@id,&#x27;C&#x27;)=&#x27;ookieWrap&#x27;]/@id   属性&#x27;C之后的字符匹配</span><br></pre></td></tr></table></figure></p>
 <p>8.通配符*</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//span[@*=&#x27;bruce&#x27;]</span><br><span class="line"></span><br><span class="line">//*[@name=&#x27;bruce&#x27;]</span><br></pre></td></tr></table></figure>
 <p>9.轴</p>
@@ -1053,6 +1061,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+          </div>
 
         
 
@@ -1060,12 +1071,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/Notes/9%E7%88%AC%E8%99%ABpyppeteer%E4%BD%BF%E7%94%A8/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/categories/Notes/8%E5%BC%82%E6%AD%A5%E7%88%AC%E8%99%AB/" rel="prev" title="爬虫3">
+      <i class="fa fa-chevron-left"></i> 爬虫3
     </a></div>
       <div class="post-nav-item">
-    <a href="/categories/Notes/8%E5%BC%82%E6%AD%A5%E7%88%AC%E8%99%AB/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/categories/Notes/9%E7%88%AC%E8%99%ABpyppeteer%E4%BD%BF%E7%94%A8/" rel="next" title="爬虫4">
+      爬虫4 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -1141,7 +1152,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
