@@ -29,5 +29,7 @@ mathjax: true
 
 ![1666345435871](ComplexNetWork/1666345435871.png)
 
+中心性参数(centrality)**度数**，可以用来衡量节点的**重要性程度**——。
 
+R-index[[13]](Schneider C, Moreira A, Andrade Jr J, Havlin S, Herrmann H (2011) Mitigation of malicious attacks on networks. Proceedings of the National Academy of Sciences 108: 3838–3841.)
 
