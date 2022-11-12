@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="学到基础类别的知识，进而能够学会分类同一个数据集中的新类。 基于少量样本便可完成类别的判断 少量标签数据，训练得到良好泛化能力的模型。   B站-liupengyuanblcu  Up主借鉴的小样本学习的论文  问题产生的原因：当前模型的训练基于经验风险最小化，用经验风险代替期望风险，所以训练数据少时，模型误差很大。  解决问题的三个角度 借助先验知识减小经验风险   数据角度   模型角度 算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小样本学习方法概述1">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/Few-Shot01/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="学到基础类别的知识，进而能够学会分类同一个数据集中的新类。 基于少量样本便可完成类别的判断 少量标签数据，训练得到良好泛化能力的模型。   B站-liupengyuanblcu  Up主借鉴的小样本学习的论文  问题产生的原因：当前模型的训练基于经验风险最小化，用经验风险代替期望风险，所以训练数据少时，模型误差很大。  解决问题的三个角度 借助先验知识减小经验风险   数据角度   模型角度 算法">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668265194697.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668265679021.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668269587232.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668269428314.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668269675140.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668270073280.png">
+<meta property="article:published_time" content="2022-08-04T12:43:22.000Z">
+<meta property="article:modified_time" content="2022-11-12T16:23:41.666Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="FSL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/Few-Shot01/1668265194697.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/Few-Shot01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>小样本学习方法概述1 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          小样本学习方法概述1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-04 20:43:22" itemprop="dateCreated datePublished" datetime="2022-08-04T20:43:22+08:00">2022-08-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-13 00:23:41" itemprop="dateModified" datetime="2022-11-13T00:23:41+08:00">2022-11-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>学到基础类别的知识，进而能够学会分类同一个数据集中的新类。</p>
+<p>基于少量样本便可完成类别的判断</p>
+<p><strong>少量标签数据</strong>，训练得到<strong>良好泛化能力</strong>的模型。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Jh411X7FG"> B站-liupengyuanblcu </a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/WenMoLiuBai/Meta-Learning-and-Few-shot-Learning">Up主借鉴的小样本学习的论文</a></p>
+</blockquote>
+<h2 id="问题产生的原因："><a href="#问题产生的原因：" class="headerlink" title="问题产生的原因："></a>问题产生的原因：</h2><p>当前模型的训练基于<strong>经验风险最小化</strong>，用经验风险代替期望风险，所以训练数据少时，模型误差很大。</p>
+<p><img src="/categories/ML/Few-Shot01/1668265194697.png" alt="1668265194697"></p>
+<h2 id="解决问题的三个角度"><a href="#解决问题的三个角度" class="headerlink" title="解决问题的三个角度"></a>解决问题的三个角度</h2><blockquote>
+<p>借助先验知识减小经验风险</p>
+</blockquote>
+<ul>
+<li>数据角度  </li>
+<li>模型角度</li>
+<li>算法角度</li>
+</ul>
+<p><img src="/categories/ML/Few-Shot01/1668265679021.png" alt="1668265679021"></p>
+<h2 id="数据角度"><a href="#数据角度" class="headerlink" title="数据角度"></a>数据角度</h2><ul>
+<li>造数据（专家经验：了解数据结构和数据特点；手动制订生成<strong>规则</strong>；通过模型学习学会数据的<strong>自动变换</strong>）</li>
+<li>加数据  无标签数据（半监督和无监督学习得到<strong>伪标签</strong>）、相似数据集（对新数据集的采集样本加权平均得到新的<strong>聚合样本</strong>参与原数据集的训练）</li>
+</ul>
+<h2 id="模型角度"><a href="#模型角度" class="headerlink" title="模型角度"></a>模型角度</h2><ul>
+<li><p>多任务学习(multi-task learning) 利用多个任务去相互辅助对方学习</p>
+</li>
+<li><p>嵌入式学习(embedding learning)</p>
+<ul>
+<li>任务不变（对所有任务都一样）</li>
+<li>任务特定的（对每个任务都要学习一个新的学习器）</li>
+<li>结合任务不变和任务特定的</li>
+</ul>
+</li>
+<li><p>借助额外<strong>记忆</strong>(external memory)学习  </p>
+<p><strong>知识存放于记忆；用时检索；不断更新</strong></p>
+<ul>
+<li>人的记忆</li>
+<li>神经图灵机NTM</li>
+</ul>
+</li>
+<li><p><strong>生成模型</strong>(generative models)</p>
+<ul>
+<li>part and releation</li>
+<li>super class</li>
+<li>潜变模型 latent variable  自编码Auto-Encoding；贝叶斯(Bayes)推理</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么以上模型可以简化搜索空间？"><a href="#为什么以上模型可以简化搜索空间？" class="headerlink" title="为什么以上模型可以简化搜索空间？"></a>为什么以上模型可以简化搜索空间？</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>学得的先验知识</th>
+<th>如何限制搜索空间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多任务学习</td>
+<td>数据集里的其他任务</td>
+<td>共享参数（多个任务用一套参数）</td>
+</tr>
+<tr>
+<td>嵌入式学习</td>
+<td>任务嵌入到一起</td>
+<td>将样本<strong>映射到较小的嵌入空间</strong>中，其中可轻易划分相似和不相似样本</td>
+</tr>
+<tr>
+<td>额外记忆</td>
+<td>嵌入层与记忆交互</td>
+<td>借助记忆的训练数据限定样本以合并特定任务的信息</td>
+</tr>
+<tr>
+<td>生成模型</td>
+<td>借助先前的训练得到参数的先验知识</td>
+<td>限制了样本分布</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="算法角度"><a href="#算法角度" class="headerlink" title="算法角度"></a>算法角度</h2><p>1.微调fine-tune已存在模型     <strong>正则</strong>、组合、新参数微调</p>
+<p>2.微调元学习器的参数  元学习器已经学到了任务的分布，这个通用参数足够优秀，离目标已经很接近了。进而通过梯度下降和<strong>考虑不确定性</strong>去微调</p>
+<p>3.加入一个元优化器指定搜索步骤(search steps)</p>
+<h3 id="正则微调"><a href="#正则微调" class="headerlink" title="正则微调"></a>正则微调</h3><p>经典？？？</p>
+<p><img src="/categories/ML/Few-Shot01/1668269587232.png" alt="1668269587232"></p>
+<h3 id="组合参数微调"><a href="#组合参数微调" class="headerlink" title="组合参数微调"></a>组合参数微调</h3><p>对于已经学到的参数，选取当前任务最相关的几个参数组合用于当前任务；</p>
+<p><img src="/categories/ML/Few-Shot01/1668269428314.png" alt="1668269428314"></p>
+<h3 id="新参数微调"><a href="#新参数微调" class="headerlink" title="新参数微调"></a>新参数微调</h3><p>改动原模型的某几层，只学习改动的这几层的参数即可。</p>
+<p><img src="/categories/ML/Few-Shot01/1668269675140.png" alt="1668269675140"></p>
+<h3 id="元优化器"><a href="#元优化器" class="headerlink" title="元优化器"></a>元优化器</h3><p>不再用固定的元学习器，自己训练一个。</p>
+<p><img src="/categories/ML/Few-Shot01/1668270073280.png" alt="1668270073280"></p>
+<blockquote>
+<p>语义嵌入和数据增强中的小样本学习，2019年12月4日 报告人：付彦伟、何旭明 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1SJ41167sW">https://www.bilibili.com/video/BV1SJ41167sW</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FSL/" rel="tag"># FSL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/MLBasic/" rel="prev" title="机器学习基础">
+      <i class="fa fa-chevron-left"></i> 机器学习基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/ML/Few-Shot02/" rel="next" title="小样本学习方法概述2">
+      小样本学习方法概述2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">问题产生的原因：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%89%E4%B8%AA%E8%A7%92%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">解决问题的三个角度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%A7%92%E5%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">数据角度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%A7%92%E5%BA%A6"><span class="nav-number">4.</span> <span class="nav-text">模型角度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%A5%E4%B8%8A%E6%A8%A1%E5%9E%8B%E5%8F%AF%E4%BB%A5%E7%AE%80%E5%8C%96%E6%90%9C%E7%B4%A2%E7%A9%BA%E9%97%B4%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">为什么以上模型可以简化搜索空间？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%A7%92%E5%BA%A6"><span class="nav-number">6.</span> <span class="nav-text">算法角度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%BE%AE%E8%B0%83"><span class="nav-number">6.1.</span> <span class="nav-text">正则微调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E5%8F%82%E6%95%B0%E5%BE%AE%E8%B0%83"><span class="nav-number">6.2.</span> <span class="nav-text">组合参数微调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%8F%82%E6%95%B0%E5%BE%AE%E8%B0%83"><span class="nav-number">6.3.</span> <span class="nav-text">新参数微调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-number">6.4.</span> <span class="nav-text">元优化器</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
