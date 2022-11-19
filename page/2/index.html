@@ -525,7 +525,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/categories/ML/Few-Shot02/" class="post-title-link" itemprop="url">小样本学习方法概述2</a>
+            <a href="/categories/ML/Few-Shot02/" class="post-title-link" itemprop="url">小样本学习与其他相似概念的区分</a>
         </h2>
 
         <div class="post-meta">
@@ -542,7 +542,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-10 10:16:26" itemprop="dateModified" datetime="2022-11-10T10:16:26+08:00">2022-11-10</time>
+                <time title="Modified: 2022-11-18 02:34:57" itemprop="dateModified" datetime="2022-11-18T02:34:57+08:00">2022-11-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -565,7 +565,49 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="元学习模型"><a href="#元学习模型" class="headerlink" title="元学习模型"></a>元学习模型</h2><p>借助训练时的元知识</p>
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Et4y1i7pu">Shusen Wang</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1a5411P7vF">小样本学习研究综述-赵凯琳,靳小龙,王元卓-中国科学院-…</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TU4y1e7R5">有限元笔记10-个人的有限元学习经验分享</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qv411571z">迁移学习</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV12U4y1N7ha">智源LIVE第4期│李文斌:基于局部表征学习的小样本学…</a></p>
+<p>注：元学习不等同于小样本学习；虽然有人把它们混用。 meta learning 是学习如何学习，few-shot learning 是要达到的目标，后者常常借助前者，以至于有人说Few-shot Learning 是 Meta Learning 在监督学习领域的应用。，但实际上少样本学习包含的范围比较大，两者更准确地说属于有交集但不完全重合的关系。</p>
+</blockquote>
+<h2 id="参数概念"><a href="#参数概念" class="headerlink" title="参数概念"></a>参数概念</h2><blockquote>
+<p>知乎-<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/84290146">小样本学习中的一些基本概念</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44422920/article/details/124229002">元学习(meta learning)和小样本学习(few-shot learning)</a></p>
+</blockquote>
+<p> 在 FSL 中，经常用到的一类方法被称为 Meta-learning。 </p>
+<p><img src="/categories/ML/Few-Shot02/1668706082696.png" alt="1668706082696"></p>
+<blockquote>
+<p>（1）<strong>support set</strong> :每次训练的样本集合很小，的数据集，用以提供参考信息，不足以训练大型神经网络。<br> （2）<strong>query set</strong> :用于与训练样本比对的样本，一般来说query set就是一个样本。Query data的类别属于support data中的类别，Q的类别可以在S中看到，但在训练数据集里看不到。 </p>
+<p>（3）在support set中，如果有n个种类，每个种类有k个样本，那么这个训练过程叫n -way k-shot ，如下图就是5-way 1-shot。 </p>
+</blockquote>
+<p>FSL 通常会被分成 N-way k-shot 问题，特指 <strong>Meta-testing </strong>中的Support Set S’的情况，对于训练过程中的S和Q没有任何要求。</p>
+<p><img src="/categories/ML/Few-Shot02/1668707106138.png" alt="1668707106138"></p>
+<p>对于训练过程，要根据query set S，每次放入一个样本得到其预估分类，和真实标签做损失后更新模型；</p>
+<p>其中，N 指的是 <strong>Meta-testing 过程中的样本类别数</strong>，k 指的是 Meta-testing 的过程中每一类有多少个样本，</p>
+<p><img src="/categories/ML/Few-Shot02/1668706589070.png" alt="1668706589070"><br> S’ 和 Q’ 是如何得到的？如上图所示，假设 Testing data 所代表的大的矩形框对应着原始的测试数据，这些数据可能包含有很多类。现在，我们从中随机选出 N 个类，每个类都可能含有很多个样本。然后，我们再从这 N 个类中，每类都随机选出 k+x 个样本（x 代表可以选任意个，但必须满足 k+x 不超过每个类最大的样本个数），其中的 k 个样本将被用作 Support set S’，另外的 x 个样本将被用作 Query set Q’。由此，我们便得到了 Meta-testing 过程中需要用到的两个数据集。</p>
+<blockquote>
+<ul>
+<li><p>测试数据的样本规模 N*(k+x)，x为任意值。</p>
+</li>
+<li><p>S 与 Q 中的样本通常是不会重合的，S’ 与 Q’ 亦然。 </p>
+</li>
+</ul>
+</blockquote>
+<h2 id="元学习Meta-learning"><a href="#元学习Meta-learning" class="headerlink" title="元学习Meta learning"></a>元学习Meta learning</h2><p>传统监督学习： 对于一个给定训练数据集，通过训练使模型可以识别训练数据集，并将其泛化到测试数据集中。要求测试数据集中数据标签类别包含在训练数据集中。<br>meta learning： 目的是让模型learn to learn，使模型可以区分不同的事物。意思是让模型自己学会学习。通过一张待测试图像，其类别不包含在训练数据集中，但包含在support set中，通过待测试图像与support set中每张图像计算他们之间的相似度，将与support set中相似度最高的类别作为query图像的类别，完成模型的预测。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334641593">https://zhuanlan.zhihu.com/p/334641593</a></p>
+</blockquote>
+<h2 id="多任务学习（MTL）："><a href="#多任务学习（MTL）：" class="headerlink" title="多任务学习（MTL）："></a><strong>多任务学习（MTL）：</strong></h2><p><strong>一般来说，优化多个损失函数就等同于进行多任务学习（与单任务学习相反）。</strong></p>
+<p>联合学习（joint learning）、自主学习（learning to learn）和带有辅助任务的学习（learning with auxiliary task）等都可以指 MTL。</p>
+<h2 id="迁移学习："><a href="#迁移学习：" class="headerlink" title="迁移学习："></a><strong>迁移学习：</strong></h2><blockquote>
+<p>将相关任务的训练数据中的可泛化知识迁移到目标任务上。<br>也就是不同领域的知识迁移的过程，源领域——&gt;目标领域。<br>领域指的是一个样本空间(x,y)(x,y)及其数据分布p(x,y)p(x,y)。只要三者中有不同，就是不同领域。<br>说人话就是，<strong>输入-输出-数据分布相同</strong>，才是两个相同的标准机器学习任务。换句话说就是一个数据集你用不同模型跑跑。</p>
+</blockquote>
+<p>源域有大量标注好的数据，目标域没有数据，这时候就用源域训练好的模型去直接test目标域。</p>
+<h2 id="一些处理数据和标签噪声与不平衡-的误差函数"><a href="#一些处理数据和标签噪声与不平衡-的误差函数" class="headerlink" title="一些处理数据和标签噪声与不平衡 的误差函数"></a>一些处理数据和标签噪声与不平衡 的误差函数</h2><p><img src="/categories/ML/Few-Shot02/1668331346921.png" alt="1668331346921"></p>
+<h2 id="元学习模型"><a href="#元学习模型" class="headerlink" title="元学习模型"></a>元学习模型</h2><p>借助训练时的元知识</p>
 <p><a href="Santoro, A.; Bartunov, S.; Botvinick, M.; Wierstra, D.; Lillicrap, T. Meta-learning with memory-augmented  neural networks. In Proceedings of the 33rd International Conference on International Conference on Machine Learning, New York, NY, USA, 19–24 June 2016; Volume 48, pp. 1842–1850.">A. Santoro,神经图灵机变种</a></p>
 <p><a href>O.Vinyals,Matching Network</a> </p>
 <p><a href>G. Koch et al.,孪生网络</a></p>
@@ -636,7 +678,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-13 00:23:41" itemprop="dateModified" datetime="2022-11-13T00:23:41+08:00">2022-11-13</time>
+                <time title="Modified: 2022-11-18 01:28:22" itemprop="dateModified" datetime="2022-11-18T01:28:22+08:00">2022-11-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -659,101 +701,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>学到基础类别的知识，进而能够学会分类同一个数据集中的新类。</p>
+          <h2 id="可读论文"><a href="#可读论文" class="headerlink" title="可读论文"></a>可读论文</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="http://bigeye.au.tsinghua.edu.cn/paperlist.html">清华张长水教授团队所做论文</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/WenMoLiuBai/Meta-Learning-and-Few-shot-Learning">Up主借鉴的小样本学习的论文</a></p>
+</blockquote>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><blockquote>
+<p>A compelling case of this approach is classifying objects classes that have not yet been used in the training set, namely Zero-shot Learning.</p>
+</blockquote>
+<p>零样本学习：可辨别训练集里没有的新类的样本。</p>
+<h2 id="小样本学习的目标："><a href="#小样本学习的目标：" class="headerlink" title="小样本学习的目标："></a>小样本学习的目标：</h2><p>学会学习，<strong>找不同</strong>，能够判断未见过的事物。</p>
+<p>学到基础类别的知识，进而能够学会分类同一个数据集中的新类。</p>
 <p>基于少量样本便可完成类别的判断</p>
 <p><strong>少量标签数据</strong>，训练得到<strong>良好泛化能力</strong>的模型。</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Jh411X7FG"> B站-liupengyuanblcu </a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/WenMoLiuBai/Meta-Learning-and-Few-shot-Learning">Up主借鉴的小样本学习的论文</a></p>
 </blockquote>
-<h2 id="问题产生的原因："><a href="#问题产生的原因：" class="headerlink" title="问题产生的原因："></a>问题产生的原因：</h2><p>当前模型的训练基于<strong>经验风险最小化</strong>，用经验风险代替期望风险，所以训练数据少时，模型误差很大。</p>
+<h2 id="问题产生的原因："><a href="#问题产生的原因：" class="headerlink" title="问题产生的原因："></a>问题产生的原因：</h2><h3 id="训练数据少："><a href="#训练数据少：" class="headerlink" title="训练数据少："></a>训练数据少：</h3><p>1.标注数据cost很大，</p>
+<p>2.有些数据的获取很难</p>
+<p>3.有些数据本身就很少</p>
+<p>当前模型的训练基于<strong>经验风险最小化</strong>，用经验风险代替期望风险，所以训练数据少时，模型误差很大。</p>
 <p><img src="/categories/ML/Few-Shot01/1668265194697.png" alt="1668265194697"></p>
-<h2 id="解决问题的三个角度"><a href="#解决问题的三个角度" class="headerlink" title="解决问题的三个角度"></a>解决问题的三个角度</h2><blockquote>
-<p>借助先验知识减小经验风险</p>
-</blockquote>
-<ul>
-<li>数据角度  </li>
-<li>模型角度</li>
-<li>算法角度</li>
-</ul>
-<p><img src="/categories/ML/Few-Shot01/1668265679021.png" alt="1668265679021"></p>
-<h2 id="数据角度"><a href="#数据角度" class="headerlink" title="数据角度"></a>数据角度</h2><ul>
-<li>造数据（专家经验：了解数据结构和数据特点；手动制订生成<strong>规则</strong>；通过模型学习学会数据的<strong>自动变换</strong>）</li>
-<li>加数据  无标签数据（半监督和无监督学习得到<strong>伪标签</strong>）、相似数据集（对新数据集的采集样本加权平均得到新的<strong>聚合样本</strong>参与原数据集的训练）</li>
-</ul>
-<h2 id="模型角度"><a href="#模型角度" class="headerlink" title="模型角度"></a>模型角度</h2><ul>
-<li><p>多任务学习(multi-task learning) 利用多个任务去相互辅助对方学习</p>
-</li>
-<li><p>嵌入式学习(embedding learning)</p>
-<ul>
-<li>任务不变（对所有任务都一样）</li>
-<li>任务特定的（对每个任务都要学习一个新的学习器）</li>
-<li>结合任务不变和任务特定的</li>
-</ul>
-</li>
-<li><p>借助额外<strong>记忆</strong>(external memory)学习  </p>
-<p><strong>知识存放于记忆；用时检索；不断更新</strong></p>
-<ul>
-<li>人的记忆</li>
-<li>神经图灵机NTM</li>
-</ul>
-</li>
-<li><p><strong>生成模型</strong>(generative models)</p>
-<ul>
-<li>part and releation</li>
-<li>super class</li>
-<li>潜变模型 latent variable  自编码Auto-Encoding；贝叶斯(Bayes)推理</li>
-</ul>
-</li>
-</ul>
-<h2 id="为什么以上模型可以简化搜索空间？"><a href="#为什么以上模型可以简化搜索空间？" class="headerlink" title="为什么以上模型可以简化搜索空间？"></a>为什么以上模型可以简化搜索空间？</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>策略</th>
-<th>学得的先验知识</th>
-<th>如何限制搜索空间</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>多任务学习</td>
-<td>数据集里的其他任务</td>
-<td>共享参数（多个任务用一套参数）</td>
-</tr>
-<tr>
-<td>嵌入式学习</td>
-<td>任务嵌入到一起</td>
-<td>将样本<strong>映射到较小的嵌入空间</strong>中，其中可轻易划分相似和不相似样本</td>
-</tr>
-<tr>
-<td>额外记忆</td>
-<td>嵌入层与记忆交互</td>
-<td>借助记忆的训练数据限定样本以合并特定任务的信息</td>
-</tr>
-<tr>
-<td>生成模型</td>
-<td>借助先前的训练得到参数的先验知识</td>
-<td>限制了样本分布</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="算法角度"><a href="#算法角度" class="headerlink" title="算法角度"></a>算法角度</h2><p>1.微调fine-tune已存在模型     <strong>正则</strong>、组合、新参数微调</p>
-<p>2.微调元学习器的参数  元学习器已经学到了任务的分布，这个通用参数足够优秀，离目标已经很接近了。进而通过梯度下降和<strong>考虑不确定性</strong>去微调</p>
-<p>3.加入一个元优化器指定搜索步骤(search steps)</p>
-<h3 id="正则微调"><a href="#正则微调" class="headerlink" title="正则微调"></a>正则微调</h3><p>经典？？？</p>
-<p><img src="/categories/ML/Few-Shot01/1668269587232.png" alt="1668269587232"></p>
-<h3 id="组合参数微调"><a href="#组合参数微调" class="headerlink" title="组合参数微调"></a>组合参数微调</h3><p>对于已经学到的参数，选取当前任务最相关的几个参数组合用于当前任务；</p>
-<p><img src="/categories/ML/Few-Shot01/1668269428314.png" alt="1668269428314"></p>
-<h3 id="新参数微调"><a href="#新参数微调" class="headerlink" title="新参数微调"></a>新参数微调</h3><p>改动原模型的某几层，只学习改动的这几层的参数即可。</p>
-<p><img src="/categories/ML/Few-Shot01/1668269675140.png" alt="1668269675140"></p>
-<h3 id="元优化器"><a href="#元优化器" class="headerlink" title="元优化器"></a>元优化器</h3><p>不再用固定的元学习器，自己训练一个。</p>
-<p><img src="/categories/ML/Few-Shot01/1668270073280.png" alt="1668270073280"></p>
-<blockquote>
-<p>语义嵌入和数据增强中的小样本学习，2019年12月4日 报告人：付彦伟、何旭明 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1SJ41167sW">https://www.bilibili.com/video/BV1SJ41167sW</a></p>
-</blockquote>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/ML/Few-Shot01/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

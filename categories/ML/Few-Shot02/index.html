@@ -20,18 +20,23 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="元学习模型借助训练时的元知识 A. Santoro,神经图灵机变种 O.Vinyals,Matching Network  G. Koch et al.,孪生网络  基于小样本学习的图像分类技术综述,刘颖等,自动化学报,2021,47(2):297-315  以建模方式为标准，分类为  卷积神经网络模型 和 图神经网络模型。  卷积网络模型 迁移学习  基于特征;基于关系;基于共享参数 元学习">
+  <meta name="description" content="Shusen Wang 小样本学习研究综述-赵凯琳,靳小龙,王元卓-中国科学院-… 有限元笔记10-个人的有限元学习经验分享 迁移学习 智源LIVE第4期│李文斌:基于局部表征学习的小样本学… 注：元学习不等同于小样本学习；虽然有人把它们混用。 meta learning 是学习如何学习，few-shot learning 是要达到的目标，后者常常借助前者，以至于有人说Few-shot Lear">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小样本学习方法概述2">
+<meta property="og:title" content="小样本学习与其他相似概念的区分">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/Few-Shot02/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="元学习模型借助训练时的元知识 A. Santoro,神经图灵机变种 O.Vinyals,Matching Network  G. Koch et al.,孪生网络  基于小样本学习的图像分类技术综述,刘颖等,自动化学报,2021,47(2):297-315  以建模方式为标准，分类为  卷积神经网络模型 和 图神经网络模型。  卷积网络模型 迁移学习  基于特征;基于关系;基于共享参数 元学习">
+<meta property="og:description" content="Shusen Wang 小样本学习研究综述-赵凯琳,靳小龙,王元卓-中国科学院-… 有限元笔记10-个人的有限元学习经验分享 迁移学习 智源LIVE第4期│李文斌:基于局部表征学习的小样本学… 注：元学习不等同于小样本学习；虽然有人把它们混用。 meta learning 是学习如何学习，few-shot learning 是要达到的目标，后者常常借助前者，以至于有人说Few-shot Lear">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot02/1668706082696.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot02/1668707106138.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot02/1668706589070.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot02/1668331346921.png">
 <meta property="article:published_time" content="2022-08-25T12:43:22.000Z">
-<meta property="article:modified_time" content="2022-11-10T02:16:26.909Z">
+<meta property="article:modified_time" content="2022-11-17T18:34:57.125Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="FSL">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/Few-Shot02/1668706082696.png">
 
 <link rel="canonical" href="https://blueinyou.com/categories/ML/Few-Shot02/">
 
@@ -46,7 +51,7 @@
   };
 </script>
 
-  <title>小样本学习方法概述2 | Paul C's Blog</title>
+  <title>小样本学习与其他相似概念的区分 | Paul C's Blog</title>
   
 
 
@@ -175,7 +180,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          小样本学习方法概述2
+          小样本学习与其他相似概念的区分
         </h1>
 
         <div class="post-meta">
@@ -192,7 +197,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-10 10:16:26" itemprop="dateModified" datetime="2022-11-10T10:16:26+08:00">2022-11-10</time>
+                <time title="Modified: 2022-11-18 02:34:57" itemprop="dateModified" datetime="2022-11-18T02:34:57+08:00">2022-11-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -215,7 +220,49 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="元学习模型"><a href="#元学习模型" class="headerlink" title="元学习模型"></a>元学习模型</h2><p>借助训练时的元知识</p>
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Et4y1i7pu">Shusen Wang</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1a5411P7vF">小样本学习研究综述-赵凯琳,靳小龙,王元卓-中国科学院-…</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TU4y1e7R5">有限元笔记10-个人的有限元学习经验分享</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qv411571z">迁移学习</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV12U4y1N7ha">智源LIVE第4期│李文斌:基于局部表征学习的小样本学…</a></p>
+<p>注：元学习不等同于小样本学习；虽然有人把它们混用。 meta learning 是学习如何学习，few-shot learning 是要达到的目标，后者常常借助前者，以至于有人说Few-shot Learning 是 Meta Learning 在监督学习领域的应用。，但实际上少样本学习包含的范围比较大，两者更准确地说属于有交集但不完全重合的关系。</p>
+</blockquote>
+<h2 id="参数概念"><a href="#参数概念" class="headerlink" title="参数概念"></a>参数概念</h2><blockquote>
+<p>知乎-<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/84290146">小样本学习中的一些基本概念</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44422920/article/details/124229002">元学习(meta learning)和小样本学习(few-shot learning)</a></p>
+</blockquote>
+<p> 在 FSL 中，经常用到的一类方法被称为 Meta-learning。 </p>
+<p><img src="/categories/ML/Few-Shot02/1668706082696.png" alt="1668706082696"></p>
+<blockquote>
+<p>（1）<strong>support set</strong> :每次训练的样本集合很小，的数据集，用以提供参考信息，不足以训练大型神经网络。<br> （2）<strong>query set</strong> :用于与训练样本比对的样本，一般来说query set就是一个样本。Query data的类别属于support data中的类别，Q的类别可以在S中看到，但在训练数据集里看不到。 </p>
+<p>（3）在support set中，如果有n个种类，每个种类有k个样本，那么这个训练过程叫n -way k-shot ，如下图就是5-way 1-shot。 </p>
+</blockquote>
+<p>FSL 通常会被分成 N-way k-shot 问题，特指 <strong>Meta-testing </strong>中的Support Set S’的情况，对于训练过程中的S和Q没有任何要求。</p>
+<p><img src="/categories/ML/Few-Shot02/1668707106138.png" alt="1668707106138"></p>
+<p>对于训练过程，要根据query set S，每次放入一个样本得到其预估分类，和真实标签做损失后更新模型；</p>
+<p>其中，N 指的是 <strong>Meta-testing 过程中的样本类别数</strong>，k 指的是 Meta-testing 的过程中每一类有多少个样本，</p>
+<p><img src="/categories/ML/Few-Shot02/1668706589070.png" alt="1668706589070"><br> S’ 和 Q’ 是如何得到的？如上图所示，假设 Testing data 所代表的大的矩形框对应着原始的测试数据，这些数据可能包含有很多类。现在，我们从中随机选出 N 个类，每个类都可能含有很多个样本。然后，我们再从这 N 个类中，每类都随机选出 k+x 个样本（x 代表可以选任意个，但必须满足 k+x 不超过每个类最大的样本个数），其中的 k 个样本将被用作 Support set S’，另外的 x 个样本将被用作 Query set Q’。由此，我们便得到了 Meta-testing 过程中需要用到的两个数据集。</p>
+<blockquote>
+<ul>
+<li><p>测试数据的样本规模 N*(k+x)，x为任意值。</p>
+</li>
+<li><p>S 与 Q 中的样本通常是不会重合的，S’ 与 Q’ 亦然。 </p>
+</li>
+</ul>
+</blockquote>
+<h2 id="元学习Meta-learning"><a href="#元学习Meta-learning" class="headerlink" title="元学习Meta learning"></a>元学习Meta learning</h2><p>传统监督学习： 对于一个给定训练数据集，通过训练使模型可以识别训练数据集，并将其泛化到测试数据集中。要求测试数据集中数据标签类别包含在训练数据集中。<br>meta learning： 目的是让模型learn to learn，使模型可以区分不同的事物。意思是让模型自己学会学习。通过一张待测试图像，其类别不包含在训练数据集中，但包含在support set中，通过待测试图像与support set中每张图像计算他们之间的相似度，将与support set中相似度最高的类别作为query图像的类别，完成模型的预测。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334641593">https://zhuanlan.zhihu.com/p/334641593</a></p>
+</blockquote>
+<h2 id="多任务学习（MTL）："><a href="#多任务学习（MTL）：" class="headerlink" title="多任务学习（MTL）："></a><strong>多任务学习（MTL）：</strong></h2><p><strong>一般来说，优化多个损失函数就等同于进行多任务学习（与单任务学习相反）。</strong></p>
+<p>联合学习（joint learning）、自主学习（learning to learn）和带有辅助任务的学习（learning with auxiliary task）等都可以指 MTL。</p>
+<h2 id="迁移学习："><a href="#迁移学习：" class="headerlink" title="迁移学习："></a><strong>迁移学习：</strong></h2><blockquote>
+<p>将相关任务的训练数据中的可泛化知识迁移到目标任务上。<br>也就是不同领域的知识迁移的过程，源领域——&gt;目标领域。<br>领域指的是一个样本空间(x,y)(x,y)及其数据分布p(x,y)p(x,y)。只要三者中有不同，就是不同领域。<br>说人话就是，<strong>输入-输出-数据分布相同</strong>，才是两个相同的标准机器学习任务。换句话说就是一个数据集你用不同模型跑跑。</p>
+</blockquote>
+<p>源域有大量标注好的数据，目标域没有数据，这时候就用源域训练好的模型去直接test目标域。</p>
+<h2 id="一些处理数据和标签噪声与不平衡-的误差函数"><a href="#一些处理数据和标签噪声与不平衡-的误差函数" class="headerlink" title="一些处理数据和标签噪声与不平衡 的误差函数"></a>一些处理数据和标签噪声与不平衡 的误差函数</h2><p><img src="/categories/ML/Few-Shot02/1668331346921.png" alt="1668331346921"></p>
+<h2 id="元学习模型"><a href="#元学习模型" class="headerlink" title="元学习模型"></a>元学习模型</h2><p>借助训练时的元知识</p>
 <p><a href="Santoro, A.; Bartunov, S.; Botvinick, M.; Wierstra, D.; Lillicrap, T. Meta-learning with memory-augmented  neural networks. In Proceedings of the 33rd International Conference on International Conference on Machine Learning, New York, NY, USA, 19–24 June 2016; Volume 48, pp. 1842–1850.">A. Santoro,神经图灵机变种</a></p>
 <p><a href>O.Vinyals,Matching Network</a> </p>
 <p><a href>G. Koch et al.,孪生网络</a></p>
@@ -319,7 +366,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">元学习模型</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">参数概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%A6%E4%B9%A0Meta-learning"><span class="nav-number">2.</span> <span class="nav-text">元学习Meta learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0%EF%BC%88MTL%EF%BC%89%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">多任务学习（MTL）：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">迁移学习：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E5%92%8C%E6%A0%87%E7%AD%BE%E5%99%AA%E5%A3%B0%E4%B8%8E%E4%B8%8D%E5%B9%B3%E8%A1%A1-%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%87%BD%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">一些处理数据和标签噪声与不平衡 的误差函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.</span> <span class="nav-text">元学习模型</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
