@@ -156,6 +156,214 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/XGBoost01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/XGBoost01/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-04 00:02:09 / Modified: 01:05:40" itemprop="dateCreated datePublished" datetime="2022-12-04T00:02:09+08:00">2022-12-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h2><ul>
+<li><p>bagging: 随机森林</p>
+</li>
+<li><p>boosting: adaboost,GBDT,XGboost，LGBM</p>
+</li>
+</ul>
+<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><ul>
+<li>分类树</li>
+<li>回归树</li>
+</ul>
+<h3 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h3><p>随机变量的不确定性，熵越大，不确定性越大。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H(X)=-\sum_&#123;i=1&#125;^&#123;n&#125; P(X=i) \log _&#123;2&#125; P(X=i)</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/ML/XGBoost01/1670084361226.png" alt="1670084361226"></p>
+<p>比如，0.5、0.5的概率，不确定性很大，计算得到H(X)=1；而0.01,0.99的概率，不确定性减少，计算得到0.09；</p>
+<h3 id="条件熵"><a href="#条件熵" class="headerlink" title="条件熵"></a>条件熵</h3><p>增加了条件限制后，不确定性会发生变化。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H(X \mid Y=v)=-\sum_&#123;i=1&#125;^&#123;n&#125; P(X=i \mid Y=v) \log _&#123;2&#125; P(X=i \mid Y=v)</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/ML/XGBoost01/1670084655525.png" alt="1670084655525"></p>
+<h3 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h3><p>代表了在一个条件下，信息不确定性减少的程度，信息更容易被确定了，所以叫做增益。</p>
+<p>I(X,Y)=H(X) -H(X|Y=v)  父节点熵-子节点加权熵</p>
+<h2 id="决策树的划分标准"><a href="#决策树的划分标准" class="headerlink" title="决策树的划分标准"></a>决策树的划分标准</h2><p>信息增益越大的时候，决策树的划分越好。所以决策树的每一级决策，取信息增益最大的因素。</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="/categories/ML/XGBoost01/1670086814625.png" alt="1670086814625"></h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-11-21 20:06:07 / Modified: 20:15:09" itemprop="dateCreated datePublished" datetime="2022-11-21T20:06:07+08:00">2022-11-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://www.av-test.org/en/statistics/malware/">AV-Test</a></p>
+<blockquote>
+<p>乔延成</p>
+</blockquote>
+<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032568781.png" alt="1669032568781"></p>
+<h2 id="恶意代码对抗样本研究存在的困难"><a href="#恶意代码对抗样本研究存在的困难" class="headerlink" title="恶意代码对抗样本研究存在的困难"></a>恶意代码对抗样本研究存在的困难</h2><p>图像对抗样本<br>·数值是连续的<br>·限制:添加的扰动人类无法察觉恶意代码对抗样本<br>·字节数据、系统调用等特征数值是离散的(基于梯度的方法无法使用)·限制:添加的扰动不能影响恶意代码的原有功能</p>
+<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032652118.png" alt="1669032652118"></p>
+<ul>
+<li>恶意代码检测模型决策依据分析</li>
+<li>恶意代码对抗样本检测方法</li>
+<li>恶意代码对抗样本攻击方法</li>
+</ul>
+<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032908841.png" alt="1669032908841"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-11-19 19:40:01 / Modified: 19:43:40" itemprop="dateCreated datePublished" datetime="2022-11-19T19:40:01+08:00">2022-11-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>VirusShare 00177 dataset and APIMDS</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -776,254 +984,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot07/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot07/" class="post-title-link" itemprop="url">MANNWARE: A Malware Classification Approach with a Few Samples Using a Memory Augmented Neural Network</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-03 20:43:22" itemprop="dateCreated datePublished" datetime="2022-10-03T20:43:22+08:00">2022-10-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-14 14:04:40" itemprop="dateModified" datetime="2022-10-14T14:04:40+08:00">2022-10-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/338662042_MANNWARE_A_Malware_Classification_Approach_with_a_Few_Samples_Using_a_Memory_Augmented_Neural_Network">下载链接</a>  MANNWARE：用记忆增强网络的小样本恶意软件分类方法,2020，小样本学习做恶意代码分类开山作</p>
-<p>Tran, Kien &amp; Sato, Hiroshi &amp; Kubo, Masao. (2020). MANNWARE: A Malware Classification Approach with a Few Samples Using a Memory Augmented Neural Network. Information. 11. 51. 10.3390/info11010051. </p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>修改了内存存取能力memory access capabilities的神经图灵机<a href>NTM</a>  +NLP(word2vec, n-gram)</p>
-<p><img src="/categories/ML/Few-Shot07/1664785741276.png" alt="1664785741276"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/ML/Few-Shot07/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot06/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot06/" class="post-title-link" itemprop="url">A Few-Shot Meta-Learning based Siamese Neural Network using Entropy Features for Ransomware Classification</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-10-02 20:43:22 / Modified: 13:28:27" itemprop="dateCreated datePublished" datetime="2022-10-02T20:43:22+08:00">2022-10-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2112.00668">下载链接</a>,一种使用熵特征进行勒索软件分类的基于小样本元学习的孪生网络，2022年</p>
-<p>Jinting Zhu, Julian Jang-Jaccard, Amardeep Singh, Ian Welch, Harith AI-Sahaf, Seyit Camtepe,<br>A few-shot meta-learning based siamese neural network using entropy features for ransomware classification,Computers &amp; Security,Volume 117,2022,102691,ISSN 0167-4048,</p>
-<blockquote>
-<p><a href="..\Few-Shot04">相关论文</a>Task-Aware Meta Learning-based Siamese Neural Network for Classifying Control Flow Obfuscated Malware</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/ML/Few-Shot06/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot05/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot05/" class="post-title-link" itemprop="url">ConvProtoNet: Deep Prototype Induction towards Better Class Representation for Few-Shot Malware Classification</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-09-27 15:43:22" itemprop="dateCreated datePublished" datetime="2022-09-27T15:43:22+08:00">2022-09-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-21 16:41:41" itemprop="dateModified" datetime="2022-10-21T16:41:41+08:00">2022-10-21</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://mdpi-res.com/d_attachment/applsci/applsci-10-02847/article_deploy/applsci-10-02847-v2.pdf#version=1587905118&amp;usg=AOvVaw0hMY5VHNyAO9Ikmo2Ghf-M">下载链接</a>，卷积原型网络：针对小样本恶意软件分类的更好的类表示的深度原型归纳,2020年</p>
-</blockquote>
-<p>Zhijie, Tang &amp; Wang, Peng &amp; Wang, Junfeng. (2020). ConvProtoNet: Deep Prototype Induction towards Better Class Representation for Few-Shot Malware Classification. Applied Sciences. 10. 2847. 10.3390/app10082847. </p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p>ConvProtoNet：基于度量(metric-based)的模型，使用了非参数的方法，<strong>在嵌入层做了深层的原型归纳</strong>，使得表达效果好，分布能匹配，避免了梯度消失，在分析时忽略无用特征。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/ML/Few-Shot05/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1095,7 +1055,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">104</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
