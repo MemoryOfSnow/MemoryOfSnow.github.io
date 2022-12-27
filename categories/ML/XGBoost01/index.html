@@ -22,7 +22,7 @@
 
   <meta name="description" content="集成学习 bagging: 随机森林  boosting: adaboost,GBDT,XGboost，LGBM   决策树 分类树 回归树  信息熵随机变量的不确定性，熵越大，不确定性越大。 1H(X)&#x3D;-\sum_&amp;#123;i&#x3D;1&amp;#125;^&amp;#123;n&amp;#125; P(X&#x3D;i) \log _&amp;#123;2&amp;#125; P(X&#x3D;i)  比如，0.5、0.5的概率，不确定性很大，计算得到H">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Paul C&#39;s Blog">
+<meta property="og:title" content="XGBoost">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/XGBoost01/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
 <meta property="og:description" content="集成学习 bagging: 随机森林  boosting: adaboost,GBDT,XGboost，LGBM   决策树 分类树 回归树  信息熵随机变量的不确定性，熵越大，不确定性越大。 1H(X)&#x3D;-\sum_&amp;#123;i&#x3D;1&amp;#125;^&amp;#123;n&amp;#125; P(X&#x3D;i) \log _&amp;#123;2&amp;#125; P(X&#x3D;i)  比如，0.5、0.5的概率，不确定性很大，计算得到H">
@@ -31,9 +31,10 @@
 <meta property="og:image" content="https://blueinyou.com/categories/ML/XGBoost01/1670084655525.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/XGBoost01/1670086814625.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/XGBoost01/1670709620272.png">
-<meta property="article:published_time" content="2022-12-03T16:02:09.703Z">
-<meta property="article:modified_time" content="2022-12-19T13:54:56.270Z">
+<meta property="article:published_time" content="2022-12-20T10:14:53.000Z">
+<meta property="article:modified_time" content="2022-12-27T14:00:47.076Z">
 <meta property="article:author" content="Paul C">
+<meta property="article:tag" content="集成学习">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blueinyou.com/categories/ML/XGBoost01/1670084361226.png">
 
@@ -50,7 +51,7 @@
   };
 </script>
 
-  <title> | Paul C's Blog</title>
+  <title>XGBoost | Paul C's Blog</title>
   
 
 
@@ -179,7 +180,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          XGBoost
         </h1>
 
         <div class="post-meta">
@@ -189,15 +190,24 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-12-04 00:02:09" itemprop="dateCreated datePublished" datetime="2022-12-04T00:02:09+08:00">2022-12-04</time>
+              <time title="Created: 2022-12-20 18:14:53" itemprop="dateCreated datePublished" datetime="2022-12-20T18:14:53+08:00">2022-12-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-19 21:54:56" itemprop="dateModified" datetime="2022-12-19T21:54:56+08:00">2022-12-19</time>
+                <time title="Modified: 2022-12-27 22:00:47" itemprop="dateModified" datetime="2022-12-27T22:00:47+08:00">2022-12-27</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
 
           
 
@@ -242,6 +252,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" rel="tag"># 集成学习</a>
+          </div>
 
         
 
@@ -249,12 +262,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/categories/ML/ActiveLearning/" rel="prev" title="Active One-shot Learning">
+      <i class="fa fa-chevron-left"></i> Active One-shot Learning
     </a></div>
       <div class="post-nav-item">
-    <a href="/categories/ML/ActiveLearning/" rel="next" title="Active One-shot Learning">
-      Active One-shot Learning <i class="fa fa-chevron-right"></i>
+    <a href="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" rel="next" title="对抗样本研究">
+      对抗样本研究 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -342,7 +355,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

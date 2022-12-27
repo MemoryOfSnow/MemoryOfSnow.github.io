@@ -22,7 +22,7 @@
 
   <meta name="description" content="AV-Test  乔延成   恶意代码对抗样本研究存在的困难图像对抗样本·数值是连续的·限制:添加的扰动人类无法察觉恶意代码对抗样本·字节数据、系统调用等特征数值是离散的(基于梯度的方法无法使用)·限制:添加的扰动不能影响恶意代码的原有功能   恶意代码检测模型决策依据分析 恶意代码对抗样本检测方法 恶意代码对抗样本攻击方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Paul C&#39;s Blog">
+<meta property="og:title" content="对抗样本研究">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
 <meta property="og:description" content="AV-Test  乔延成   恶意代码对抗样本研究存在的困难图像对抗样本·数值是连续的·限制:添加的扰动人类无法察觉恶意代码对抗样本·字节数据、系统调用等特征数值是离散的(基于梯度的方法无法使用)·限制:添加的扰动不能影响恶意代码的原有功能   恶意代码检测模型决策依据分析 恶意代码对抗样本检测方法 恶意代码对抗样本攻击方法">
@@ -30,9 +30,10 @@
 <meta property="og:image" content="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032568781.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032652118.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032908841.png">
-<meta property="article:published_time" content="2022-11-21T12:06:07.861Z">
-<meta property="article:modified_time" content="2022-11-21T12:15:09.434Z">
+<meta property="article:published_time" content="2022-12-21T10:14:53.000Z">
+<meta property="article:modified_time" content="2022-12-27T14:02:08.921Z">
 <meta property="article:author" content="Paul C">
+<meta property="article:tag" content="PoisonAttack">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032568781.png">
 
@@ -49,7 +50,7 @@
   };
 </script>
 
-  <title> | Paul C's Blog</title>
+  <title>对抗样本研究 | Paul C's Blog</title>
   
 
 
@@ -178,7 +179,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          对抗样本研究
         </h1>
 
         <div class="post-meta">
@@ -187,9 +188,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-11-21 20:06:07 / Modified: 20:15:09" itemprop="dateCreated datePublished" datetime="2022-11-21T20:06:07+08:00">2022-11-21</time>
+              <time title="Created: 2022-12-21 18:14:53" itemprop="dateCreated datePublished" datetime="2022-12-21T18:14:53+08:00">2022-12-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-27 22:02:08" itemprop="dateModified" datetime="2022-12-27T22:02:08+08:00">2022-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
             </span>
 
           
@@ -224,6 +240,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PoisonAttack/" rel="tag"># PoisonAttack</a>
+          </div>
 
         
 
@@ -231,12 +250,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/categories/ML/XGBoost01/" rel="prev" title="XGBoost">
+      <i class="fa fa-chevron-left"></i> XGBoost
     </a></div>
       <div class="post-nav-item">
-    <a href="/categories/ML/XGBoost01/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/categories/ML/MC%E6%95%B0%E6%8D%AE%E9%9B%86%E7%94%9F%E6%88%90%E5%8A%9E%E6%B3%95/" rel="next" title="给样本贴标签的办法">
+      给样本贴标签的办法 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -324,7 +343,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
