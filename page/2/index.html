@@ -156,6 +156,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot09/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot09/" class="post-title-link" itemprop="url">CAD-FSL: Code-Aware Data Generation based Few-Shot Learningfor Efficient Malware Detection</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-29 20:43:22" itemprop="dateCreated datePublished" datetime="2022-10-29T20:43:22+08:00">2022-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-12 23:12:55" itemprop="dateModified" datetime="2022-11-12T23:12:55+08:00">2022-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/ComplexNetWork/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -913,88 +986,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/GAN01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/GAN01/" class="post-title-link" itemprop="url">GAN01</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-09-08 20:43:22 / Modified: 17:54:54" itemprop="dateCreated datePublished" datetime="2022-09-08T20:43:22+08:00">2022-09-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h2><p>输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。</p>
-<p>例如语音聊天机器人，需要一个范围。</p>
-<h2 id="Generative-Adversarial-Network-GAN"><a href="#Generative-Adversarial-Network-GAN" class="headerlink" title="Generative Adversarial Network(GAN)"></a>Generative Adversarial Network(GAN)</h2><p>以生成动漫头像为例。</p>
-<p>Generator和Discriminator互相对抗。</p>
-<p>Generator</p>
-<p>Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能是一张动漫图片。</p>
-<blockquote>
-<p>用来分辨Generator的输出与真正的图片有何不同。</p>
-</blockquote>
-<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>1.G初始化参数，生成杂讯。</p>
-<p>2.固定G，更新D；（经过训练，D学到真正的和生成的之间的差异：把真正的人脸当做1,把训练出的图片当做0；或者是回归问题)</p>
-<p>3.固定D(鉴别器)，更新G(生成器生成在D中得分高的样本)</p>
-<p>重复步骤2,3</p>
-<h2 id="Progressive-GAN可以产生人脸"><a href="#Progressive-GAN可以产生人脸" class="headerlink" title="Progressive GAN可以产生人脸"></a>Progressive GAN可以产生人脸</h2><p>Interpolation内插可以融合两张图片，做男女性别互转的照片。</p>
-<h2 id="Divergence"><a href="#Divergence" class="headerlink" title="Divergence"></a>Divergence</h2><p>散度 表征空间各点矢量场发散的强弱程度 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1066,7 +1057,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">108</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1078,7 +1069,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
