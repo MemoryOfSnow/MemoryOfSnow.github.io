@@ -156,105 +156,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="post-title-link" itemprop="url">Ubuntu22虚拟机安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-11-05 19:59:30 / Modified: 11:19:56" itemprop="dateCreated datePublished" datetime="2022-11-05T19:59:30+08:00">2022-11-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-piix4-smbus-SMBus-Host-controller-not-enabled"><a href="#1-piix4-smbus-SMBus-Host-controller-not-enabled" class="headerlink" title="1.piix4_smbus **SMBus Host controller not enabled"></a>1.piix4_smbus <em>**</em>SMBus Host controller not enabled</h2><blockquote>
-<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46238869/article/details/119717890">weixin_46238869的blog</a> </p>
-</blockquote>
-<p>1.在开机界面按住shift键，进入后选择[Advanced Option]—&gt;[Recovery Mode]，获得恢复菜单如下；</p>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667616777282.png" alt="1667616777282"></p>
-<p>2.选择[root] ，连敲两次回车，获得root命令行。</p>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667616901206.png" alt="1667616901206"></p>
-<p>3.命令行中输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount -o remount,rw /    #用可读写模式重新挂上根分区</span><br><span class="line">vi /etc/modprobe.d/blacklist.conf   #修改模块黑名单</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667617258574.png" alt="1667617258574"></p>
-<p>4.按住i，在文件末尾追加下面的黑名单，保存。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blacklist intel_powerclamp</span><br><span class="line">blacklist i2c_piix4</span><br></pre></td></tr></table></figure>
-<p>5.更新镜像。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update-initramfs -u -k all</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667617685163.png" alt="1667617685163"></p>
-<ol>
-<li>最后输入reboot重启 </li>
-</ol>
-<h2 id="2-mtd-device-must-be-supplied"><a href="#2-mtd-device-must-be-supplied" class="headerlink" title="2.mtd device must be supplied"></a>2.mtd device must be supplied</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1981622">BugReport</a></p>
-<p><a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1417618/mtd-device-must-be-supplied-device-name-is-empty">StackOverflow</a></p>
-</blockquote>
-<ol>
-<li>这个消息是由于mtdpstore module的默认配置有问题。 </li>
-<li>不影响启动，在启动后，做一次update就可以消除这个问题。</li>
-</ol>
-<h2 id="3-nouveau-unknown-chipset"><a href="#3-nouveau-unknown-chipset" class="headerlink" title="3.nouveau unknown chipset"></a>3.nouveau unknown chipset</h2><p><a target="_blank" rel="noopener" href="https://www.linuxquestions.org/questions/linux-newbie-8/how-can-we-fix-this-nouveau-000-07-00-0-unknown-chipset-b76000a1-4175692213/">显卡驱动不支持问题</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Add nomodeset nouveau.modeset=0 to the kernel options to fix it.</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://www.reddit.com/r/Ubuntu/comments/g37gvy/i_added_nouveaumodeset0_to_the_grub_cmdline/">grub编辑</a></p>
-<p> 1.Vmware—&gt;【加速3D图形】 取消勾选</p>
-<p>2.本机命令行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh winsock reset</span><br></pre></td></tr></table></figure>
-<h1 id><a href="#" class="headerlink" title=" "></a> </h1>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot10/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -969,6 +870,107 @@
 <blockquote>
 <p><a href="..\Few-Shot06">相关论文</a>A Few-Shot Meta-Learning based Siamese Neural Network using Entropy Features for Ransomware Classification</p>
 </blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">wslubuntu的cuda安装</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-09-25 14:19:49 / Modified: 23:51:43" itemprop="dateCreated datePublished" datetime="2022-09-25T14:19:49+08:00">2022-09-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Ashken/article/details/108974058">https://blog.csdn.net/Ashken/article/details/108974058</a></p>
+</blockquote>
+<h2 id="1-安装wsl子系统"><a href="#1-安装wsl子系统" class="headerlink" title="1.安装wsl子系统"></a>1.安装wsl子系统</h2><p>1.安装如下的两个Windows功能，重启系统。</p>
+<p><img src="/categories/CTF/wsl_cuda%E5%AE%89%E8%A3%85/1664118004637.png" alt="1664118004637"></p>
+<p>2.dos命令行，列出可以安装的子系统类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$:wsl -l -o</span><br><span class="line">NAME            FRIENDLY NAME</span><br><span class="line">Ubuntu          Ubuntu</span><br><span class="line">Debian          Debian GNU/Linux</span><br><span class="line">kali-linux      Kali Linux Rolling</span><br><span class="line">openSUSE-42     openSUSE Leap 42</span><br><span class="line">SLES-12         SUSE Linux Enterprise Server v12</span><br><span class="line">Ubuntu-16.04    Ubuntu 16.04 LTS</span><br><span class="line">Ubuntu-18.04    Ubuntu 18.04 LTS</span><br><span class="line">Ubuntu-20.04    Ubuntu 20.04 LTS</span><br></pre></td></tr></table></figure>
+<p>3.下载Ubuntu18.04子系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install -d Ubuntu-18.04</span><br></pre></td></tr></table></figure>
+<h2 id="2-在Windows上安装CUDA-on-WSL驱动"><a href="#2-在Windows上安装CUDA-on-WSL驱动" class="headerlink" title="2.在Windows上安装CUDA on WSL驱动"></a>2.在Windows上安装CUDA on WSL驱动</h2><p>1.打开INVIDA-<a target="_blank" rel="noopener" href="https://www.nvidia.com/Download/index.aspx?lang=en-us">wsl驱动下载界面</a></p>
+<p>2.输入你的配置，下载对应的驱动程序。</p>
+<p>3.我下载的是<a target="_blank" rel="noopener" href="https://www.nvidia.com/content/DriverDownload-March2009/confirmation.php?url=/Windows/516.94/516.94-notebook-win10-win11-64bit-international-dch-whql.exe&amp;lang=us&amp;type=geforcem">这个</a></p>
+<p>4.双击程序安装。</p>
+<h2 id="3-wsl安装cuda-Toolkit"><a href="#3-wsl安装cuda-Toolkit" class="headerlink" title="3.wsl安装cuda Toolkit"></a>3.wsl安装cuda Toolkit</h2><p>在dos命令行输入wsl，会自动启动之前安装的子系统。</p>
+<p>在子系统的命令行里，一个一个执行下面的语句。</p>
+<p>这里我使用了cuda11.3，因为<a target="_blank" rel="noopener" href="https://pytorch.org/get-started/locally/">pytorch官网</a>目前给出的cuda版本有10.2，11.3,11.6.取最新版的前一版用就可以。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#这里需要导入两个pubkey；</span><br><span class="line">sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub</span><br><span class="line"></span><br><span class="line">sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub</span><br><span class="line"></span><br><span class="line">sudo sh -c &#x27;echo &quot;deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /&quot; &gt; /etc/apt/sources.list.d/cuda.list&#x27;</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install -y cuda-toolkit-11-3 </span><br><span class="line"></span><br><span class="line">#网上其他教程缺少下面的步骤</span><br><span class="line">sudo apt --fix-broken install</span><br></pre></td></tr></table></figure>
+<h2 id="4-安装Pytorch"><a href="#4-安装Pytorch" class="headerlink" title="4.安装Pytorch"></a>4.安装Pytorch</h2><p>1.下载conda。</p>
+<p>在子系统的命令行里执行，安装Miniconda</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/$(whoami)/Downloads</span><br><span class="line">cd /home/$(whoami)/Downloads</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh</span><br><span class="line">sudo ./Miniconda3-latest-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>2.给conda建立软链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /root/Miniconda3/bin/conda /usr/bin/conda</span><br></pre></td></tr></table></figure>
+<p>3.下载cuda11.3版本的pytorch</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch</span><br></pre></td></tr></table></figure>
+<p>5.验证安装是否成功</p>
+<p>在子系统里执行下面的语句。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#给root改名</span><br><span class="line">sudo passwd root</span><br><span class="line">#切换到root用户</span><br><span class="line">su</span><br><span class="line">#执行python</span><br><span class="line">python</span><br><span class="line">#判断cuda安装成功与否</span><br><span class="line">(base) root@BlackGame:~# python</span><br><span class="line">Python 3.9.12 (main, Apr  5 2022, 06:56:58)</span><br><span class="line">[GCC 7.5.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import torch as t</span><br><span class="line">&gt;&gt;&gt; t.cuda.is_available()</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<h2 id="diskpart"><a href="#diskpart" class="headerlink" title="diskpart"></a>diskpart</h2><blockquote>
+<p>新建和隐藏分区符</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">list disk</span><br><span class="line">sel disk 0</span><br><span class="line">list vol</span><br><span class="line">sel vol 2</span><br><span class="line">assign letter=Z</span><br><span class="line">remove Z</span><br></pre></td></tr></table></figure>
+<h2 id="wls子系统"><a href="#wls子系统" class="headerlink" title="wls子系统"></a>wls子系统</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure>
+<h2 id="grub界面恢复到win11启动"><a href="#grub界面恢复到win11启动" class="headerlink" title="grub界面恢复到win11启动"></a>grub界面恢复到win11启动</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">insmod part_gpt</span><br><span class="line">insmod chain</span><br><span class="line">set root=(hd0,gpt1)</span><br><span class="line">chainloader /EFI/Microsoft/Boot/bootmgfw.efi</span><br><span class="line">boot</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br><span class="line">wsl --shutdown Ubuntu18.04</span><br><span class="line">sudo service ssh start</span><br><span class="line">cd /mnt/c/Users/22154/Downloads </span><br><span class="line">cd ~/Downloads</span><br></pre></td></tr></table></figure>
 
       
     </div>
