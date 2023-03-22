@@ -13,3 +13,6 @@ Zhu, Jinting & Jang-Jaccard, Julian & Singh, Amardeep & Watters, Paul & Camtepe,
 
 > [相关论文](..\Few-Shot06)A Few-Shot Meta-Learning based Siamese Neural Network using Entropy Features for Ransomware Classification
 
+输入：熵特征，(样本对,样本对标签)
+
+输出：类内距离

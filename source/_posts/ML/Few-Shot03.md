@@ -12,7 +12,29 @@ mathjax: true
 
 Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&Securitty,April,2021. 
 
+![1668858454381](Few-Shot03/1668858454381.png)
+
+
+
+## 单模态方法和最近邻
+
+
+
+
+
+
+
+
+
 ## 概念
+
+
+
+
+
+
+
+
 
 
 

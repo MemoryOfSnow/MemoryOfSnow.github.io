@@ -1,5 +1,5 @@
 ---
-title: 安装Cuckoo
+title: Ubuntu22虚拟机安装Cuckoo
 date: 2022-06-11 19:59:30
 categories: Linux 
 tags: [Cuckoo]

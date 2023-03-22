@@ -63,6 +63,8 @@ Y.shape
 
 ### Relu激活函数
 
+ 整流线性单元 
+
 <img src="DeepLearing01/image-20220311151441590.png" alt="image-20220311151441590" style="zoom:50%;" />
 
 线性、非饱和，可以克服学习过程中的梯度消失问题，加快训练速度。
@@ -78,6 +80,74 @@ SoftMax Loss的缺点：
 1、随着分类数目的增大，分类层的线性变化矩阵参数也随着增大；
 
 2、针对封闭集分类问题，学习到的特征是可分离的，不适用于开放集这种所学特征没有区分性的分类问题。   ----> SM-SoftMax
+
+
+
+## 2.2 不常见的激活函数
+
+### Elu
+
+指数线性单元
+
+f(x)=`alpha * (exp(x)-1)` ,x<0
+
+```python
+keras.activations.elu(x, alpha=1.0)#alpha一个标量，表示负数部分的斜率。
+```
+
+
+
+### SElu
+
+ SELU 等同于：`scale * elu(x, alpha)` 
+
+ 可伸缩的指数线性单元（SELU）。 
+
+### ThresholdedReLU
+
+ 带阈值的修正线性单元。 
+
+ 形式： `f(x) = x for x > theta`, `f(x) = 0 otherwise`. 
+
+### PReLU
+
+ 参数化的 ReLU 
+
+```python
+#形式： f(x) = alpha * x for x < 0, f(x) = x for x >= 0, 
+#其中 alpha 是一个可学习的数组，尺寸与 x 相同。
+keras.layers.PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None)
+```
+
+
+
+### softplus
+
+f(x)= log(exp(x) + 1) 
+
+<img src="DeepLearing01/1677335283218.png" alt="1677335283218" style="zoom:50%;" />
+
+### softsign
+
+f(x)= x / (abs(x) + 1) 
+
+![1677335543832](DeepLearing01/1677335543832.png)
+
+
+
+### Hard sigmoid 激活：
+
+ 计算速度比 sigmoid 激活函数更快。 
+
+- 如果 `x < -2.5`，返回 0。
+- 如果 `x > 2.5`，返回 1。
+- 如果 `-2.5 <= x <= 2.5`，返回 `0.2 * x + 0.5`。
+
+![1677336308417](DeepLearing01/1677336308417.png)
+
+
+
+
 
 ## 3.学习器
 
