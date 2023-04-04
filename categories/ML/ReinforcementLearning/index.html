@@ -20,16 +20,24 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="强化学习的原理图">
+  <meta name="description" content="机器学习里除了监督和无监督学习做分类回归，还有强化学习算法用于做决策。 灵感来源于：神经科学和心理学，用外界反馈和暗示加强心理偏向。 Chap1 强化学习原理图 state value，状态值用于评价一个策略好坏。   西湖大学RL课程-B站  奖励值的设置在正数代表奖励的情况下，0不惩罚，也是一种鼓励。  Reward(s,a)，奖励考虑当前状态和行为。 Trajectory（轨迹）:状态-动作">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ReinforcementLearning01">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/ReinforcementLearning/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="强化学习的原理图">
+<meta property="og:description" content="机器学习里除了监督和无监督学习做分类回归，还有强化学习算法用于做决策。 灵感来源于：神经科学和心理学，用外界反馈和暗示加强心理偏向。 Chap1 强化学习原理图 state value，状态值用于评价一个策略好坏。   西湖大学RL课程-B站  奖励值的设置在正数代表奖励的情况下，0不惩罚，也是一种鼓励。  Reward(s,a)，奖励考虑当前状态和行为。 Trajectory（轨迹）:状态-动作">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/image-20220510203532764.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678108982211.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678169561779.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678171954954.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678104650697.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678108155935.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678113431994.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678115817103.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/ReinforcementLearning/1678116051479.png">
 <meta property="article:published_time" content="2022-02-07T12:43:22.000Z">
-<meta property="article:modified_time" content="2022-06-03T19:03:56.415Z">
+<meta property="article:modified_time" content="2023-03-07T07:37:10.349Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="ReinforcementLearning">
 <meta name="twitter:card" content="summary">
@@ -194,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+                <time title="Modified: 2023-03-07 15:37:10" itemprop="dateModified" datetime="2023-03-07T15:37:10+08:00">2023-03-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,8 +225,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>强化学习的原理图</p>
-<p><img src="/categories/ML/ReinforcementLearning/image-20220510203532764.png" alt="image-20220510203532764"></p>
+        <p>机器学习里除了监督和无监督学习做分类回归，还有强化学习算法用于做决策。</p>
+<p>灵感来源于：神经科学和心理学，用外界反馈和暗示加强心理偏向。</p>
+<h2 id="Chap1-强化学习原理图"><a href="#Chap1-强化学习原理图" class="headerlink" title="Chap1 强化学习原理图"></a>Chap1 强化学习原理图</h2><p><img src="/categories/ML/ReinforcementLearning/image-20220510203532764.png" alt="image-20220510203532764"></p>
+<p>state value，状态值用于评价一个策略好坏。</p>
+<p><img src="/categories/ML/ReinforcementLearning/1678108982211.png" alt="1678108982211"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1sd4y167NS">西湖大学RL课程-B站</a></p>
+</blockquote>
+<h3 id="奖励值的设置"><a href="#奖励值的设置" class="headerlink" title="奖励值的设置"></a>奖励值的设置</h3><p>在正数代表奖励的情况下，0不惩罚，也是一种鼓励。</p>
+<p><img src="/categories/ML/ReinforcementLearning/1678169561779.png" alt="1678169561779"></p>
+<p>Reward(s,a)，奖励考虑当前状态和行为。</p>
+<p>Trajectory（轨迹）:状态-动作-奖励 链。</p>
+<p><img src="/categories/ML/ReinforcementLearning/1678171954954.png" alt="1678171954954"></p>
+<p>return 是一个轨迹所有的奖励加起来的值。</p>
+<p>如return=0+0+0+1=1</p>
+<p>而在第9格时所有动作的收益将会一直加一，1+1+1+1+…+1=∞</p>
+<p>为避免结果无穷大，引入折扣率，即discount <code>γ</code>∈[0,1]，</p>
+<p>此时的dicount return=0+γ0+γ^2<em>0+γ^3\</em>1+…+γ^n*1=γ^3*1\(1-γ)</p>
+<p>γ趋近于0，短视。</p>
+<h2 id="Chap2-贝尔曼方程"><a href="#Chap2-贝尔曼方程" class="headerlink" title="Chap2 贝尔曼方程"></a>Chap2 贝尔曼方程</h2><p><img src="/categories/ML/ReinforcementLearning/1678104650697.png" alt="1678104650697"></p>
+<h2 id="Chap3-贝尔曼最优公式"><a href="#Chap3-贝尔曼最优公式" class="headerlink" title="Chap3 贝尔曼最优公式"></a>Chap3 贝尔曼最优公式</h2><p>找最优策略，即能够找到的最大状态值对应的策略。</p>
+<p><img src="/categories/ML/ReinforcementLearning/1678108155935.png" alt="1678108155935"></p>
+<p>不动点原理=&gt;{最优的策略存在（不一定唯一） ，最优的状态值唯一}</p>
+<h2 id="Chap4-优化策略"><a href="#Chap4-优化策略" class="headerlink" title="Chap4 优化策略"></a>Chap4 优化策略</h2><blockquote>
+<p>值更新-&gt;策略更新-&gt;值更新-&gt;…，互相促进，最终得到最优策略和最佳状态值。</p>
+</blockquote>
+<p>值迭代</p>
+<p>策略迭代</p>
+<p>截断策略迭代</p>
+<h2 id="Chap5-Monte-Carlo学习"><a href="#Chap5-Monte-Carlo学习" class="headerlink" title="Chap5 Monte Carlo学习"></a>Chap5 Monte Carlo学习</h2><p>蒙特卡罗</p>
+<h2 id="Chap6-随机近似"><a href="#Chap6-随机近似" class="headerlink" title="Chap6  随机近似"></a>Chap6  随机近似</h2><p>增量：来一次采样，就可以用它更新估计。</p>
+<p>Robbins-Monro算法</p>
+<p><strong>SGD</strong></p>
+<p>SGD、BGD、MBGD</p>
+<h2 id="Chap7-时序差分方法"><a href="#Chap7-时序差分方法" class="headerlink" title="Chap7 时序差分方法"></a>Chap7 时序差分方法</h2><p>TD（Temporal Difference）学习状态值   </p>
+<p>Sarsa：用TD的思想学习action value</p>
+<p>Q-learing：直接计算优化的action values；off-policy算法</p>
+<p>on-policy :Behavior Policy（生成经验数据）和Target Policy目标策略相同</p>
+<p>off-policy:两个策略可以不同</p>
+<h2 id="Chap8-Value-Function-Approximation"><a href="#Chap8-Value-Function-Approximation" class="headerlink" title="Chap8  Value Function  Approximation"></a>Chap8  Value Function  Approximation</h2><p>引入函数，让神经网络有机会进入到强化学习。</p>
+<p>找一个状态值的近似函数v_hat(S,w)</p>
+<p><img src="/categories/ML/ReinforcementLearning/1678113431994.png" alt="1678113431994"></p>
+<p>DQN：两个网络、经验回放</p>
+<h2 id="Chap9-策略梯度学习"><a href="#Chap9-策略梯度学习" class="headerlink" title="Chap9 策略梯度学习"></a>Chap9 策略梯度学习</h2><p><strong>Policy Gradient是一种On-policy的算法</strong></p>
+<p><img src="/categories/ML/ReinforcementLearning/1678115817103.png" alt="1678115817103"></p>
+<h2 id="Chap10-Actor-Critic"><a href="#Chap10-Actor-Critic" class="headerlink" title="Chap10 Actor-Critic"></a>Chap10 Actor-Critic</h2><p>Policy Gradient的一种方法，只是critic部分强调了值的作用。</p>
+<p><img src="/categories/ML/ReinforcementLearning/1678116051479.png" alt="1678116051479"></p>
+<p>4）从随机的动作选择策略转到确定性的，就是DPG。</p>
+<p>3)通过<strong>重要性采样</strong>可以把on-policy策略变为off-policy策略。</p>
 
     </div>
 
@@ -302,6 +357,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap1-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text">Chap1 强化学习原理图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%96%E5%8A%B1%E5%80%BC%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">奖励值的设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap2-%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%96%B9%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Chap2 贝尔曼方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap3-%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E5%85%AC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">Chap3 贝尔曼最优公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap4-%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text">Chap4 优化策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap5-Monte-Carlo%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">Chap5 Monte Carlo学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap6-%E9%9A%8F%E6%9C%BA%E8%BF%91%E4%BC%BC"><span class="nav-number">6.</span> <span class="nav-text">Chap6  随机近似</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap7-%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E6%96%B9%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">Chap7 时序差分方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap8-Value-Function-Approximation"><span class="nav-number">8.</span> <span class="nav-text">Chap8  Value Function  Approximation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap9-%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-number">9.</span> <span class="nav-text">Chap9 策略梯度学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chap10-Actor-Critic"><span class="nav-number">10.</span> <span class="nav-text">Chap10 Actor-Critic</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -317,7 +373,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -329,7 +385,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

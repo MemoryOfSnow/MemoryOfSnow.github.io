@@ -156,6 +156,818 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot03/" class="post-title-link" itemprop="url">A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-23 20:43:22" itemprop="dateCreated datePublished" datetime="2022-09-23T20:43:22+08:00">2022-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-03 18:26:28" itemprop="dateModified" datetime="2023-04-03T18:26:28+08:00">2023-04-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/350960578">下载链接</a> 用多原型模型做未知家族识别的全新小样本恶意代码分类方法</p>
+</blockquote>
+<p>Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&amp;Securitty,April,2021. </p>
+<h3 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h3><p>样本少，识别新家族需要重训练。</p>
+<ul>
+<li>scarce samples：新发现家族的样本收集困难，而用小批量样本，模型会过拟合，或者激烈振荡（ oscillate drastically）不收敛；</li>
+<li>dynamic recognition：动态识别问题，旧分类器缺乏增量识别新家族的能力，要求从头开始重训练。</li>
+<li>signature-based analysis：需要专家设计签名，无法识别变形或者多态的样本（polymorphic or metamorphic）</li>
+<li>Open Set Recognition Problem (OSR)开放集识别问题，对新样本需要保持快速响应能力，从已经收集的样本中构建对应的分类器。</li>
+</ul>
+<p><img src="/categories/ML/Few-Shot03/1668858454381.png" alt="1668858454381"></p>
+<h2 id="单模态方法和最近邻"><a href="#单模态方法和最近邻" class="headerlink" title="单模态方法和最近邻"></a>单模态方法和最近邻</h2><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>多序列比对Multiple Sequence Alignment</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>meta learning based few-shot learning (FSL)基于元学习的小样本学习</p>
+<p>模型名：SIMPLE (Supervised Infifinite Mixture Prototypes LEarning)监督无限混合原型系统</p>
+<p><strong>设计：</strong>基于从动态分析中获得的API调用序列（API invocation sequences），引入多原型建模来为每个家族生成多个原型。以增强泛化能力。</p>
+<p><strong>idea来源：</strong>同家族的行为有相同，也有不同，即经常会匹配多个子模式并满足多模态数据分布。</p>
+<h2 id="模型结构："><a href="#模型结构：" class="headerlink" title="模型结构："></a>模型结构：</h2><p>API invocation sequences—-&gt;word embedding—-&gt;LSTM（保留序列信息）——&gt; clustering（聚类）—-&gt;每个恶意家族的多原型表示。</p>
+<p>​                                                                        少量样本的监督标签信息<br>                                                                                 ↓<br><a href="K. R. Allen, E. Shelhamer, H. Shin, J. B. Tenenbaum, Infifinite mixture prototypes for few-shot learning, in: 36th International Conference on Machine Learning, ICML 2019, Vol. 2019-June, 2019, pp. 348–357. arXiv:1902.04552.">无限混合原型IMP(infifinite mixture prototypes)</a>：聚类数目无需事先确定，模型容量能够根据任务数据自适应推断以平衡简单和复杂的数据分布。↓</p>
+<p>​                                                                            更合理的恶意样本家族的原型</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/ML/Few-Shot03/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/GAN01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/GAN01/" class="post-title-link" itemprop="url">GAN01</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-09-08 20:43:22 / Modified: 17:54:54" itemprop="dateCreated datePublished" datetime="2022-09-08T20:43:22+08:00">2022-09-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h2><p>输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。</p>
+<p>例如语音聊天机器人，需要一个范围。</p>
+<h2 id="Generative-Adversarial-Network-GAN"><a href="#Generative-Adversarial-Network-GAN" class="headerlink" title="Generative Adversarial Network(GAN)"></a>Generative Adversarial Network(GAN)</h2><p>以生成动漫头像为例。</p>
+<p>Generator和Discriminator互相对抗。</p>
+<p>Generator</p>
+<p>Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能是一张动漫图片。</p>
+<blockquote>
+<p>用来分辨Generator的输出与真正的图片有何不同。</p>
+</blockquote>
+<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>1.G初始化参数，生成杂讯。</p>
+<p>2.固定G，更新D；（经过训练，D学到真正的和生成的之间的差异：把真正的人脸当做1,把训练出的图片当做0；或者是回归问题)</p>
+<p>3.固定D(鉴别器)，更新G(生成器生成在D中得分高的样本)</p>
+<p>重复步骤2,3</p>
+<h2 id="Progressive-GAN可以产生人脸"><a href="#Progressive-GAN可以产生人脸" class="headerlink" title="Progressive GAN可以产生人脸"></a>Progressive GAN可以产生人脸</h2><p>Interpolation内插可以融合两张图片，做男女性别互转的照片。</p>
+<h2 id="Divergence"><a href="#Divergence" class="headerlink" title="Divergence"></a>Divergence</h2><p>散度 表征空间各点矢量场发散的强弱程度 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot02/" class="post-title-link" itemprop="url">小样本学习与其他相似概念的区分</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-25 20:43:22" itemprop="dateCreated datePublished" datetime="2022-08-25T20:43:22+08:00">2022-08-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-18 02:34:57" itemprop="dateModified" datetime="2022-11-18T02:34:57+08:00">2022-11-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Et4y1i7pu">Shusen Wang</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1a5411P7vF">小样本学习研究综述-赵凯琳,靳小龙,王元卓-中国科学院-…</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TU4y1e7R5">有限元笔记10-个人的有限元学习经验分享</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qv411571z">迁移学习</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV12U4y1N7ha">智源LIVE第4期│李文斌:基于局部表征学习的小样本学…</a></p>
+<p>注：元学习不等同于小样本学习；虽然有人把它们混用。 meta learning 是学习如何学习，few-shot learning 是要达到的目标，后者常常借助前者，以至于有人说Few-shot Learning 是 Meta Learning 在监督学习领域的应用。，但实际上少样本学习包含的范围比较大，两者更准确地说属于有交集但不完全重合的关系。</p>
+</blockquote>
+<h2 id="参数概念"><a href="#参数概念" class="headerlink" title="参数概念"></a>参数概念</h2><blockquote>
+<p>知乎-<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/84290146">小样本学习中的一些基本概念</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44422920/article/details/124229002">元学习(meta learning)和小样本学习(few-shot learning)</a></p>
+</blockquote>
+<p> 在 FSL 中，经常用到的一类方法被称为 Meta-learning。 </p>
+<p><img src="/categories/ML/Few-Shot02/1668706082696.png" alt="1668706082696"></p>
+<blockquote>
+<p>（1）<strong>support set</strong> :每次训练的样本集合很小，的数据集，用以提供参考信息，不足以训练大型神经网络。<br> （2）<strong>query set</strong> :用于与训练样本比对的样本，一般来说query set就是一个样本。Query data的类别属于support data中的类别，Q的类别可以在S中看到，但在训练数据集里看不到。 </p>
+<p>（3）在support set中，如果有n个种类，每个种类有k个样本，那么这个训练过程叫n -way k-shot ，如下图就是5-way 1-shot。 </p>
+</blockquote>
+<p>FSL 通常会被分成 N-way k-shot 问题，特指 <strong>Meta-testing </strong>中的Support Set S’的情况，对于训练过程中的S和Q没有任何要求。</p>
+<p><img src="/categories/ML/Few-Shot02/1668707106138.png" alt="1668707106138"></p>
+<p>对于训练过程，要根据query set S，每次放入一个样本得到其预估分类，和真实标签做损失后更新模型；</p>
+<p>其中，N 指的是 <strong>Meta-testing 过程中的样本类别数</strong>，k 指的是 Meta-testing 的过程中每一类有多少个样本，</p>
+<p><img src="/categories/ML/Few-Shot02/1668706589070.png" alt="1668706589070"><br> S’ 和 Q’ 是如何得到的？如上图所示，假设 Testing data 所代表的大的矩形框对应着原始的测试数据，这些数据可能包含有很多类。现在，我们从中随机选出 N 个类，每个类都可能含有很多个样本。然后，我们再从这 N 个类中，每类都随机选出 k+x 个样本（x 代表可以选任意个，但必须满足 k+x 不超过每个类最大的样本个数），其中的 k 个样本将被用作 Support set S’，另外的 x 个样本将被用作 Query set Q’。由此，我们便得到了 Meta-testing 过程中需要用到的两个数据集。</p>
+<blockquote>
+<ul>
+<li><p>测试数据的样本规模 N*(k+x)，x为任意值。</p>
+</li>
+<li><p>S 与 Q 中的样本通常是不会重合的，S’ 与 Q’ 亦然。 </p>
+</li>
+</ul>
+</blockquote>
+<h2 id="元学习Meta-learning"><a href="#元学习Meta-learning" class="headerlink" title="元学习Meta learning"></a>元学习Meta learning</h2><p>传统监督学习： 对于一个给定训练数据集，通过训练使模型可以识别训练数据集，并将其泛化到测试数据集中。要求测试数据集中数据标签类别包含在训练数据集中。<br>meta learning： 目的是让模型learn to learn，使模型可以区分不同的事物。意思是让模型自己学会学习。通过一张待测试图像，其类别不包含在训练数据集中，但包含在support set中，通过待测试图像与support set中每张图像计算他们之间的相似度，将与support set中相似度最高的类别作为query图像的类别，完成模型的预测。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334641593">https://zhuanlan.zhihu.com/p/334641593</a></p>
+</blockquote>
+<h2 id="多任务学习（MTL）："><a href="#多任务学习（MTL）：" class="headerlink" title="多任务学习（MTL）："></a><strong>多任务学习（MTL）：</strong></h2><p><strong>一般来说，优化多个损失函数就等同于进行多任务学习（与单任务学习相反）。</strong></p>
+<p>联合学习（joint learning）、自主学习（learning to learn）和带有辅助任务的学习（learning with auxiliary task）等都可以指 MTL。</p>
+<h2 id="迁移学习："><a href="#迁移学习：" class="headerlink" title="迁移学习："></a><strong>迁移学习：</strong></h2><blockquote>
+<p>将相关任务的训练数据中的可泛化知识迁移到目标任务上。<br>也就是不同领域的知识迁移的过程，源领域——&gt;目标领域。<br>领域指的是一个样本空间(x,y)(x,y)及其数据分布p(x,y)p(x,y)。只要三者中有不同，就是不同领域。<br>说人话就是，<strong>输入-输出-数据分布相同</strong>，才是两个相同的标准机器学习任务。换句话说就是一个数据集你用不同模型跑跑。</p>
+</blockquote>
+<p>源域有大量标注好的数据，目标域没有数据，这时候就用源域训练好的模型去直接test目标域。</p>
+<h2 id="一些处理数据和标签噪声与不平衡-的误差函数"><a href="#一些处理数据和标签噪声与不平衡-的误差函数" class="headerlink" title="一些处理数据和标签噪声与不平衡 的误差函数"></a>一些处理数据和标签噪声与不平衡 的误差函数</h2><p><img src="/categories/ML/Few-Shot02/1668331346921.png" alt="1668331346921"></p>
+<h2 id="元学习模型"><a href="#元学习模型" class="headerlink" title="元学习模型"></a>元学习模型</h2><p>借助训练时的元知识</p>
+<p><a href="Santoro, A.; Bartunov, S.; Botvinick, M.; Wierstra, D.; Lillicrap, T. Meta-learning with memory-augmented  neural networks. In Proceedings of the 33rd International Conference on International Conference on Machine Learning, New York, NY, USA, 19–24 June 2016; Volume 48, pp. 1842–1850.">A. Santoro,神经图灵机变种</a></p>
+<p><a href>O.Vinyals,Matching Network</a> </p>
+<p><a href>G. Koch et al.,孪生网络</a></p>
+<blockquote>
+<p>基于小样本学习的图像分类技术综述,刘颖等,自动化学报,2021,47(2):297-315</p>
+</blockquote>
+<p>以建模方式为标准，分类为  卷积神经网络模型 和 图神经网络模型。</p>
+<ul>
+<li>卷积网络模型<ul>
+<li>迁移学习  基于特征;基于关系;基于共享参数</li>
+<li>元学习  基于度量;基于优化;基于模型</li>
+<li>对偶学习  自<strong>编码</strong>机</li>
+<li>贝叶斯学习</li>
+</ul>
+</li>
+<li>图神经网络模型<ul>
+<li>非欧几里得数据—&gt;应用于欧几里得数据</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot01/" class="post-title-link" itemprop="url">小样本学习方法概述1</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-04 20:43:22" itemprop="dateCreated datePublished" datetime="2022-08-04T20:43:22+08:00">2022-08-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-18 01:28:22" itemprop="dateModified" datetime="2022-11-18T01:28:22+08:00">2022-11-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="可读论文"><a href="#可读论文" class="headerlink" title="可读论文"></a>可读论文</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="http://bigeye.au.tsinghua.edu.cn/paperlist.html">清华张长水教授团队所做论文</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/WenMoLiuBai/Meta-Learning-and-Few-shot-Learning">Up主借鉴的小样本学习的论文</a></p>
+</blockquote>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><blockquote>
+<p>A compelling case of this approach is classifying objects classes that have not yet been used in the training set, namely Zero-shot Learning.</p>
+</blockquote>
+<p>零样本学习：可辨别训练集里没有的新类的样本。</p>
+<h2 id="小样本学习的目标："><a href="#小样本学习的目标：" class="headerlink" title="小样本学习的目标："></a>小样本学习的目标：</h2><p>学会学习，<strong>找不同</strong>，能够判断未见过的事物。</p>
+<p>学到基础类别的知识，进而能够学会分类同一个数据集中的新类。</p>
+<p>基于少量样本便可完成类别的判断</p>
+<p><strong>少量标签数据</strong>，训练得到<strong>良好泛化能力</strong>的模型。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Jh411X7FG"> B站-liupengyuanblcu </a></p>
+</blockquote>
+<h2 id="问题产生的原因："><a href="#问题产生的原因：" class="headerlink" title="问题产生的原因："></a>问题产生的原因：</h2><h3 id="训练数据少："><a href="#训练数据少：" class="headerlink" title="训练数据少："></a>训练数据少：</h3><p>1.标注数据cost很大，</p>
+<p>2.有些数据的获取很难</p>
+<p>3.有些数据本身就很少</p>
+<p>当前模型的训练基于<strong>经验风险最小化</strong>，用经验风险代替期望风险，所以训练数据少时，模型误差很大。</p>
+<p><img src="/categories/ML/Few-Shot01/1668265194697.png" alt="1668265194697"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/ML/Few-Shot01/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/MLBasic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/MLBasic/" class="post-title-link" itemprop="url">机器学习基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-08-01 15:20:22 / Modified: 16:24:18" itemprop="dateCreated datePublished" datetime="2022-08-01T15:20:22+08:00">2022-08-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h2><p>回归</p>
+<p>分类、</p>
+<p>Structured Learning</p>
+<h2 id="符号约定"><a href="#符号约定" class="headerlink" title="符号约定"></a>符号约定</h2><p>Label  指真实值，     <code>y^</code>；  预测值用y表示。</p>
+<p>误差/距离的衡量(计算)方式  MAE(Mean Absolute Error)      MSE(Mean Square Error)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/OWASP01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/OWASP01/" class="post-title-link" itemprop="url">OWASP01</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-07-04 12:56:59 / Modified: 14:02:32" itemprop="dateCreated datePublished" datetime="2022-07-04T12:56:59+08:00">2022-07-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="http://www.owasp.org.cn/OWASP-CHINA/owasp-project/download/OWASP_testing_guide.pdf">http://www.owasp.org.cn/OWASP-CHINA/owasp-project/download/OWASP_testing_guide.pdf</a></p>
+</blockquote>
+<p>应用安全测试最重要的方面可能就是必须<strong>在有限的时间</strong>内<strong>尽可能多地覆盖</strong>应用程序的各个方面，安全问题深度隐藏在业务逻辑和定制应用设计中。</p>
+<h2 id="何时测试？"><a href="#何时测试？" class="headerlink" title="何时测试？"></a>何时测试？</h2><p>通用软件开发生命周期(SDLC)模型：定义—&gt;设计—&gt;开发—&gt;部署—&gt;维护</p>
+<p>最佳的方法之一是将安全测试融入到软件开发生命周期每一个阶段以防止安全漏洞的出现</p>
+<p>安全是一个过程，不是某个产 品。</p>
+<p><img src="/categories/CTF/OWASP01/1656913862123.png" alt="1656913862123"></p>
+<p>安全威胁模型（帮助区分系统中的哪些部分的 特定资源是危险的）</p>
+<h2 id="测试流程"><a href="#测试流程" class="headerlink" title="测试流程"></a>测试流程</h2><h3 id="1-了解测试软件"><a href="#1-了解测试软件" class="headerlink" title="1.了解测试软件"></a>1.了解测试软件</h3><p>结构，数据流程图，使用情况等，书面确定保存下来；</p>
+<h3 id="2-自动化通用漏洞例行扫描"><a href="#2-自动化通用漏洞例行扫描" class="headerlink" title="2.自动化通用漏洞例行扫描"></a>2.自动化通用漏洞例行扫描</h3><h3 id="2-2适当时候要看到源码。"><a href="#2-2适当时候要看到源码。" class="headerlink" title="2.2适当时候要看到源码。"></a>2.2适当时候要看到源码。</h3><p>3.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/Cuckoo%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Linux/Cuckoo%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">Ubuntu22虚拟机安装Cuckoo</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-11 19:59:30" itemprop="dateCreated datePublished" datetime="2022-06-11T19:59:30+08:00">2022-06-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-10 18:57:17" itemprop="dateModified" datetime="2022-11-10T18:57:17+08:00">2022-11-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="安装Cuckoo"><a href="#安装Cuckoo" class="headerlink" title="安装Cuckoo"></a>安装Cuckoo</h2><h3 id="m2crypto"><a href="#m2crypto" class="headerlink" title="m2crypto"></a>m2crypto</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/include/x86_64-linux-gnu/openssl/opensslconf.h /usr/include/openssl/opensslconf.h</span><br><span class="line">pip install --global-option=build_ext --global-option=&quot;-I/usr/include/x86_64-linux-gnu&quot; m2crypto</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装Py36支持的组件"><a href="#2-安装Py36支持的组件" class="headerlink" title="2.安装Py36支持的组件"></a>2.安装Py36支持的组件</h2><h3 id="Volatility"><a href="#Volatility" class="headerlink" title="Volatility"></a>Volatility</h3><h2 id="3-可选项安装"><a href="#3-可选项安装" class="headerlink" title="3.可选项安装"></a>3.可选项安装</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install libfuzzy-dev</span><br></pre></td></tr></table></figure>
+<h3 id="guacd"><a href="#guacd" class="headerlink" title="guacd"></a>guacd</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd</span><br></pre></td></tr></table></figure>
+<h2 id="4-安装Cuckoo"><a href="#4-安装Cuckoo" class="headerlink" title="4.安装Cuckoo"></a>4.安装Cuckoo</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libx11-dev</span><br><span class="line">#apt-file search Intrinsic.h apt-file可以根据缺少的文件找对应需要安装的库</span><br><span class="line">pip install -U cuckoo</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/TaxLaw/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/TaxLaw/" class="post-title-link" itemprop="url">税法相关</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-10 17:08:58" itemprop="dateCreated datePublished" datetime="2022-06-10T17:08:58+08:00">2022-06-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-22 17:10:31" itemprop="dateModified" datetime="2022-06-22T17:10:31+08:00">2022-06-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-概念介绍"><a href="#1-概念介绍" class="headerlink" title="1.概念介绍"></a>1.概念介绍</h2><h3 id="1-1-纳税流程"><a href="#1-1-纳税流程" class="headerlink" title="1.1 纳税流程"></a>1.1 纳税流程</h3><p>谈合同/协议—&gt;签合同—&gt;干活—&gt;发工资(企业预扣税+个人实领工资)—&gt;纳税个人收报—&gt;年度汇缴（税款多退少补）。</p>
+<h3 id="1-2-工资薪金"><a href="#1-2-工资薪金" class="headerlink" title="1.2 工资薪金"></a>1.2 工资薪金</h3><p>工资、薪金所得是个人非独立劳动，从所在单位领取的报酬，他与支付报酬的单位存在雇佣与被雇佣关系。</p>
+<h3 id="1-3-劳务报酬范围"><a href="#1-3-劳务报酬范围" class="headerlink" title="1.3 劳务报酬范围"></a>1.3 劳务报酬范围</h3><p>个人担任企业董事职务所取得的董事费收入，也属于劳务报酬性质，按劳务报酬所得项目征收个人所得税。</p>
+<p>劳务报酬所得是个人独立从事某种技艺，独立提供某种劳务而取得的报酬，他与支付报酬的单位不存在雇佣与被雇佣关系，一般也<strong>不用受委托方的上下班、劳动工作制度约束</strong>，<strong>工作成果达到合同要求</strong>即可领取报酬。</p>
+<p><strong>劳务报酬可以专项扣除吗？</strong></p>
+<p>可以，但不预扣，汇算时才扣除。劳务报酬所得预扣预缴计算方法里是没有专项附加扣除的，所以在预扣预缴时不能扣除，只有汇算清缴时才能扣除专项附加。</p>
+<h2 id="2-相关法条介绍"><a href="#2-相关法条介绍" class="headerlink" title="2.相关法条介绍"></a>2.相关法条介绍</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">扣缴义务人向居民个人支付劳务报酬所得，按次或者按月预扣预缴个人所得税。</span><br><span class="line">​                                  ——《国家税务总局关于全面实施新个人所得税法若干征管衔接问题的公告》(税务总局公告2018年第56号)</span><br></pre></td></tr></table></figure>
+<p>劳务报酬所得以收入减除费用后的余额为收入额。</p>
+<p>减除费用：劳务报酬所得每次收入不超过四千元的，减除费用按八百元计算，每次收入四千元以上的，减除费用按百分之二十计算。应纳税所得额：劳务报酬所得，以每次收入额为预扣预缴应纳税所得额，劳务报酬所得适用百分之二十至百分之上海个人避税四十的超额累进预扣率。</p>
+<p>劳务报酬所得应预扣预缴税额=预扣预缴应纳税所得额×预扣率-速算扣除数。</p>
+<h2 id="3-每月扣税"><a href="#3-每月扣税" class="headerlink" title="3.每月扣税"></a>3.每月扣税</h2><p>按照新个税法，劳务报酬缴纳个税分为两步，一是按次预扣；二是汇缴。</p>
+<p>劳务报酬收入最后会纳入综合所得，和工资薪金一起进行年度汇缴。</p>
+<p>劳务报酬所得、稿酬所得、特许权使用费所得以收入减除百分之二十的费用后的余额为收入额。</p>
+<p>劳务报酬所得<strong>预扣预缴应纳税所得</strong>额=每次收入*（1-20%）=9000*（1-20%）=7200元</p>
+<p>劳务报酬所得应预扣预缴税额=预扣预缴应纳税所得额×预扣率-速算扣除数=7200*20%-0=1440元。</p>
+<h2 id="4-汇缴及退税"><a href="#4-汇缴及退税" class="headerlink" title="4.汇缴及退税"></a>4.汇缴及退税</h2><p>假如2022年，我只工作两个月，下个月我的劳务报酬所得<strong>预扣预缴应纳税所得</strong>额=9900*(1-20%)=7920元，劳务报酬所得应预扣预缴税额=9900*20%-0=1980元。</p>
+<p>年收入额=工资薪金所得收入+劳务报酬所得收入=0+(7200+7920)=15100元</p>
+<p>居民个人综合所得应纳税所得额=年收入额-6万元-专项扣除-专项附加扣除=0</p>
+<p>按照下表所示，全年应纳税额=应纳税所得额*税率-速算扣除数=0-0=0；<br>我在两个月内一次性取得15100元劳务报酬收入时候已经预扣预缴个税1440+1980=3420元，所以，2022年度汇算后，我还需要退税=3420-0=3420元。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E8%BD%AF%E9%97%B4%E9%9A%94%E6%9C%80%E5%A4%A7%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E8%BD%AF%E9%97%B4%E9%9A%94%E6%9C%80%E5%A4%A7%E5%8C%96/" class="post-title-link" itemprop="url">软件隔最大化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-08 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-08T14:17:22+08:00">2022-06-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-16 19:29:06" itemprop="dateModified" datetime="2022-06-16T19:29:06+08:00">2022-06-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="6-SVM优化"><a href="#6-SVM优化" class="headerlink" title="6.SVM优化"></a>6.SVM优化</h2><h2 id="7-软间隔"><a href="#7-软间隔" class="headerlink" title="7.软间隔"></a>7.软间隔</h2><h2 id="8-核函数"><a href="#8-核函数" class="headerlink" title="8.核函数"></a>8.核函数</h2><p>核技巧(Vapnik)让SVM成为非线性；</p>
+<p>kernel function表示将输入从输入空间映射到特征空间得到的特征向量之间的内积。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E7%BA%BF%E6%80%A7SVM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -245,945 +1057,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">数据分析概述</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-06-07 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-07T14:17:22+08:00">2022-06-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-14 19:28:05" itemprop="dateModified" datetime="2022-07-14T19:28:05+08:00">2022-07-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-相关库"><a href="#1-相关库" class="headerlink" title="1.相关库"></a>1.相关库</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png" alt="image-20220321094551847"></p>
-<h2 id="2-数据等级"><a href="#2-数据等级" class="headerlink" title="2.数据等级"></a>2.数据等级</h2><ul>
-<li>非结构化—&gt;结构化数据</li>
-</ul>
-<p>结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除)</p>
-<h2 id="3-数据分析"><a href="#3-数据分析" class="headerlink" title="3.数据分析"></a>3.数据分析</h2><h3 id="1-数据质量分析"><a href="#1-数据质量分析" class="headerlink" title="1.数据质量分析"></a>1.数据质量分析</h3><p>缺失值  80%数据全部丢失，30%的缺失（做填充）</p>
-<p>异常值  均值填充</p>
-<p>一致性分析    （训练集和测试集的逻辑分布要是一致的）</p>
-<h3 id="2-数据特征分析"><a href="#2-数据特征分析" class="headerlink" title="2.数据特征分析"></a>2.数据特征分析</h3><ul>
-<li>分布分析     数据要选分布宽度比较低的</li>
-<li>对比分析     均值、方差</li>
-<li>统计量分析  sum</li>
-<li>周期性分析   一般用在时间序列上</li>
-<li>贡献度分析  </li>
-<li>相关度分析  </li>
-</ul>
-<h3 id="3-函数工具"><a href="#3-函数工具" class="headerlink" title="3.函数工具"></a>3.函数工具</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数功能</th>
-<th>所属扩展库</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>interpolate</td>
-<td>一维、高维数据插值</td>
-<td>Scipy</td>
-</tr>
-<tr>
-<td>unique</td>
-<td>去除数据中的重复元素，得到单值元素列表，它是对象的方法名（此功能可以用集合的办法去重）</td>
-<td>Pandas/Numpy</td>
-</tr>
-<tr>
-<td>isnull</td>
-<td>判断是否空值</td>
-<td>Pandas</td>
-</tr>
-<tr>
-<td>notnull</td>
-<td>判断是否为非空值</td>
-<td>Pandas</td>
-</tr>
-<tr>
-<td>PCA</td>
-<td>对指标变量矩阵进行主成分分析</td>
-<td>Scikit-Learn</td>
-</tr>
-<tr>
-<td>random</td>
-<td>生成随机矩阵</td>
-<td>Numpy</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="4-数据规约"><a href="#4-数据规约" class="headerlink" title="4.数据规约"></a>4.数据规约</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321102046509.png" alt="image-20220321102046509"></p>
-<h3 id="属性规约"><a href="#属性规约" class="headerlink" title="属性规约"></a>属性规约</h3><p>属性的合并、提取和删除、归纳、主成分分析</p>
-<ul>
-<li>合并  {A1,A2,A3}—-&gt;{A};{B1,B2.B3}—-&gt;{B}  <strong>数据降维</strong></li>
-<li>逐步向前选择   从空属性集开始 ，每次从原属性集中选一个当前最优的属性加到现在的集合中，直到无法选择出最优属性或满足一定阈值约束为止。</li>
-<li>逐步向后删除  从全属性集开始，…(与逐步向前选择恰好相反)</li>
-<li>决策树归纳  用决策树对初始数据进行分类归纳学习，决策树上没有的属性可以认为是无关属性，删除之。</li>
-<li>PCA，用较少的变量去解释原始数据中的大部分变量，即将很多相关性很高的变量降低相关性，变为不相关或者独立的变量</li>
-</ul>
-<h3 id="数值规约"><a href="#数值规约" class="headerlink" title="数值规约"></a>数值规约</h3><p>​    数据标准化</p>
-<h2 id="5-数据变换"><a href="#5-数据变换" class="headerlink" title="5.数据变换"></a>5.数据变换</h2><ul>
-<li>简单函数变换</li>
-<li>规范化   把数据变成0，1，数据标准化减少噪声的影响</li>
-<li>连续属性离散化</li>
-<li>属性构造</li>
-<li>小波变换</li>
-<li>傅里叶变换</li>
-</ul>
-<h2 id="6-数据集成"><a href="#6-数据集成" class="headerlink" title="6.数据集成"></a>6.数据集成</h2><p>合并多个数据源的数据，让数据没有偏见</p>
-<ul>
-<li>实体属性识别</li>
-<li>冗余属性识别</li>
-</ul>
-<h2 id="7-数据清洗"><a href="#7-数据清洗" class="headerlink" title="7.数据清洗"></a>7.数据清洗</h2><p>删除原始数据集中的无关数据、重复数据，平滑噪声数据，筛选值与挖掘主题无关的数据，处理缺失值、异常值等。</p>
-<p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321205617659.png" alt="image-20220321205617659"></p>
-<h3 id="缺失值处理"><a href="#缺失值处理" class="headerlink" title="缺失值处理"></a>缺失值处理</h3><ul>
-<li>均值、中位数、众数</li>
-<li>使用固定值</li>
-<li>最近邻插补</li>
-<li>回归方法</li>
-<li><p>插值法</p>
-<ul>
-<li>拉格朗日插值                                                                                                                                                                                                                                                                                                                                                                          </li>
-<li>牛顿插值<h3 id="异常值处理"><a href="#异常值处理" class="headerlink" title="异常值处理"></a>异常值处理</h3></li>
-</ul>
-</li>
-<li><p>删除</p>
-</li>
-<li>视为缺失</li>
-<li>平均值</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/LSTM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/LSTM/" class="post-title-link" itemprop="url">LSTM</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-18 09:57:22" itemprop="dateCreated datePublished" datetime="2022-05-18T09:57:22+08:00">2022-05-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-16 19:29:06" itemprop="dateModified" datetime="2022-06-16T19:29:06+08:00">2022-06-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>RNN是一个链式结构，每个<strong>时间片</strong>使用的是<strong>相同的参数</strong>。常用的是LSTM和GLU。</p>
-<p>输入数据要序列化；</p>
-<p>具有记忆性、时间维度上权值共享且图灵完备，能够以极高的效率学习序列中的非线性特征。</p>
-<p><img src="/categories/ML/LSTM/image-20220518102240209.png" alt="image-20220518102240209" style="zoom:50%;"></p>
-<p>​                                                                            1-1   循环神经网络示例</p>
-<p><img src="/categories/ML/LSTM/image-20220518102352284.png" alt="image-20220518102352284"></p>
-<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h<span class="built_in">_</span>&#123;t&#125;=<span class="keyword">\sigma</span><span class="keyword">\left</span>(x<span class="built_in">_</span>&#123;t&#125; <span class="keyword">\times</span> w<span class="built_in">_</span>&#123;x t&#125;+h<span class="built_in">_</span>&#123;t-1&#125; <span class="keyword">\times</span> w<span class="built_in">_</span>&#123;h t&#125;+b<span class="keyword">\right</span>)</span><br></pre></td></tr></table></figure>
-<p>其中，w_{h t}，为状态权重。</p>
-<h3 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h3><p><strong>长期依赖问题</strong>：</p>
-<p>隐藏状态h_t只能存储有限的信息，当记忆单元存储内容多时，它会逐渐以往之前所学到的知识（着数据时间片的增加，RNN丧失了连接相隔较远的层之间信息的能力）。</p>
-<p>长期依赖的现象也会产生很小的梯度。</p>
-<p><strong>梯度消失。梯度爆炸</strong></p>
-<p>权值矩阵循环相乘导致。因为RNN中每个时间片使用相同的权值矩阵，相同函数的多次组合会导致极端的非线性行为。</p>
-<ul>
-<li>处理梯度爆炸可以采用梯度截断的方法。所谓梯度截断是指将梯度值超过阈值\theta的梯度手动降到\theta 。虽然梯度截断会一定程度上改变梯度的方向，但梯度截断的方向依旧是朝向损失函数减小的方向。</li>
-<li>处理梯度消失？？</li>
-</ul>
-<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>引入门控机制，选择性遗忘一些无用信息，从而控制信息的累积。</p>
-<h2 id="LSTM总结"><a href="#LSTM总结" class="headerlink" title="LSTM总结"></a>LSTM总结</h2><blockquote>
-<p>参考<a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/lstm/">https://easyai.tech/ai-definition/lstm/</a></p>
-</blockquote>
-<p>1997年由Hochreiter &amp; Schmidhuber提出</p>
-<blockquote>
-<p>Hochreiter, S, and J. Schmidhuber. “Long short-term memory.” Neural Computation 9.8(1997):1735-1780.</p>
-</blockquote>
-<h2 id><a href="#" class="headerlink" title=" "></a> </h2><p><img src="/categories/ML/LSTM/image-20220526171733768.png" alt="image-20220526171733768"></p>
-<p><img src="/categories/ML/LSTM/image-20220526174100054.png" alt="image-20220526174100054"></p>
-<h2 id="LSTM详细内容"><a href="#LSTM详细内容" class="headerlink" title="LSTM详细内容"></a>LSTM详细内容</h2><p>5月26日</p>
-<h3 id="1-门-F、I、O"><a href="#1-门-F、I、O" class="headerlink" title="1.门(F、I、O)"></a>1.门(F、I、O)</h3><p>LSTM 可以通过所谓“门”的精细结构向细胞状态添加或移除信息。</p>
-<p><img src="/categories/ML/LSTM/2019-07-05-men.png" alt="LSTM 可以通过所谓“门”的精细结构向细胞状态添加或移除信息"></p>
-<p>门可以<strong>选择性地以让信息通过</strong>。它们由 S 形神经网络层和逐点乘法运算组成。</p>
-<p>S 形网络的输出值介于 0 和 1 之间，表示有多大比例的信息通过。0 值表示“没有信息通过”，1 值表示“所有信息通过”。</p>
-<p>一个 LSTM 有三种这样的门用来保持和控制细胞状态。</p>
-<ul>
-<li>忘记门(Forget gate)：将值朝0减少。</li>
-<li>输入门(Input gate)：决定是否忽略掉输入数据；</li>
-<li>输出门(Output gate)：决定是否使用隐状态；</li>
-</ul>
-<p><img src="/categories/ML/LSTM/image-20220526173429277.png" alt="image-20220526173429277"></p>
-<p><img src="/categories/ML/LSTM/image-20220526173647329.png" alt="image-20220526173647329"></p>
-<h3 id="2-候选记忆单元（增加的部分）"><a href="#2-候选记忆单元（增加的部分）" class="headerlink" title="2.候选记忆单元（增加的部分）"></a>2.候选记忆单元（增加的部分）</h3><p><strong>没有用到任何Gate</strong></p>
-<p>读法：C_tilda</p>
-<p><img src="/categories/ML/LSTM/image-20220526173509561.png" alt="image-20220526173509561"></p>
-<p><img src="/categories/ML/LSTM/image-20220526173323589.png" alt="image-20220526173323589"></p>
-<h3 id="3-记忆单元Ct"><a href="#3-记忆单元Ct" class="headerlink" title="3.记忆单元Ct"></a>3.<strong>记忆单元</strong>Ct</h3><p><img src="/categories/ML/LSTM/2019-07-05-xibao.png" alt="LSTM 的关键是细胞状态，即图中上方的水平线" style="zoom:50%;"></p>
-<p>Ct的范围比较大，需要tanh规范到-1到1之间。</p>
-<p>LSTM 的关键是细胞状态，即图中上方的水平线。</p>
-<p>细胞状态有点像传送带。它贯穿整个链条，只有一些次要的线性交互作用。信息很容易以不变的方式流过。</p>
-<p><img src="/categories/ML/LSTM/image-20220526172126536.png" alt="image-20220526172126536"></p>
-<h3 id="4-隐状态Ht"><a href="#4-隐状态Ht" class="headerlink" title="4.隐状态Ht"></a>4.隐状态Ht</h3><p>让隐藏状态放在+1到-1之间，避免梯度爆炸，降低模型复杂度。</p>
-<p><img src="/categories/ML/LSTM/image-20220526173904253.png" alt="image-20220526173904253"></p>
-<p><img src="/categories/ML/LSTM/image-20220526174148608.png" alt="image-20220526174148608"></p>
-<h2 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h2><h3 id="1-计算模型占用显存"><a href="#1-计算模型占用显存" class="headerlink" title="1.计算模型占用显存"></a>1.计算模型占用显存</h3><p>取决于调用的库，对框架的优化，所以最好直接查看实际GPU占用；</p>
-<h2 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">最优化问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-18 09:57:22" itemprop="dateCreated datePublished" datetime="2022-05-18T09:57:22+08:00">2022-05-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-22 17:10:30" itemprop="dateModified" datetime="2022-06-22T17:10:30+08:00">2022-06-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>subject to  s.t.  约束为</p>
-<p><strong>最优化问题= 目标函数+约束函数</strong></p>
-<p>运筹学里的一种</p>
-<ul>
-<li><p>无约束优化/约束优化 </p>
-</li>
-<li><p>线性/非线性优化   目标函数+约束函数有非线性函数</p>
-</li>
-<li><p>连续优化（股票投资比例）/离散优化 （如整数规化：路径选择、生产车辆）</p>
-</li>
-<li><p>单目标优化/多目标优化（考虑多个方面，比如租房）</p>
-</li>
-<li><p>动态规划</p>
-</li>
-<li><p>随机规划</p>
-</li>
-<li><p>鲁棒优化</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Kaggle2019/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Kaggle2019/" class="post-title-link" itemprop="url">CustomerLoyalty</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-06 14:12:58" itemprop="dateCreated datePublished" datetime="2022-05-06T14:12:58+08:00">2022-05-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-24 19:17:08" itemprop="dateModified" datetime="2022-12-24T19:17:08+08:00">2022-12-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/" class="post-title-link" itemprop="url">走代理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-26 14:19:49" itemprop="dateCreated datePublished" datetime="2022-04-26T14:19:49+08:00">2022-04-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-18 17:14:36" itemprop="dateModified" datetime="2022-10-18T17:14:36+08:00">2022-10-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这部分内容常用，所以做了一个系统整理；之后会陆续增加点其他内容</p>
-<p>查看左边栏的目录进行快速跳转。</p>
-<p>防火墙ban了大部分国外服务器的IP，可以轻易检测出没有伪装过的vmess流量，考虑效益，我购买了某机场的会员，价格为30元一个季度，每个月200GB流量。</p>
-<p><img src="/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/image-20220426160329651.png" alt="image-20220426160329651"></p>
-<p>我的真机系统为Win11，使用v2rayN管理连接的服务器和代理端口。</p>
-<p>如图所示，我的socks代理端口为10808，http端口为10809。这两种端口，http端口使用的最为频繁。</p>
-<ul>
-<li>设置v2rayNG-&gt;系统代理-&gt;清除系统代理；</li>
-<li>设置v2rayNG-&gt;路由-&gt;PAC分流模式。</li>
-</ul>
-<h2 id="虚拟机走代理"><a href="#虚拟机走代理" class="headerlink" title="虚拟机走代理"></a>虚拟机走代理</h2><p>百度都是直接关闭防火墙，这样不安全，所以写下这一部分内容记录一下步骤。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/CTF/%E8%B5%B0%E4%BB%A3%E7%90%86/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/stacking/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/stacking/" class="post-title-link" itemprop="url">模型融合</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-20 18:14:53" itemprop="dateCreated datePublished" datetime="2022-04-20T18:14:53+08:00">2022-04-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>stacking&amp;blending</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.6aiq.com/article/1536427413103">机器学习比赛大杀器 —— 模型融合</a>，目前只看到<strong>排名平均</strong>部分。</p>
-</blockquote>
-<p>1.可以集成提交文件（对预测结果的文件进行集成）</p>
-<p>2.投票集成(预测结果为类别时)  少数服从多数， 概率意义上相加值大于原来的准确率。</p>
-<p>3.集成低相关度的模型（即使其性能较差）也可以提升模型的性能。</p>
-<h2 id="4-加权投票"><a href="#4-加权投票" class="headerlink" title="4.加权投票"></a>4.加权投票</h2><blockquote>
-<p>原理理解：三个臭皮匠才可以稍微的对诸葛亮的看法做点改进。</p>
-</blockquote>
-<p>通常我们希望模型越好，其权重就越高。比如，我们将表现最好的模型的投票看作3票，其它的4个模型只看作1票。</p>
-<p>原因是：当表现较差的模型需要否决表现最好的模型时，唯一的办法是它们集体同意另一种选择。我们期望这样的集成能够对表现最好的模型进行一些修正，带来一些小的提高。</p>
-<p><img src="/categories/ML/stacking/image-20220420182603405.png" alt="image-20220420182603405"></p>
-<h2 id="5-Average"><a href="#5-Average" class="headerlink" title="5.Average"></a>5.Average</h2><p>更愿意叫做”bagging Sumissions”。打包提交。</p>
-<blockquote>
-<p>脚本：<a target="_blank" rel="noopener" href="https://github.com/MLWave/Kaggle-Ensemble-Guide/tree/master/src">https://github.com/MLWave/Kaggle-Ensemble-Guide/tree/master/src</a></p>
-</blockquote>
-<p><strong>平均预测常常会降低过拟合</strong></p>
-<p><img src="/categories/ML/stacking/image-20220420195230457.png" alt="image-20220420195230457"></p>
-<p>图中黑线比绿线有更好的分割，绿色线已经从数据点中学习了一些噪声。</p>
-<p><strong>平均多个不同的绿线， 使其更接近黑线。</strong></p>
-<p>我们的目标不仅是去记住这些训练数据(这里有比在随机森林里更加有效的方法来存储数据)，而且还要去对我们没有看到的数据进行良好的泛化。</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF">https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF</a></p>
-</blockquote>
-<h2 id="ROC空间"><a href="#ROC空间" class="headerlink" title="ROC空间"></a>ROC空间</h2><p>Receiver operating characteristic接收者操作特征</p>
-<p>ROC空间将伪阳性率（FPR）定义为 <em>X</em> 轴，真阳性率（TPR）定义为 <em>Y</em> 轴。</p>
-<ul>
-<li>伪阳性率(FPR, false positive rate)</li>
-</ul>
-<p>又称：错误命中率，假警报率 (false alarm rate)</p>
-<p>FPR = FP / N = FP / (FP + TN)</p>
-<ul>
-<li>真阳性率 (TPR, true positive rate)</li>
-</ul>
-<p>又称：命中率 (hit rate)、敏感度(sensitivity)</p>
-<p>TPR = TP / P = TP / (TP+FN)</p>
-<p><strong>则(0，1)是完美情况，FP错误的肯定为0，FN错误的否定为0.</strong></p>
-<p><img src="/categories/ML/stacking/image-20220420192855473.png" alt="image-20220420192855473"></p>
-<p><img src="/categories/ML/stacking/image-20220420193035472.png" alt="image-20220420193035472" style="zoom: 25%;"></p>
-<p>离左上角越近，即x越小、y越大，模型预测准确度越好；</p>
-<p>三种模型中，A&gt;B&gt;C但是只要把C当作一个相反结果预测机，则C’&gt;A&gt;B；</p>
-<h2 id="ROC曲线"><a href="#ROC曲线" class="headerlink" title="ROC曲线"></a>ROC曲线</h2><p>调整二分类模型的阈值，得出不同的FPR和TPR，将这些点全部作在一个ROC空间里，就成为<strong>特定模型的ROC曲线</strong>。</p>
-<ul>
-<li><strong>在同一个分类器之内</strong>，<strong>当阈值设置为最高时</strong>，<strong>没有样本被预测为阳性</strong>，FPR=0,TPR=0；<strong>得出ROC坐标系左下角的点 (0, 0)。</strong></li>
-<li>当阈值设置为最低时，所有样本均为阳性，FPR=FP/N=FP/(TN+FP)=1；TPR=TP/(TP+FN)=1；<strong>得出ROC坐标系右上角的点 (1, 1)。</strong></li>
-<li><strong>随着阈值调低，FP、TP增大，FN、TN减小；ROC点</strong> 往右上（或右／或上）移动，或不动；但<strong>绝不会往左下(或左／或下)移动</strong>。</li>
-</ul>
-<h2 id="AUC曲线下面积"><a href="#AUC曲线下面积" class="headerlink" title="AUC曲线下面积"></a>AUC曲线下面积</h2><p>Area Under the Curve of ROC，作为评价模型优劣的指针；取值范围为[0,1]</p>
-<p><img src="/categories/ML/stacking/image-20220420192128438.png" alt="image-20220420192128438"></p>
-<p><strong>AUC值越大的分类器，正确率越高。</strong></p>
-<p>从AUC判断分类器（预测模型）优劣的标准：</p>
-<ul>
-<li>AUC = 1，是完美分类器，采用这个预测模型时，存在至少一个阈值能得出完美预测。绝大多数预测的场合，不存在完美分类器。</li>
-<li>0.5 &lt; AUC &lt; 1，优于随机猜测。这个分类器（模型）妥善设置阈值的话，能有预测价值。</li>
-<li>AUC = 0.5，跟随机猜测一样（例：丢铜板），模型没有预测价值。</li>
-<li>AUC &lt; 0.5，比随机猜测还差；但只要总是反预测而行，就优于随机猜测。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/perm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/perm/" class="post-title-link" itemprop="url">chmod命令</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-14 19:59:30" itemprop="dateCreated datePublished" datetime="2022-04-14T19:59:30+08:00">2022-04-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>全文选摘自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/u013197629/article/details/73608613#t1">林20的CSDNblog</a></p>
-</blockquote>
-<p>Linux下权限的粒度有 <strong>拥有者 、群组 、其它组</strong> 三种。每个文件都可以针对三个粒度，设置不同的rwx(读写执行)权限。</p>
-<p>对于user、group、other分别设置三个粒度，则形成了000~777的不同授权数字，分别表示<code>---------</code>和<code>rwxrwxrwx</code>；</p>
-<p>实际表示文件时，会采用10位表示法的八进制表示，最高的那一位实际上是拼接上的字母（还有12位二进制的八进制表示，此时要用四个八进制数字）。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/Linux/perm/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/xargs,sed,awk/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/xargs,sed,awk/" class="post-title-link" itemprop="url">xargs、sed、awk</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-14 19:59:30" itemprop="dateCreated datePublished" datetime="2022-04-14T19:59:30+08:00">2022-04-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>持续更新ing</p>
-<p>xargs可以解析空格分隔的命令，类似于管道符，但是支持的广泛性上强于管道符。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/SL-05/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/SL-05/" class="post-title-link" itemprop="url">梯度下降法、[拟]牛顿法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-30 16:14:53" itemprop="dateCreated datePublished" datetime="2022-03-30T16:14:53+08:00">2022-03-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="GD"><a href="#GD" class="headerlink" title="GD"></a>GD</h2><p>Gradient Decent/Steepest Decent，求解无约束最优化问题。</p>
-<p><img src="/categories/ML/SL-05/image-20220330173751248.png" alt="image-20220330173751248" style="zoom:33%;"></p>
-<p>负梯度方向是使函数值下降最快的方向。</p>
-<p><img src="/categories/ML/SL-05/image-20220330181452563.png" alt="image-20220330181452563"></p>
-<p>否则，不断地找f(x)的极小值点x，办法是让x=x-df(x)* λ，最关键的是找到合适的λ。</p>
-<p>举例如下：</p>
-<p><img src="/categories/ML/SL-05/image-20220330181942932.png" alt="image-20220330181942932"></p>
-<p>梯度下降法收敛速度不一定快，而牛顿法和拟牛顿法，收敛速度更快。</p>
-<h2 id="Newton-Method"><a href="#Newton-Method" class="headerlink" title="Newton Method"></a>Newton Method</h2><p>求解无约束最优化问题的迭代算法，每一步需要求解目标函数的海森矩阵的逆矩阵。</p>
-<p>基本思想:在现有极小值估计值的附近对f(x)做泰勒展开，进而找到<strong>极小值的下一个估计</strong>值。</p>
-<p><img src="/categories/ML/SL-05/image-20220330182720475.png" alt="image-20220330182720475"></p>
-<h2 id="quasi-Newton-Method"><a href="#quasi-Newton-Method" class="headerlink" title="quasi-Newton Method"></a>quasi-Newton Method</h2><p>通过正定矩阵近似海森矩阵(的逆矩阵)。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1255,7 +1128,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1267,7 +1140,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1364,6 +1237,61 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
