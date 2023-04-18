@@ -8,6 +8,8 @@ mathjax: true
 
 > M. S. Rahman, S. E. Coull和M. Wright, 《On the Limitations of Continual Learning for Malware Classification》. arXiv, 2022年8月13日. 见于: 2022年12月8日. [在线]. 载于: http://arxiv.org/abs/2208.06568
 
+[持续学习-Code03](https://github.com/msrocean/continual-learning-malware/)
+
 ## 本文结论：
 
 CL本应该适合于恶意软件每日的进化和数量级，但是本文实验数据说明持续学习在几乎所有场景下表现都不如数据的*Joint* 重放。选择性重放20%~50%的数据相比联合重放，可以在达到最佳训练效果的同时节省35-50%的时间。

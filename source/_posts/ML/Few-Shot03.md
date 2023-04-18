@@ -12,6 +12,15 @@ mathjax: true
 
 Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&Securitty,April,2021. 
 
+### 1.问题
+
+样本少，识别新家族需要重训练。
+
+-  scarce samples：新发现家族的样本收集困难，而用小批量样本，模型会过拟合，或者激烈振荡（ oscillate drastically）不收敛；
+- dynamic recognition：动态识别问题，旧分类器缺乏增量识别新家族的能力，要求从头开始重训练。
+- signature-based analysis：需要专家设计签名，无法识别变形或者多态的样本（polymorphic or metamorphic）
+- Open Set Recognition Problem (OSR)开放集识别问题，对新样本需要保持快速响应能力，从已经收集的样本中构建对应的分类器。
+
 ![1668858454381](Few-Shot03/1668858454381.png)
 
 
@@ -72,12 +81,7 @@ API invocation sequences--->word embedding--->LSTM（保留序列信息）----> 
 
 ## Abstract
 
-### 传统学习方法的挑战
 
--  scarce samples：新发现家族的样本收集困难，而用小批量样本，模型会过拟合，或者激烈振荡（ oscillate drastically）不收敛；
-- dynamic recognition：动态识别问题，旧分类器缺乏增量识别新家族的能力，要求从头开始重训练。
-- signature-based analysis：需要专家设计签名，无法识别变形或者多态的样本（polymorphic or metamorphic）
-- Open Set Recognition Problem (OSR)开放集识别问题，对新样本需要保持快速响应能力，从已经收集的样本中构建对应的分类器。
 
 ### 元学习框架
 
