@@ -1,3 +1,14 @@
+---
+title: wslubuntu的cuda安装
+date: 2023-03-10 14:19:49
+categories: 机器学习 #try
+tags: [机器学习]
+---
+
+
+
+
+
 ## 1.新建环境
 
 ```
