@@ -163,7 +163,7 @@ Cuckoo 沙箱，又遇见了，说明它对于elf文件执行确实好。
 
 - 去除冗余调用。**对于同样的API多次出现，只保留两次。**
 
-- 采用[N-gram](https://zhuanlan.zhihu.com/p/32829048），增加了序列表示的多样性。从m（原来不同的序列个数）-->m^n
+- 采用N-gram，增加了序列表示的多样性。从m（原来不同的序列个数）-->m^n
 - 计算每个n元组合的Term Frequency - Inverse Document Frequency (TF-IDF) ，**只保留前l的TF-IDF的的n-gram项，减少总体序列长度。**
 
 ![1664020542600](Few-Shot03/1664020542600.png)

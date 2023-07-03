@@ -36,7 +36,7 @@ T0:多任务encoder-decoder模型，针对不同下游任务，人为设计不�
 
 T5LM-XXL :XXL(11B)级参数规模的T5语言模型，
 
-**soft prompts和hard prompts**：
+**soft prompts和hard prompts**： 模板的制作分为手工创建模板和自动化生成模板，而自动化生成模板又分为离散提示（又叫做硬提示）和连续提示（又叫做软提示） 
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: 'Malware-SMELL: A zero-shot learning strategy for detecting zero-dayvulnerabilities'
+title: 'Malware-SMELL: A zero-shot learning strategy for detecting zero-day vulnerabilities'
 date: 2022-11-04 20:43:22
 categories: 机器学习 #
 tags: [FSL]
