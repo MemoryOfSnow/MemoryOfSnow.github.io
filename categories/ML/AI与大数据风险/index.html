@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="大数据在医疗、金融、安全、管理等方面都有很多应用，可以用来化解这些领域中出现的风险；而大数据的应用本身又带来一系列安全隐患，需要靠机器学习技术去解决或缓解。 Prompt:本篇论文采用了{}机器学习技术，对大数据的{}{}特征进行建模，处理{分类}任务，达成了{}效果，在{}领域有所应用。 大数据应用大数据的一些应用,推荐系统、辅助决策、异常检测、关联分析  数据驱动的决策：大数据分析可以提供大量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI与大数据风险近5年论文摘要汇">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="大数据在医疗、金融、安全、管理等方面都有很多应用，可以用来化解这些领域中出现的风险；而大数据的应用本身又带来一系列安全隐患，需要靠机器学习技术去解决或缓解。 Prompt:本篇论文采用了{}机器学习技术，对大数据的{}{}特征进行建模，处理{分类}任务，达成了{}效果，在{}领域有所应用。 大数据应用大数据的一些应用,推荐系统、辅助决策、异常检测、关联分析  数据驱动的决策：大数据分析可以提供大量">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-06-29T06:17:22.000Z">
+<meta property="article:modified_time" content="2023-06-29T03:27:38.148Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="BigData">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>AI与大数据风险近5年论文摘要汇 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AI与大数据风险近5年论文摘要汇
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-29 14:17:22 / Modified: 11:27:38" itemprop="dateCreated datePublished" datetime="2023-06-29T14:17:22+08:00">2023-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>大数据在医疗、金融、安全、管理等方面都有很多应用，可以用来化解这些领域中出现的风险；而大数据的应用本身又带来一系列安全隐患，需要靠机器学习技术去解决或缓解。</p>
+<p>Prompt:本篇论文采用了{}机器学习技术，对大数据的{}{}特征进行建模，处理{分类}任务，达成了{}效果，在{}领域有所应用。</p>
+<h3 id="大数据应用"><a href="#大数据应用" class="headerlink" title="大数据应用"></a>大数据应用</h3><p>大数据的一些应用,推荐系统、辅助决策、异常检测、关联分析</p>
+<ol>
+<li>数据驱动的决策：大数据分析可以提供大量的实时和历史数据，帮助组织做出更准确的决策。通过对海量数据进行挖掘和分析，可以发现隐藏的关联和趋势，从而指导业务决策和战略规划。</li>
+<li>个性化服务和推荐系统：基于大数据分析的个性化服务和推荐系统可以根据用户的历史行为和偏好，提供定制化的产品和服务。这使得用户能够更好地满足其需求，提升用户体验。</li>
+<li>预测和趋势分析：通过对大数据进行分析，可以预测未来趋势和行业发展方向。这对于市场营销、销售预测、风险管理等领域具有重要意义，可以帮助组织做出战略决策和规划。</li>
+<li>预测和趋势分析：数据挖掘可以通过分析历史数据，发现潜在的趋势和模式，从而进行未来的预测。这在市场预测、销售预测、天气预测等领域具有重要应用。</li>
+<li>客户细分和市场分析：通过对客户行为和偏好的分析，可以将客户划分为不同的细分群体，了解他们的需求和行为模式，并制定针对性的市场策略和营销活动。</li>
+<li>金融欺诈检测：数据挖掘可以帮助金融机构检测异常交易和欺诈行为。通过分析大量的金融交易数据，可以识别潜在的欺诈模式和指标，及时采取相应的措施。</li>
+<li>社交网络分析：数据挖掘可以揭示社交网络中的关系和影响力。通过分析社交媒体数据、用户之间的互动和信息传播，可以了解社交网络中的关键人物、群体动态和舆论趋势。</li>
+<li>生物信息学：数据挖掘在生物信息学中发挥重要作用，例如基因表达数据的分析、蛋白质结构预测、基因组序列分析等，有助于理解生物学的复杂性和进行基因研究。</li>
+<li>物流和供应链优化：通过对物流和供应链数据的挖掘和分析，可以优化物流路径、减少库存成本、提高配送效率，并优化供应链的整体运作。</li>
+<li>医疗诊断和治疗：数据挖掘可以帮助医疗领域进行疾病诊断、药物选择和治疗计划的优化。通过分析医疗数据和患者病历，可以发现潜在的疾病模式和个体化的治疗方案。</li>
+</ol>
+<h2 id="大数据在风险管理领域的应用"><a href="#大数据在风险管理领域的应用" class="headerlink" title="大数据在风险管理领域的应用"></a>大数据在风险管理领域的应用</h2><h3 id="可靠性方面"><a href="#可靠性方面" class="headerlink" title="可靠性方面"></a>可靠性方面</h3><p> 基于新能源汽车大数据平台 ，研究电动汽车的锂离子电池可靠性问题， 电池故障诊断与健康状态预估 </p>
+<p>[1]李放,闵永军,张涌.基于大数据的动力锂电池可靠性关键技术研究综述[J].储能科学与技术,2023,12(06):1981-1994.DOI:10.19799/j.cnki.2095-4239.2023.0316.</p>
+<h3 id="医疗"><a href="#医疗" class="headerlink" title="医疗"></a>医疗</h3><p>在医疗领域，大数据的应用可以带来以下益处：</p>
+<ol>
+<li>疾病预测和诊断：通过分析大规模的医疗数据，可以发现潜在的疾病风险因素和诊断模式，提前进行疾病预测和诊断，从而提高治疗效果和患者生存率。</li>
+<li>药物研发和治疗方案优化：大数据分析可以加速药物研发过程，帮助科学家识别潜在的药物靶点和候选化合物。此外，通过分析大量的患者数据，可以优化治疗方案，提供更个性化和有效的治疗。</li>
+</ol>
+<h3 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h3><ol>
+<li>风险管理和欺诈检测：通过分析大数据，可以识别金融交易中的异常模式和风险指标，帮助金融机构及时发现潜在的欺诈行为，并采取相应措施进行风险管理。</li>
+<li>个人信用评估和贷款决策：利用大数据分析个人的消费行为、信用记录和其他相关数据，可以更准确地评估个人的信用状况，并基于此做出贷款决策和利率定价。</li>
+</ol>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h3 id="计算机"><a href="#计算机" class="headerlink" title="计算机"></a>计算机</h3><p>隐私保护</p>
+<p>[1]方滨兴,贾焰,李爱平等.大数据隐私保护技术综述[J].大数据,2016,2(01):1-18.</p>
+<h3 id="环境、资源等其他方面"><a href="#环境、资源等其他方面" class="headerlink" title="环境、资源等其他方面"></a>环境、资源等其他方面</h3><h2 id="大数据带来的风险"><a href="#大数据带来的风险" class="headerlink" title="大数据带来的风险"></a>大数据带来的风险</h2><p> 大数据由于需要从网络等多个渠道收集数据，别有用心的攻击者可以进行数据投毒，污染模型，从而导致模型有后门生成。因此，大数据可能带来数据投毒风险。 </p>
+<ol>
+<li>数据隐私和安全：大数据涉及大量的个人敏感信息和机密数据，如个人身份信息、医疗记录、财务数据等。如果这些数据未经适当保护，可能会导致隐私泄露和滥用，甚至成为黑客攻击的目标。</li>
+<li>偏见和歧视：大数据分析依赖于大量的历史数据，而这些数据可能反映了现实社会的偏见和歧视。如果不加以适当的处理，分析结果可能具有偏见性，导致不公平的结果和决策。</li>
+<li>数据质量问题：大数据分析对数据的质量和准确性要求很高。如果数据存在错误、缺失或不完整，分析结果可能不准确或误导性，影响决策的可靠性。</li>
+<li>安全漏洞和数据泄露：大数据系统中可能存在安全漏洞和弱点，攻击者可以利用这些漏洞来获取敏感数据或操纵分析结果。此外，数据共享和合作过程中的数据传输也可能面临被窃取或泄露的风险。</li>
+</ol>
+<h2 id="AI对大数据风险的解决"><a href="#AI对大数据风险的解决" class="headerlink" title="AI对大数据风险的解决"></a>AI对大数据风险的解决</h2><p>社交图谱、差分隐私、安全计算。</p>
+<h2 id="金融-1"><a href="#金融-1" class="headerlink" title="金融"></a>金融</h2><h2 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h2><h2 id="计算机-1"><a href="#计算机-1" class="headerlink" title="计算机"></a>计算机</h2><p>隐私保护</p>
+<h2 id="环境、资源等其他方面-1"><a href="#环境、资源等其他方面-1" class="headerlink" title="环境、资源等其他方面"></a>环境、资源等其他方面</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/BigData/" rel="tag"># BigData</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/" rel="prev" title="CTF里的常用加密算法">
+      <i class="fa fa-chevron-left"></i> CTF里的常用加密算法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/" rel="next" title="QQ Elevation复现">
+      QQ Elevation复现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">大数据应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9C%A8%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86%E9%A2%86%E5%9F%9F%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">大数据在风险管理领域的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%96%B9%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">可靠性方面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BB%E7%96%97"><span class="nav-number">2.</span> <span class="nav-text">医疗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%91%E8%9E%8D"><span class="nav-number">3.</span> <span class="nav-text">金融</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number"></span> <span class="nav-text"> </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">计算机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E3%80%81%E8%B5%84%E6%BA%90%E7%AD%89%E5%85%B6%E4%BB%96%E6%96%B9%E9%9D%A2"><span class="nav-number">2.</span> <span class="nav-text">环境、资源等其他方面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%A3%8E%E9%99%A9"><span class="nav-number"></span> <span class="nav-text">大数据带来的风险</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AI%E5%AF%B9%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9%E7%9A%84%E8%A7%A3%E5%86%B3"><span class="nav-number"></span> <span class="nav-text">AI对大数据风险的解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%91%E8%9E%8D-1"><span class="nav-number"></span> <span class="nav-text">金融</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#-1"><span class="nav-number"></span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA-1"><span class="nav-number"></span> <span class="nav-text">计算机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E3%80%81%E8%B5%84%E6%BA%90%E7%AD%89%E5%85%B6%E4%BB%96%E6%96%B9%E9%9D%A2-1"><span class="nav-number"></span> <span class="nav-text">环境、资源等其他方面</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

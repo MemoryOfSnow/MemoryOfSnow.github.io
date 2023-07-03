@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot17/1681830294139.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot17/1681784982024.png">
 <meta property="article:published_time" content="2023-04-16T16:13:22.000Z">
-<meta property="article:modified_time" content="2023-04-19T02:50:54.409Z">
+<meta property="article:modified_time" content="2023-06-14T08:00:32.337Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="FSL">
 <meta name="twitter:card" content="summary">
@@ -197,7 +197,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-19 10:50:54" itemprop="dateModified" datetime="2023-04-19T10:50:54+08:00">2023-04-19</time>
+                <time title="Modified: 2023-06-14 16:00:32" itemprop="dateModified" datetime="2023-06-14T16:00:32+08:00">2023-06-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,7 +234,7 @@
 <p>DINO[22]:通过指令获得数据集的方法，Datasets from Instructions</p>
 <p>T0:多任务encoder-decoder模型，针对不同下游任务，人为设计不同的提示词预训练后获得。</p>
 <p>T5LM-XXL :XXL(11B)级参数规模的T5语言模型，</p>
-<p><strong>soft prompts和hard prompts</strong>：</p>
+<p><strong>soft prompts和hard prompts</strong>： 模板的制作分为手工创建模板和自动化生成模板，而自动化生成模板又分为离散提示（又叫做硬提示）和连续提示（又叫做软提示） </p>
 <h3 id="以下均为需要微调参数的方法"><a href="#以下均为需要微调参数的方法" class="headerlink" title="以下均为需要微调参数的方法"></a>以下均为需要微调参数的方法</h3><p>BBT(Black-Box Tuning)： 无梯度的微调方法，搜索连续空间中的最佳软<strong>提示词嵌入</strong>，而不是搜索离散的文本提示词。</p>
 <p>MT(Model Tuning)：在<strong>每个任务上对整个</strong>预训练语言<strong>模型</strong>进行微调的通用范式</p>
 <p>PT(Prompt Tuning)：预训练模型被冻结，<strong>只训练额外的连续软提示词</strong>的梯度引导的微调方法</p>
@@ -350,7 +350,10 @@
     <a href="/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/" rel="prev" title="心理学效应">
       <i class="fa fa-chevron-left"></i> 心理学效应
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/%E5%B8%B8%E8%A7%81%E7%9A%84%E8%8A%B1%E6%8C%87%E4%BB%A4/" rel="next" title="TEB-PEB-SEH">
+      TEB-PEB-SEH <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -425,7 +428,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -437,7 +440,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">53</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
