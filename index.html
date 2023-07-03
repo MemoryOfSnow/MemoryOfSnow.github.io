@@ -181,7 +181,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-07-03 14:19:49 / Modified: 14:42:51" itemprop="dateCreated datePublished" datetime="2023-07-03T14:19:49+08:00">2023-07-03</time>
+              <time title="Created: 2023-07-03 14:19:49 / Modified: 14:52:18" itemprop="dateCreated datePublished" datetime="2023-07-03T14:19:49+08:00">2023-07-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -250,7 +250,8 @@
 <li><code>EPBD</code> 表示函数的第一个参数是一个 <code>const char*</code> 类型的指针。</li>
 <li><code>PAH</code> 表示函数的第二个参数是一个 <code>int*</code> 类型的指针。</li>
 <li><code>PAVTiXmlElement 表示返回类型是一个指向</code>TiXmlElement` 类的指针。 </li>
-<li>XZ` 表示该构造函数不接受任何参数。 </li>
+<li><code>0TiXmlDocument@@QAE@XZ</code>中0表示该类的默认构造函数</li>
+<li><code>@Z</code>：函数参数的结尾标记 ，<code>XZ</code> 表示该构造函数不接受任何参数。 </li>
 </ul>
 <h3 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">CreateProcessAsUserW</span>(token2, <span class="literal">None</span>, <span class="title function_ invoke__">PWSTR</span>(<span class="string">&quot;cmd.exe&quot;</span>.<span class="title function_ invoke__">encode_utf16</span>().<span class="title function_ invoke__">chain</span>(<span class="title function_ invoke__">Some</span>(<span class="number">0</span>)).collect::&lt;<span class="type">Vec</span>&lt;<span class="type">u16</span>&gt;&gt;().<span class="title function_ invoke__">as_mut_ptr</span>()), <span class="literal">None</span>, <span class="literal">None</span>, FALSE, <span class="title function_ invoke__">PROCESS_CREATION_FLAGS</span>(<span class="number">0</span>), <span class="literal">None</span>, <span class="literal">None</span>, &amp;si, &amp;<span class="keyword">mut</span> pi).<span class="title function_ invoke__">ok</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
 
