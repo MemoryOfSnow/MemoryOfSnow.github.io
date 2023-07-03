@@ -134,7 +134,8 @@ EXPORTS
 - `EPBD` 表示函数的第一个参数是一个 `const char*` 类型的指针。
 - `PAH` 表示函数的第二个参数是一个 `int*` 类型的指针。
 -  `PAVTiXmlElement 表示返回类型是一个指向 `TiXmlElement` 类的指针。 
-- XZ` 表示该构造函数不接受任何参数。 
+- `0TiXmlDocument@@QAE@XZ`中0表示该类的默认构造函数
+-  `@Z`：函数参数的结尾标记 ，`XZ` 表示该构造函数不接受任何参数。 
 
 
 
