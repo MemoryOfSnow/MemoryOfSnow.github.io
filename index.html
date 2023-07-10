@@ -156,6 +156,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Pediy01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/Pediy01/" class="post-title-link" itemprop="url">微信多实例运行</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-07-07 14:19:49" itemprop="dateCreated datePublished" datetime="2023-07-07T14:19:49+08:00">2023-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-10 14:57:52" itemprop="dateModified" datetime="2023-07-10T14:57:52+08:00">2023-07-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> ADVAPI.dll  提供高级系统功能,Advanced，如 注册表、安全性、事件日志、服务管理等 ；</p>
+<p>查看API对应的源代码路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um</span><br></pre></td></tr></table></figure>
+<h2 id="只运行一个实例"><a href="#只运行一个实例" class="headerlink" title="只运行一个实例"></a>只运行一个实例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CreateMutexA</span><br><span class="line">FindWindowA</span><br><span class="line">使用共享Section</span><br></pre></td></tr></table></figure>
+<p>5.1节的Serial.exe只能运行一个实例。</p>
+<p><img src="/categories/CTF/Pediy01/1688962133346.png" alt="1688962133346"></p>
+<p><img src="/categories/CTF/Pediy01/1688963259744.png" alt="1688963259744"></p>
+<p>修改FindWindow后面的判断逻辑即可。一开始改为了75(jnz)</p>
+<p>此时可以运行多个，但是运行前需要找到已存在的一个窗口才能继续创建，再次修改程序，把jz改成jmp。</p>
+<h2 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h2><p>先根据break定位关闭微信的函数<code>CloseWechat</code>，进而找到关键函数sub_405FD0，它控制着返回结果。</p>
+<p><img src="/categories/CTF/Pediy01/1688970540191.png" alt="1688970540191"></p>
+<p>关键函数<code>int __stdcall sub_405FD0(DWORD a1, int a2, int a3, int a4)</code></p>
+<p>跟进去后，可以看到一开始检查注册表语言配置和更新配置。</p>
+<p><img src="/categories/CTF/Pediy01/1688968867614.png" alt="1688968867614"></p>
+<p>微信整体打开，靠WechatWin.dl里的函数。</p>
+<p><img src="/categories/CTF/Pediy01/1688969199372.png" alt="1688969199372"></p>
+<p>打开WechatWin.dll，发现其导入表里存在实例判断函数。</p>
+<p><img src="/categories/CTF/Pediy01/1688969733507.png" alt="1688969733507"></p>
+<p><img src="/categories/CTF/Pediy01/1688969749959.png" alt="1688969749959"></p>
+<p>双击进入后，等待库加载完成，需要几分钟，之后x查看两个函数的上下文：</p>
+<p>注意这里一定要多等一会，不然调用<code>CreateMutex</code>的地址可能检索不全。</p>
+<p><img src="/categories/CTF/Pediy01/1688970084672.png" alt="1688970084672"></p>
+<p>调用<code>FindWindowW</code>函数的上下文十分明显：</p>
+<p><img src="/categories/CTF/Pediy01/1688971265497.png" alt="1688971265497"></p>
+<p>对于上图尾行的这个大跳，是一个经典的判断Mutex是否存在的代码段。</p>
+<blockquote>
+<p>Mutex存在，则GetLastError返回 <code>ERROR_ALREADY_EXISTS</code>.，不存在时，返回0.</p>
+</blockquote>
+<p><img src="/categories/CTF/Pediy01/1688971805972.png" alt="1688971805972"></p>
+<p>把jnz StartNewInstance改变成为jmp。</p>
+<p>爆破成功。</p>
+<p><img src="/categories/CTF/Pediy01/1688972258464.png" alt="1688972258464"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1054,116 +1159,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E6%91%98%E8%A6%81survey/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E6%91%98%E8%A6%81survey/" class="post-title-link" itemprop="url">恶意检测2023年论文摘要汇</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-08 14:17:22" itemprop="dateCreated datePublished" datetime="2023-05-08T14:17:22+08:00">2023-05-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-29 10:33:58" itemprop="dateModified" datetime="2023-06-29T10:33:58+08:00">2023-06-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>[1] 针对在程序功能无关区域添加修改的一类对抗样本攻击,  利用模型解释技术提取端到端恶意代码检测<strong>模型的决策依据作为特征</strong>,  进而通过<strong>异常检测</strong>方法准确识别对抗样本.  该方法作为恶意代码检测模型的<strong>附加模块</strong>,  不需要对原有模型做修改, </p>
-<p>[2]建立了一种多尺度卷积核混合的卷积神经网络（Convolutional Neu⁃ ral Network，CNN）架构，以提高恶意代码识别能力. 该模型运用具有捷径<strong>（shortcut）结构</strong>的深度大内核卷积和标准小内 核卷积相结合的混合卷积核（Mixed Kernels，MK）模块，以提高模型准确率；在此基础上，通过<strong>多尺度内核融合（Multiscale Kernel Fusion，MKF</strong>），以降低模型参数量；再结合<strong>特征重组（feature shuffle）</strong>操作，实现优化特征通信，在不增加模 型参数量的前提下提升了分类精度 。</p>
-<p> [3]设计 APT 恶意 软件基因模型和基因相似度检测算法构建<strong>恶意行为基因库</strong>,  </p>
-<p>[4] . 针对目前研究仅着眼于提升模型分类准确率而忽略了恶意代码<strong>检测的时效性</strong>  。将多尺度恶意 代码特征融合与通道注意力机制结合，增强关键特征表达，并使用数据增强技术改善数据集类别不平衡问题 ，检测速度快。</p>
-<p>[5]生成<strong>概率 CFG</strong>，其中顶点代表操作码，操作码之间的边代表这些操作码在文件中出现的概率。。。。</p>
-<p>[6]可视化方法生成的恶意软件图像并没有保留语义和统计属性，尺寸小且统一。 本文给出了提取内容和填充模式的定义，以表征恶意软件可视化任务的关键因素，并提出了一种新的基于汇编指令和<strong>马尔可夫传递矩阵</strong>的恶意软件可视化方法来表征恶意软件。 因此，提出了一种基于<strong>三通道可视化</strong>和深度学习（MCTVD）的恶意软件分类方法。。。。</p>
-<p>[7]通过实施 CNN 模型和<strong>迁移学习</strong> (TL，<strong>MobileNetV2 和 ResNet-50 模型</strong>) 进行恶意软件分类的深度学习，以克服基于 DL 的恶意软件检测模型中的常见问题，包括过度拟合、高资源消耗和无法检测混淆的恶意软件。本文提出的模型检测混淆的能力强。。。。</p>
-<p>[8]提出了提高特征表示质量的两种新机制。一是通过重新解释user-defined function calls的操作码序列来捕获这些函数调用的语义；二是将文字信息整合到函数调用图FCG的嵌入中，以实现更好的判别能力。在静态检测的背景下，通过采用所提出的两种机制，五个广泛采用的分类器对恶意软件家族分类的准确率平均提高了 2%。。。。（表示）</p>
-<p>[9]</p>
-<p>[1] 田志成, 张伟哲, 乔延臣, 等. 基于模型解释的 PE 文件对抗性恶意代码检测[J]. 软件学报, 2023, 34(4): 1926-1943. </p>
-<p>[2] 张丹丹, 宋亚飞, 刘曙. MalMKNet：一种用于恶意代码分类的多尺度卷积神经网络[J]. 电子学报, <a target="_blank" rel="noopener" href="https://doi.org/10.12263/DZXB.20221069">DOI: 10.12263/DZXB.20221069</a>. </p>
-<p> [3]陈伟翔, 任怡彤, 肖岩军, 等. 面向 APT 家族分析的攻击路径预测方法研究[J]. Journal of Cyber Security 信息安全学报, 2023, 8(1). </p>
-<p>[4] 王硕, 王坚, 王亚男, 等. 一种基于特征融合的恶意代码快速检测方法[J]. 电子学报, 2023, 51(1): 57-66. </p>
-<p>[5] shah, I.A., Mehmood, A., Khan, A.N. <em>et al.</em> HeuCrip: a malware detection approach for internet of battlefield things. <em>Cluster Comput</em> <strong>26</strong>, 977–992 (2023). <a target="_blank" rel="noopener" href="https://doi.org/10.1007/s10586-022-03618-y">https://doi.org/10.1007/s10586-022-03618-y</a> </p>
-<p>[6] Deng H, Guo C, Shen G, et al. MCTVD: A malware classification method based on three-channel visualization and deep learning[J]. Computers &amp; Security, 2023, 126: 103084. </p>
-<p>[7] Habibi O, Chemmakha M, Lazaar M. Performance Evaluation of CNN and Pre-trained Models for Malware Classification[J]. Arabian Journal for Science and Engineering, 2023: 1-15. </p>
-<p>[8] Wu C Y, Ban T, Cheng S M, et al. IoT malware classification based on reinterpreted function-call graphs[J]. Computers &amp; Security, 2023, 125: 103060. </p>
-<p>[9] Malhotra V, Potika K, Stamp M. A Comparison of Graph Neural Networks for Malware Classification[J]. arXiv preprint arXiv:2303.12812, 2023. </p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2303.12812">https://arxiv.org/pdf/2303.12812</a></p>
-<p>[10] Chaganti R, Ravi V, Pham T D. A multi-view feature fusion approach for effective malware classification using Deep Learning[J]. Journal of Information Security and Applications, 2023, 72: 103402. </p>
-<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/366323708_A_multi-view_feature_fusion_approach_for_effective_malware_classification_using_Deep_Learning/links/639c5704e42faa7e75cad9c6/A-multi-view-feature-fusion-approach-for-effective-malware-classification-using-Deep-Learning.pdf">https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/366323708_A_multi-view_feature_fusion_approach_for_effective_malware_classification_using_Deep_Learning/links/639c5704e42faa7e75cad9c6/A-multi-view-feature-fusion-approach-for-effective-malware-classification-using-Deep-Learning.pdf</a></p>
-<p>[11] 利用节表的注入欺骗分类模型。da Silva A A, Pamplona Segundo M. On deceiving malware classification with section injection[J]. Machine Learning and Knowledge Extraction, 2023, 5(1): 144-168. </p>
-<p><a target="_blank" rel="noopener" href="https://www.mdpi.com/2504-4990/5/1/9">https://www.mdpi.com/2504-4990/5/1/9</a></p>
-<p>[12]</p>
-<p> Ravi V, Alazab M. Attention‐based convolutional neural network deep learning approach for robust malware classification[J]. Computational Intelligence, 2023, 39(1): 145-168. </p>
-<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/363834604_Attention-based_convolutional_neural_network_deep_learning_approach_for_robust_malware_classification/links/634ba0e376e39959d6c627dc/Attention-based-convolutional-neural-network-deep-learning-approach-for-robust-malware-classification.pdf">https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/363834604_Attention-based_convolutional_neural_network_deep_learning_approach_for_robust_malware_classification/links/634ba0e376e39959d6c627dc/Attention-based-convolutional-neural-network-deep-learning-approach-for-robust-malware-classification.pdf</a></p>
-<p>[13]动态权重值的联邦学习分类安卓恶意软件方法</p>
-<p> Chaudhuri A, Nandi A, Pradhan B. A Dynamic Weighted Federated Learning for Android Malware Classification[M]//Soft Computing: Theories and Applications: Proceedings of SoCTA 2022. Singapore: Springer Nature Singapore, 2023: 147-159. </p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2211.12874">https://arxiv.org/pdf/2211.12874</a></p>
-<p>[14]增强勒索软件分类，通过<strong>多阶段特征提取和数据不平衡的校正</strong>。</p>
-<p> Onwuegbuche F C, Delia A. Enhancing Ransomware Classification with Multi-Stage Feature Selection and Data Imbalance Correction[J]. </p>
-<p>[15]</p>
-<p>[16]</p>
-<p>[17]</p>
-<p>[18]</p>
-<p>[19]</p>
-<p>[20]</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1235,7 +1230,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">136</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
