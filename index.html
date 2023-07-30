@@ -156,6 +156,297 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/IDAPro01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/IDAPro01/" class="post-title-link" itemprop="url">SP-Analysis failed[Xctf g0Re]</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-07-29 14:58:58" itemprop="dateCreated datePublished" datetime="2023-07-29T14:58:58+08:00">2023-07-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-30 21:24:56" itemprop="dateModified" datetime="2023-07-30T21:24:56+08:00">2023-07-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>xctf的一道Go语言逆向题，涉及AES加密和base64换表加密。</p>
+<p>用IDA打开g0Re报告<code>SP-Analysis failed</code>错误。</p>
+<p><img src="/categories/Notes/IDAPro01/1690613919182.png" alt="1690613919182"></p>
+<h2 id="静态检测"><a href="#静态检测" class="headerlink" title="静态检测"></a>静态检测</h2><p>将文件拷贝到kali后，静态检测一番。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ file g0Re               </span><br><span class="line">g0Re: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, no section header</span><br><span class="line"></span><br><span class="line">readelf -hlS --w g0Re</span><br></pre></td></tr></table></figure>
+<p>报告如下错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">readelf: Warning: Section 49 has an out of range sh_link value of 2302008908</span><br><span class="line">Section Headers:</span><br><span class="line">  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al</span><br><span class="line">  [ 0] &lt;no-strings&gt;      00010102: &lt;unknown&gt; 00000001003e0002 481cb0 000040 400003      0   0 15762873573703680</span><br><span class="line">readelf: Warning: [ 1]: Link field (533963) should index a symtab section.</span><br><span class="line">readelf: Warning: [ 3]: Unexpected value (1482181455) in info field.</span><br></pre></td></tr></table></figure>
+<p>strings找到一些特征字符串<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~/idawork]</span><br><span class="line">└─$ strings -a  -tx g0Re|grep -E &#x27;\s&#123;4,30&#125;&#x27;</span><br><span class="line">     ec OKXX$</span><br><span class="line">    13e FN&#123;o</span><br><span class="line">    1e6 r mL</span><br><span class="line">    284 dRe6eYPgXygMd</span><br><span class="line">    295 fSCPpMP/C9DU36D2kliiYS5D9wKG/E_p</span><br><span class="line">    2b9 XkJb3WwcGMbUPd63r/bG8gVDS6EsZ5vv</span><br><span class="line">  81e18 $Info: This file is packed with the                                           </span><br><span class="line">  81e67 $Id:  </span><br></pre></td></tr></table></figure></p>
+<p>猜测是UPX加壳，但是UPX标志被抹去了。</p>
+<h2 id="UPX-标志被抹除"><a href="#UPX-标志被抹除" class="headerlink" title="UPX! 标志被抹除"></a>UPX! 标志被抹除</h2><p>unpack时会依次在三个地方检查UPX_MAGIC_LE32（即”UPX!”）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、在倒数第36字节偏移处检查，如果特征值不符就会转入throwNotPacked()异常抛出函数，打印not packed by UPX；</span><br><span class="line">2、&quot;.ELF&quot;魔数前36字节处，如果这里的特征值不符就会转入throwCantUnpack()异常抛出函数，打印l_info corrupted；</span><br><span class="line">3、 在倒数第46字节偏移处检查，如果特征值不符就会转入throwCompressedDataViolation()异常抛出函数，打印Exception: compressed data violation；</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/Notes/IDAPro01/1690711701628.png" alt="1690711701628"></p>
+<p>结合上面的规则2，可以很清晰地判断出出题人用<code>0KXX</code>代替了<code>UPX!</code>。</p>
+<p><img src="/categories/Notes/IDAPro01/1690712364661.png" alt="1690712364661"></p>
+<p>在对应的三个位置处换上UPX!魔数。</p>
+<p><img src="/categories/Notes/IDAPro01/1690713002432.png" alt="1690713002432"></p>
+<p><img src="/categories/Notes/IDAPro01/1690712555711.png" alt="1690712555711"></p>
+<p>upx脱壳。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~/idawork]</span><br><span class="line">└─$ upx -d g0Re_upx </span><br><span class="line">                       Ultimate Packer for eXecutables</span><br><span class="line">                          Copyright (C) 1996 - 2020</span><br><span class="line">UPX 3.96        Markus Oberhumer, Laszlo Molnar &amp; John Reiser   Jan 23rd 2020</span><br><span class="line"></span><br><span class="line">        File size         Ratio      Format      Name</span><br><span class="line">   --------------------   ------   -----------   -----------</span><br><span class="line">   1331200 &lt;-    534092   40.12%   linux/amd64   g0Re_upx</span><br><span class="line"></span><br><span class="line">Unpacked 1 file.</span><br></pre></td></tr></table></figure>
+<h2 id="输入flag后的处理流程"><a href="#输入flag后的处理流程" class="headerlink" title="输入flag后的处理流程"></a>输入flag后的处理流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_int64 __usercall sub_48CD80@&lt;rax&gt;(__int64 i%16@&lt;rdi&gt;, __int64 key[i%16]@&lt;rsi&gt;, __int64 a3@&lt;r14&gt;, __int128 a4@&lt;xmm15&gt;)</span><br></pre></td></tr></table></figure>
+<p>1.aes   2.base64    3.简单运算</p>
+<p><img src="/categories/Notes/IDAPro01/1690723199822.png" alt="1690723199822"></p>
+<p><img src="/categories/Notes/IDAPro01/1690723104727.png" alt="1690723104727"></p>
+<h2 id="aes加密-密钥获取"><a href="#aes加密-密钥获取" class="headerlink" title="aes加密 密钥获取"></a>aes加密 密钥获取</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">动态调试获取密钥：wvgitbygwbk2b46d</span><br></pre></td></tr></table></figure>
+<p>启动ida服务端。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#端口，密码，详细模式</span></span><br><span class="line"><span class="comment">#若希望同时维护几个调试实例，就要在不同端口启动调试服务器。</span></span><br><span class="line">./linux_server64 -p23946 -p23946 -v</span><br><span class="line">IDA Linux 64-bit remote debug server(ST) v1.22. Hex-Rays (c) 2004-2017</span><br><span class="line">Listening on 0.0.0.0:23946...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/categories/Notes/IDAPro01/1690716983450.png" alt="1690716983450"></p>
+<p>Hex窗口与RSI同步。</p>
+<p><img src="/categories/Notes/IDAPro01/1690718805904.png" alt="1690718805904"></p>
+<h2 id="base64换表加密"><a href="#base64换表加密" class="headerlink" title="base64换表加密"></a>base64换表加密</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strings -tx g0Re_upx|grep -E &#x27;[A-Z]&#123;10,64&#125;&#x27; </span><br><span class="line">12c040 456789&#125;#IJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123ABCDEFGH</span><br></pre></td></tr></table></figure>
+<h2 id="解密脚本"><a href="#解密脚本" class="headerlink" title="解密脚本"></a>解密脚本</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*-encoding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">string1 = <span class="string">&quot;456789&#125;#IJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123ABCDEFGH&quot;</span></span><br><span class="line">string2 = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span><br><span class="line"><span class="comment">#ascii字符范围</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">filter_printable_chars</span>(<span class="params">flag</span>):</span><br><span class="line">    filtered_flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> flag:</span><br><span class="line">        <span class="keyword">if</span> byte <span class="keyword">in</span> string1:</span><br><span class="line">            filtered_flag+=byte</span><br><span class="line">        <span class="comment">#else:</span></span><br><span class="line">            <span class="comment">#print(&quot;ERROR&quot;)</span></span><br><span class="line">            <span class="comment">#break</span></span><br><span class="line">    <span class="keyword">return</span> filtered_flag</span><br><span class="line"></span><br><span class="line">enc=[    <span class="number">0xE6</span>, <span class="number">0xCE</span>, <span class="number">0x89</span>, <span class="number">0xC8</span>, <span class="number">0xCF</span>, <span class="number">0xC5</span>, <span class="number">0xF5</span>, <span class="number">0xC9</span>, <span class="number">0xD2</span>, <span class="number">0xD9</span>,   <span class="number">0xC0</span>, <span class="number">0x91</span>, <span class="number">0xCE</span>, <span class="number">0x7F</span>, <span class="number">0xAC</span>, <span class="number">0xCC</span>, <span class="number">0xE9</span>, <span class="number">0xCF</span>, <span class="number">0xB7</span>, <span class="number">0xC0</span>,   <span class="number">0x96</span>, <span class="number">0xD4</span>, <span class="number">0xEA</span>, <span class="number">0x92</span>, <span class="number">0xE2</span>, <span class="number">0xD7</span>, <span class="number">0xDF</span>, <span class="number">0x84</span>, <span class="number">0xCB</span>, <span class="number">0xA5</span>,   <span class="number">0xAE</span>, <span class="number">0x93</span>, <span class="number">0xA6</span>, <span class="number">0xCA</span>, <span class="number">0xBE</span>, <span class="number">0x97</span>, <span class="number">0xDF</span>, <span class="number">0xCE</span>, <span class="number">0xF0</span>, <span class="number">0xC9</span>,   <span class="number">0xB7</span>, <span class="number">0xE1</span>, <span class="number">0xAE</span>, <span class="number">0x6B</span>, <span class="number">0xC4</span>, <span class="number">0xB1</span>, <span class="number">0x65</span>, <span class="number">0xDB</span>, <span class="number">0xCE</span>, <span class="number">0xED</span>,   <span class="number">0x92</span>, <span class="number">0x93</span>, <span class="number">0xD6</span>, <span class="number">0x8C</span>, <span class="number">0xED</span>, <span class="number">0xC3</span>, <span class="number">0xA3</span>, <span class="number">0xDA</span>, <span class="number">0x94</span>, <span class="number">0xA5</span>,   <span class="number">0xAA</span>, <span class="number">0xB2</span>, <span class="number">0xB5</span>, <span class="number">0xA7</span>, <span class="number">0x55</span>]</span><br><span class="line">key=<span class="string">b&quot;wvgitbygwbk2b46d&quot;</span></span><br><span class="line">base = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(enc)):    </span><br><span class="line">    base+=<span class="built_in">chr</span>(((enc[i]-key[i%<span class="number">16</span>])^<span class="number">0x1a</span>) &amp;<span class="number">0xff</span>)</span><br><span class="line"><span class="built_in">print</span>(base)<span class="comment">#uB8EAyfxAmOEvQlrhCJM8hk1qonHskb55NM4qvmxZeY#xg5mMm10x0nF6b3iRdeYÄ</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#过滤base64编码表里的字符</span></span><br><span class="line">str1=filter_printable_chars(base)</span><br><span class="line">result=base64.b64decode(str1.translate(<span class="built_in">str</span>.maketrans(string1,string2)))</span><br><span class="line"></span><br><span class="line"><span class="comment">#AES解密</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES<span class="comment"># </span></span><br><span class="line">aes = AES.new(key,mode=AES.MODE_ECB)</span><br><span class="line"><span class="built_in">print</span>(aes.decrypt(result)) <span class="comment">#b&#x27;flag&#123;g0_1s_th3_b3st_1anguage_1n_the_wOrld!_xxx&#125;\x01&#x27;</span></span><br></pre></td></tr></table></figure>
+<h2 id="反汇编算法"><a href="#反汇编算法" class="headerlink" title="反汇编算法"></a>反汇编算法</h2><ul>
+<li>1.线性扫描反汇编 关键是确定代码起始位置，之后线性扫描整个代码段，并逐条反汇编每条指令。不会识别分支来解释控制流。<ul>
+<li>优点：覆盖程序的所有代码段；</li>
+<li>缺点：假设代码段中全是代码，没法处理代码段中混入的数据。</li>
+</ul>
+</li>
+<li>2.递归下降反汇编。根据指令间的引用关系决定是否反汇编，在一个代码块内部，还是使用线性扫描算法。<ul>
+<li>优点：大部分情况下可以区分代码和数据。</li>
+<li>缺点：无法处理间接代码路径。</li>
+</ul>
+</li>
+</ul>
+<p>IDA pro是递归下降反汇编器。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//add、xor、mov、栈操作push</span></span><br><span class="line"><span class="keyword">case</span> 顺序流指令:</span><br><span class="line">	线性扫描反汇编</span><br><span class="line"><span class="comment">//jnz、ja</span></span><br><span class="line"><span class="keyword">case</span> 条件分支指令:</span><br><span class="line">	反汇编两个路径，直接反汇编下一条指令对应的分支，将跳转目标指令的地址加入延迟反汇编地址列表。</span><br><span class="line"><span class="comment">//jmp</span></span><br><span class="line"><span class="keyword">case</span> 无条件分支指令:</span><br><span class="line">	确定跳转目标，反汇编目的地址；对于无条件分支后的字节不作处理。</span><br><span class="line">，</span><br><span class="line"><span class="comment">//call</span></span><br><span class="line"><span class="keyword">case</span> 函数调用指令:</span><br><span class="line">	运行方式类似于无条件跳转，但是其后的返回地址会被直接反汇编，将跳转目标指令的地址加入延迟反汇编地址列表。</span><br><span class="line"><span class="comment">//ret,</span></span><br><span class="line"><span class="keyword">case</span> 返回指令:</span><br><span class="line">	获取接下来将要执行的指令信息；有时需要从栈顶获取，而静态反汇编器不具备访问栈的能力。此时反汇编器会开始处理延迟反汇编地址列表。</span><br></pre></td></tr></table></figure>
+<h2 id="反汇编出问题的情形"><a href="#反汇编出问题的情形" class="headerlink" title="反汇编出问题的情形"></a>反汇编出问题的情形</h2><p>1.对于无条件分支指令，例如jmp eax这样的运行时才能确定跳转地址的指令，需要人工赋值。</p>
+<p>2.call指令，在函数内部篡改了函数返回地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">foo proc near</span><br><span class="line">	inc  dword ptr[esp];</span><br><span class="line">	retn</span><br><span class="line">endp</span><br><span class="line">//错误的反汇编</span><br><span class="line">E8 F7 FF FF FF call foo</span><br><span class="line">05 89 45 F8 90 add eax,90F84589h</span><br><span class="line"></span><br><span class="line">//正确的反汇编</span><br><span class="line">E8 F7 FF FF FF call foo</span><br><span class="line">05 				db  5</span><br><span class="line">89 45 F8 		mov [ebp-8],eax</span><br><span class="line">90 				nop</span><br></pre></td></tr></table></figure>
+<p>3.ret没有提供返回地址。</p>
+<p><img src="/categories/Notes/IDAPro01/1690714484074.png" alt="1690714484074"></p>
+<p> IDA遇到的函数返回语句，检测到其栈指针值不为0。</p>
+<h2 id="反汇编的困难"><a href="#反汇编的困难" class="headerlink" title="反汇编的困难"></a>反汇编的困难</h2><p>1.编译，和自然语言的翻译一样是一个多对多操作。除了C编译器，还有Go、Python、Delphi编译器、WinAPI库，反编译器非常依赖语言和库。</p>
+<p>2.编译过程中会丢失命名和类型信息。反汇编后最多知道变量的位数，类型信息需要通过变量的用途确定。</p>
+<h2 id="一些静态工具用法"><a href="#一些静态工具用法" class="headerlink" title="一些静态工具用法"></a>一些静态工具用法</h2><ul>
+<li><p>Linux:ldd；  nm展示符号，C++filter、展示重定义。</p>
+</li>
+<li><p>OSX:otool；  处理MACH-O。</p>
+</li>
+<li><p>Windows:VS里的dumpbin /dependents  ；objdump</p>
+</li>
+</ul>
+<h3 id="ldd显示依赖库"><a href="#ldd显示依赖库" class="headerlink" title="ldd显示依赖库"></a>ldd显示依赖库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~/idawork]</span><br><span class="line">└─$ ldd linux_server64 </span><br><span class="line">        linux-vdso.so.1 (0x00007fff323bf000)</span><br><span class="line">        libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fbfef767000)</span><br><span class="line">        libthread_db.so.1 =&gt; /lib/x86_64-linux-gnu/libthread_db.so.1 (0x00007fbfef75c000)</span><br><span class="line">        librt.so.1 =&gt; /lib/x86_64-linux-gnu/librt.so.1 (0x00007fbfef751000)</span><br><span class="line">        libpthread.so.0 =&gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fbfef730000)</span><br><span class="line">        libstdc++.so.6 =&gt; /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fbfef515000)</span><br><span class="line">        libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007fbfef3d2000)</span><br><span class="line">        libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbfef1f6000)</span><br><span class="line">        /lib64/ld-linux-x86-64.so.2 (0x00007fbfef782000)</span><br><span class="line">        libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fbfef1d6000)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="dumpbin-dependents"><a href="#dumpbin-dependents" class="headerlink" title="dumpbin /dependents"></a>dumpbin /dependents</h3><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Dump of file baby.exe</span><br><span class="line"></span><br><span class="line">File <span class="built_in">Type</span>: EXECUTABLE IMAGE</span><br><span class="line"></span><br><span class="line">  Image has the following dependencies:</span><br><span class="line"></span><br><span class="line">    KERNEL32.dll</span><br><span class="line">    msvcrt.dll</span><br><span class="line">    msvcrt.dll</span><br><span class="line"></span><br><span class="line">  Summary</span><br><span class="line"></span><br><span class="line">        <span class="number">1000</span> .CRT  C runtime Lib</span><br><span class="line">        <span class="number">1000</span> .bss</span><br><span class="line">        <span class="number">1000</span> .data</span><br><span class="line">        <span class="number">1000</span> .debug_abbrev</span><br><span class="line">        <span class="number">1000</span> .debug_aranges</span><br><span class="line">        <span class="number">1000</span> .debug_frame</span><br><span class="line">        <span class="number">2000</span> .debug_info</span><br><span class="line">        <span class="number">1000</span> .debug_line</span><br><span class="line">        <span class="number">1000</span> .eh_frame</span><br><span class="line">        <span class="number">1000</span> .idata</span><br><span class="line">        <span class="number">1000</span> .rdata</span><br><span class="line">        <span class="number">3000</span> .text</span><br><span class="line">        <span class="number">1000</span> .tls</span><br></pre></td></tr></table></figure>
+<h3 id="strings"><a href="#strings" class="headerlink" title="strings"></a>strings</h3><p>-t 显示字符的文件偏移</p>
+<p>-a 使得strings扫描整个文件，而非只有文件中可加载的、经初始化的部分</p>
+<p>-e 搜素其他字符编码，如Unicode</p>
+<p>几乎不会用到的工具：x86流式反汇编器，ndisasm和diStorm。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Win32_01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Win32_01/" class="post-title-link" itemprop="url">Windows汇编语言基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-07-18 14:58:58" itemprop="dateCreated datePublished" datetime="2023-07-18T14:58:58+08:00">2023-07-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-29 15:39:37" itemprop="dateModified" datetime="2023-07-29T15:39:37+08:00">2023-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="x86汇编语法"><a href="#x86汇编语法" class="headerlink" title="x86汇编语法"></a>x86汇编语法</h2><ul>
+<li>AT&amp;T：GNU工具（Gas：GNU汇编器、gcc、gdb)         <ul>
+<li>前缀：%reg,$立即数</li>
+<li>操作数排序：mov 源操作数,目的操作数  add $0x4,%eax</li>
+</ul>
+</li>
+<li>Intel ：MASM(微软汇编器)、Turbo汇编器、NASM<ul>
+<li>add eax,0x4</li>
+</ul>
+</li>
+</ul>
+<h2 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h2><p>MIPS  长度固定的指令。</p>
+<p>.model flat，平坦模式，代码段和数据段共用一个4G段。</p>
+<h2 id="局部变量、"><a href="#局部变量、" class="headerlink" title="局部变量、"></a>局部变量、</h2><p><strong>局部变量是堆栈变量</strong>。作用域是单个子程序，从子程序返回到主程序时被释放。一种规范写法是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LOCAL @buffer[10]:BYTE ;LOCAL 变量名1[重复数量]:类型,变量名2[重复数量]:类型</span><br></pre></td></tr></table></figure>
+<p><code>LOCAL</code>用于为堆栈变量预留空间。</p>
+<p>局部变量：只能在过程中用，主程序里不能用；</p>
+<p>堆栈变量：没有初始值，只在调用时分配。C语言中的函数值传递的本质。</p>
+<h2 id="一些常用类型整理"><a href="#一些常用类型整理" class="headerlink" title="一些常用类型整理"></a>一些常用类型整理</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">byte db,word dw,DWORD dd,fword df,QWORD dq,tbyte dt  1,2,4,6,8,10</span><br><span class="line">WNDCLASS</span><br></pre></td></tr></table></figure>
+<ul>
+<li>TYPE返回变量大小</li>
+<li>LENGTHOF  返回变量元素个数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">;,用于表示一个变量是否结束</span><br><span class="line">var6 dw 10,20,30,40,50</span><br><span class="line">	 dw 60,70,80,90,99</span><br><span class="line">var7 dw 10,20,30,40,50,</span><br><span class="line">	    60,70,80,90,99	 </span><br><span class="line">LENGTHOF var6 ;5</span><br><span class="line">LENGTHOF var7 ;10</span><br></pre></td></tr></table></figure>
+<ul>
+<li>SIZE，SIZEOF返回所占字节数=LENGTHOF*TYPR</li>
+</ul>
+<h2 id="1-和EQU伪指令"><a href="#1-和EQU伪指令" class="headerlink" title="1.=和EQU伪指令"></a>1.=和EQU伪指令</h2><p>由等号或者EQU定义的符号常量<strong>不占用存储空间。</strong></p>
+<p>EQU类似于等号伪指令，但是EQU伪指令不许重复定义，而等号伪指令可以（同一个常量名可重复定义多次）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">presskey EQU &lt;&quot;Output is:&quot;&gt;</span><br><span class="line">.data</span><br><span class="line">propt db presskey</span><br></pre></td></tr></table></figure>
+<h2 id="2-当前地址运算符"><a href="#2-当前地址运算符" class="headerlink" title="2.$ 当前地址运算符"></a>2.$ 当前地址运算符</h2><h2 id="3-LEA伪指令"><a href="#3-LEA伪指令" class="headerlink" title="3.LEA伪指令"></a>3.LEA伪指令</h2><p>OFFSET和ADDR编译时起作用，LEA是指令，在运行时起作用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV ESI,ADDR BVAL  ;相当于</span><br><span class="line">LEA ESi,BVAL</span><br></pre></td></tr></table></figure>
+<p>计算堆栈（程序执行是分配）变量的偏移地址时，只能用lea。</p>
+<h2 id="4-PTR-操作符"><a href="#4-PTR-操作符" class="headerlink" title="4.PTR 操作符"></a>4.PTR 操作符</h2><p>按照指定类型在内存中读写值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LIST DB 12H,34H,56H,78H;</span><br><span class="line">MOV EAX,DWORD PTR LIST ;EAX  78563412H</span><br></pre></td></tr></table></figure>
+<h2 id="5-ALIGN和EVEN伪指令"><a href="#5-ALIGN和EVEN伪指令" class="headerlink" title="5.ALIGN和EVEN伪指令"></a>5.ALIGN和EVEN伪指令</h2><blockquote>
+<p>CPU处理偶数地址比处理奇数地址要快。 可以在一个内存访问周期内获取该数据 </p>
+</blockquote>
+<p>ALIGN 对齐 (1,2,4)  按照n个字节的边界值对齐</p>
+<p>EVEN  使下一地址从偶数地址开始</p>
+<h2 id="6-TYPEDEF和TYPEDEF-PTR操作符"><a href="#6-TYPEDEF和TYPEDEF-PTR操作符" class="headerlink" title="6.TYPEDEF和TYPEDEF PTR操作符"></a>6.TYPEDEF和TYPEDEF PTR操作符</h2><p>类型自命名和定义指针的类型，<strong>不占用存储空间</strong></p>
+<h2 id="7-LABEL伪指令"><a href="#7-LABEL伪指令" class="headerlink" title="7.LABEL伪指令"></a>7.LABEL伪指令</h2><p>别名，<strong>不占用存储空间</strong></p>
+<h2 id="8-基数控制伪指令RAIDX"><a href="#8-基数控制伪指令RAIDX" class="headerlink" title="8.基数控制伪指令RAIDX"></a>8.基数控制伪指令RAIDX</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.RADIX  16;默认该指令后面的数据都是16进制数，其他进制的数据需要额外说明</span><br><span class="line"></span><br><span class="line">MOV AX,0FF ;十六进制数,对应十进制255</span><br><span class="line">MOV BX ,12D ;十进制数12</span><br></pre></td></tr></table></figure>
+<p>9.ORG伪指令</p>
+<p>10.REPT伪指令</p>
+<h2 id="11-ASSUME伪指令"><a href="#11-ASSUME伪指令" class="headerlink" title="11.ASSUME伪指令"></a>11.ASSUME伪指令</h2><p>将程序的段与逻辑段绑定。</p>
+<h2 id="12-SHORT伪指令"><a href="#12-SHORT伪指令" class="headerlink" title="12.SHORT伪指令"></a>12.SHORT伪指令</h2><h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.while(条件)</span><br><span class="line">.endw</span><br><span class="line"></span><br><span class="line">.repeat</span><br><span class="line"></span><br><span class="line">until(条件)</span><br><span class="line"></span><br><span class="line">.if </span><br><span class="line">.elseif</span><br><span class="line">.endif</span><br><span class="line">.break .if ;退出循环</span><br><span class="line">.continue ;结束本次循环，进入下一次循环</span><br></pre></td></tr></table></figure>
+<h2 id="14-结构体和共用体"><a href="#14-结构体和共用体" class="headerlink" title="14.结构体和共用体"></a>14.结构体和共用体</h2><h2 id="15-宏定义"><a href="#15-宏定义" class="headerlink" title="15.宏定义"></a>15.宏定义</h2><h2 id="16-过程"><a href="#16-过程" class="headerlink" title="16.过程"></a>16.过程</h2><p>模块化代码</p>
+<p>PROC [NEAR] 或者[FAR]，默认近调用，即在ODS实模式下的一个段里(&lt;64KB(。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">主程序中 CALL &#123;PROC_noarg_name&#125;</span><br><span class="line"></span><br><span class="line">PUSH 参数2</span><br><span class="line">PUSH 参数1</span><br><span class="line">INVOKE &#123;PROC_noarg_name&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;PROC_noarg_name&#125; PROC [NEAR]</span><br><span class="line">	LOCAL 变量名1[重复数量]:类型,变量名2[重复数量]:类型</span><br><span class="line">	RET   ;从栈中弹出返回地址，返回到主程序</span><br><span class="line">&#123;PROC_noarg_name&#125; ENDP	</span><br><span class="line"></span><br><span class="line">&#123;PROC_name&#125; PROC,参数1:类型,参数2:类型,...</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="17-ENTER和LEAVE"><a href="#17-ENTER和LEAVE" class="headerlink" title="17.ENTER和LEAVE"></a>17.ENTER和LEAVE</h2><h2 id="18-RET和RETN"><a href="#18-RET和RETN" class="headerlink" title="18.RET和RETN"></a>18.RET和RETN</h2><h2 id="19-IDA的反汇编"><a href="#19-IDA的反汇编" class="headerlink" title="19.IDA的反汇编"></a>19.IDA的反汇编</h2><h2 id="0day-安全"><a href="#0day-安全" class="headerlink" title="0day 安全"></a>0day 安全</h2><p> 文件偏移地址 = 虚拟内存地址（VA）−装载基址（Image Base）−节偏移<br>= RVA -节偏移 </p>
+<p>对于 栈桢可能发生移位的情况 </p>
+<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p> 一个函数返回时，esp正好指向原来存储返回地址的下一位，我们将shellcode从ret_addr的后一个位置开始填充，并将ret_addr填充为一个进程中的”jmp esp”的指令的地址，这样函数返回后就会跳到esp指向的栈顶的位置开始执行shellcode。 </p>
+<p>缓冲区组成方式，现阶段已经讲了两种：</p>
+<ol>
+<li>将shellcode放到缓冲区，然后覆盖返回地址到缓冲区的起始地址。这种适用于缓冲区较大的场合。</li>
+<li><p>将shellcode放到函数返回地址以后，然后覆盖返回地址为”jmp esp”之类的指令，使得函数返回时跳转到shellcode处执行指令。这种适用于缓冲区较小的场合。</p>
+</li>
+<li><p>找到程序运行的线程环境块TEB。</p>
+</li>
+<li>TEB的起始地址偏移0x30的地方指向进程环境块PEB。</li>
+<li>PEB的地址偏移0x0C的地方存放指向PEB_LDR_DATA结构体的指针，该指针指向一个存放着被进程装载的动态链接库的信息的结构体。</li>
+<li>PEB_LDR_DATA结构体偏移位置位0x1C的地方指向模块初始化链表的头指针InInitializationOrderModuleList。</li>
+<li>4中的链表存放PE被载入时初始化的模块信息，第一个链表节点时ntdll.dll，第二个位kernel32.dll。</li>
+<li>kernel32.dll的节点偏移0x08是kernel32.dll在内存中载入的基址。</li>
+<li>kernel32.dll的基址加0xe3C是PE头的地址。</li>
+<li>PE头偏移0x78存放着指向函数导出表的指针。</li>
+<li>安照下述方法寻址：<ul>
+<li>导出表偏移0x1C的指针指向存储导出函数偏移地址（RVA）的列表。</li>
+<li>导出表偏移0x20指针指向存储导出函数名的列表。</li>
+<li>根据函数名找到我们要的函数是导出表中的第几个，然后再地址列表中找到对应RVA。</li>
+<li>RVA加上动态链接库的基址即是VA，这个也是我们在shellcode中需要的地址。</li>
+</ul>
+</li>
+</ol>
+<p>这里shellcode的构造为了尽可能的短，所以需要给每个API名字用一个hash去代替。<br>MessageBoxA：0x1e380a6a<br>ExitProcess：0x4fd18963<br>LoadLibraryA：0x0c917432</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">push 0x1e380a6a</span><br><span class="line">push 0x4fd18963 </span><br><span class="line">push 0x0c917432</span><br><span class="line">mov esi,esp</span><br><span class="line">lea edi,[esi-0xC]</span><br></pre></td></tr></table></figure>
+<h2 id="如何实现一款-shellcodeLoader"><a href="#如何实现一款-shellcodeLoader" class="headerlink" title="如何实现一款 shellcodeLoader"></a>如何实现一款 shellcodeLoader</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1755926">https://cloud.tencent.com/developer/article/1755926</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/rev01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -870,320 +1161,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Linkers&Loaders02/" class="post-title-link" itemprop="url">第三章-目标文件格式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-23 14:58:58" itemprop="dateCreated datePublished" datetime="2023-05-23T14:58:58+08:00">2023-05-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-24 15:36:54" itemprop="dateModified" datetime="2023-05-24T15:36:54+08:00">2023-05-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>俞甲子等，《程序员的自我修养——链接、装载与库》，北京：电子工业出版社，2009年6月第2版。</p>
-</blockquote>
-<p>不放过任何一个字节。</p>
-<blockquote>
-<p>利用工具：gcc、readelf、objdump、size，</p>
-<p>strace ./run跟踪程序的运行</p>
-</blockquote>
-<h2 id="3-1-目标文件的格式"><a href="#3-1-目标文件的格式" class="headerlink" title="3.1 目标文件的格式"></a>3.1 目标文件的格式</h2><p>目标文件：源代码编译后但还未链接的那些中间文件（.o或者.obj）</p>
-<p>静态链接库：把很多目标文件捆绑形成一个文件，再加上一些索引，可以简单理解为一个包含很多目标文件的文件包。</p>
-<p>gcc命令 预处理、编译、汇编、链接</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">file xxx.so</span><br><span class="line">x86_64,version 1(SYSV) </span><br></pre></td></tr></table></figure>
-<p>表明该文件的兼容性，采用了Unix System V的格式规范，即COFF文件。</p>
-<p><strong>注</strong>：Unix最早的可执行文件格式为a.out，无法应对共享库等概念，所以设计了COFF来解决它。</p>
-<p>COFF的贡献：目标文件里引入了段机制，不同文件可以有不同数量和不同类型的段(Section节或者Segment段)；定义了调试数据格式。</p>
-<p><img src="/categories/Notes/Linkers&Loaders02/1684805407488.png" alt="1684805407488"></p>
-<h2 id="3-2为什么分段-amp-段名的含义"><a href="#3-2为什么分段-amp-段名的含义" class="headerlink" title="3.2为什么分段&amp;段名的含义"></a>3.2为什么分段&amp;段名的含义</h2><p>指令和数据分段的好处：</p>
-<p>1、给程序指令区域单独设置可读权限，防止程序被改写。</p>
-<p>2、利用局部性原理提高缓存的命中率。现代CPU缓存也设计成数据缓存和指令缓存分离。</p>
-<p>3、在内存中有多个程序副本时，通过<strong>内存共享</strong>，节省内存空间。只读数据（指令；图像、文本资源）可以共享；而每个副本进程的数据区域不一样，是进程私有的，属于Private Bytes。</p>
-<p><img src="/categories/Notes/Linkers&Loaders02/1684807383776.png" alt="1684807383776"></p>
-<p>如图所示，Win7的exploer.exe在运行中，此刻占据的总虚存为338 740KB，它的私有数据部分占了51 360 KB，即共享部分数据占了287 380KB，也就是280多MB的空间，极大的节省了内存空间。</p>
-<h2 id="3-3-段概述"><a href="#3-3-段概述" class="headerlink" title="3.3 段概述"></a>3.3 段概述</h2><p>ELF Header，描述整个文件的文件属性，包括文件是否可执行、是静态链接还是动态链接还是可执行文件（给出入口地址)、目标硬件和目标操作系统，还包括一个段表 Section Table：一个描述各个段在文件中偏移位置及段的属性的数组。</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>.bss</th>
-<th>为节省存储空间，只记录给未初始化数据预留的空间大小，而不存储其内容，因为其默认全部为0.</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>.data</td>
-<td>初始化的全局变量和局部静态变量</td>
-</tr>
-<tr>
-<td>.text、.code</td>
-<td>代码段</td>
-</tr>
-<tr>
-<td>.rodata、.rodata1</td>
-<td>只读数据段，比如字符串常量、全局const变量</td>
-</tr>
-<tr>
-<td>.comment</td>
-<td>存放编译器版本信息，比如字符串：”GCC:(GNU) 4.2.0”</td>
-</tr>
-<tr>
-<td>.note</td>
-<td>额外的编译器信息，程序公司名、发布版本号等</td>
-</tr>
-<tr>
-<td>.debug</td>
-<td>调试信息</td>
-</tr>
-<tr>
-<td>.line</td>
-<td>调试时的行号表，源代码行号与编译后指令的对应表</td>
-</tr>
-<tr>
-<td>.eh_frame</td>
-<td>存储异常处理框架（Exception Handling Frame）的相关信息。包括异常处理函数的调用关系、异常处理函数的地址、堆栈展开信息等。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><img src="/categories/Notes/Linkers&Loaders02/1684811465144.png" alt="1684811465144"></p>
-<h3 id="其他段"><a href="#其他段" class="headerlink" title="其他段"></a>其他段</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>.dynamic</th>
-<th>动态链接信息</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>.hash</td>
-<td>符号哈希表</td>
-</tr>
-<tr>
-<td>.strtab</td>
-<td>String Table，字符串表</td>
-</tr>
-<tr>
-<td>.symtab</td>
-<td>Symbol Table，符号表</td>
-</tr>
-<tr>
-<td>.shstrtab</td>
-<td>Section Header String table,段名表，集中管理段名称。不存储用户自定义的字符串，而是存储与 ELF 文件结构相关的字符串</td>
-</tr>
-<tr>
-<td>.plt\.got</td>
-<td>动态链接的跳转表和全局入口表</td>
-</tr>
-<tr>
-<td>.init,.fini</td>
-<td>程序初始化与终结代码段</td>
-</tr>
-</tbody>
-</table>
-</div>
-<blockquote>
-<p>.表示这些段名由系统保留，应用程序自定义段名不能加.，否则容易跟系统保留段名冲突。</p>
-<p>一个elf文件中可以有多个.text的段。</p>
-<p>一些已遗弃的段名：.sdata、.tdata、.sbss .lit4 .lit8 .reginfo .gptab .liblist .conflict</p>
-</blockquote>
-<h3 id="BSS段"><a href="#BSS段" class="headerlink" title="BSS段"></a>BSS段</h3><p>Block Started by Symbol Table  ，最初是美航符号汇编程序（1950s）的一个伪指令，被IBM保留并引用到Fortran 汇编器，用于定义符号并且为该符号预留给定数量的未初始化内存空间。</p>
-<p>因为bss段没有内容，所以它在文件中不占据空间；但是，程序运行时，要占内存空间。</p>
-<p><img src="/categories/Notes/Linkers&Loaders02/1684810240218.png" alt="1684810240218"></p>
-<p>借助size命令，查看代码段和数据段长度。</p>
-<p><img src="/categories/Notes/Linkers&Loaders02/1684810335918.png" alt="1684810335918"></p>
-<p>借助objdump查看各段基本信息，<code>-x</code>查看详细信息。</p>
-<p><img src="/categories/Notes/Linkers&Loaders02/1684810503471.png" alt="1684810503471"></p>
-<p>解释：一个初始化的全局变量+一个初始化的局部静态变量，所以.data的Size为8；同理，.bss大小为8；因为两个printf里共有13+4共17个字符（每个字符串尾还有一个\0），所以这里的rodata大小为0x11.各个段属性的第二行中，CONTENTS表示该段在文件中存在，可以看到BSS段没有CONTENTS，它在ELF文件中不存在内容。</p>
-<h2 id="3-5-链接的接口-符号"><a href="#3-5-链接的接口-符号" class="headerlink" title="3.5 链接的接口-符号"></a>3.5 链接的接口-符号</h2><p>链接如同拼积木，目标文件B引用A中定义的函数和变量，需要其具备独特的名字。</p>
-<p>链接过程中，我们将<strong>函数和变量</strong>称为符号；其名称称为符号名。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Linkers&Loaders01/" class="post-title-link" itemprop="url">PE/COFF</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-12 14:58:58" itemprop="dateCreated datePublished" datetime="2023-05-12T14:58:58+08:00">2023-05-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-24 16:01:20" itemprop="dateModified" datetime="2023-05-24T16:01:20+08:00">2023-05-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>俞甲子等，《程序员的自我修养——链接、装载与库》，北京：电子工业出版社，2009年6月第2版。</p>
-</blockquote>
-<h2 id="1-5-程序的分段和分页"><a href="#1-5-程序的分段和分页" class="headerlink" title="1.5 程序的分段和分页"></a>1.5 程序的分段和分页</h2><p>解决三个问题：1.内存隔离。2.空间利用。3.重定位。</p>
-<p>本质上是增加了一个中间层，即虚存，这样就可以避免在编写程序时还要考虑详细的地址分配问题了。为了内存隔离，分段；为了细粒度的空间利用，分页。</p>
-<p>CPU-&gt;虚拟地址—&gt;MMU(Memory Management Unit，内存管理单元)—&gt;物理地址。</p>
-<h2 id="2-1-构建过程"><a href="#2-1-构建过程" class="headerlink" title="2.1 构建过程"></a>2.1 构建过程</h2><p>预编译：.cpp/.cxx.,.hpp——&gt;.i,.ii，处理所有的”#”预编译命令并递归插入和展开宏命令，删除注释，加入行号和文件名标识，保留#pragma编译器指令。</p>
-<p>编译：gcc -S/cc1 hello.c -o hello.s。完成词法分析和语法分析，生成中间代码。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;...&gt; search starts here:</span><br><span class="line">/usr/lib/gcc/x86_64-linux-gnu/11/include</span><br><span class="line">/usr/local/include</span><br><span class="line">/usr/include/x86_64-linux-gnu</span><br><span class="line">/usr/include</span><br></pre></td></tr></table></figure>
-<p>汇编：gcc -c /as hello.s -o hello.o。把汇编符号翻译为机器码。</p>
-<p>链接：ld，最终确定各个符号的绝对地址，完成对指令引用的符号地址的校正，需要一大堆文件。</p>
-<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h2 id="2-2-编译原理概述"><a href="#2-2-编译原理概述" class="headerlink" title="2.2 编译原理概述"></a>2.2 编译原理概述</h2><p>词法分析，Scanner—&gt;Tokens，识别记号，同时叫标识符放到符号表(lex)。</p>
-<p>语法分析，Parser—&gt;Syntax tree，关于编译器的编译器(yacc)。</p>
-<p>语义分析：Semantic Analyzer—&gt;Commented Syntax Tree（注释语法树），只能分析静态语义：声明、类型匹配转换（在编译器可以确定的语义，其他的等待程序运行（除0异常）时才能确定）</p>
-<p>中间代码生成：使得编译器可以拆分为前后端。非常接近目标代码，但是跟目标机器与运行时环境无关。不包含数据尺寸、地址和寄存器名字。</p>
-<p>目标代码生成与优化：生成器和优化器。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LEA,基址比例变址寻址（Load Effective Address），进行地址的计算后将算得的结果放入存储中，不会把结果地址的内存数据实际加载到寄存器里。用于高效地进行一些复杂的地址计算，例如数组索引、数据结构访问等，而无需实际读写内存</span><br></pre></td></tr></table></figure>
-<h2 id="2-3-链接器年龄比编译器更长"><a href="#2-3-链接器年龄比编译器更长" class="headerlink" title="2.3 链接器年龄比编译器更长"></a>2.3 链接器年龄比编译器更长</h2><p>纸带编程时，一些跳转都是绝对地址，需要人为计算，一旦指令间增删其他指令，所有目标地址都要重新人工计算<strong>（重定位，Relocation，每个要被修正的地方叫一个重定位入口，Relocation Entry)</strong>，一条纸带上的指令很麻烦，多条纸带间更是灾难。</p>
-<p>引入符号（对函数和变量位置的助记符），计算符号地址的过程让汇编器自动完成，方便程序的模块化。</p>
-<p>程序之间的接口就是这些符号，类似于拼图，我少这一部分，你恰好多这一部分，每个模块放到合适的位置，就是一幅完整的有意义的图。</p>
-<h2 id="2-4-静态链接是什么玩意？"><a href="#2-4-静态链接是什么玩意？" class="headerlink" title="2.4 静态链接是什么玩意？"></a>2.4 静态链接是什么玩意？</h2><p>详细介绍在第4章。</p>
-<p>链接过程包括：地址和空间分配、Symbol Resolution（符号决议：静态链接，绑定：动态链接）和重定位。</p>
-<p><strong>库：</strong>常用的代码编译成目标文件存放，例如运行时库。</p>
-<h2 id="5-2一些历史"><a href="#5-2一些历史" class="headerlink" title="5.2一些历史"></a>5.2一些历史</h2><p>DEC（Degital Equipment Corp.)被 康柏电脑 收购， 康柏电脑02年又被惠普（1939）收购。DEC推出的VAX/VMS（Virtual Address eXtension/System） ，是一个最先使用权限管理和容错机制的多任务OS， 提供高性能、可靠性和安全性 。微软开发Win NT时，最初成员来自于DEC的VAX/VMS小组，所以Windows的PE格式来自于DEC的VAX/VMS上的COFF（Common Object File Format）文件格式。</p>
-<p> 贝尔实验室 （Bell Telephone Laboratories， 1925 ）  —&gt;  肖克利半导体实验室（Shockley Semiconductor Laboratory，1955） —&gt; 仙童半导体（Fairchild Semiconductor，1957）  —&gt;AMD(1968)，Intel(1968) —&gt;Microsoft（操作系统，1975）。</p>
-<p> SGI（Silicon Graphics, Inc.，1982） —&gt;NVIDA（正在收购ARM（移动处理器），1993）， Netscape  （1994年，开源了 Netscape Navigator（打不过微软IE） ，发展成为 Mozilla Firefox 。</p>
-<p>Google （创建者为Stanford University博士，PageRank算法： Google搜索引擎的核心， 通过链接关系评估网页的重要性  ， 1998 ）</p>
-<p><strong>思路：</strong>链接多的代码块，也可以权重传递和赋予它高的权重值。</p>
-<ul>
-<li><p>COFF:VC++产生的目标文件格式。</p>
-</li>
-<li><p>PE：Win平台下的可执行文件格式，和ELF都是基于段的相同结构， 是COFF的一种扩展。对于64位系统，将PE中的32位字段改为64字段，叫做PE32+。</p>
-</li>
-<li><p>映像文件Image File：因为PE文件在装载时会被映射到进程的虚拟空间中运行，它是进程虚拟空间的映像，所以PE可执行文件又可称为映像文件。</p>
-</li>
-</ul>
-<h3 id="SMP与多核"><a href="#SMP与多核" class="headerlink" title="SMP与多核"></a>SMP与多核</h3><p>服务器要的是 并发吞吐 ，要CPU核数、要线程数、要大的L2/L3缓存。</p>
-<p>而PC要的是单核频率。</p>
-<p>截至2023年5月12日，至强的处理器基准频率基本在4GHz以下， 酷睿i9-13900KS 睿频最高为6GHz（受生产工艺影响）。出于性能需求发展出多处理器，SMP（symmetrical）是其中的常见形式，由于成本高，通过共用缓存，SMP发展成为多核处理器。</p>
-<h3 id="段名"><a href="#段名" class="headerlink" title="段名"></a>段名</h3><p>段名<strong>只具有提示作用</strong>，没有实际意义。不同编译器产生的段名不同，VC++用’.code’和’.data’。</p>
-<p>使用链接脚本来控制link时，段名含义一般是固定的。</p>
-<h2 id="自定义段"><a href="#自定义段" class="headerlink" title="自定义段"></a>自定义段</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//GCC，扩展属性，将变量或者函数放入自定义段中</span></span><br><span class="line">__atribute__((<span class="built_in">section</span>(<span class="string">&quot;name&quot;</span>)))</span><br><span class="line"><span class="comment">//要放入name段的全局变量或者函数</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">//VC++中，编译指示：把全局变量放到FOO段里</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> data_seg(<span class="string">&quot;FOO&quot;</span>)</span></span><br><span class="line"><span class="type">int</span> global =<span class="number">1</span>;</span><br><span class="line"><span class="comment">//把编译器指示换回来，此时开始，全局变量和局部变量恢复到放入.data中</span></span><br><span class="line"><span class="meta">#pragama data_seg(<span class="string">&quot;.data&quot;</span>)</span></span><br></pre></td></tr></table></figure>
-<p>使用VS Command Prompt，编译：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#编译，不调用链接器，禁用Microsoft C/C++语法扩展，生成标准的C/C++目标文件</span></span><br><span class="line">cl /c /Za SimpleSection.c</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/cpp/build/reference/microsoft-extensions-to-c-and-cpp?view=msvc-170">Microsoft C/C++语法扩展</a>，编译器会自动定义<code>__STDC__</code>这个宏。</p>
-<p>利用VS目标文件查看工具查看COFF格式或PE格式，详细/简介。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dumpbin  [/all,summary] hw2.obj &gt;hw2_section.txt</span><br></pre></td></tr></table></figure>
-<p> C runtime library (UCRT) </p>
-<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format">微软的PE文件格式定义</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1255,7 +1232,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">139</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1267,7 +1244,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

