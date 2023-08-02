@@ -156,6 +156,178 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/FBot%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/FBot%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">Fbot</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-01 14:19:49" itemprop="dateCreated datePublished" datetime="2020-02-01T14:19:49+08:00">2020-02-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>ADB.Miner会感染Amazon FireTV （使用FireOS 7，一个安卓分支)操作系统，利用adb安卓调试接口传播，并挖矿。</p>
+<p>投入载荷会下载执行 hxxp://188.209.52.142/c，或者是hxxp://188.209.52.142/w。这两个脚本的区别仅在下载方式是wget/curl，下文不再区分。两个脚本的主体功能一致，包括：</p>
+<ul>
+<li>尝试进一步从 188.209.52.142 下载 fbot.{arch} 恶意样本；</li>
+<li>卸载 com.ufo.miner，一个类似ADB.Miner的挖矿组件；</li>
+<li>完成自身清理工作。</li>
+</ul>
+<p>下载得到的 fbot.{arch} 是个mirai的变种，主要特点包括：</p>
+<ul>
+<li>C2：musl.lib:7000，当前在EmerDNS上的解析地址为 66.42.57.45，Singapore/SG Singapore</li>
+<li>扫描和传播：针对 TCP 5555 adb 端口扫描。扫描成功后，会下载hxxp://188.209.52.142/c，完成对蠕虫自身的传播。</li>
+<li>进程清理：样本中会遍历 /proc/pid/exe 目录下面的特定进程，如smi、xig、rig等。枚举得到符合条件的进程后，会杀掉该进程。</li>
+</ul>
+<h4 id="主控域名-musl-lib-在EmereDNS上的解析"><a href="#主控域名-musl-lib-在EmereDNS上的解析" class="headerlink" title="主控域名 musl.lib 在EmereDNS上的解析"></a>主控域名 musl.lib 在EmereDNS上的解析</h4><p>Fbot蠕虫作者选择了OpenNic公司的公共DNS服务。蠕虫中硬编码了一组OpenNic公共服务器IP地址，被感染的机器通过向这些服务器请求，得到 musl.lib 的EmerDNS解析IP。</p>
+<p>扫描器的版本有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hxxp://188.209.52.142/fbot.aarch64     #扫描器，下同，完成自身的蠕虫传播</span><br><span class="line">hxxp://188.209.52.142/fbot.arm7</span><br><span class="line">hxxp://188.209.52.142/fbot.mips</span><br><span class="line">hxxp://188.209.52.142/fbot.mipsel</span><br><span class="line">hxxp://188.209.52.142/fbot.x86</span><br><span class="line">hxxp://188.209.52.142/fbot.x86_64</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/url%E8%B7%B3%E8%BD%AC%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/url%E8%B7%B3%E8%BD%AC%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">常见的Bypass</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-01 14:19:49" itemprop="dateCreated datePublished" datetime="2020-02-01T14:19:49+08:00">2020-02-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a>Bypass</h2><h3 id="1-特殊字符的绕过"><a href="#1-特殊字符的绕过" class="headerlink" title="1.特殊字符的绕过"></a>1.特殊字符的绕过</h3><p>@，#，/，?，\,\\\,//绕过。<br>base64加码，URL编码绕过</p>
+<h3 id="2-白名单绕过"><a href="#2-白名单绕过" class="headerlink" title="2.白名单绕过"></a>2.白名单绕过</h3><p>白名单的：找到类似的域名，或者采用多级跳转。</p>
+<h3 id="3-xip-io后缀绕过"><a href="#3-xip-io后缀绕过" class="headerlink" title="3.xip.io后缀绕过"></a>3.xip.io后缀绕过</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/CTF/url%E8%B7%B3%E8%BD%AC%E6%BC%8F%E6%B4%9E/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E8%AE%B2%E5%BA%A7%E5%86%85%E5%AE%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -907,170 +1079,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/tar%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/tar%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">tar命令</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-11 19:59:30" itemprop="dateCreated datePublished" datetime="2018-06-11T19:59:30+08:00">2018-06-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解压缩</span></span><br><span class="line"> tar -xvf xxx.tar</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#压缩  target  source_dir/</span></span><br><span class="line">tar -cvf xxx.tar xxx/</span><br><span class="line"></span><br><span class="line">其中，字母v如果更换为</span><br><span class="line">-z <span class="comment">#生成tar.gz文件</span></span><br><span class="line">-j <span class="comment">#生成tar.bz2文件</span></span><br><span class="line">-Z <span class="comment">#打包成xxx.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为xxx.tar.Z</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#追加文件放入压缩包</span></span><br><span class="line">tar -rf xxx.tar newadd.txt</span><br><span class="line"><span class="comment">#更新文件放入压缩包</span></span><br><span class="line">tar -uf xxx.tar newadd.txt</span><br><span class="line"><span class="comment">#展示压缩包中的文件</span></span><br><span class="line">tar -tf xxx.tar</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/OralEnglish01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/OralEnglish01/" class="post-title-link" itemprop="url">OralEnglish03</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-03-05 21:00:26" itemprop="dateCreated datePublished" datetime="2017-03-05T21:00:26+08:00">2017-03-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1.Yeah,I’m good to go. 我准备好了</p>
-<p>2.Really?You don’t know what that means to me.我很感动</p>
-<p>3.Knock Knock!How are we today?有人在吗，今天过得怎么样？</p>
-<p>4.They’ll wind up calling her Geller，then he gets his way.他们最后就会只叫他盖勒，他就得逞了</p>
-<p>5.We are kind of thing now.我们在交往</p>
-<p>6.Things change，roll with the punches.世事难料，见招拆招（逆来顺受）</p>
-<p>7.House cats, for one, are twilight hunters with vertically elongated pupils. 举个例子，黄昏的猎手家猫，有着竖直拉长的瞳孔。</p>
-<p>8.cushions the blow.把打击变得和缓（降维打击？？）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/Notes/OralEnglish01/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1142,7 +1150,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

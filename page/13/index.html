@@ -156,6 +156,153 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/md5%E5%8A%A0%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/md5%E5%8A%A0%E5%AF%86/" class="post-title-link" itemprop="url">md5加密</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-17 14:19:49" itemprop="dateCreated datePublished" datetime="2020-03-17T14:19:49+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!D:/softwares/Python3.7</span></span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="built_in">hash</span> = hashlib.md5()<span class="comment">#md5对象，md5不能反解，但是加密是固定的，就是关系是一一对应，所以有缺陷，可以被对撞出来</span></span><br><span class="line"><span class="built_in">hash</span>.update(<span class="built_in">bytes</span>(<span class="string">&#x27;paul&#x27;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>))<span class="comment">#要对哪个字符串进行加密，就放这里</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hash</span>.hexdigest())<span class="comment">#拿到加密字符串</span></span><br><span class="line"><span class="comment"># hash2=hashlib.sha384()#不同算法，hashlib很多加密算法</span></span><br><span class="line"><span class="comment"># hash2.update(bytes(&#x27;admin&#x27;,encoding=&#x27;utf-8&#x27;))</span></span><br><span class="line"><span class="comment"># print(hash.hexdigest())</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hash3 = hashlib.md5(<span class="built_in">bytes</span>(<span class="string">&#x27;abd&#x27;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 如果没有参数，所以md5遵守一个规则，生成同一个对应关系，如果加了参数，</span></span><br><span class="line"><span class="string">就是在原先加密的基础上再加密一层，这样的话参数只有自己知道，防止被撞库，</span></span><br><span class="line"><span class="string">因为别人永远拿不到这个参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">hash3.update(<span class="built_in">bytes</span>(<span class="string">&#x27;admin&#x27;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(hash3.hexdigest())</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/cipher/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/cipher/" class="post-title-link" itemprop="url">VigenereDecrypto</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-17 14:19:49" itemprop="dateCreated datePublished" datetime="2020-03-17T14:19:49+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*-coding:utf-8-*-</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">fileName : VigenereDecrypto.py</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">VigenereDecrypto</span> (output , key) :</span><br><span class="line">    ptLen = <span class="built_in">len</span> (output)</span><br><span class="line">    keyLen = <span class="built_in">len</span> (key)</span><br><span class="line">quotien = ptLen // keyLen</span><br><span class="line">remainder = ptLen % keyLen</span><br><span class="line"></span><br><span class="line">inp = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">0</span> , quotient) :</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">0</span> , keyLen) :</span><br><span class="line">        c = <span class="built_in">int</span>((<span class="built_in">ord</span>(output[i*keyLen+j]) - <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>) + <span class="number">26</span> - (<span class="built_in">ord</span>(key[j]) - <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>)) % <span class="number">26</span> + <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>)))</span><br><span class="line">        <span class="comment">#global input</span></span><br><span class="line">        inp += <span class="built_in">chr</span> (c)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">0</span> , remainder) :</span><br><span class="line">    c = <span class="built_in">int</span>((<span class="built_in">ord</span>(output[quotient*keyLen + i]) - <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>) + <span class="number">26</span> - (<span class="built_in">ord</span>(key[i]) - <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>)) % <span class="number">26</span> + <span class="built_in">ord</span>(<span class="string">&#x27;a&#x27;</span>)))</span><br><span class="line">    <span class="comment">#global input</span></span><br><span class="line">    inp += <span class="built_in">chr</span> (c)</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> inp</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/hashlib%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -790,178 +937,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/FBot%E7%9B%B8%E5%85%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/FBot%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">Fbot</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-01 14:19:49" itemprop="dateCreated datePublished" datetime="2020-02-01T14:19:49+08:00">2020-02-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>ADB.Miner会感染Amazon FireTV （使用FireOS 7，一个安卓分支)操作系统，利用adb安卓调试接口传播，并挖矿。</p>
-<p>投入载荷会下载执行 hxxp://188.209.52.142/c，或者是hxxp://188.209.52.142/w。这两个脚本的区别仅在下载方式是wget/curl，下文不再区分。两个脚本的主体功能一致，包括：</p>
-<ul>
-<li>尝试进一步从 188.209.52.142 下载 fbot.{arch} 恶意样本；</li>
-<li>卸载 com.ufo.miner，一个类似ADB.Miner的挖矿组件；</li>
-<li>完成自身清理工作。</li>
-</ul>
-<p>下载得到的 fbot.{arch} 是个mirai的变种，主要特点包括：</p>
-<ul>
-<li>C2：musl.lib:7000，当前在EmerDNS上的解析地址为 66.42.57.45，Singapore/SG Singapore</li>
-<li>扫描和传播：针对 TCP 5555 adb 端口扫描。扫描成功后，会下载hxxp://188.209.52.142/c，完成对蠕虫自身的传播。</li>
-<li>进程清理：样本中会遍历 /proc/pid/exe 目录下面的特定进程，如smi、xig、rig等。枚举得到符合条件的进程后，会杀掉该进程。</li>
-</ul>
-<h4 id="主控域名-musl-lib-在EmereDNS上的解析"><a href="#主控域名-musl-lib-在EmereDNS上的解析" class="headerlink" title="主控域名 musl.lib 在EmereDNS上的解析"></a>主控域名 musl.lib 在EmereDNS上的解析</h4><p>Fbot蠕虫作者选择了OpenNic公司的公共DNS服务。蠕虫中硬编码了一组OpenNic公共服务器IP地址，被感染的机器通过向这些服务器请求，得到 musl.lib 的EmerDNS解析IP。</p>
-<p>扫描器的版本有：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hxxp://188.209.52.142/fbot.aarch64     #扫描器，下同，完成自身的蠕虫传播</span><br><span class="line">hxxp://188.209.52.142/fbot.arm7</span><br><span class="line">hxxp://188.209.52.142/fbot.mips</span><br><span class="line">hxxp://188.209.52.142/fbot.mipsel</span><br><span class="line">hxxp://188.209.52.142/fbot.x86</span><br><span class="line">hxxp://188.209.52.142/fbot.x86_64</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/url%E8%B7%B3%E8%BD%AC%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/url%E8%B7%B3%E8%BD%AC%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">常见的Bypass</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-01 14:19:49" itemprop="dateCreated datePublished" datetime="2020-02-01T14:19:49+08:00">2020-02-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a>Bypass</h2><h3 id="1-特殊字符的绕过"><a href="#1-特殊字符的绕过" class="headerlink" title="1.特殊字符的绕过"></a>1.特殊字符的绕过</h3><p>@，#，/，?，\,\\\,//绕过。<br>base64加码，URL编码绕过</p>
-<h3 id="2-白名单绕过"><a href="#2-白名单绕过" class="headerlink" title="2.白名单绕过"></a>2.白名单绕过</h3><p>白名单的：找到类似的域名，或者采用多级跳转。</p>
-<h3 id="3-xip-io后缀绕过"><a href="#3-xip-io后缀绕过" class="headerlink" title="3.xip.io后缀绕过"></a>3.xip.io后缀绕过</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/CTF/url%E8%B7%B3%E8%BD%AC%E6%BC%8F%E6%B4%9E/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1033,7 +1008,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -156,6 +156,272 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot17/" class="post-title-link" itemprop="url">借助遗传算法的语义搜索高效小样本学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-04-17 00:13:22" itemprop="dateCreated datePublished" datetime="2023-04-17T00:13:22+08:00">2023-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-06-14 16:00:32" itemprop="dateModified" datetime="2023-06-14T16:00:32+08:00">2023-06-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener" href="https://github.com/hwxu20/gps">GPSCode-06</a></p>
+<ul>
+<li>Hanwei Xu, Yujun Chen, Yulun Du, Nan Shao, Wang Yanggang, Haiyu Li, and Zhilin Yang. 2022. <a target="_blank" rel="noopener" href="https://aclanthology.org/2022.emnlp-main.559">GPS: Genetic Prompt Search for Efficient Few-Shot Learning</a>. In <em>Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing</em>, pages 8162–8171, Abu Dhabi, United Arab Emirates. Association for Computational Linguistics.</li>
+</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>用自然语言指令设置提示词，可以提高零样本设置中大型语言模型的任务性能。当前工作通过手动重写或基于梯度的调整来改进此类提示词。 然而，</p>
+<p>手动重写非常耗时并且需要主观解释，</p>
+<p>而基于梯度的调整对于大型模型的计算要求极高，并且需要完全访问模型权重，这对于基于 API 的模型可能不可用。</p>
+<p>基于提示词的方法有利于小样本泛化，但是之前的都是手动设置，与之前的T0等方法不同，本文将各种来源的提示词作为种子，用遗传算法去进行提示词搜索，无须参数、无须梯度。</p>
+<h2 id="术语介绍"><a href="#术语介绍" class="headerlink" title="术语介绍"></a>术语介绍</h2><p>intrinsic dimension(本征维)： 在多维信号的信号处理中，信号的本征维描述了生成信号的良好近似需要多少变量。 </p>
+<p>Ablation Study（消融实验）： 在深度学习论文中，ablation study往往是在论文最终提出的模型上，<strong>减少一些改进特征</strong>（如减少几层网络等），以验证相应改进特征的必要性。 </p>
+<p>LM-BFF <a href="Gao et al., 2021b">5</a>：： better few-shot fine-tuning of language models ，更好的适合小样本微调的语言模型。</p>
+<p>DINO[22]:通过指令获得数据集的方法，Datasets from Instructions</p>
+<p>T0:多任务encoder-decoder模型，针对不同下游任务，人为设计不同的提示词预训练后获得。</p>
+<p>T5LM-XXL :XXL(11B)级参数规模的T5语言模型，</p>
+<p><strong>soft prompts和hard prompts</strong>： 模板的制作分为手工创建模板和自动化生成模板，而自动化生成模板又分为离散提示（又叫做硬提示）和连续提示（又叫做软提示） </p>
+<h3 id="以下均为需要微调参数的方法"><a href="#以下均为需要微调参数的方法" class="headerlink" title="以下均为需要微调参数的方法"></a>以下均为需要微调参数的方法</h3><p>BBT(Black-Box Tuning)： 无梯度的微调方法，搜索连续空间中的最佳软<strong>提示词嵌入</strong>，而不是搜索离散的文本提示词。</p>
+<p>MT(Model Tuning)：在<strong>每个任务上对整个</strong>预训练语言<strong>模型</strong>进行微调的通用范式</p>
+<p>PT(Prompt Tuning)：预训练模型被冻结，<strong>只训练额外的连续软提示词</strong>的梯度引导的微调方法</p>
+<h3 id="无须微调参数的方法"><a href="#无须微调参数的方法" class="headerlink" title="无须微调参数的方法"></a>无须微调参数的方法</h3><ul>
+<li><p>ICL(In-Context Learning):上下文学习，大规模预训练模型进行小样本学习的通用方法。</p>
+<p>由标注的样本和<strong>手动模板</strong>组成的<strong>范例</strong>被用来帮助模型理解test tasks的含义。</p>
+<p>缺陷：需要人工提供手动提示词，对标记数据敏感，表现不稳定。</p>
+</li>
+<li><p>GRIPS（  Gradient-free Instructional Prompt Search) ：无梯度指令提示搜索，基于编辑的优化提示词搜索方法，主要用于简单的基于编辑的操作（例如增、删、交换、释义）</p>
+</li>
+</ul>
+<h2 id="提示词重新生成方法"><a href="#提示词重新生成方法" class="headerlink" title="提示词重新生成方法"></a>提示词重新生成方法</h2><ul>
+<li>BT:回译(back translation)。将提示词从英语翻译到其他 11 种语言，然后将它们翻译回英语。包括中文、日语、韩语、法语、西班牙语、意大利语、俄语、德语、阿拉伯语、希腊语、粤语，</li>
+<li>完形填空（cloze）。利用LM-BFF[5]里的模板生成方法，使用T5（transformer）文本到文本预训练模型生成模板。对每个输入样例及其表达器（verbalizer）用占位符作为前缀和后缀生成模板，让T5去补全这些占位符。采用波束搜索(beam search)生成多个候选提示词。与论文[5]不同的是，本文的方法里是没有参数更新的，所以完型填空的效果并不好。所以本文中，使用人工提示词作为初始模板，用占位符代替一些随机的标记，然后让T5填空。选出在校验集（Ddev）时平均结果最好的提示词。</li>
+<li>SC:续写句子（sentence continuation）。采用和论文[22]中一样的根据指令生成数据集方法，采用模板“Write two sentences that mean the same thing. Sentence 1: Manual Prompt, Sentence 2:” 交给预训练模型去续写。采用了GPT2-XL (1.5B)和 T5LM-XXL (11B)作为提示词生成模型。</li>
+</ul>
+<p>这些方法不需要人工定义编辑规则，而且生成的提示词语义流畅。</p>
+<h3 id="提示词打分"><a href="#提示词打分" class="headerlink" title="提示词打分"></a>提示词打分</h3><p>Close: 按照[5]里的方法，用校验集(D_dev)上的平均对数打分；</p>
+<p>BT和SC：不适用平均对数，采用校验集(D_dev)上的准确率评价。</p>
+<h2 id="创新点：提示词遗传搜索算法"><a href="#创新点：提示词遗传搜索算法" class="headerlink" title="创新点：提示词遗传搜索算法"></a>创新点：提示词遗传搜索算法</h2><p>离散的词空间中找到高表现的硬提示词。</p>
+<p><img src="/categories/ML/Few-Shot17/1681822830925.png" alt="1681822830925"></p>
+<p><img src="/categories/ML/Few-Shot17/1681784514455.png" alt="1681784514455"></p>
+<p>​                                    Table4  五种小样本学习方法在四个评价指标上的比较</p>
+<blockquote>
+<p>这里的代价消耗是训练和提示词搜索的联合损失。</p>
+<p>MT缺乏服务效率，因为保存MT需要对于每个任务都保存整个模型，造成巨大的存储开销。所有参数都需要调整，其使用的Adam等优化器要求存储额外的动量和方差项。</p>
+<p>PT和BBT只需要调整提示词嵌入层。</p>
+<p>ICL使用很长的序列长度来串联例子，推理昂贵，尤其是在范例数目多的时候。那为什么这里的代价只是1x？？？</p>
+<p>可以看到，本文提出的方法GPS提供Serving Effiency、不需要参数更新、极大的减少了计算代价，还能取得接近于整个模型调优的效果。获得了60.12的准确率。</p>
+</blockquote>
+<h2 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h2><h3 id="数据集（NLP的）"><a href="#数据集（NLP的）" class="headerlink" title="数据集（NLP的）"></a>数据集（NLP的）</h3><blockquote>
+<p>T0语言模型的10个测试任务</p>
+</blockquote>
+<ul>
+<li><p>自然语言推理任务（natural language inference）：ANLI R1, ANLI R2, ANLI R3, CB, RTE</p>
+</li>
+<li><p>共指解析（coreference resolution）：WSC, Winogrande</p>
+</li>
+<li>语句补全（sentence completion）：COPA, HellaSwag</li>
+<li>词义消歧（word sense disambiguation）：WiC</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>参数设置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PT</td>
+<td>Adafactor Optimizer，lr=0.05</td>
+</tr>
+<tr>
+<td>MT</td>
+<td>Adafactor Optimizer，,lr=5e-5=0.00005</td>
+</tr>
+<tr>
+<td>BBT</td>
+<td>本征维度=500，pop size=20，使用交叉熵损失；         软提示词标记数量为1 or 50时结果最好</td>
+</tr>
+<tr>
+<td>ICL</td>
+<td>每个task随机从训练集挑2个样本</td>
+</tr>
+<tr>
+<td>GRIPS</td>
+<td>复用arXiv:2203.07281.里的超参数，将初始提示词换成T0的</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="/categories/ML/Few-Shot17/1681830294139.png" alt="1681830294139"></p>
+<p>T0、BBT、PT、MT采用相同的人工提示词集，GRIPS和GPS自己搜索提示词。</p>
+<p>实验结果是三种不同的数据划分方式的平均结果，脚注是一种方法在一个数据集的三种数据划分下的标准差。</p>
+<p>划线部分给出了小样本学习下参数微调得到的最好结果，加粗部分给出了参数冻结方法的最好结果。</p>
+<p><img src="/categories/ML/Few-Shot17/1681784982024.png" alt="1681784982024"></p>
+<p>​                                        Table3 GPS产生的提示词的解释 </p>
+<p>&gt;</p>
+<h2 id="我的未来工作"><a href="#我的未来工作" class="headerlink" title="我的未来工作"></a>我的未来工作</h2><p>GPT-3表明，在超大规模预训练语言模型上使用提示词进行小样本学习效果良好；</p>
+<blockquote>
+<p>Brown et al., Language models are few-shot learners. NIPS,2020</p>
+</blockquote>
+<p>但对于每个特定任务找到最优化的提示词很困难。</p>
+<p>To模型来源于这篇论文——Sanh et al., 2021. Multitask prompted training enables zero-shot task generalization.</p>
+<blockquote>
+<p>[2]Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel HerbertVoss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel Ziegler, Jeffrey Wu, Clemens Winter, Chris Hesse, Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark, Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever, and Dario Amodei. 2020. Language models are few-shot learners. In Advances in Neural Information Processing Systems, volume 33, pages 1877–1901. Curran Associates, Inc.</p>
+<p>[5]Tianyu Gao, Adam Fisch, and Danqi Chen. 2021b. Making pre-trained language models better few-shot learners. In Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers), pages 3816–3830, Online. Association for Computational Linguistics.</p>
+<p>[6]Xu Han, Weilin Zhao, Ning Ding, Zhiyuan Liu, and Maosong Sun. 2021. Ptr: Prompt tuning with rules for text classification.</p>
+<p>[17]Archiki Prasad, Peter Hase, Xiang Zhou, and Mohit Bansal. 2022. Grips: Gradient-free, edit-based instruction search for prompting large language models. arXiv preprint arXiv:2203.07281.</p>
+<p>[19]Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J. Liu. 2020. Exploring the limits of transfer learning with a unified text-totext transformer. Journal of Machine Learning Research, 21(140):1–67.</p>
+<p>[22]Timo Schick and Hinrich Schütze. 2021. Generating datasets with pretrained language models. Computing Research Repository, arXiv:2104.07540.</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/" class="post-title-link" itemprop="url">心理学效应</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-04-07 12:16:58 / Modified: 12:49:20" itemprop="dateCreated datePublished" datetime="2023-04-07T12:16:58+08:00">2023-04-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>理解和引导自己与朋友；</p>
+<p>心理暗示：使得人不自觉地按照一定的方式去行动，不加批判地接受一定的观念。</p>
+<h2 id="瓦伦达效应："><a href="#瓦伦达效应：" class="headerlink" title="瓦伦达效应："></a>瓦伦达效应：</h2><p>美国一个走钢丝演员在特别想成功的一场演出上失败了。</p>
+<p>做法：1、平常心  2、专注事情本身，而非其结果。 3、抗干扰，其他事情与我无关。4、用暗示性动作或者自己习惯的场景让自己处于一种适合做事的条件下，类似于条件概率，让大脑和身体习惯  5、熟练度max，即使干扰也不影响。</p>
+<p>4、5都是重复，更大的来说所有做法都是重复形成习惯。</p>
+<h2 id="酸葡萄-甜柠檬效应"><a href="#酸葡萄-甜柠檬效应" class="headerlink" title="酸葡萄/甜柠檬效应"></a>酸葡萄/甜柠檬效应</h2><p>狐狸想尽办法也吃不到葡萄。“嗯，那个葡萄一定非常酸.””</p>
+<p>实在得不到的，可以不要太执着，肯定是坏的，但是不要丢掉上进心；</p>
+<p>自卑时，自己拥有的是最好的，注意其中的度。</p>
+<h2 id="罗森塔尔效应"><a href="#罗森塔尔效应" class="headerlink" title="罗森塔尔效应"></a>罗森塔尔效应</h2><p>随机挑选孩子，对老师说这些学生是可造之才。</p>
+<p>权威的延誉会让周围的人对某个人的心理评价变高，通过日常行为体现出来，被期待的人受到这种鼓舞，成绩变得更好。</p>
+<p>反思：1.从朋友和老师亲人的正面评价中汲取力量 </p>
+<p>2.相信朋友会成长得越来越好，实现他的目标。</p>
+<p>3.对一个人的喜欢和赞赏，无须直接说话，从众多细节中可以体现出来。细细品味，你会发现身边人的态度。</p>
+<h2 id="飞轮效应"><a href="#飞轮效应" class="headerlink" title="飞轮效应"></a>飞轮效应</h2><p>万事开头难；惯性的作用，一开始会比较费劲，之后就轻松了，按部就班就可以。</p>
+<p>3.前面的努力，都会变成后面的推动力。永远相信付出的努力会在某一天给自己回报。</p>
+<p>4.增强回路的过程。因曾强果，果又反过来增强因，循环往复。重视反馈，给自己暗示的反馈，给自己找进步空间。</p>
+<h2 id="蘑菇效应"><a href="#蘑菇效应" class="headerlink" title="蘑菇效应"></a>蘑菇效应</h2><p>生长在阴暗角落的蘑菇，无人关注，没有阳光，常常自生自灭。只有自己长得高大了，才会被人发现，发挥出作用。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot16/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -869,167 +1135,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Win-Rev01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Win-Rev01/" class="post-title-link" itemprop="url">Win_Rev01</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-01-09 11:00:12" itemprop="dateCreated datePublished" datetime="2023-01-09T11:00:12+08:00">2023-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-01-08 12:46:56" itemprop="dateModified" datetime="2023-01-08T12:46:56+08:00">2023-01-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="虎符-the-shellcode"><a href="#虎符-the-shellcode" class="headerlink" title="虎符_the_shellcode"></a>虎符_the_shellcode</h2><p><img src="/categories/CTF/Win-Rev01/1673151993119.png" alt="1673151993119"></p>
-<p>明显的循环结构；从开始直接结束的特征；</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>()</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2022-21882/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/CVE-2022-21882/" class="post-title-link" itemprop="url">Windows 权限提升漏洞cve-2022-21882</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-01-04 14:19:49" itemprop="dateCreated datePublished" datetime="2023-01-04T14:19:49+08:00">2023-01-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-05 12:04:04" itemprop="dateModified" datetime="2023-04-05T12:04:04+08:00">2023-04-05</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Win10版本；Win32k权限提升漏洞 </p>
-</blockquote>
-<p> 该漏洞是之前CVE-2021-1732漏洞补丁的绕过。CVE-2022-21882是一个本地权限提升漏洞，攻击者利用该漏洞可以在Windows 10系统上获得管理员权限、创建新的管理员账户、执行特权命令。</p>
-<p> <strong>由dump分析入手，到漏洞原理剖析，再到漏洞的重现利用手法，最后到分析漏洞的影响函数、修补方式等，完整重现“由dump到POC”的全过程。</strong> </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//k  栈追踪</span><br><span class="line">//b给出每个函数的前三个参数</span><br><span class="line"> kd&gt; kb </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">//u Address1 Address2，反汇编选定范围内的代码</span><br><span class="line"> kd&gt; u xxxDestroyWindow xxxDestroyWindow+34 </span><br><span class="line"> </span><br><span class="line"> //给出某个函数调用前的内容</span><br><span class="line"> kd&gt; u xxxMNCancel la</span><br><span class="line"> </span><br><span class="line"> //反汇编选定地址之前长度为Lnum的代码</span><br><span class="line"> kd&gt; ub xxxMNCancel+121 L5</span><br><span class="line"> //展示某个数据结构data type里的某个名称的对象</span><br><span class="line"> 0: kd&gt; dt tagPOPUPMENU -d spwndPopupMenu</span><br><span class="line"> win32k!tagPOPUPMENU</span><br><span class="line">   +0x008 spwndPopupMenu : Ptr32 tagWND</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-<p>xxxTrackPopupMenuEx的工作原理，熟悉界面编程的朋友都知道这是用于弹出一个Popup Menu的函数，那么在内核中它是如何工作的呢，这里笔者简单列出一下大概的工作的流程 ：</p>
-<p>(1). 创建Menu窗口对象： 根据HMENU等相关参数，创建最终弹出和展示的Menu窗口（通过xxxCreateWindowEx）</p>
-<p>(2). 分配和初始化当前线程的MenuState结构（xxxMNAllocMenuState）</p>
-<p>(3). 计算和设定Menu窗口的相关位置、属性等（通过FindBestPos/xxxSetWindowPos等）</p>
-<p>(4). 进入菜单循环，展示Menu并进入等待菜单选择的循环（xxxMNLoop），在进入循环前，会通过xxxWindowEvent来“播放”一个EVENT_SYSTEM_MENUPOPUPSTART的窗口事件，这个细节会在后面用到</p>
-<p>(5). 菜单被选择或取消，退出循环并销毁PopupMenu、Menu窗口对象和MenuState结构(xxxxxEndMenuLoop、xxxMNEndMenuState等)</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1101,7 +1206,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
