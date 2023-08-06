@@ -156,6 +156,202 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/rev02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/rev02/" class="post-title-link" itemprop="url">SYCTF2306 babyThread题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-06 14:19:49 / Modified: 22:09:14" itemprop="dateCreated datePublished" datetime="2023-08-06T14:19:49+08:00">2023-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="本题难点"><a href="#本题难点" class="headerlink" title="本题难点"></a>本题难点</h2><p>1.这道题要给线程下断点，</p>
+<p>2.而且还要跳过一个IsDebuggerPresent的反调试，</p>
+<p>3.在进入线程后，输入阶段也有一个跳转需要修改。</p>
+<h2 id="静态反汇编，"><a href="#静态反汇编，" class="headerlink" title="静态反汇编，"></a>静态反汇编，</h2><p>一路跟踪跳转关系，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">Main_func</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  sub_41141A();                                 <span class="comment">// 给函数指针赋值</span></span><br><span class="line">  <span class="keyword">return</span> sub_412A90();                          <span class="comment">// 得到flag</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//sub_412A90() line 36</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//int sub_412D60() line 9</span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">Key_func</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  CreateThread(<span class="number">0</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)StartAddress, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  hHandle = (HANDLE)sub_41127B();</span><br><span class="line">  CreateThread(<span class="number">0</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)sub_411316, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">//sub_411316 line3</span></span><br><span class="line"><span class="comment">//定位到关键函数</span></span><br><span class="line">__int64 __stdcall <span class="title function_">sub_411B80</span><span class="params">(<span class="type">int</span> a1)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> v1; <span class="comment">// edx</span></span><br><span class="line">  __int64 v2; <span class="comment">// ST08_8</span></span><br><span class="line">  <span class="type">char</span> v4; <span class="comment">// [esp+0h] [ebp-13Ch]</span></span><br><span class="line">  <span class="type">size_t</span> Size; <span class="comment">// [esp+D0h] [ebp-6Ch]</span></span><br><span class="line">  <span class="type">char</span> Buf2; <span class="comment">// [esp+DCh] [ebp-60h]</span></span><br><span class="line">  <span class="type">int</span> v7_32; <span class="comment">// [esp+108h] [ebp-34h]</span></span><br><span class="line">  <span class="type">char</span> flag; <span class="comment">// [esp+114h] [ebp-28h]</span></span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+13Ch] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_41137F((<span class="type">int</span>)&amp;unk_41D0F4);</span><br><span class="line">  WaitForSingleObject(hObject, <span class="number">0xFFFFFFFF</span>);</span><br><span class="line">  Check_Run_Error(&amp;v4 == &amp;v4);</span><br><span class="line">  Print_str((<span class="type">int</span>)<span class="string">&quot;please input your flag:&quot;</span>, v4);</span><br><span class="line">  Input_str(<span class="string">&quot;%32s&quot;</span>, (<span class="type">unsigned</span> <span class="type">int</span>)&amp;flag);</span><br><span class="line">  v7_32 = j_strlen(&amp;flag);</span><br><span class="line">  Enc_str(<span class="number">16</span>, (<span class="type">int</span>)&amp;flag, v7_32, (<span class="type">int</span>)&amp;Buf2);</span><br><span class="line">  Size = <span class="number">32</span>;</span><br><span class="line">  <span class="keyword">if</span> ( !j_memcmp(&amp;unk_41B018, &amp;Buf2, <span class="number">32u</span>) )</span><br><span class="line">    Print_str((<span class="type">int</span>)<span class="string">&quot;you win!&quot;</span>, v4);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    Print_str((<span class="type">int</span>)<span class="string">&quot;you lose!&quot;</span>, v4);</span><br><span class="line">  SetEvent(hObject);</span><br><span class="line">  Check_Run_Error(&amp;v4 == &amp;v4);</span><br><span class="line">  HIDWORD(v2) = v1;</span><br><span class="line">  LODWORD(v2) = <span class="number">1</span>;</span><br><span class="line">  sub_411217((<span class="type">int</span>)&amp;savedregs, (<span class="type">int</span>)&amp;dword_411C7C);</span><br><span class="line">  <span class="keyword">return</span> v2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​    猜测memcmp比较的：unk_41B018是程序的密文，Buf2存储根据输入生成的密文。</p>
+<p>跟入前面的处理函数，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 __cdecl <span class="title function_">sub_411DA0</span><span class="params">(<span class="type">int</span> a1_16, <span class="type">int</span> flag, <span class="type">int</span> a3_32, <span class="type">int</span> cipher)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">size_t</span> v4; <span class="comment">// eax</span></span><br><span class="line">  __int64 v5; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">char</span> v6; <span class="comment">// STEB_1</span></span><br><span class="line">  <span class="type">unsigned</span> __int8 v7; <span class="comment">// STDF_1</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v8; <span class="comment">// ST04_8</span></span><br><span class="line">  <span class="type">char</span> v10[<span class="number">264</span>]; <span class="comment">// [esp+E8h] [ebp-16Ch]</span></span><br><span class="line">  <span class="type">int</span> v11; <span class="comment">// [esp+1F0h] [ebp-64h]</span></span><br><span class="line">  <span class="type">int</span> v12; <span class="comment">// [esp+1F4h] [ebp-60h]</span></span><br><span class="line">  <span class="type">int</span> v13; <span class="comment">// [esp+1F8h] [ebp-5Ch]</span></span><br><span class="line">  <span class="type">int</span> v14; <span class="comment">// [esp+1FCh] [ebp-58h]</span></span><br><span class="line">  <span class="type">int</span> v15; <span class="comment">// [esp+200h] [ebp-54h]</span></span><br><span class="line">  <span class="type">int</span> v16; <span class="comment">// [esp+20Ch] [ebp-48h]</span></span><br><span class="line">  <span class="type">int</span> j; <span class="comment">// [esp+218h] [ebp-3Ch]</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [esp+224h] [ebp-30h]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v19; <span class="comment">// [esp+230h] [ebp-24h]</span></span><br><span class="line">  <span class="type">char</span> v20; <span class="comment">// [esp+23Ch] [ebp-18h]</span></span><br><span class="line">  <span class="type">char</span> v21; <span class="comment">// [esp+23Dh] [ebp-17h]</span></span><br><span class="line">  <span class="type">char</span> v22; <span class="comment">// [esp+23Eh] [ebp-16h]</span></span><br><span class="line">  <span class="type">char</span> v23[<span class="number">21</span>]; <span class="comment">// [esp+23Fh] [ebp-15h]</span></span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+254h] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_41137F((<span class="type">int</span>)&amp;unk_41D0F4);</span><br><span class="line">  v11 = <span class="number">1</span>;</span><br><span class="line">  v12 = <span class="number">0x55</span>;</span><br><span class="line">  v13 = <span class="number">0x1C39</span>;</span><br><span class="line">  v14 = <span class="number">0x95EED</span>;</span><br><span class="line">  v15 = <span class="number">0x31C84B1</span>;</span><br><span class="line">  v19 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; ; i += <span class="number">4</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v4 = j_strlen(Dest);</span><br><span class="line">    <span class="keyword">if</span> ( v19 &gt;= v4 )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    v16 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; <span class="number">5</span>; ++j )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( Dest[j + v19] == <span class="number">0x7A</span> )</span><br><span class="line">        *(&amp;v20 + j + i) = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        v16 += *(&amp;v11 + <span class="number">4</span> - j) * (Dest[j + v19] - <span class="number">33</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    v23[i] = v16;</span><br><span class="line">    *(&amp;v22 + i) = BYTE1(v16);</span><br><span class="line">    *(&amp;v21 + i) = BYTE2(v16);</span><br><span class="line">    *(&amp;v20 + i) = HIBYTE(v16);</span><br><span class="line">    v19 += <span class="number">5</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  v5 = sub_411127((<span class="type">int</span>)&amp;v20, a1_16, (<span class="type">int</span>)v10);</span><br><span class="line">  v19 = <span class="number">0</span>;</span><br><span class="line">  i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; a3_32; ++j )</span><br><span class="line">  &#123;</span><br><span class="line">    v19 = (<span class="type">signed</span> <span class="type">int</span>)(v19 + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">    i = (i + (<span class="type">unsigned</span> __int8)v10[v19]) % <span class="number">256</span>;</span><br><span class="line">    v6 = v10[v19];</span><br><span class="line">    v10[v19] = v10[i];</span><br><span class="line">    v10[i] = v6;</span><br><span class="line">    v7 = v10[((<span class="type">unsigned</span> __int8)v10[i] + (<span class="type">unsigned</span> __int8)v10[v19]) % <span class="number">256</span>];</span><br><span class="line">    HIDWORD(v5) = v7;</span><br><span class="line">    *(_BYTE *)(j + cipher) = v7 ^ *(_BYTE *)(j + flag);<span class="comment">// cipher[j]=v7^flag[j]</span></span><br><span class="line">  &#125;</span><br><span class="line">  v8 = __PAIR__(HIDWORD(v5), j);</span><br><span class="line">  Check_Stack((<span class="type">int</span>)&amp;savedregs, (<span class="type">int</span>)&amp;dword_411FF8);</span><br><span class="line">  <span class="keyword">return</span> v8;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到前面根据一系列操作，生成了v7，然后用v7和flag异或得到了正确的cipher。</p>
+<h2 id="所以动态调试，"><a href="#所以动态调试，" class="headerlink" title="所以动态调试，"></a>所以动态调试，</h2><p>1.先搜索字符串，下好断点，一个是输入位置，一个是比较位置。</p>
+<p><img src="/categories/CTF/rev02/1691327074344.png" alt="1691327074344"></p>
+<h3 id="考点1"><a href="#考点1" class="headerlink" title="考点1"></a>考点1</h3><p>多线程下好断点。</p>
+<p><img src="/categories/CTF/rev02/1691326897356.png" alt="1691326897356"></p>
+<h3 id="考点2"><a href="#考点2" class="headerlink" title="考点2"></a>考点2</h3><p>2.一开始直接<code>jmp F12E10</code>。</p>
+<p><img src="/categories/CTF/rev02/1691325095601.png" alt="1691325095601"></p>
+<p>3.进入到F12A90。</p>
+<p>F9运行，断到了线程函数执行前。</p>
+<p><img src="/categories/CTF/rev02/1691327641950.png" alt="1691327641950"></p>
+<p>按几下F9，成功断到了关键函数处。</p>
+<p><img src="/categories/CTF/rev02/1691328283702.png" alt="1691328283702"></p>
+<p>此时的线程状态：</p>
+<p><img src="/categories/CTF/rev02/1691328244877.png" alt="1691328244877"></p>
+<h3 id="考点3"><a href="#考点3" class="headerlink" title="考点3"></a>考点3</h3><p>跟入F11037，在F12860的跳转处，强制让其不跳转。</p>
+<p><img src="/categories/CTF/rev02/1691329006039.png" alt="1691329006039"></p>
+<p>断在输入位置0x411BDE位置，</p>
+<p><img src="/categories/CTF/rev02/1691329286256.png" alt="1691329286256"></p>
+<p>先随便输入32个1，根据对比函数里的栈地址，找到密文unk_41B018，</p>
+<p><img src="/categories/CTF/rev02/1691329776133.png" alt="1691329776133"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">00F1B018  DE 1C 22 27 1D AE AD 65 AD EF 6E 41 4C 34 75 F1  ?&quot;&#x27;enAL4u?</span><br><span class="line">00F1B028  16 50 50 D4 48 69 6D 93 36 1C 86 3B BB D0 4C 91  PP訦im??恍L?</span><br></pre></td></tr></table></figure>
+<p>整理如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DE1C22271DAEAD65ADEF6E414C3475F1165050D448696D93361C863BBBD04C91</span><br></pre></td></tr></table></figure>
+<p>再次运行程序，先断到长度函数处。</p>
+<p><img src="/categories/CTF/rev02/1691330092818.png" alt="1691330092818"></p>
+<p>修改这里的输入值，将前面的密文输入进去。</p>
+<p><img src="/categories/CTF/rev02/1691330196880.png" alt="1691330196880"></p>
+<p>再断到加密函数位置处：</p>
+<p><img src="/categories/CTF/rev02/1691330953276.png" alt="1691330953276"></p>
+<p>经过异或处理后，此时memcmp的Buf2里, 就是flag值。</p>
+<p><img src="/categories/CTF/rev02/1691330848182.png" alt="1691330848182"></p>
+<p><img src="/categories/CTF/rev02/1691330936363.png" alt="1691330936363"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders03/" class="post-title-link" itemprop="url">Chap6-可执行文件的装载和进程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-03 14:58:58" itemprop="dateCreated datePublished" datetime="2023-08-03T14:58:58+08:00">2023-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-02 21:01:24" itemprop="dateModified" datetime="2023-08-02T21:01:24+08:00">2023-08-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Linux下的分段故障<code>Segmentation fault</code>与Windows的“进程因非法操作需要关闭，很多时候是因为进程访问了未经允许的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**Linux操作系统</span></span><br><span class="line"><span class="comment"> * |----------------------------------|</span></span><br><span class="line"><span class="comment"> * |              操作系统空间         | 1G</span></span><br><span class="line"><span class="comment"> * |----------------------------------| 0xC0000000</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  | </span></span><br><span class="line"><span class="comment"> * |             用户进程空间          |   3G</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |__________________________________| 0x00000000</span></span><br><span class="line"><span class="comment"> * WinXP默认操作系统占据2G内存，可以调整使其只占1G内存。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="PAE"><a href="#PAE" class="headerlink" title="PAE"></a>PAE</h3><p>(Physical Address Extension)，是针对32位CPU内存不足的一种修补。类似的，针对16位CPU，借助段偏移寻址能够达到1MB，每次读块只能读64KB，使用XMS(一种中断处理技术)读取大于1MB内存的地方。</p>
+<p>OS采用36位地址线\内存地址时，程序使用的最大虚拟地址空间仍旧不会超过4GB，但是它程序的虚拟地址空间可以映射到的物理内存的范围扩大到64GB。</p>
+<p>通过这种页或块映射在Win下访存的操作方式叫地址窗口映射扩展AWE(Address Windowing Extension)；在Linu下通过mmap()系统调用来实现。</p>
+<h3 id="装载的方式"><a href="#装载的方式" class="headerlink" title="装载的方式"></a>装载的方式</h3><ul>
+<li>overlay覆盖装入，适合内存受限场景比如木马或者嵌入式设备；</li>
+</ul>
+<p>保证调用路径上的块都在内存；禁止跨树间调用。</p>
+<p>编写程序时将程序分块，写一小段辅助代码，管理模块在内存的驻留和更替。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                 Overlay Manager (几十Bytes)        |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                  Main (1024 bytes)                 | </span></span><br><span class="line"><span class="comment"> * |											    |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |      A 模块 (512 bytes)    |   B 模块 (256 bytes)   |</span></span><br><span class="line"><span class="comment"> * |						 |----------------------- |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>如上图所示，A和B模块互不依赖，都被Main模块调用时，则可以采用Overlay的方式，使得需要的内存空间节省256Bytes。</p>
+<ul>
+<li>Paging页映射 和页替换算法  MMU的地址映射</li>
+</ul>
+<h2 id="从操作系统可执行文件的装载"><a href="#从操作系统可执行文件的装载" class="headerlink" title="从操作系统可执行文件的装载"></a>从操作系统可执行文件的装载</h2><h3 id="进程的建立"><a href="#进程的建立" class="headerlink" title="进程的建立"></a>进程的建立</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">虚拟地址空间&lt;-----------&gt;物理地址</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -938,96 +1134,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Pediy01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Pediy01/" class="post-title-link" itemprop="url">微信多实例运行</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-07-10 14:19:49 / Modified: 14:59:29" itemprop="dateCreated datePublished" datetime="2023-07-10T14:19:49+08:00">2023-07-10</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> ADVAPI.dll  提供高级系统功能,Advanced，如 注册表、安全性、事件日志、服务管理等 ；</p>
-<p>查看API对应的源代码路径：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um</span><br></pre></td></tr></table></figure>
-<h2 id="只运行一个实例"><a href="#只运行一个实例" class="headerlink" title="只运行一个实例"></a>只运行一个实例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CreateMutexA</span><br><span class="line">FindWindowA</span><br><span class="line">使用共享Section</span><br></pre></td></tr></table></figure>
-<p>5.1节的Serial.exe只能运行一个实例。</p>
-<p><img src="/categories/CTF/Pediy01/1688962133346.png" alt="1688962133346"></p>
-<p><img src="/categories/CTF/Pediy01/1688963259744.png" alt="1688963259744"></p>
-<p>修改FindWindow后面的判断逻辑即可。一开始改为了75(jnz)</p>
-<p>此时可以运行多个，但是运行前需要找到已存在的一个窗口才能继续创建，再次修改程序，把jz改成jmp。</p>
-<h2 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h2><p>先根据break定位关闭微信的函数<code>CloseWechat</code>，进而找到关键函数sub_405FD0，它控制着返回结果。</p>
-<p><img src="/categories/CTF/Pediy01/1688970540191.png" alt="1688970540191"></p>
-<p>关键函数<code>int __stdcall sub_405FD0(DWORD a1, int a2, int a3, int a4)</code></p>
-<p>跟进去后，可以看到一开始检查注册表语言配置和更新配置。</p>
-<p><img src="/categories/CTF/Pediy01/1688968867614.png" alt="1688968867614"></p>
-<p>微信整体打开，靠WechatWin.dl里的函数。</p>
-<p><img src="/categories/CTF/Pediy01/1688969199372.png" alt="1688969199372"></p>
-<p>打开WechatWin.dll，发现其导入表里存在实例判断函数。</p>
-<p><img src="/categories/CTF/Pediy01/1688969733507.png" alt="1688969733507"></p>
-<p><img src="/categories/CTF/Pediy01/1688969749959.png" alt="1688969749959"></p>
-<p>双击进入后，等待库加载完成，需要几分钟，之后x查看两个函数的上下文：</p>
-<p>注意这里一定要多等一会，不然调用<code>CreateMutex</code>的地址可能检索不全。</p>
-<p><img src="/categories/CTF/Pediy01/1688970084672.png" alt="1688970084672"></p>
-<p>调用<code>FindWindowW</code>函数的上下文十分明显：</p>
-<p><img src="/categories/CTF/Pediy01/1688971265497.png" alt="1688971265497"></p>
-<p>对于上图尾行的这个大跳，是一个经典的判断Mutex是否存在的代码段。</p>
-<blockquote>
-<p>Mutex存在，则GetLastError返回 <code>ERROR_ALREADY_EXISTS</code>.，不存在时，返回0.</p>
-</blockquote>
-<p><img src="/categories/CTF/Pediy01/1688971805972.png" alt="1688971805972"></p>
-<p>把jnz StartNewInstance改变成为jmp。</p>
-<p>爆破成功。</p>
-<p><img src="/categories/CTF/Pediy01/1688972258464.png" alt="1688972258464"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1129,123 +1235,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">QQ Elevation复现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-07-03 14:19:49 / Modified: 14:52:18" itemprop="dateCreated datePublished" datetime="2023-07-03T14:19:49+08:00">2023-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>利用QQProtect.exe提权，获得NT Authority\SYSTEM权限。</p>
-</blockquote>
-<h2 id="漏洞成因："><a href="#漏洞成因：" class="headerlink" title="漏洞成因："></a>漏洞成因：</h2><p>QQProtect.exe没有使用ASLR保护，篡改函数指针，利用ROP链（Ret Oriented Programming，即修改函数返回指针)实现了任意代码执行。</p>
-<p>1.QQProtect.exe+0x40c9f8处，有<code>任意地址写漏洞</code>。</p>
-<p>待添加自己的截图，网络截图可见：</p>
-<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image0.png" alt="image0"></p>
-<p>可以在任意地址写入DWORD(1)。</p>
-<p>2.QQProtectEngine.dll+0x3B4F6处，</p>
-<p>待添加自己的截图，网络截图可见：</p>
-<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image1.png" alt="image1"></p>
-<p>可以完成对任意地址的指针ptr，偏移2个ptr指针类型大小的位置处，赋值为(unsigned int )(ptr+3)。</p>
-<p>Affected Products:</p>
-<ul>
-<li>QQ 9.7.1.28940 ~ 9.7.8.29039</li>
-<li>TIM 3.4.5.22071 ~ 3.4.7.22084</li>
-</ul>
-<p>Affected Components:</p>
-<ul>
-<li>QQProtect.exe 4.5.0.9424 (in TIM 3.4.5.22071)</li>
-<li>QQProtect.exe 4.5.0.9426 (in QQ 9.7.1.28940)</li>
-<li>QQProtectEngine.dll 4.5.0.9424 (in TIM 3.4.5.22071)</li>
-<li>QQProtectEngine.dll 4.5.0.9426 (in QQ 9.7.1.28940)</li>
-</ul>
-<h2 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h2><p>POC整体用rust构建，先来解析配置文件里的内容。</p>
-<h3 id="1-配置文件解析"><a href="#1-配置文件解析" class="headerlink" title="1.配置文件解析"></a>1.配置文件解析</h3><p>针对32位系统使用静态链接的C运行时，构建可执行文件。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo +stable-i686-pc-windows-msvc build --release --config <span class="string">&quot;build.rustflags = [\&quot;-C\&quot;, \&quot;target-feature=+crt-static\&quot;]&quot;</span></span><br></pre></td></tr></table></figure>
-<p>对应的toml文件</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[profile.release]</span></span><br><span class="line"><span class="attr">opt-level</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="section">[profile.release.overrides.&#x27;cfg(target_os = &quot;windows&quot;)&#x27;]</span></span><br><span class="line"><span class="attr">rustflags</span> = [<span class="string">&quot;-C&quot;</span>, <span class="string">&quot;target-feature=+crt-static&quot;</span>]</span><br></pre></td></tr></table></figure>
-<p>此时，只需要<code>cargo build --release</code>即可。</p>
-<p>开发过程中，要利用一些依赖库，来调用Windows API、服务和命令行参数。</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[dependencies.rhexdump]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.44.0&quot;</span></span><br><span class="line"><span class="attr">features</span> = [</span><br><span class="line">    <span class="string">&quot;Win32_Foundation&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_LibraryLoader&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Threading&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_SystemServices&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Console&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-service]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.5.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-args]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.2.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成动态链接库，即dll文件</span></span><br><span class="line"><span class="section">[lib]</span></span><br><span class="line"><span class="attr">crate-type</span> = [<span class="string">&quot;cdylib&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>2.定义的<code>src\lib.def</code>文件中的导出符号。</p>
-<h3 id="C-名称修饰规则"><a href="#C-名称修饰规则" class="headerlink" title="C++名称修饰规则"></a>C++名称修饰规则</h3><p> C++ 的名称修饰规则，也称为名称重整（name mangling）。用于编译器生成符号表，会因平台和编译器有所不同。它将函数和变量的名称、参数类型、返回类型等信息编码成一个唯一的符号。 </p>
-<p>名称修饰的目的是确保在<strong>链接阶段可以正确地解析函数和变量的符号，避免符号冲突和重复定义的问题。</strong>  为了实现不同编程语言之间的互操作性，可以使用 <code>extern &quot;C&quot;</code> 来指定使用 C 风格的符号。</p>
-<blockquote>
-<p>导出符号的格式是 <code>?SymbolName@ClassName@@FunctionSignature=_alias@0</code> </p>
-</blockquote>
-<p>下面的文件规定了导出的类和符号命，并 将所有导出符号重命名为 <code>_die</code>。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY</span><br><span class="line">EXPORTS</span><br><span class="line">    ?NextSiblingElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ?FirstChildElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ??1TiXmlDocument@@UAE@XZ=_die@0</span><br><span class="line">    ?RootElement@TiXmlDocument@@QAEPAVTiXmlElement@@XZ=_die@0</span><br><span class="line">    ?GetText@TiXmlElement@@QBEPBDXZ=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBD@Z=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBDPAH@Z=_die@0</span><br><span class="line">    ?LoadXML@TiXmlDocument@@QAE_NPADHW4TiXmlEncoding@@@Z=_die@0</span><br><span class="line">    ??0TiXmlDocument@@QAE@XZ=_die@0</span><br><span class="line">    DllMain</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p> <code>QAE</code> 指示该构造函数是一个非静态成员函数，</p>
-<ul>
-<li><code>QB</code> 表示该函数是一个非静态成员函数，并且返回一个指针。</li>
-<li><code>EPBD</code> 表示函数的第一个参数是一个 <code>const char*</code> 类型的指针。</li>
-<li><code>PAH</code> 表示函数的第二个参数是一个 <code>int*</code> 类型的指针。</li>
-<li><code>PAVTiXmlElement 表示返回类型是一个指向</code>TiXmlElement` 类的指针。 </li>
-<li><code>0TiXmlDocument@@QAE@XZ</code>中0表示该类的默认构造函数</li>
-<li><code>@Z</code>：函数参数的结尾标记 ，<code>XZ</code> 表示该构造函数不接受任何参数。 </li>
-</ul>
-<h3 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">CreateProcessAsUserW</span>(token2, <span class="literal">None</span>, <span class="title function_ invoke__">PWSTR</span>(<span class="string">&quot;cmd.exe&quot;</span>.<span class="title function_ invoke__">encode_utf16</span>().<span class="title function_ invoke__">chain</span>(<span class="title function_ invoke__">Some</span>(<span class="number">0</span>)).collect::&lt;<span class="type">Vec</span>&lt;<span class="type">u16</span>&gt;&gt;().<span class="title function_ invoke__">as_mut_ptr</span>()), <span class="literal">None</span>, <span class="literal">None</span>, FALSE, <span class="title function_ invoke__">PROCESS_CREATION_FLAGS</span>(<span class="number">0</span>), <span class="literal">None</span>, <span class="literal">None</span>, &amp;si, &amp;<span class="keyword">mut</span> pi).<span class="title function_ invoke__">ok</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1317,7 +1306,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1329,7 +1318,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

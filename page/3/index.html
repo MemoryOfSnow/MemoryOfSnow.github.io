@@ -156,6 +156,172 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E5%B8%B8%E8%A7%81%E7%9A%84%E8%8A%B1%E6%8C%87%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/%E5%B8%B8%E8%A7%81%E7%9A%84%E8%8A%B1%E6%8C%87%E4%BB%A4/" class="post-title-link" itemprop="url">TEB-PEB-SEH</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-05-07 14:19:49" itemprop="dateCreated datePublished" datetime="2023-05-07T14:19:49+08:00">2023-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-06-20 16:14:10" itemprop="dateModified" datetime="2023-06-20T16:14:10+08:00">2023-06-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="去混淆工具使用"><a href="#去混淆工具使用" class="headerlink" title="去混淆工具使用"></a>去混淆工具使用</h2><p>使用下面这条命令快速去混淆。</p>
+<p>Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Import-Module .\Revoke-Obfuscation.psd1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">下列命令可以针对EID 4104脚本块日志执行分析检测：</span><br><span class="line"></span><br><span class="line">Get-RvoScriptBlock -Path &#x27;C:\Windows\System32\Winevt\Logs\Microsoft-Windows-PowerShell%4Operational.evtx&#x27; -Verbose</span><br><span class="line"></span><br><span class="line">Get-ChildItem .\Demo\demo.evtx | Get-RvoScriptBlock -Verbose</span><br><span class="line"></span><br><span class="line">Get-WinEvent -LogName Microsoft-Windows-PowerShell/Operational | Get-RvoScriptBlock -Verbose</span><br><span class="line">下列命令可以针对demo.evtx中的数据记录执行完整检测：</span><br><span class="line"></span><br><span class="line">$obfResults = Get-WinEvent -Path .\Demo\demo.evtx | Get-RvoScriptBlock | Measure-RvoObfuscation -OutputToDisk -Verbose</span><br><span class="line">下列命令可以对本地或远程托管的测试脚本执行检测：</span><br><span class="line"></span><br><span class="line">Measure-RvoObfuscation -Url &#x27;http://bit.ly/DBOdemo1&#x27; -Verbose -OutputToDisk</span><br><span class="line"></span><br><span class="line">Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</span><br><span class="line"></span><br><span class="line">Get-ChildItem .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</span><br></pre></td></tr></table></figure>
+<p>1.伪装vc++5.0代码：<br>PUSH EBP<br>MOV EBP,ESP<br>PUSH -1<br>push 111111   -___<br>PUSH 111111   -/   在这段代码中类似这样的操作数可以乱填<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>ADD ESP,-6C<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>nop<br>jmp 原入口地址</p>
+<hr>
+<p>2.胡乱跳转代码：<br>push ebp<br>mov ebp,esp<br>inc ecx<br>push edx<br>ADD ESP,-6C<br>nop<br>pop edx<br>dec ecx<br>pop ebp<br>ADD ESP,6C<br>inc ecx<br>loop somewhere   /跳转到上面那段代码地址去！  </p>
+<p>somewhere:<br>nop   /“胡乱”跳转的开始…<br>jmp 下一个jmp的地址   /在附近随意跳<br>jmp …   /…<br>jmp 原入口地址   /跳到原始oep</p>
+<hr>
+<p>3.伪装c++代码：<br>push eax<br>mov ebp,esp<br>push -1<br>push 111111<br>push 111111<br>mov eax,fs:[0]<br>push eax<br>mov fs:[0],esp<br>pop eax<br>mov fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>nop<br>nop<br>jmp 原入口地址</p>
+<hr>
+<p>4.伪装Microsoft Visual C++ 6.0代码：</p>
+<p>PUSH -1<br>PUSH 0<br>PUSH 0<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>SUB ESP,1<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>POP EAX<br>POP EAX<br>nop<br>POP EAX<br>nop<br>ADD ESP,1<br>POP EAX<br>MOV DWORD PTR FS:[0],EAX<br>POP EAX<br>POP EAX<br>nop<br>POP EAX<br>nop<br>POP EAX<br>MOV EBP,EAX<br>JMP 原入口地址</p>
+<hr>
+<p>5.伪装防杀精灵一号防杀代码：<br>push ebp<br>mov ebp,esp<br>push -1<br>push 666666<br>push 888888<br>mov eax,dword ptr fs:[0]<br>nop<br>mov dword ptr fs:[0],esp<br>nop<br>mov dword ptr fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>jmp 原入口地址</p>
+<hr>
+<p>6.伪装防杀精灵二号防杀代码：<br>push ebp<br>mov ebp,esp<br>push -1<br>push 0<br>push 0<br>mov eax,dword ptr fs:[0]<br>push eax<br>mov dword ptr fs:[0],esp<br>sub esp,68<br>push ebx<br>push esi<br>push edi<br>pop eax<br>pop eax<br>pop eax<br>add esp,68<br>pop eax<br>mov dword ptr fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>jmp 原入口地址</p>
+<hr>
+<p>7.伪装木马彩衣(无限复活袍)代码：<br>PUSH EBP<br>MOV EBP,ESP<br>PUSH -1<br>push 415448   -___<br>PUSH 4021A8   -/   在这段代码中类似这样的操作数可以乱填<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>ADD ESP,-6C<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>ADD BYTE PTR DS:[EAX],AL   /这条指令可以不要!<br>jo 原入口地址<br>jno 原入口地址<br>call 下一地址</p>
+<hr>
+<p>8.伪装木马彩衣(虾米披风)代码：<br>push ebp<br>nop<br>nop<br>mov ebp,esp<br>inc ecx<br>nop<br>push edx<br>nop<br>nop<br>pop edx<br>nop<br>pop ebp<br>inc ecx<br>loop somewhere /跳转到下面那段代码地址去！</p>
+<p>someshere:<br>nop   /“胡乱”跳转的开始…<br>jmp 下一个jmp的地址   /在附近随意跳<br>jmp …   /…<br>jmp 原入口的地址   /跳到原始oep</p>
+<hr>
+<p>9.伪装花花添加器(神话)代码：—————-根据C++改<br>nop<br>nop<br>nop<br>mov ebp,esp<br>push -1<br>push 111111<br>push 222222<br>mov eax,dword ptr fs:[0]<br>push eax<br>mov dword ptr fs:[0],esp<br>pop eax<br>mov dword ptr fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>mov eax,原入口地址<br>push eax<br>retn</p>
+<hr>
+<p>10.伪装花花添加器(无极)代码：<br>nop<br>mov   ebp, esp<br>push   -1<br>push   0A2C2A<br>push   0D9038<br>mov   eax, fs:[0]<br>push   eax<br>mov   fs:[0], esp<br>pop   eax<br>mov   fs:[0], eax<br>pop   eax<br>pop   eax<br>pop   eax<br>pop   eax<br>mov   ebp, eax<br>mov   eax, 原入口地址<br>jmp   eax</p>
+<hr>
+<p>11.伪装花花添加器(金刚)代码：————根据VC++5.0改<br>nop<br>nop<br>mov   ebp, esp<br>push   -1<br>push   415448<br>push   4021A8<br>mov   eax, fs:[0]<br>push   eax<br>mov   fs:[0], esp<br>add   esp, -6C<br>push   ebx<br>push   esi<br>push   edi<br>add   [eax], al<br>mov   eax,原入口地址<br>jmp   eax</p>
+<hr>
+<p>12.伪装花花添加器(杀破浪)代码：<br>nop<br>mov   ebp, esp<br>push   -1<br>push   0<br>push   0<br>mov   eax, fs:[0]<br>push   eax<br>mov   fs:[0], esp<br>sub   esp, 68<br>push   ebx<br>push   esi<br>push   edi<br>pop   eax<br>pop   eax<br>pop   eax<br>add   esp, 68<br>pop   eax<br>mov   fs:[0], eax<br>pop   eax<br>pop   eax<br>pop   eax<br>pop   eax<br>mov   ebp, eax<br>mov   eax, 原入口地址<br>jmp   eax</p>
+<hr>
+<p>12.伪装花花添加器(痴情大圣)代码：<br>nop<br>……….省略N行nop<br>nop<br>push   ebp<br>mov   ebp, esp<br>add   esp, -0C<br>add   esp, 0C<br>mov   eax, 原入口地址<br>push   eax<br>retn</p>
+<hr>
+<p>13.伪装花花添加器(如果*爱)代码：<br>nop<br>……..省略N行nop<br>nop<br>push   ebp<br>mov   ebp, esp<br>inc   ecx<br>push   edx<br>nop<br>pop   edx<br>dec   ecx<br>pop   ebp<br>inc   ecx<br>mov   eax, 原入口地址<br>jmp   eax</p>
+<hr>
+<p>14.伪装PEtite 2.2 -&gt; Ian Luck代码：<br>mov eax,0040E000<br>push 004153F3<br>push dword ptr fs:[0]<br>mov dword ptr fs:[0],esp<br>pushfw<br>pushad<br>push eax<br>xor ebx,ebx<br>pop eax<br>popad<br>popfw<br>pop dword ptr fs:[0]<br>pop eax<br>jmp 原入口地址   &#39;执行到程序的原有OEP </p>
+<hr>
+<p>15.无效PE文件代码：<br>push ebp<br>mov ebp,esp<br>inc ecx<br>push edx<br>nop<br>pop edx<br>dec ecx<br>pop ebp<br>inc ecx<br>MOV DWORD PTR FS:[0],EAX   \<br>POP EAX   |<br>POP EAX   \<br>MOV DWORD PTR FS:[0],EAX   |（注意了。。花指令）<br>POP EAX   /<br>POP EAX   |<br>MOV DWORD PTR FS:[0],EAX   /<br>loop 原入口地址</p>
+<hr>
+<p>16.伪装防杀精灵终极防杀代码：<br>push ebp<br>mov ebp,esp<br>add esp,-0C<br>add esp,0C<br>push eax<br>jmp 原入口地址</p>
+<hr>
+<p>17.伪装木马彩衣(金色鱼锦衣)花代码<br>push ebp<br>mov ebp,esp<br>add esp,-0C<br>add esp,0C<br>mov eax,原入口地址<br>push eax<br>retn</p>
+<hr>
+<p>18.<br>在mov ebp,eax<br>后面加上<br>PUSH EAX<br>POP EAX</p>
+<hr>
+<p>19.伪装UPX花指令代码：</p>
+<p>pushad<br>mov esi,m.0044D000<br>lea edi,dword ptr ds:[esi+FFFB4000]<br>push edi<br>or ebp,FFFFFFFF<br>jmp short m.00477F2A</p>
+<hr>
+<p>20.<br>push ebp<br>mov ebp,esp<br>inc ecx<br>push edx<br>pop edx<br>dec ecx<br>pop ebp<br>inc ecx<br>jmp 原入口 </p>
+<p>21、<br>push ebp<br>nop<br>nop<br>mov ebp,esp<br>inc ecx<br>nop<br>push edx<br>nop<br>nop<br>pop edx<br>nop<br>pop ebp<br>inc ecx<br>loop A1地址<br>nop<br>nop</p>
+<p>A1：push ebp<br>mov ebp,esp<br>jo 原入口<br>jno 原入口</p>
+<hr>
+<p>【深层】伪装 WCRT Library (Visual C++) DLL Method 1 -&gt; Jibz<br>黑吧代码 + 汇编代码：<br>使用黑吧粘贴以下代码：</p>
+<p>55 8B EC 83 7D 0C 01 75 41 A1 C0 30 00 10 85 C0 74 0A FF D0 85 C0 75 04 6A FE EB 17 68 0C 30 00 10 68 08 30 00 10 E8 89 00 00 00 85 C0 59 59 74 08 6A FD FF 15 08 20 00 10 68 04 30 00 10 68 00 30 00 10 E8 52 00 00 00 59 59</p>
+<p>粘贴完毕后，再添加2行汇编语句：</p>
+<p>jmp 原入口地址   &#39;执行到程序的原有OEP </p>
+<p>retn 0C</p>
+<hr>
+<p>发布几个不常见的花指令</p>
+<p>B1 01   mov cl,1<br>2C 90   sub al,90<br>95   xchg eax,ebp<br>4D   dec ebp<br>65:42   inc edx<br>40   inc eax<br>20C4   and ah,al<br>8350 06 6E   adc dword ptr ds:[eax+6],6E<br>226A E4   and ch,byte ptr ds:[edx-1C]<br>E8 B15FBC5B   call 入口点</p>
+<p>55   push ebp<br>8BEC   mov ebp,esp<br>51   push ecx<br>53   push ebx<br>8BD8   mov ebx,eax<br>8BC3   mov eax,ebx<br>04 9F   add al,9F<br>2C 1A   sub al,1A<br>73 03   jnb 入口点</p>
+<p>JMP SHORT test.00414FB5 (EB 01)<br>NOP<br>JMP SHORT test.00414FB8 (EB 01)<br>NOP<br>JMP SHORT test.00414FBB (EB 01)<br>NOP<br>JMP test. (EB 01)</p>
+<p>90=c4</p>
+<p>PUSH EBP<br>MOVE EBP,ESP<br>inc ecx<br>push eax<br>pop eax<br>push edx<br>pop edx<br>dec ecx<br>sub eax,-2<br>ADD ESP,68<br>DEC eax<br>DEC eax<br>SUB ESP,68<br>JPE 入口<br>JPO 入口</p>
+<ol>
+<li><p>NOP：这个指令代表“无操作”，通常被用作占位符或在程序中创建延迟。</p>
+</li>
+<li><p>LEA：这个指令代表“加载有效地址”，将某个值的地址加载到一个寄存器中，而不是加载这个值本身。</p>
+</li>
+</ol>
+<h2 id="TEB"><a href="#TEB" class="headerlink" title="TEB"></a>TEB</h2><p>(Thread Environment Block，线程环境块) </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>偏移<br><br>000 <br><br>004 <br><br>008 <br><br>00C <br><br>010 <br><br>014 <br><br>018 <br><br>020 <br><br>024 <br><br>02C <br><br>030</th>
+<th>说明<br><br>指向SEH链指针<br><br>线程堆栈顶部<br><br>线程堆栈底部<br><br>SubSystemTib<br><br>FiberData<br><br>ArbitraryUserPointer<br><br>FS段寄存器在内存中的镜像<br><br>进程PID<br><br>线程ID<br><br>指向线程局部存储指针<br><br>PEB结构地址（进程结构）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>034</td>
+<td>上个错误号</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="异常处理的优先级"><a href="#异常处理的优先级" class="headerlink" title="异常处理的优先级"></a>异常处理的优先级</h2><ol>
+<li>VEH  向量化异常处理 VectoredExceptionHandler </li>
+<li>SEH   结构化异常处理</li>
+<li>UEF   UnhandledExceptionFilter </li>
+<li>VCH   VectoredContinueHandler </li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yilang/p/11850734.html">https://www.cnblogs.com/yilang/p/11850734.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot17/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1059,82 +1225,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot13/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot13/" class="post-title-link" itemprop="url">Learning a Universal Template for Few-shot Dataset Generalization</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-01-15 20:43:22" itemprop="dateCreated datePublished" datetime="2023-01-15T20:43:22+08:00">2023-01-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-04 11:01:23" itemprop="dateModified" datetime="2023-04-04T11:01:23+08:00">2023-04-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Triantafillou, E., Larochelle, H., Zemel, R.S., &amp; Dumoulin, V. (2021). Learning a Universal Template for Few-shot Dataset Generalization. <em>ArXiv**, abs/2105.07029</em>.</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1206,7 +1296,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1218,7 +1308,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
