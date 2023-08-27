@@ -18,6 +18,12 @@ Neural Style transfer神经风格转换：
 
 ## 2.卷积计算
 
+![1691653575850](CNN01/1691653575850.png)
+
+输出维度取决于卷积核的数量N_filter。
+
+ **参数量=（K*K \* 前一层特征图的通道数 ）\* 当前层N_filter **+偏置项（一般默认等于N_filter*D_filter）
+
 image-->filter--->image
 
 ```python

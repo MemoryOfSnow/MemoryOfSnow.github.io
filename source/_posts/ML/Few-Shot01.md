@@ -6,6 +6,29 @@ tags: [FSL]
 mathjax: true
 ---
 
+## A类
+
+- CCS  ACM Conference on Computer and  Communications Security  ACM
+
+- TIFS     IEEE Transactions on Information Forensics and Security IEEE
+- S&P  IEEE Symposium on Security and Privacy  IEEE 
+
+- USENIX Security  USENIX Security Symposium  USENIX Association
+- NDSS Network and Distributed System Security Symposium ISOC
+
+## B类
+
+- TOPS  ACM Transactions on Privacy and Security  ACM 
+- Computers & Security  **Elsevier**
+- JCS  Journal of Computer Security  **IOS Press**
+- CSFW IEEE Computer Security Foundations Workshop  IEEE 
+- RAID International Symposium on Recent Advances in Intrusion Detection  Springer
+- ESORICS  European Symposium on Research in Computer Security  **Springer**
+- ACSAC  Annual Computer Security Applications Conference  IEEE
+- DSN  International Conference on Dependable Systems and  Networks  IEEE/IFIP 可靠系统和网络
+
+只关注这13个会议期刊，其他的在资源匮乏的时候，可以去看四家出版社或者arxiv上的论文。
+
 ## 可读论文
 
 > [清华张长水教授团队所做论文](http://bigeye.au.tsinghua.edu.cn/paperlist.html)

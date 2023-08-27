@@ -1,7 +1,7 @@
 ---
 title: 微信多实例运行
 date: 2023-07-10 14:19:49
-categories: CTF
+categories: 笔记
 tags: [逆向]
 ---
 
