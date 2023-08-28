@@ -156,6 +156,272 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E7%BA%BF%E6%80%A7SVM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E7%BA%BF%E6%80%A7SVM/" class="post-title-link" itemprop="url">SVM</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-07 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-07T14:17:22+08:00">2022-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-23 01:24:19" itemprop="dateModified" datetime="2022-06-23T01:24:19+08:00">2022-06-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>学习策略：间隔最大化。</strong>形式化为一个凸二次规划(convex quadratic programming)问题，等价于正则式的合页损失函数的最小化问题。</p>
+<p>由简到繁：</p>
+<ul>
+<li>线性可分——&gt;学习线性的分类器——&gt;线性可分（硬间隔）支持向量机；</li>
+<li>数据近似线性可分—&gt;软间隔最大化—&gt;学习线性的分类器—&gt;线性支持向量机；</li>
+<li>数据线性不可分—&gt;kernel trick+软间隔最大化—&gt;非线性支持向量机（等价于在高维空间中学习线性支持向量机)；</li>
+</ul>
+<h2 id="1-超平面："><a href="#1-超平面：" class="headerlink" title="1.超平面："></a>1.超平面：</h2><p><img src="/categories/ML/%E7%BA%BF%E6%80%A7SVM/image-20220526234208124.png" alt="image-20220526234208124"></p>
+<h2 id="2-函数间隔和几何间隔"><a href="#2-函数间隔和几何间隔" class="headerlink" title="2.函数间隔和几何间隔"></a>2.函数间隔和几何间隔</h2><p>因为超平面wx+b=0，所以对于点(xi,yi)，(wxi+bi)能够表示点距离超平面的远近，其与yi的乘积的符号可以用来表示分类的正确性(-1表示分类错误，分类正确时)。</p>
+<p>所以ri=yi(wxi+bi)定义为超平面关于样本点(xi,yi)的函数间隔；超平面关于训练集T的函数间隔为所有超平面关于每个样本点的函数间隔的最小值。</p>
+<p>r’=min(ri)</p>
+<p>函数间隔规范化（<strong>确保超平面不变的时候，间隔也是确定的</strong>）后，即w=w/||w||,b=b/||w||，函数间隔<code>r&#39;</code>变为<strong>几何间隔</strong><code>r</code>。</p>
+<p><strong>约束优化问题为：</strong>求解能够正确划分训练数据集并且使得几何间隔最大的<strong>分离超平面</strong>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/ML/%E7%BA%BF%E6%80%A7SVM/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">数据分析概述</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-07 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-07T14:17:22+08:00">2022-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-14 19:28:05" itemprop="dateModified" datetime="2022-07-14T19:28:05+08:00">2022-07-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-相关库"><a href="#1-相关库" class="headerlink" title="1.相关库"></a>1.相关库</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png" alt="image-20220321094551847"></p>
+<h2 id="2-数据等级"><a href="#2-数据等级" class="headerlink" title="2.数据等级"></a>2.数据等级</h2><ul>
+<li>非结构化—&gt;结构化数据</li>
+</ul>
+<p>结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除)</p>
+<h2 id="3-数据分析"><a href="#3-数据分析" class="headerlink" title="3.数据分析"></a>3.数据分析</h2><h3 id="1-数据质量分析"><a href="#1-数据质量分析" class="headerlink" title="1.数据质量分析"></a>1.数据质量分析</h3><p>缺失值  80%数据全部丢失，30%的缺失（做填充）</p>
+<p>异常值  均值填充</p>
+<p>一致性分析    （训练集和测试集的逻辑分布要是一致的）</p>
+<h3 id="2-数据特征分析"><a href="#2-数据特征分析" class="headerlink" title="2.数据特征分析"></a>2.数据特征分析</h3><ul>
+<li>分布分析     数据要选分布宽度比较低的</li>
+<li>对比分析     均值、方差</li>
+<li>统计量分析  sum</li>
+<li>周期性分析   一般用在时间序列上</li>
+<li>贡献度分析  </li>
+<li>相关度分析  </li>
+</ul>
+<h3 id="3-函数工具"><a href="#3-函数工具" class="headerlink" title="3.函数工具"></a>3.函数工具</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数功能</th>
+<th>所属扩展库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>interpolate</td>
+<td>一维、高维数据插值</td>
+<td>Scipy</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>去除数据中的重复元素，得到单值元素列表，它是对象的方法名（此功能可以用集合的办法去重）</td>
+<td>Pandas/Numpy</td>
+</tr>
+<tr>
+<td>isnull</td>
+<td>判断是否空值</td>
+<td>Pandas</td>
+</tr>
+<tr>
+<td>notnull</td>
+<td>判断是否为非空值</td>
+<td>Pandas</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>对指标变量矩阵进行主成分分析</td>
+<td>Scikit-Learn</td>
+</tr>
+<tr>
+<td>random</td>
+<td>生成随机矩阵</td>
+<td>Numpy</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="4-数据规约"><a href="#4-数据规约" class="headerlink" title="4.数据规约"></a>4.数据规约</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321102046509.png" alt="image-20220321102046509"></p>
+<h3 id="属性规约"><a href="#属性规约" class="headerlink" title="属性规约"></a>属性规约</h3><p>属性的合并、提取和删除、归纳、主成分分析</p>
+<ul>
+<li>合并  {A1,A2,A3}—-&gt;{A};{B1,B2.B3}—-&gt;{B}  <strong>数据降维</strong></li>
+<li>逐步向前选择   从空属性集开始 ，每次从原属性集中选一个当前最优的属性加到现在的集合中，直到无法选择出最优属性或满足一定阈值约束为止。</li>
+<li>逐步向后删除  从全属性集开始，…(与逐步向前选择恰好相反)</li>
+<li>决策树归纳  用决策树对初始数据进行分类归纳学习，决策树上没有的属性可以认为是无关属性，删除之。</li>
+<li>PCA，用较少的变量去解释原始数据中的大部分变量，即将很多相关性很高的变量降低相关性，变为不相关或者独立的变量</li>
+</ul>
+<h3 id="数值规约"><a href="#数值规约" class="headerlink" title="数值规约"></a>数值规约</h3><p>​    数据标准化</p>
+<h2 id="5-数据变换"><a href="#5-数据变换" class="headerlink" title="5.数据变换"></a>5.数据变换</h2><ul>
+<li>简单函数变换</li>
+<li>规范化   把数据变成0，1，数据标准化减少噪声的影响</li>
+<li>连续属性离散化</li>
+<li>属性构造</li>
+<li>小波变换</li>
+<li>傅里叶变换</li>
+</ul>
+<h2 id="6-数据集成"><a href="#6-数据集成" class="headerlink" title="6.数据集成"></a>6.数据集成</h2><p>合并多个数据源的数据，让数据没有偏见</p>
+<ul>
+<li>实体属性识别</li>
+<li>冗余属性识别</li>
+</ul>
+<h2 id="7-数据清洗"><a href="#7-数据清洗" class="headerlink" title="7.数据清洗"></a>7.数据清洗</h2><p>删除原始数据集中的无关数据、重复数据，平滑噪声数据，筛选值与挖掘主题无关的数据，处理缺失值、异常值等。</p>
+<p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321205617659.png" alt="image-20220321205617659"></p>
+<h3 id="缺失值处理"><a href="#缺失值处理" class="headerlink" title="缺失值处理"></a>缺失值处理</h3><ul>
+<li>均值、中位数、众数</li>
+<li>使用固定值</li>
+<li>最近邻插补</li>
+<li>回归方法</li>
+<li><p>插值法</p>
+<ul>
+<li>拉格朗日插值                                                                                                                                                                                                                                                                                                                                                                          </li>
+<li>牛顿插值<h3 id="异常值处理"><a href="#异常值处理" class="headerlink" title="异常值处理"></a>异常值处理</h3></li>
+</ul>
+</li>
+<li><p>删除</p>
+</li>
+<li>视为缺失</li>
+<li>平均值</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/LSTM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -918,177 +1184,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/SL-04/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/SL-04/" class="post-title-link" itemprop="url">最大熵模型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-30 16:14:53" itemprop="dateCreated datePublished" datetime="2022-03-30T16:14:53+08:00">2022-03-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-准则函数"><a href="#1-准则函数" class="headerlink" title="1.准则函数"></a>1.准则函数</h2><p>把要最小化或最大化的函数称为目标函数（objective function）或准则（criterion）。</p>
-<p>当对其进行最小化时，我们也把它称为代价函数（cost function）、损失函数（loss function）或误差函数（error function）。</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35709485">知乎：飞鱼Talk</a></p>
-</blockquote>
-<ul>
-<li>Classification Error（分类错误率）  错误分类占比</li>
-<li>Mean Squared Error (均方误差)，</li>
-<li>Cross Entropy Loss Function（交叉熵损失函数）</li>
-</ul>
-<blockquote>
-<p>Loss Func可以用来判断模型在样本上的表现；</p>
-</blockquote>
-<h3 id="1-1-Mean-Squared-Error-均方误差-，"><a href="#1-1-Mean-Squared-Error-均方误差-，" class="headerlink" title="1.1 Mean Squared Error (均方误差)，"></a>1.1 Mean Squared Error (均方误差)，</h3><p><img src="/categories/ML/SL-04/image-20220330142518870.png" alt="image-20220330142518870" style="zoom: 50%;"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/ML/SL-04/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A601/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A601/" class="post-title-link" itemprop="url">抽象代数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-30 16:14:53" itemprop="dateCreated datePublished" datetime="2022-03-30T16:14:53+08:00">2022-03-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="代数系统"><a href="#代数系统" class="headerlink" title="代数系统"></a>代数系统</h2><h2 id="群环域"><a href="#群环域" class="headerlink" title="群环域"></a>群环域</h2><h2 id="格"><a href="#格" class="headerlink" title="格"></a>格</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1156,7 +1255,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">150</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

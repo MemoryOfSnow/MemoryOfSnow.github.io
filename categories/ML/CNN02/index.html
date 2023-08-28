@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="CNN_EXAMPLE  1. pooling layer 减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。  Hyper parameter f: filter size s: stride type:Max or average pooling 用的很少的：p&#x3D;0—padding  这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。">
+  <meta name="description" content="CNN_EXAMPLE  1. pooling layer 减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。  Hyper parameter f: filter size  小的卷积核捕获细微特征或局部信息，参数量相对较少。  s: stride type:Max or average pooling 用的很少的：p&#x3D;0—padding  这是一个确定的函数，手动输入或者交叉检验，不需">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CNN02">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/CNN02/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="CNN_EXAMPLE  1. pooling layer 减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。  Hyper parameter f: filter size s: stride type:Max or average pooling 用的很少的：p&#x3D;0—padding  这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。">
+<meta property="og:description" content="CNN_EXAMPLE  1. pooling layer 减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。  Hyper parameter f: filter size  小的卷积核捕获细微特征或局部信息，参数量相对较少。  s: stride type:Max or average pooling 用的很少的：p&#x3D;0—padding  这是一个确定的函数，手动输入或者交叉检验，不需">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304145228545.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304160534107.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/CNN02/image-20220304161730310.png">
 <meta property="article:published_time" content="2022-03-07T12:43:22.000Z">
-<meta property="article:modified_time" content="2022-06-03T19:03:56.335Z">
+<meta property="article:modified_time" content="2023-08-28T07:26:27.727Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="CNN">
 <meta name="twitter:card" content="summary">
@@ -196,7 +196,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+                <time title="Modified: 2023-08-28 15:26:27" itemprop="dateModified" datetime="2023-08-28T15:26:27+08:00">2023-08-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -226,7 +226,7 @@
 <p>减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。</p>
 </blockquote>
 <h3 id="Hyper-parameter"><a href="#Hyper-parameter" class="headerlink" title="Hyper parameter"></a>Hyper parameter</h3><ul>
-<li>f: filter size</li>
+<li>f: filter size  小的卷积核捕获细微特征或局部信息，参数量相对较少。 </li>
 <li>s: stride</li>
 <li>type:Max or average pooling</li>
 <li>用的很少的：p=0—padding</li>
@@ -238,7 +238,7 @@
 <p>独立作用于各个<code>channel</code></p>
 <p>近似于把高、宽均缩小了两倍以上；</p>
 <p>收集后的特征表明该特诊原来存在于原来的特征集合；没有收集到的表明特征可能不存在或者比较小。</p>
-<h3 id="输出大小"><a href="#输出大小" class="headerlink" title="输出大小"></a>输出大小</h3><ul>
+<h3 id="输出大小"><a href="#输出大小" class="headerlink" title="输出大小"></a><strong>输出大小</strong></h3><ul>
 <li>Ouputsize: (n+2p-f)/s+1</li>
 </ul>
 <h3 id="层数惯例"><a href="#层数惯例" class="headerlink" title="层数惯例"></a>层数惯例</h3><p>惯例一：因为池化层没有权重和参数，所以<strong>把卷积层和池化合一块称为一层</strong>。</p>
@@ -356,7 +356,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">150</span>
+          <span class="site-state-item-count">152</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

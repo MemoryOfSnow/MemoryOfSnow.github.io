@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="卷积核的作用 一个图像矩阵经过一个卷积核的卷积操作后，得到了另一个矩阵，这个矩阵叫做特征映射（feature map）。   每一个卷积核都可以提取特定的特征，不同的卷积核提取不同的特征    利用附录里的卷积核测试代码， 借助图中的三个卷积核，  分别可以提取X的左上右下、中间和右上左下特征。将图片X用三个卷积核计算，得到三个 特征矩阵 。 获得下面的热力图。  可以发现， 其中的值，  越接近">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN&amp;GIN">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/CNN&GIN/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="卷积核的作用 一个图像矩阵经过一个卷积核的卷积操作后，得到了另一个矩阵，这个矩阵叫做特征映射（feature map）。   每一个卷积核都可以提取特定的特征，不同的卷积核提取不同的特征    利用附录里的卷积核测试代码， 借助图中的三个卷积核，  分别可以提取X的左上右下、中间和右上左下特征。将图片X用三个卷积核计算，得到三个 特征矩阵 。 获得下面的热力图。  可以发现， 其中的值，  越接近">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/CNN&GIN/1693193110387.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/CNN&GIN/1693192781178.png">
+<meta property="article:published_time" content="2022-08-28T12:43:22.000Z">
+<meta property="article:modified_time" content="2023-08-28T07:38:25.662Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="CNN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/CNN&GIN/1693193110387.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/ML/CNN&GIN/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>CNN&GIN | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/CNN&GIN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CNN&GIN
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-28 20:43:22" itemprop="dateCreated datePublished" datetime="2022-08-28T20:43:22+08:00">2022-08-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-28 15:38:25" itemprop="dateModified" datetime="2023-08-28T15:38:25+08:00">2023-08-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="卷积核的作用"><a href="#卷积核的作用" class="headerlink" title="卷积核的作用"></a>卷积核的作用</h2><ul>
+<li><p>一个图像矩阵经过一个卷积核的卷积操作后，得到了另一个矩阵，这个矩阵叫做特征映射（feature map）。 </p>
+</li>
+<li><p>每一个卷积核都可以提取特定的特征，不同的卷积核提取不同的特征 </p>
+</li>
+</ul>
+<p>利用附录里的<a href="#卷积核效果测试代码">卷积核测试代码</a>，</p>
+<p>借助图中的三个卷积核，</p>
+<p><img src="/categories/ML/CNN&GIN/1693193110387.png" alt="1693193110387"></p>
+<p>分别可以提取X的左上右下、中间和右上左下特征。将图片X用三个卷积核计算，得到三个 特征矩阵 。</p>
+<p>获得下面的热力图。</p>
+<p><img src="/categories/ML/CNN&GIN/1693192781178.png" alt="1693192781178"></p>
+<p>可以发现， 其中的值，</p>
+<ul>
+<li><p>越接近为1表示对应位置和卷积核代表的特征越接近，</p>
+</li>
+<li><p>越是接近-1，表示对应位置和卷积核代表的反向特征越匹配，</p>
+</li>
+<li><p>而值接近0的表示对应位置没有任何匹配或者说没有什么关联。 </p>
+</li>
+</ul>
+<h2 id="GIN模型"><a href="#GIN模型" class="headerlink" title="GIN模型"></a>GIN模型</h2><h3 id="1-模型结构"><a href="#1-模型结构" class="headerlink" title="1.模型结构"></a>1.模型结构</h3><h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="卷积核效果测试代码"><a href="#卷积核效果测试代码" class="headerlink" title="卷积核效果测试代码"></a>卷积核效果测试代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="comment">#热图用处</span></span><br><span class="line"><span class="comment">#相关性矩阵: 查看多个变量之间的关系。颜色可以帮助你快速识别哪些变量之间有强烈的正相关（例如，显示为深红色）或强烈的负相关（例如，显示为深蓝色）。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#混淆矩阵: 分类任务中，混淆矩阵表示出模型在每个类别上的表现。使用热图可以更容易地识别模型在哪些类别上表现不佳。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#数据密度: 如果你有两个维度的大量数据点，可以使用热图来查看哪些区域的数据点最多，哪些区域的数据点最少。</span></span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> signal</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个简单的示例图像</span></span><br><span class="line">image = -<span class="number">1</span> * np.ones((<span class="number">9</span>, <span class="number">9</span>), dtype=<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将主对角线上的元素设置为1</span></span><br><span class="line">np.fill_diagonal(image, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将副对角线上的元素设置为1</span></span><br><span class="line">np.fill_diagonal(np.fliplr(image), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义三个卷积核</span></span><br><span class="line">kernel1 = np.array([</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>,  <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">]) /<span class="number">9</span> <span class="comment"># \边缘检测</span></span><br><span class="line">kernel2 = np.array([</span><br><span class="line">    [-<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>,  <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>]</span><br><span class="line">]) /<span class="number">9</span> <span class="comment"># \边缘检测</span></span><br><span class="line">kernel3 = np.array([</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>,  <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">])/<span class="number">9</span>  <span class="comment"># X边缘检测</span></span><br><span class="line"></span><br><span class="line">kernel4 = np.array([</span><br><span class="line">    [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">    [-<span class="number">1</span>, <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">]) /<span class="number">9</span> <span class="comment"># 锐化</span></span><br><span class="line"></span><br><span class="line">kernel5 = np.array([</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">]) / <span class="number">9</span>  <span class="comment"># 平均/模糊</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对图像进行卷积操作</span></span><br><span class="line">conv_image1 = signal.convolve2d(image, kernel1, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">conv_image2 = signal.convolve2d(image, kernel2, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">conv_image3 = signal.convolve2d(image, kernel3, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化结果</span></span><br><span class="line">fig, axarr = plt.subplots(<span class="number">1</span>, <span class="number">4</span>, figsize=(<span class="number">20</span>, <span class="number">5</span>))</span><br><span class="line"><span class="comment">#annot=True表示单元格中显示数据值	</span></span><br><span class="line">sns.heatmap(image, ax=axarr[<span class="number">0</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">0</span>].set_title(<span class="string">&quot;Original Image&quot;</span>)</span><br><span class="line"></span><br><span class="line">sns.heatmap(conv_image1, ax=axarr[<span class="number">1</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">1</span>].set_title(<span class="string">&quot;Convolved with Kernel 1&quot;</span>)</span><br><span class="line"></span><br><span class="line">sns.heatmap(conv_image2, ax=axarr[<span class="number">2</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">2</span>].set_title(<span class="string">&quot;Convolved with Kernel 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">sns.heatmap(conv_image3, ax=axarr[<span class="number">3</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">3</span>].set_title(<span class="string">&quot;Convolved with Kernel 3&quot;</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="GIN模型代码"><a href="#GIN模型代码" class="headerlink" title="GIN模型代码"></a>GIN模型代码</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/oldmao_2001/article/details/118853262">CSDN小班课笔记专栏</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> dgl.nn.pytorch.conv <span class="keyword">import</span> GINConv</span><br><span class="line"><span class="keyword">from</span> dgl.nn.pytorch.glob <span class="keyword">import</span> SumPooling, AvgPooling, MaxPooling</span><br><span class="line"></span><br><span class="line"><span class="comment">#自定义节点更新特征的方式，这里是mlp+bn+relu，实际是对应原文公式4.1第一项</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ApplyNodeFunc</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Update the node feature hv with MLP, BN and ReLU.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, mlp</span>):</span><br><span class="line">        <span class="built_in">super</span>(ApplyNodeFunc, self).__init__()</span><br><span class="line">        self.mlp = mlp</span><br><span class="line">        self.bn = nn.BatchNorm1d(self.mlp.output_dim)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, h</span>):</span><br><span class="line">        h = self.mlp(h)</span><br><span class="line">        h = self.bn(h)</span><br><span class="line">        h = F.relu(h)</span><br><span class="line">        <span class="keyword">return</span> h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MLP</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;MLP with linear output&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment">#num_layers:共有多少层</span></span><br><span class="line">    <span class="comment">#input_dim：输入维度</span></span><br><span class="line">    <span class="comment">#hidden_dim：隐藏层维度，所有隐藏层维度都一样</span></span><br><span class="line">    <span class="comment">#hidden_dim：输出维度</span></span><br><span class="line"><span class="comment">#...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GIN</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;GIN model初始化&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_layers, num_mlp_layers, input_dim, hidden_dim,</span></span><br><span class="line"><span class="params">                 output_dim, final_dropout, learn_eps, graph_pooling_type,</span></span><br><span class="line"><span class="params">                 neighbor_pooling_type</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;model parameters setting</span></span><br><span class="line"><span class="string">        Paramters</span></span><br><span class="line"><span class="string">        ---------</span></span><br><span class="line"><span class="string">        num_layers: int这个是GIN的层数</span></span><br><span class="line"><span class="string">            The number of linear layers in the neural network</span></span><br><span class="line"><span class="string">        num_mlp_layers: intMLP的层数</span></span><br><span class="line"><span class="string">            The number of linear layers in mlps</span></span><br><span class="line"><span class="string">        input_dim: int</span></span><br><span class="line"><span class="string">            The dimensionality of input features</span></span><br><span class="line"><span class="string">        hidden_dim: int</span></span><br><span class="line"><span class="string">            The dimensionality of hidden units at ALL layers</span></span><br><span class="line"><span class="string">        output_dim: int</span></span><br><span class="line"><span class="string">            The number of classes for prediction</span></span><br><span class="line"><span class="string">        final_dropout: float最后一层的抓爆率</span></span><br><span class="line"><span class="string">            dropout ratio on the final linear layer</span></span><br><span class="line"><span class="string">        learn_eps: boolean在学习epsilon参数时是否区分节点本身和邻居节点</span></span><br><span class="line"><span class="string">            If True, learn epsilon to distinguish center nodes from neighbors</span></span><br><span class="line"><span class="string">            If False, aggregate neighbors and center nodes altogether.</span></span><br><span class="line"><span class="string">        neighbor_pooling_type: str邻居汇聚方式，原文公式4.1的后半部分</span></span><br><span class="line"><span class="string">            how to aggregate neighbors (sum, mean, or max)</span></span><br><span class="line"><span class="string">        graph_pooling_type: str全图汇聚方式，和上面的邻居汇聚方式可以不一样</span></span><br><span class="line"><span class="string">            how to aggregate entire nodes in a graph (sum, mean or max)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(GIN, self).__init__()</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line">        self.learn_eps = learn_eps</span><br><span class="line"></span><br><span class="line">        <span class="comment"># List of MLPs</span></span><br><span class="line">        self.ginlayers = torch.nn.ModuleList()</span><br><span class="line">        self.batch_norms = torch.nn.ModuleList()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="built_in">range</span>(self.num_layers - <span class="number">1</span>):<span class="comment">#GIN有几层，除了最后一层每层都定义一个MLP（num_mlp_layers层）来进行COMBINE</span></span><br><span class="line">            <span class="keyword">if</span> layer == <span class="number">0</span>:<span class="comment">#第一层GIN，注意输入维度，</span></span><br><span class="line">                mlp = MLP(num_mlp_layers, input_dim, hidden_dim, hidden_dim)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mlp = MLP(num_mlp_layers, hidden_dim, hidden_dim, hidden_dim)</span><br><span class="line"></span><br><span class="line">            <span class="comment">#更新特征的方式是ApplyNodeFunc，邻居汇聚方式为neighbor_pooling_type</span></span><br><span class="line">            <span class="comment">#具体参考：https://docs.dgl.ai/api/python/nn.pytorch.html#ginconv</span></span><br><span class="line">            self.ginlayers.append(</span><br><span class="line">                GINConv(ApplyNodeFunc(mlp), neighbor_pooling_type, <span class="number">0</span>, self.learn_eps))</span><br><span class="line">            self.batch_norms.append(nn.BatchNorm1d(hidden_dim))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Linear function for graph poolings of output of each layer</span></span><br><span class="line">        <span class="comment"># which maps the output of different layers into a prediction score</span></span><br><span class="line">        self.linears_prediction = torch.nn.ModuleList()</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#以下代码是将每一层点的表征保存下来，然后作为最后的图的表征计算</span></span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="built_in">range</span>(num_layers):</span><br><span class="line">            <span class="keyword">if</span> layer == <span class="number">0</span>:</span><br><span class="line">                self.linears_prediction.append(</span><br><span class="line">                    nn.Linear(input_dim, output_dim))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.linears_prediction.append(</span><br><span class="line">                    nn.Linear(hidden_dim, output_dim))</span><br><span class="line"></span><br><span class="line">        self.drop = nn.Dropout(final_dropout)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#图表征消息汇聚的方式</span></span><br><span class="line">        <span class="keyword">if</span> graph_pooling_type == <span class="string">&#x27;sum&#x27;</span>:</span><br><span class="line">            self.pool = SumPooling()</span><br><span class="line">        <span class="keyword">elif</span> graph_pooling_type == <span class="string">&#x27;mean&#x27;</span>:</span><br><span class="line">            self.pool = AvgPooling()</span><br><span class="line">        <span class="keyword">elif</span> graph_pooling_type == <span class="string">&#x27;max&#x27;</span>:</span><br><span class="line">            self.pool = MaxPooling()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> NotImplementedError</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CNN/" rel="tag"># CNN</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/Few-Shot02/" rel="prev" title="小样本学习与其他相似概念的区分">
+      <i class="fa fa-chevron-left"></i> 小样本学习与其他相似概念的区分
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/ML/GAN01/" rel="next" title="GAN01">
+      GAN01 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E6%A0%B8%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">卷积核的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIN%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">GIN模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">1.模型结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E6%A0%B8%E6%95%88%E6%9E%9C%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="nav-number">3.1.</span> <span class="nav-text">卷积核效果测试代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIN%E6%A8%A1%E5%9E%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">GIN模型代码</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
