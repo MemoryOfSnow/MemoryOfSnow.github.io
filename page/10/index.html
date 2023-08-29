@@ -156,6 +156,436 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/%E6%B8%85%E7%A9%BA%E5%A4%A7%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Linux/%E6%B8%85%E7%A9%BA%E5%A4%A7%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">清空大文件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-11 19:59:30" itemprop="dateCreated datePublished" datetime="2022-03-11T19:59:30+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1.null重定向到文件</p>
+<blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;big_size_file<span class="comment">#null清空文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;test.log</span><br><span class="line"><span class="built_in">echo</span>  &gt;test.log<span class="comment">#空字符串清空文件，此时用cat查看文件会打印空行</span></span><br><span class="line"><span class="comment">#使用-n告诉echo不输出换行符</span></span><br><span class="line"><span class="built_in">echo</span> -n <span class="string">&quot;&quot;</span> &gt;test.log</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>2.true命令</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:&gt;accesslog</span><br><span class="line"><span class="literal">true</span> &gt;test.log</span><br></pre></td></tr></table></figure>
+<p>3.借助/dev/null的dd，cp，cat程序</p>
+<blockquote>
+<p>/dev/null 可以吞噬输入，或者当成空文件输出</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat /dev/null &gt;test.log</span><br><span class="line">cp /dev/null &gt;test.log</span><br><span class="line">dd if=/dev/null of=test.log</span><br></pre></td></tr></table></figure>
+<p>4.truncate将文件大小缩小或扩展到指定大小</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">truncate</span> -s 0 test.log</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Tools/git%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Tools/git%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">git分支管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-11 01:06:42" itemprop="dateCreated datePublished" datetime="2022-03-11T01:06:42+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>首先，在github网页端的控制界面从master分出一个分支hexo；</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#指定hexo分支clone到本地，并重命名为blog</span></span><br><span class="line">git <span class="built_in">clone</span> -b hexo git@github.com:MemoryOfSnow/MemoryOfSnow.github.io.git blog</span><br><span class="line"><span class="comment">#添加用户名配置</span></span><br><span class="line">git config --global user.email <span class="string">&quot;you@example.com&quot;</span></span><br><span class="line">git config --global user.name <span class="string">&quot;MemoryOfSnow&quot;</span></span><br><span class="line"><span class="comment"># 强行覆盖远程的hexo分支</span></span><br><span class="line">git push --set-upstream origin hexo --force</span><br><span class="line"><span class="comment">#本地切换分支</span></span><br><span class="line">git checkout -b hexo</span><br></pre></td></tr></table></figure>
+<p>hexo的_config.yml将分支设置为master，而整个文件夹设置为hexo分支，这样就可以实现多设备共同维护博客了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/Tools/git%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Tools/git%E6%94%B9%E7%9B%AE%E5%BD%95%E6%95%B0%E7%9B%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Tools/git%E6%94%B9%E7%9B%AE%E5%BD%95%E6%95%B0%E7%9B%AE/" class="post-title-link" itemprop="url">git分支管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-11 01:06:42" itemprop="dateCreated datePublished" datetime="2022-03-11T01:06:42+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>打开 <code>./themes/next/layout/_partials/pagination.swig</code> 文件，修改 <code>mid_size</code> 字段</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/CNN02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/CNN02/" class="post-title-link" itemprop="url">CNN02</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-07 20:43:22" itemprop="dateCreated datePublished" datetime="2022-03-07T20:43:22+08:00">2022-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-28 15:26:27" itemprop="dateModified" datetime="2023-08-28T15:26:27+08:00">2023-08-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1e54y1b7uk?p=10">CNN_EXAMPLE</a></p>
+</blockquote>
+<h2 id="1-pooling-layer"><a href="#1-pooling-layer" class="headerlink" title="1. pooling layer"></a>1. pooling layer</h2><blockquote>
+<p>减少展示信息，以加快计算，还能增强检测到的特征的鲁棒性。</p>
+</blockquote>
+<h3 id="Hyper-parameter"><a href="#Hyper-parameter" class="headerlink" title="Hyper parameter"></a>Hyper parameter</h3><ul>
+<li>f: filter size  小的卷积核捕获细微特征或局部信息，参数量相对较少。 </li>
+<li>s: stride</li>
+<li>type:Max or average pooling</li>
+<li>用的很少的：p=0—padding</li>
+</ul>
+<p>这是一个确定的函数，手动输入或者交叉检验，不需要学习获得。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/ML/CNN02/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/NAS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/NAS/" class="post-title-link" itemprop="url">NAS</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-07 20:43:22" itemprop="dateCreated datePublished" datetime="2022-03-07T20:43:22+08:00">2022-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="神经网络结构搜索"><a href="#神经网络结构搜索" class="headerlink" title="神经网络结构搜索"></a>神经网络结构搜索</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18Y4y1r7tb">厦大-纪荣嵘教授</a></p>
+</blockquote>
+<p><img src="/categories/ML/NAS/image-20220510201253099.png" alt="image-20220510201253099"></p>
+<h3 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h3><p><img src="/categories/ML/NAS/image-20220510201331612.png" alt="image-20220510201331612"></p>
+<p>1.基于细胞的：</p>
+<p>谷歌2018年的策略，把公共结构做成cell，借助这些cell组合出需要的模型。</p>
+<p>Zoph, Barret, et al. “Learning transferable architectures for scalable image recognition.”Proceedings of the IEEE conference on computer vision and pattern recognition.2018.</p>
+<p>2。基于链式的：</p>
+<p><img src="/categories/ML/NAS/image-20220510202140341.png" alt="image-20220510202140341"></p>
+<p><img src="/categories/ML/NAS/image-20220510202439208.png" alt="image-20220510202439208"></p>
+<hr>
+<p>全局视角：</p>
+<p><img src="/categories/ML/NAS/image-20220510202643036.png" alt="image-20220510202643036"></p>
+<p><img src="/categories/ML/NAS/image-20220510203014458.png" alt="image-20220510203014458"></p>
+<p><img src="/categories/ML/NAS/image-20220510203153112.png" alt="image-20220510203153112"></p>
+<h2 id="NAS的进化计算"><a href="#NAS的进化计算" class="headerlink" title="NAS的进化计算"></a>NAS的进化计算</h2><p>从种群出发，然后一定概率进行变异，杂交，交给环境，利用环境去做出选择，然后再进行迭代。</p>
+<p><img src="/categories/ML/NAS/image-20220510204255094.png" alt="image-20220510204255094"></p>
+<p>Genetic CNN</p>
+<p>搜索策略:进化算法，将网络结构编码为01序列的基因，通过俄罗斯转盘选择、复制、交叉、变异产生后代.</p>
+<p>当搜索变深时，内存开销增大，要裁剪掉大量操作。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/CNN01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -587,466 +1017,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/DeepLearing01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/DeepLearing01/" class="post-title-link" itemprop="url">DeepLearing01</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-07 20:43:22" itemprop="dateCreated datePublished" datetime="2022-02-07T20:43:22+08:00">2022-02-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-28 15:33:23" itemprop="dateModified" datetime="2023-08-28T15:33:23+08:00">2023-08-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>反向传播的一个比方，以猜数字为例，B手中有一张数字牌让A猜，首先A将随意给出一个数字，B反馈给A是大了还是小了，然后A经过修改，再次给出一个数字，B再反馈给A是否正确以及大小关系，经过数次猜测和反馈，最后得到正确答案。 </p>
-<h2 id="Logistic-regression逻辑回归"><a href="#Logistic-regression逻辑回归" class="headerlink" title="Logistic regression逻辑回归"></a>Logistic regression逻辑回归</h2><p>二分类算法；</p>
-<ul>
-<li>image—&gt;matrices—&gt;feature vector—&gt;{0,1}；</li>
-<li>many images—&gt;X—&gt;Y；</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/ML/DeepLearing01/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/ReinforcementLearning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/ReinforcementLearning/" class="post-title-link" itemprop="url">ReinforcementLearning01</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-07 20:43:22" itemprop="dateCreated datePublished" datetime="2022-02-07T20:43:22+08:00">2022-02-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-03-07 15:37:10" itemprop="dateModified" datetime="2023-03-07T15:37:10+08:00">2023-03-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>机器学习里除了监督和无监督学习做分类回归，还有强化学习算法用于做决策。</p>
-<p>灵感来源于：神经科学和心理学，用外界反馈和暗示加强心理偏向。</p>
-<h2 id="Chap1-强化学习原理图"><a href="#Chap1-强化学习原理图" class="headerlink" title="Chap1 强化学习原理图"></a>Chap1 强化学习原理图</h2><p><img src="/categories/ML/ReinforcementLearning/image-20220510203532764.png" alt="image-20220510203532764"></p>
-<p>state value，状态值用于评价一个策略好坏。</p>
-<p><img src="/categories/ML/ReinforcementLearning/1678108982211.png" alt="1678108982211"></p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1sd4y167NS">西湖大学RL课程-B站</a></p>
-</blockquote>
-<h3 id="奖励值的设置"><a href="#奖励值的设置" class="headerlink" title="奖励值的设置"></a>奖励值的设置</h3><p>在正数代表奖励的情况下，0不惩罚，也是一种鼓励。</p>
-<p><img src="/categories/ML/ReinforcementLearning/1678169561779.png" alt="1678169561779"></p>
-<p>Reward(s,a)，奖励考虑当前状态和行为。</p>
-<p>Trajectory（轨迹）:状态-动作-奖励 链。</p>
-<p><img src="/categories/ML/ReinforcementLearning/1678171954954.png" alt="1678171954954"></p>
-<p>return 是一个轨迹所有的奖励加起来的值。</p>
-<p>如return=0+0+0+1=1</p>
-<p>而在第9格时所有动作的收益将会一直加一，1+1+1+1+…+1=∞</p>
-<p>为避免结果无穷大，引入折扣率，即discount <code>γ</code>∈[0,1]，</p>
-<p>此时的dicount return=0+γ0+γ^2<em>0+γ^3\</em>1+…+γ^n*1=γ^3*1\(1-γ)</p>
-<p>γ趋近于0，短视。</p>
-<h2 id="Chap2-贝尔曼方程"><a href="#Chap2-贝尔曼方程" class="headerlink" title="Chap2 贝尔曼方程"></a>Chap2 贝尔曼方程</h2><p><img src="/categories/ML/ReinforcementLearning/1678104650697.png" alt="1678104650697"></p>
-<h2 id="Chap3-贝尔曼最优公式"><a href="#Chap3-贝尔曼最优公式" class="headerlink" title="Chap3 贝尔曼最优公式"></a>Chap3 贝尔曼最优公式</h2><p>找最优策略，即能够找到的最大状态值对应的策略。</p>
-<p><img src="/categories/ML/ReinforcementLearning/1678108155935.png" alt="1678108155935"></p>
-<p>不动点原理=&gt;{最优的策略存在（不一定唯一） ，最优的状态值唯一}</p>
-<h2 id="Chap4-优化策略"><a href="#Chap4-优化策略" class="headerlink" title="Chap4 优化策略"></a>Chap4 优化策略</h2><blockquote>
-<p>值更新-&gt;策略更新-&gt;值更新-&gt;…，互相促进，最终得到最优策略和最佳状态值。</p>
-</blockquote>
-<p>值迭代</p>
-<p>策略迭代</p>
-<p>截断策略迭代</p>
-<h2 id="Chap5-Monte-Carlo学习"><a href="#Chap5-Monte-Carlo学习" class="headerlink" title="Chap5 Monte Carlo学习"></a>Chap5 Monte Carlo学习</h2><p>蒙特卡罗</p>
-<h2 id="Chap6-随机近似"><a href="#Chap6-随机近似" class="headerlink" title="Chap6  随机近似"></a>Chap6  随机近似</h2><p>增量：来一次采样，就可以用它更新估计。</p>
-<p>Robbins-Monro算法</p>
-<p><strong>SGD</strong></p>
-<p>SGD、BGD、MBGD</p>
-<h2 id="Chap7-时序差分方法"><a href="#Chap7-时序差分方法" class="headerlink" title="Chap7 时序差分方法"></a>Chap7 时序差分方法</h2><p>TD（Temporal Difference）学习状态值   </p>
-<p>Sarsa：用TD的思想学习action value</p>
-<p>Q-learing：直接计算优化的action values；off-policy算法</p>
-<p>on-policy :Behavior Policy（生成经验数据）和Target Policy目标策略相同</p>
-<p>off-policy:两个策略可以不同</p>
-<h2 id="Chap8-Value-Function-Approximation"><a href="#Chap8-Value-Function-Approximation" class="headerlink" title="Chap8  Value Function  Approximation"></a>Chap8  Value Function  Approximation</h2><p>引入函数，让神经网络有机会进入到强化学习。</p>
-<p>找一个状态值的近似函数v_hat(S,w)</p>
-<p><img src="/categories/ML/ReinforcementLearning/1678113431994.png" alt="1678113431994"></p>
-<p>DQN：两个网络、经验回放</p>
-<h2 id="Chap9-策略梯度学习"><a href="#Chap9-策略梯度学习" class="headerlink" title="Chap9 策略梯度学习"></a>Chap9 策略梯度学习</h2><p><strong>Policy Gradient是一种On-policy的算法</strong></p>
-<p><img src="/categories/ML/ReinforcementLearning/1678115817103.png" alt="1678115817103"></p>
-<h2 id="Chap10-Actor-Critic"><a href="#Chap10-Actor-Critic" class="headerlink" title="Chap10 Actor-Critic"></a>Chap10 Actor-Critic</h2><p>Policy Gradient的一种方法，只是critic部分强调了值的作用。</p>
-<p><img src="/categories/ML/ReinforcementLearning/1678116051479.png" alt="1678116051479"></p>
-<p>4）从随机的动作选择策略转到确定性的，就是DPG。</p>
-<p>3)通过<strong>重要性采样</strong>可以把on-policy策略变为off-policy策略。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E7%BD%91%E5%AE%89%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/%E7%BD%91%E5%AE%89%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/" class="post-title-link" itemprop="url">网安面试问题汇总</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-07 12:56:59" itemprop="dateCreated datePublished" datetime="2022-02-07T12:56:59+08:00">2022-02-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-SQL注入的WAF绕过"><a href="#1-SQL注入的WAF绕过" class="headerlink" title="1.SQL注入的WAF绕过"></a>1.SQL注入的WAF绕过</h2><ul>
-<li>白盒  框架源码，代码审计</li>
-<li>黑盒绕过<ul>
-<li>架构层绕过</li>
-<li>资源限制角度绕过</li>
-<li>协议层</li>
-<li>规则层面绕过</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/CTF/%E7%BD%91%E5%AE%89%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%BC%8F%E6%B4%9E%E5%A6%82%E4%BB%8A%E7%9A%84%E9%98%B2%E6%8A%A4%E6%8E%AA%E6%96%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%BC%8F%E6%B4%9E%E5%A6%82%E4%BB%8A%E7%9A%84%E9%98%B2%E6%8A%A4%E6%8E%AA%E6%96%BD/" class="post-title-link" itemprop="url">二进制漏洞防护</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-01-07 14:19:49" itemprop="dateCreated datePublished" datetime="2022-01-07T14:19:49+08:00">2022-01-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-01-27 16:18:20" itemprop="dateModified" datetime="2023-01-27T16:18:20+08:00">2023-01-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> Security Cookie、SafeSEH、DEP、ASLR、CFG </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Diary/%E5%9D%9A%E6%8C%81%E4%B8%80%E7%94%9F%E7%9A%84%E4%B9%A0%E6%83%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Diary/%E5%9D%9A%E6%8C%81%E4%B8%80%E7%94%9F%E7%9A%84%E4%B9%A0%E6%83%AF/" class="post-title-link" itemprop="url">2022年的几件事</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-01-01 14:19:49" itemprop="dateCreated datePublished" datetime="2022-01-01T14:19:49+08:00">2022-01-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-02 12:46:19" itemprop="dateModified" datetime="2022-10-02T12:46:19+08:00">2022-10-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Diary/" itemprop="url" rel="index"><span itemprop="name">Diary</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="时间安排"><a href="#时间安排" class="headerlink" title="时间安排"></a>时间安排</h2><ul>
-<li>上午的时光用于做有意义的事情，只有学习。</li>
-</ul>
-<h2 id="2022年的几件事"><a href="#2022年的几件事" class="headerlink" title="2022年的几件事"></a>2022年的几件事</h2><ul>
-<li>1.保持规律作息 晚上不得迟于一点，起床不得迟于7点半</li>
-<li>2.保持运动</li>
-<li>3.保持积极的人际沟通和与长辈的交流</li>
-<li>4.对于非学习事项，工作日期间每天的手机只有在三餐和晚上10点~12点才看；</li>
-<li>5.锻炼自己的表达的精确度</li>
-<li>6.对于诱惑，抵制。</li>
-<li>7.想要谈场恋爱</li>
-<li>8.搞好科研</li>
-</ul>
-<p>​        现在是22年的8月11日凌晨，我还是一个人，没有一个伴。虽然说宁缺毋滥，但是还是感觉稍微有些 孤单。可能是我没有专注于我应该专注的事情，不够充实，才会有这种唏嘘之感。</p>
-<p>​    希望我能努力，积极向上，成为值得被爱的人。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1118,7 +1088,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1130,7 +1100,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1227,61 +1197,6 @@
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 

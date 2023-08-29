@@ -156,6 +156,474 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Pediy01/" class="post-title-link" itemprop="url">微信多实例运行</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-07-10 14:19:49" itemprop="dateCreated datePublished" datetime="2023-07-10T14:19:49+08:00">2023-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-02 16:31:08" itemprop="dateModified" datetime="2023-08-02T16:31:08+08:00">2023-08-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p> ADVAPI.dll  提供高级系统功能,Advanced，如 注册表、安全性、事件日志、服务管理等 ；</p>
+<p>查看API对应的源代码路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um</span><br></pre></td></tr></table></figure>
+<h2 id="只运行一个实例"><a href="#只运行一个实例" class="headerlink" title="只运行一个实例"></a>只运行一个实例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CreateMutexA</span><br><span class="line">FindWindowA</span><br><span class="line">使用共享Section</span><br></pre></td></tr></table></figure>
+<p>5.1节的Serial.exe只能运行一个实例。</p>
+<p><img src="/categories/Notes/Pediy01/1688962133346.png" alt="1688962133346"></p>
+<p><img src="/categories/Notes/Pediy01/1688963259744.png" alt="1688963259744"></p>
+<p>修改FindWindow后面的判断逻辑即可。一开始改为了75(jnz)</p>
+<p>此时可以运行多个，但是运行前需要找到已存在的一个窗口才能继续创建，再次修改程序，把jz改成jmp。</p>
+<h2 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h2><p>先根据break定位关闭微信的函数<code>CloseWechat</code>，进而找到关键函数sub_405FD0，它控制着返回结果。</p>
+<p><img src="/categories/Notes/Pediy01/1688970540191.png" alt="1688970540191"></p>
+<p>关键函数<code>int __stdcall sub_405FD0(DWORD a1, int a2, int a3, int a4)</code></p>
+<p>跟进去后，可以看到一开始检查注册表语言配置和更新配置。</p>
+<p><img src="/categories/Notes/Pediy01/1688968867614.png" alt="1688968867614"></p>
+<p>微信整体打开，靠WechatWin.dl里的函数。</p>
+<p><img src="/categories/Notes/Pediy01/1688969199372.png" alt="1688969199372"></p>
+<p>打开WechatWin.dll，发现其导入表里存在实例判断函数。</p>
+<p><img src="/categories/Notes/Pediy01/1688969733507.png" alt="1688969733507"></p>
+<p><img src="/categories/Notes/Pediy01/1688969749959.png" alt="1688969749959"></p>
+<p>双击进入后，等待库加载完成，需要几分钟，之后x查看两个函数的上下文：</p>
+<p>注意这里一定要多等一会，不然调用<code>CreateMutex</code>的地址可能检索不全。</p>
+<p><img src="/categories/Notes/Pediy01/1688970084672.png" alt="1688970084672"></p>
+<p>调用<code>FindWindowW</code>函数的上下文十分明显：</p>
+<p><img src="/categories/Notes/Pediy01/1688971265497.png" alt="1688971265497"></p>
+<p>对于上图尾行的这个大跳，是一个经典的判断Mutex是否存在的代码段。</p>
+<blockquote>
+<p>Mutex存在，则GetLastError返回 <code>ERROR_ALREADY_EXISTS</code>.，不存在时，返回0.</p>
+</blockquote>
+<p><img src="/categories/Notes/Pediy01/1688971805972.png" alt="1688971805972"></p>
+<p>把jnz StartNewInstance改变成为jmp。</p>
+<p>爆破成功。</p>
+<p><img src="/categories/Notes/Pediy01/1688972258464.png" alt="1688972258464"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">QQ Elevation复现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-07-03 14:19:49 / Modified: 14:52:18" itemprop="dateCreated datePublished" datetime="2023-07-03T14:19:49+08:00">2023-07-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>利用QQProtect.exe提权，获得NT Authority\SYSTEM权限。</p>
+</blockquote>
+<h2 id="漏洞成因："><a href="#漏洞成因：" class="headerlink" title="漏洞成因："></a>漏洞成因：</h2><p>QQProtect.exe没有使用ASLR保护，篡改函数指针，利用ROP链（Ret Oriented Programming，即修改函数返回指针)实现了任意代码执行。</p>
+<p>1.QQProtect.exe+0x40c9f8处，有<code>任意地址写漏洞</code>。</p>
+<p>待添加自己的截图，网络截图可见：</p>
+<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image0.png" alt="image0"></p>
+<p>可以在任意地址写入DWORD(1)。</p>
+<p>2.QQProtectEngine.dll+0x3B4F6处，</p>
+<p>待添加自己的截图，网络截图可见：</p>
+<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image1.png" alt="image1"></p>
+<p>可以完成对任意地址的指针ptr，偏移2个ptr指针类型大小的位置处，赋值为(unsigned int )(ptr+3)。</p>
+<p>Affected Products:</p>
+<ul>
+<li>QQ 9.7.1.28940 ~ 9.7.8.29039</li>
+<li>TIM 3.4.5.22071 ~ 3.4.7.22084</li>
+</ul>
+<p>Affected Components:</p>
+<ul>
+<li>QQProtect.exe 4.5.0.9424 (in TIM 3.4.5.22071)</li>
+<li>QQProtect.exe 4.5.0.9426 (in QQ 9.7.1.28940)</li>
+<li>QQProtectEngine.dll 4.5.0.9424 (in TIM 3.4.5.22071)</li>
+<li>QQProtectEngine.dll 4.5.0.9426 (in QQ 9.7.1.28940)</li>
+</ul>
+<h2 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h2><p>POC整体用rust构建，先来解析配置文件里的内容。</p>
+<h3 id="1-配置文件解析"><a href="#1-配置文件解析" class="headerlink" title="1.配置文件解析"></a>1.配置文件解析</h3><p>针对32位系统使用静态链接的C运行时，构建可执行文件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo +stable-i686-pc-windows-msvc build --release --config <span class="string">&quot;build.rustflags = [\&quot;-C\&quot;, \&quot;target-feature=+crt-static\&quot;]&quot;</span></span><br></pre></td></tr></table></figure>
+<p>对应的toml文件</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[profile.release]</span></span><br><span class="line"><span class="attr">opt-level</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="section">[profile.release.overrides.&#x27;cfg(target_os = &quot;windows&quot;)&#x27;]</span></span><br><span class="line"><span class="attr">rustflags</span> = [<span class="string">&quot;-C&quot;</span>, <span class="string">&quot;target-feature=+crt-static&quot;</span>]</span><br></pre></td></tr></table></figure>
+<p>此时，只需要<code>cargo build --release</code>即可。</p>
+<p>开发过程中，要利用一些依赖库，来调用Windows API、服务和命令行参数。</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[dependencies.rhexdump]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.44.0&quot;</span></span><br><span class="line"><span class="attr">features</span> = [</span><br><span class="line">    <span class="string">&quot;Win32_Foundation&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_LibraryLoader&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Threading&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_SystemServices&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Console&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-service]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.5.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-args]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.2.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成动态链接库，即dll文件</span></span><br><span class="line"><span class="section">[lib]</span></span><br><span class="line"><span class="attr">crate-type</span> = [<span class="string">&quot;cdylib&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.定义的<code>src\lib.def</code>文件中的导出符号。</p>
+<h3 id="C-名称修饰规则"><a href="#C-名称修饰规则" class="headerlink" title="C++名称修饰规则"></a>C++名称修饰规则</h3><p> C++ 的名称修饰规则，也称为名称重整（name mangling）。用于编译器生成符号表，会因平台和编译器有所不同。它将函数和变量的名称、参数类型、返回类型等信息编码成一个唯一的符号。 </p>
+<p>名称修饰的目的是确保在<strong>链接阶段可以正确地解析函数和变量的符号，避免符号冲突和重复定义的问题。</strong>  为了实现不同编程语言之间的互操作性，可以使用 <code>extern &quot;C&quot;</code> 来指定使用 C 风格的符号。</p>
+<blockquote>
+<p>导出符号的格式是 <code>?SymbolName@ClassName@@FunctionSignature=_alias@0</code> </p>
+</blockquote>
+<p>下面的文件规定了导出的类和符号命，并 将所有导出符号重命名为 <code>_die</code>。 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY</span><br><span class="line">EXPORTS</span><br><span class="line">    ?NextSiblingElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ?FirstChildElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ??1TiXmlDocument@@UAE@XZ=_die@0</span><br><span class="line">    ?RootElement@TiXmlDocument@@QAEPAVTiXmlElement@@XZ=_die@0</span><br><span class="line">    ?GetText@TiXmlElement@@QBEPBDXZ=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBD@Z=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBDPAH@Z=_die@0</span><br><span class="line">    ?LoadXML@TiXmlDocument@@QAE_NPADHW4TiXmlEncoding@@@Z=_die@0</span><br><span class="line">    ??0TiXmlDocument@@QAE@XZ=_die@0</span><br><span class="line">    DllMain</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p> <code>QAE</code> 指示该构造函数是一个非静态成员函数，</p>
+<ul>
+<li><code>QB</code> 表示该函数是一个非静态成员函数，并且返回一个指针。</li>
+<li><code>EPBD</code> 表示函数的第一个参数是一个 <code>const char*</code> 类型的指针。</li>
+<li><code>PAH</code> 表示函数的第二个参数是一个 <code>int*</code> 类型的指针。</li>
+<li><code>PAVTiXmlElement 表示返回类型是一个指向</code>TiXmlElement` 类的指针。 </li>
+<li><code>0TiXmlDocument@@QAE@XZ</code>中0表示该类的默认构造函数</li>
+<li><code>@Z</code>：函数参数的结尾标记 ，<code>XZ</code> 表示该构造函数不接受任何参数。 </li>
+</ul>
+<h3 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">CreateProcessAsUserW</span>(token2, <span class="literal">None</span>, <span class="title function_ invoke__">PWSTR</span>(<span class="string">&quot;cmd.exe&quot;</span>.<span class="title function_ invoke__">encode_utf16</span>().<span class="title function_ invoke__">chain</span>(<span class="title function_ invoke__">Some</span>(<span class="number">0</span>)).collect::&lt;<span class="type">Vec</span>&lt;<span class="type">u16</span>&gt;&gt;().<span class="title function_ invoke__">as_mut_ptr</span>()), <span class="literal">None</span>, <span class="literal">None</span>, FALSE, <span class="title function_ invoke__">PROCESS_CREATION_FLAGS</span>(<span class="number">0</span>), <span class="literal">None</span>, <span class="literal">None</span>, &amp;si, &amp;<span class="keyword">mut</span> pi).<span class="title function_ invoke__">ok</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/" class="post-title-link" itemprop="url">AI与大数据风险近5年论文摘要汇</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-29 14:17:22 / Modified: 11:27:38" itemprop="dateCreated datePublished" datetime="2023-06-29T14:17:22+08:00">2023-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>大数据在医疗、金融、安全、管理等方面都有很多应用，可以用来化解这些领域中出现的风险；而大数据的应用本身又带来一系列安全隐患，需要靠机器学习技术去解决或缓解。</p>
+<p>Prompt:本篇论文采用了{}机器学习技术，对大数据的{}{}特征进行建模，处理{分类}任务，达成了{}效果，在{}领域有所应用。</p>
+<h3 id="大数据应用"><a href="#大数据应用" class="headerlink" title="大数据应用"></a>大数据应用</h3><p>大数据的一些应用,推荐系统、辅助决策、异常检测、关联分析</p>
+<ol>
+<li>数据驱动的决策：大数据分析可以提供大量的实时和历史数据，帮助组织做出更准确的决策。通过对海量数据进行挖掘和分析，可以发现隐藏的关联和趋势，从而指导业务决策和战略规划。</li>
+<li>个性化服务和推荐系统：基于大数据分析的个性化服务和推荐系统可以根据用户的历史行为和偏好，提供定制化的产品和服务。这使得用户能够更好地满足其需求，提升用户体验。</li>
+<li>预测和趋势分析：通过对大数据进行分析，可以预测未来趋势和行业发展方向。这对于市场营销、销售预测、风险管理等领域具有重要意义，可以帮助组织做出战略决策和规划。</li>
+<li>预测和趋势分析：数据挖掘可以通过分析历史数据，发现潜在的趋势和模式，从而进行未来的预测。这在市场预测、销售预测、天气预测等领域具有重要应用。</li>
+<li>客户细分和市场分析：通过对客户行为和偏好的分析，可以将客户划分为不同的细分群体，了解他们的需求和行为模式，并制定针对性的市场策略和营销活动。</li>
+<li>金融欺诈检测：数据挖掘可以帮助金融机构检测异常交易和欺诈行为。通过分析大量的金融交易数据，可以识别潜在的欺诈模式和指标，及时采取相应的措施。</li>
+<li>社交网络分析：数据挖掘可以揭示社交网络中的关系和影响力。通过分析社交媒体数据、用户之间的互动和信息传播，可以了解社交网络中的关键人物、群体动态和舆论趋势。</li>
+<li>生物信息学：数据挖掘在生物信息学中发挥重要作用，例如基因表达数据的分析、蛋白质结构预测、基因组序列分析等，有助于理解生物学的复杂性和进行基因研究。</li>
+<li>物流和供应链优化：通过对物流和供应链数据的挖掘和分析，可以优化物流路径、减少库存成本、提高配送效率，并优化供应链的整体运作。</li>
+<li>医疗诊断和治疗：数据挖掘可以帮助医疗领域进行疾病诊断、药物选择和治疗计划的优化。通过分析医疗数据和患者病历，可以发现潜在的疾病模式和个体化的治疗方案。</li>
+</ol>
+<h2 id="大数据在风险管理领域的应用"><a href="#大数据在风险管理领域的应用" class="headerlink" title="大数据在风险管理领域的应用"></a>大数据在风险管理领域的应用</h2><h3 id="可靠性方面"><a href="#可靠性方面" class="headerlink" title="可靠性方面"></a>可靠性方面</h3><p> 基于新能源汽车大数据平台 ，研究电动汽车的锂离子电池可靠性问题， 电池故障诊断与健康状态预估 </p>
+<p>[1]李放,闵永军,张涌.基于大数据的动力锂电池可靠性关键技术研究综述[J].储能科学与技术,2023,12(06):1981-1994.DOI:10.19799/j.cnki.2095-4239.2023.0316.</p>
+<h3 id="医疗"><a href="#医疗" class="headerlink" title="医疗"></a>医疗</h3><p>在医疗领域，大数据的应用可以带来以下益处：</p>
+<ol>
+<li>疾病预测和诊断：通过分析大规模的医疗数据，可以发现潜在的疾病风险因素和诊断模式，提前进行疾病预测和诊断，从而提高治疗效果和患者生存率。</li>
+<li>药物研发和治疗方案优化：大数据分析可以加速药物研发过程，帮助科学家识别潜在的药物靶点和候选化合物。此外，通过分析大量的患者数据，可以优化治疗方案，提供更个性化和有效的治疗。</li>
+</ol>
+<h3 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h3><ol>
+<li>风险管理和欺诈检测：通过分析大数据，可以识别金融交易中的异常模式和风险指标，帮助金融机构及时发现潜在的欺诈行为，并采取相应措施进行风险管理。</li>
+<li>个人信用评估和贷款决策：利用大数据分析个人的消费行为、信用记录和其他相关数据，可以更准确地评估个人的信用状况，并基于此做出贷款决策和利率定价。</li>
+</ol>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h3 id="计算机"><a href="#计算机" class="headerlink" title="计算机"></a>计算机</h3><p>隐私保护</p>
+<p>[1]方滨兴,贾焰,李爱平等.大数据隐私保护技术综述[J].大数据,2016,2(01):1-18.</p>
+<h3 id="环境、资源等其他方面"><a href="#环境、资源等其他方面" class="headerlink" title="环境、资源等其他方面"></a>环境、资源等其他方面</h3><h2 id="大数据带来的风险"><a href="#大数据带来的风险" class="headerlink" title="大数据带来的风险"></a>大数据带来的风险</h2><p> 大数据由于需要从网络等多个渠道收集数据，别有用心的攻击者可以进行数据投毒，污染模型，从而导致模型有后门生成。因此，大数据可能带来数据投毒风险。 </p>
+<ol>
+<li>数据隐私和安全：大数据涉及大量的个人敏感信息和机密数据，如个人身份信息、医疗记录、财务数据等。如果这些数据未经适当保护，可能会导致隐私泄露和滥用，甚至成为黑客攻击的目标。</li>
+<li>偏见和歧视：大数据分析依赖于大量的历史数据，而这些数据可能反映了现实社会的偏见和歧视。如果不加以适当的处理，分析结果可能具有偏见性，导致不公平的结果和决策。</li>
+<li>数据质量问题：大数据分析对数据的质量和准确性要求很高。如果数据存在错误、缺失或不完整，分析结果可能不准确或误导性，影响决策的可靠性。</li>
+<li>安全漏洞和数据泄露：大数据系统中可能存在安全漏洞和弱点，攻击者可以利用这些漏洞来获取敏感数据或操纵分析结果。此外，数据共享和合作过程中的数据传输也可能面临被窃取或泄露的风险。</li>
+</ol>
+<h2 id="AI对大数据风险的解决"><a href="#AI对大数据风险的解决" class="headerlink" title="AI对大数据风险的解决"></a>AI对大数据风险的解决</h2><p>社交图谱、差分隐私、安全计算。</p>
+<h2 id="金融-1"><a href="#金融-1" class="headerlink" title="金融"></a>金融</h2><h2 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h2><h2 id="计算机-1"><a href="#计算机-1" class="headerlink" title="计算机"></a>计算机</h2><p>隐私保护</p>
+<h2 id="环境、资源等其他方面-1"><a href="#环境、资源等其他方面-1" class="headerlink" title="环境、资源等其他方面"></a>环境、资源等其他方面</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">CTF里的常用加密算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-06-27 14:19:49" itemprop="dateCreated datePublished" datetime="2023-06-27T14:19:49+08:00">2023-06-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-06-20 16:53:36" itemprop="dateModified" datetime="2023-06-20T16:53:36+08:00">2023-06-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h2><h3 id="对RSA的攻击："><a href="#对RSA的攻击：" class="headerlink" title="对RSA的攻击："></a>对RSA的攻击：</h3><h2 id="AES"><a href="#AES" class="headerlink" title="AES"></a>AES</h2><h2 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h2><h2 id="RC4"><a href="#RC4" class="headerlink" title="RC4"></a>RC4</h2><p> 流密码 ， 一次一个字节地加密消息 ，速度快。</p>
+<p><img src="/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/1687250986520.png" alt="1687250986520"></p>
+<h3 id="对RC4的攻击："><a href="#对RC4的攻击：" class="headerlink" title="对RC4的攻击："></a>对RC4的攻击：</h3><h2 id="ECC"><a href="#ECC" class="headerlink" title="ECC"></a>ECC</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E6%9C%80%E6%96%B0%E6%B7%B7%E6%B7%86%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/%E6%9C%80%E6%96%B0%E6%B7%B7%E6%B7%86%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">TEB-PEB-SEH</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-20 14:19:49 / Modified: 16:16:29" itemprop="dateCreated datePublished" datetime="2023-06-20T14:19:49+08:00">2023-06-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="多态字符串混淆、"><a href="#多态字符串混淆、" class="headerlink" title="多态字符串混淆、"></a>多态字符串混淆、</h2><h2 id="基于哈希的导入解析"><a href="#基于哈希的导入解析" class="headerlink" title="基于哈希的导入解析"></a>基于哈希的导入解析</h2><h2 id="运行时常量计算"><a href="#运行时常量计算" class="headerlink" title="运行时常量计算"></a>运行时常量计算</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot18/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -653,640 +1121,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E6%91%98%E8%A6%81survey/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%81%B6%E6%84%8F%E8%BD%AF%E4%BB%B6%E6%A3%80%E6%B5%8B%E6%91%98%E8%A6%81survey/" class="post-title-link" itemprop="url">恶意检测2023年论文摘要汇</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-08 14:17:22" itemprop="dateCreated datePublished" datetime="2023-05-08T14:17:22+08:00">2023-05-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-29 10:33:58" itemprop="dateModified" datetime="2023-06-29T10:33:58+08:00">2023-06-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>[1] 针对在程序功能无关区域添加修改的一类对抗样本攻击,  利用模型解释技术提取端到端恶意代码检测<strong>模型的决策依据作为特征</strong>,  进而通过<strong>异常检测</strong>方法准确识别对抗样本.  该方法作为恶意代码检测模型的<strong>附加模块</strong>,  不需要对原有模型做修改, </p>
-<p>[2]建立了一种多尺度卷积核混合的卷积神经网络（Convolutional Neu⁃ ral Network，CNN）架构，以提高恶意代码识别能力. 该模型运用具有捷径<strong>（shortcut）结构</strong>的深度大内核卷积和标准小内 核卷积相结合的混合卷积核（Mixed Kernels，MK）模块，以提高模型准确率；在此基础上，通过<strong>多尺度内核融合（Multiscale Kernel Fusion，MKF</strong>），以降低模型参数量；再结合<strong>特征重组（feature shuffle）</strong>操作，实现优化特征通信，在不增加模 型参数量的前提下提升了分类精度 。</p>
-<p> [3]设计 APT 恶意 软件基因模型和基因相似度检测算法构建<strong>恶意行为基因库</strong>,  </p>
-<p>[4] . 针对目前研究仅着眼于提升模型分类准确率而忽略了恶意代码<strong>检测的时效性</strong>  。将多尺度恶意 代码特征融合与通道注意力机制结合，增强关键特征表达，并使用数据增强技术改善数据集类别不平衡问题 ，检测速度快。</p>
-<p>[5]生成<strong>概率 CFG</strong>，其中顶点代表操作码，操作码之间的边代表这些操作码在文件中出现的概率。。。。</p>
-<p>[6]可视化方法生成的恶意软件图像并没有保留语义和统计属性，尺寸小且统一。 本文给出了提取内容和填充模式的定义，以表征恶意软件可视化任务的关键因素，并提出了一种新的基于汇编指令和<strong>马尔可夫传递矩阵</strong>的恶意软件可视化方法来表征恶意软件。 因此，提出了一种基于<strong>三通道可视化</strong>和深度学习（MCTVD）的恶意软件分类方法。。。。</p>
-<p>[7]通过实施 CNN 模型和<strong>迁移学习</strong> (TL，<strong>MobileNetV2 和 ResNet-50 模型</strong>) 进行恶意软件分类的深度学习，以克服基于 DL 的恶意软件检测模型中的常见问题，包括过度拟合、高资源消耗和无法检测混淆的恶意软件。本文提出的模型检测混淆的能力强。。。。</p>
-<p>[8]提出了提高特征表示质量的两种新机制。一是通过重新解释user-defined function calls的操作码序列来捕获这些函数调用的语义；二是将文字信息整合到函数调用图FCG的嵌入中，以实现更好的判别能力。在静态检测的背景下，通过采用所提出的两种机制，五个广泛采用的分类器对恶意软件家族分类的准确率平均提高了 2%。。。。（表示）</p>
-<p>[9]</p>
-<p>[1] 田志成, 张伟哲, 乔延臣, 等. 基于模型解释的 PE 文件对抗性恶意代码检测[J]. 软件学报, 2023, 34(4): 1926-1943. </p>
-<p>[2] 张丹丹, 宋亚飞, 刘曙. MalMKNet：一种用于恶意代码分类的多尺度卷积神经网络[J]. 电子学报, <a target="_blank" rel="noopener" href="https://doi.org/10.12263/DZXB.20221069">DOI: 10.12263/DZXB.20221069</a>. </p>
-<p> [3]陈伟翔, 任怡彤, 肖岩军, 等. 面向 APT 家族分析的攻击路径预测方法研究[J]. Journal of Cyber Security 信息安全学报, 2023, 8(1). </p>
-<p>[4] 王硕, 王坚, 王亚男, 等. 一种基于特征融合的恶意代码快速检测方法[J]. 电子学报, 2023, 51(1): 57-66. </p>
-<p>[5] shah, I.A., Mehmood, A., Khan, A.N. <em>et al.</em> HeuCrip: a malware detection approach for internet of battlefield things. <em>Cluster Comput</em> <strong>26</strong>, 977–992 (2023). <a target="_blank" rel="noopener" href="https://doi.org/10.1007/s10586-022-03618-y">https://doi.org/10.1007/s10586-022-03618-y</a> </p>
-<p>[6] Deng H, Guo C, Shen G, et al. MCTVD: A malware classification method based on three-channel visualization and deep learning[J]. Computers &amp; Security, 2023, 126: 103084. </p>
-<p>[7] Habibi O, Chemmakha M, Lazaar M. Performance Evaluation of CNN and Pre-trained Models for Malware Classification[J]. Arabian Journal for Science and Engineering, 2023: 1-15. </p>
-<p>[8] Wu C Y, Ban T, Cheng S M, et al. IoT malware classification based on reinterpreted function-call graphs[J]. Computers &amp; Security, 2023, 125: 103060. </p>
-<p>[9] Malhotra V, Potika K, Stamp M. A Comparison of Graph Neural Networks for Malware Classification[J]. arXiv preprint arXiv:2303.12812, 2023. </p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2303.12812">https://arxiv.org/pdf/2303.12812</a></p>
-<p>[10] Chaganti R, Ravi V, Pham T D. A multi-view feature fusion approach for effective malware classification using Deep Learning[J]. Journal of Information Security and Applications, 2023, 72: 103402. </p>
-<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/366323708_A_multi-view_feature_fusion_approach_for_effective_malware_classification_using_Deep_Learning/links/639c5704e42faa7e75cad9c6/A-multi-view-feature-fusion-approach-for-effective-malware-classification-using-Deep-Learning.pdf">https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/366323708_A_multi-view_feature_fusion_approach_for_effective_malware_classification_using_Deep_Learning/links/639c5704e42faa7e75cad9c6/A-multi-view-feature-fusion-approach-for-effective-malware-classification-using-Deep-Learning.pdf</a></p>
-<p>[11] 利用节表的注入欺骗分类模型。da Silva A A, Pamplona Segundo M. On deceiving malware classification with section injection[J]. Machine Learning and Knowledge Extraction, 2023, 5(1): 144-168. </p>
-<p><a target="_blank" rel="noopener" href="https://www.mdpi.com/2504-4990/5/1/9">https://www.mdpi.com/2504-4990/5/1/9</a></p>
-<p>[12]</p>
-<p> Ravi V, Alazab M. Attention‐based convolutional neural network deep learning approach for robust malware classification[J]. Computational Intelligence, 2023, 39(1): 145-168. </p>
-<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/363834604_Attention-based_convolutional_neural_network_deep_learning_approach_for_robust_malware_classification/links/634ba0e376e39959d6c627dc/Attention-based-convolutional-neural-network-deep-learning-approach-for-robust-malware-classification.pdf">https://www.researchgate.net/profile/Vinayakumar-Ravi/publication/363834604_Attention-based_convolutional_neural_network_deep_learning_approach_for_robust_malware_classification/links/634ba0e376e39959d6c627dc/Attention-based-convolutional-neural-network-deep-learning-approach-for-robust-malware-classification.pdf</a></p>
-<p>[13]动态权重值的联邦学习分类安卓恶意软件方法</p>
-<p> Chaudhuri A, Nandi A, Pradhan B. A Dynamic Weighted Federated Learning for Android Malware Classification[M]//Soft Computing: Theories and Applications: Proceedings of SoCTA 2022. Singapore: Springer Nature Singapore, 2023: 147-159. </p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2211.12874">https://arxiv.org/pdf/2211.12874</a></p>
-<p>[14]增强勒索软件分类，通过<strong>多阶段特征提取和数据不平衡的校正</strong>。</p>
-<p> Onwuegbuche F C, Delia A. Enhancing Ransomware Classification with Multi-Stage Feature Selection and Data Imbalance Correction[J]. </p>
-<p>[15]</p>
-<p>[16]</p>
-<p>[17]</p>
-<p>[18]</p>
-<p>[19]</p>
-<p>[20]</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E5%B8%B8%E8%A7%81%E7%9A%84%E8%8A%B1%E6%8C%87%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/%E5%B8%B8%E8%A7%81%E7%9A%84%E8%8A%B1%E6%8C%87%E4%BB%A4/" class="post-title-link" itemprop="url">TEB-PEB-SEH</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-07 14:19:49" itemprop="dateCreated datePublished" datetime="2023-05-07T14:19:49+08:00">2023-05-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-20 16:14:10" itemprop="dateModified" datetime="2023-06-20T16:14:10+08:00">2023-06-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="去混淆工具使用"><a href="#去混淆工具使用" class="headerlink" title="去混淆工具使用"></a>去混淆工具使用</h2><p>使用下面这条命令快速去混淆。</p>
-<p>Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Import-Module .\Revoke-Obfuscation.psd1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">下列命令可以针对EID 4104脚本块日志执行分析检测：</span><br><span class="line"></span><br><span class="line">Get-RvoScriptBlock -Path &#x27;C:\Windows\System32\Winevt\Logs\Microsoft-Windows-PowerShell%4Operational.evtx&#x27; -Verbose</span><br><span class="line"></span><br><span class="line">Get-ChildItem .\Demo\demo.evtx | Get-RvoScriptBlock -Verbose</span><br><span class="line"></span><br><span class="line">Get-WinEvent -LogName Microsoft-Windows-PowerShell/Operational | Get-RvoScriptBlock -Verbose</span><br><span class="line">下列命令可以针对demo.evtx中的数据记录执行完整检测：</span><br><span class="line"></span><br><span class="line">$obfResults = Get-WinEvent -Path .\Demo\demo.evtx | Get-RvoScriptBlock | Measure-RvoObfuscation -OutputToDisk -Verbose</span><br><span class="line">下列命令可以对本地或远程托管的测试脚本执行检测：</span><br><span class="line"></span><br><span class="line">Measure-RvoObfuscation -Url &#x27;http://bit.ly/DBOdemo1&#x27; -Verbose -OutputToDisk</span><br><span class="line"></span><br><span class="line">Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</span><br><span class="line"></span><br><span class="line">Get-ChildItem .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</span><br></pre></td></tr></table></figure>
-<p>1.伪装vc++5.0代码：<br>PUSH EBP<br>MOV EBP,ESP<br>PUSH -1<br>push 111111   -___<br>PUSH 111111   -/   在这段代码中类似这样的操作数可以乱填<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>ADD ESP,-6C<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>nop<br>jmp 原入口地址</p>
-<hr>
-<p>2.胡乱跳转代码：<br>push ebp<br>mov ebp,esp<br>inc ecx<br>push edx<br>ADD ESP,-6C<br>nop<br>pop edx<br>dec ecx<br>pop ebp<br>ADD ESP,6C<br>inc ecx<br>loop somewhere   /跳转到上面那段代码地址去！  </p>
-<p>somewhere:<br>nop   /“胡乱”跳转的开始…<br>jmp 下一个jmp的地址   /在附近随意跳<br>jmp …   /…<br>jmp 原入口地址   /跳到原始oep</p>
-<hr>
-<p>3.伪装c++代码：<br>push eax<br>mov ebp,esp<br>push -1<br>push 111111<br>push 111111<br>mov eax,fs:[0]<br>push eax<br>mov fs:[0],esp<br>pop eax<br>mov fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>nop<br>nop<br>jmp 原入口地址</p>
-<hr>
-<p>4.伪装Microsoft Visual C++ 6.0代码：</p>
-<p>PUSH -1<br>PUSH 0<br>PUSH 0<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>SUB ESP,1<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>POP EAX<br>POP EAX<br>nop<br>POP EAX<br>nop<br>ADD ESP,1<br>POP EAX<br>MOV DWORD PTR FS:[0],EAX<br>POP EAX<br>POP EAX<br>nop<br>POP EAX<br>nop<br>POP EAX<br>MOV EBP,EAX<br>JMP 原入口地址</p>
-<hr>
-<p>5.伪装防杀精灵一号防杀代码：<br>push ebp<br>mov ebp,esp<br>push -1<br>push 666666<br>push 888888<br>mov eax,dword ptr fs:[0]<br>nop<br>mov dword ptr fs:[0],esp<br>nop<br>mov dword ptr fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>jmp 原入口地址</p>
-<hr>
-<p>6.伪装防杀精灵二号防杀代码：<br>push ebp<br>mov ebp,esp<br>push -1<br>push 0<br>push 0<br>mov eax,dword ptr fs:[0]<br>push eax<br>mov dword ptr fs:[0],esp<br>sub esp,68<br>push ebx<br>push esi<br>push edi<br>pop eax<br>pop eax<br>pop eax<br>add esp,68<br>pop eax<br>mov dword ptr fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>jmp 原入口地址</p>
-<hr>
-<p>7.伪装木马彩衣(无限复活袍)代码：<br>PUSH EBP<br>MOV EBP,ESP<br>PUSH -1<br>push 415448   -___<br>PUSH 4021A8   -/   在这段代码中类似这样的操作数可以乱填<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>ADD ESP,-6C<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>ADD BYTE PTR DS:[EAX],AL   /这条指令可以不要!<br>jo 原入口地址<br>jno 原入口地址<br>call 下一地址</p>
-<hr>
-<p>8.伪装木马彩衣(虾米披风)代码：<br>push ebp<br>nop<br>nop<br>mov ebp,esp<br>inc ecx<br>nop<br>push edx<br>nop<br>nop<br>pop edx<br>nop<br>pop ebp<br>inc ecx<br>loop somewhere /跳转到下面那段代码地址去！</p>
-<p>someshere:<br>nop   /“胡乱”跳转的开始…<br>jmp 下一个jmp的地址   /在附近随意跳<br>jmp …   /…<br>jmp 原入口的地址   /跳到原始oep</p>
-<hr>
-<p>9.伪装花花添加器(神话)代码：—————-根据C++改<br>nop<br>nop<br>nop<br>mov ebp,esp<br>push -1<br>push 111111<br>push 222222<br>mov eax,dword ptr fs:[0]<br>push eax<br>mov dword ptr fs:[0],esp<br>pop eax<br>mov dword ptr fs:[0],eax<br>pop eax<br>pop eax<br>pop eax<br>pop eax<br>mov ebp,eax<br>mov eax,原入口地址<br>push eax<br>retn</p>
-<hr>
-<p>10.伪装花花添加器(无极)代码：<br>nop<br>mov   ebp, esp<br>push   -1<br>push   0A2C2A<br>push   0D9038<br>mov   eax, fs:[0]<br>push   eax<br>mov   fs:[0], esp<br>pop   eax<br>mov   fs:[0], eax<br>pop   eax<br>pop   eax<br>pop   eax<br>pop   eax<br>mov   ebp, eax<br>mov   eax, 原入口地址<br>jmp   eax</p>
-<hr>
-<p>11.伪装花花添加器(金刚)代码：————根据VC++5.0改<br>nop<br>nop<br>mov   ebp, esp<br>push   -1<br>push   415448<br>push   4021A8<br>mov   eax, fs:[0]<br>push   eax<br>mov   fs:[0], esp<br>add   esp, -6C<br>push   ebx<br>push   esi<br>push   edi<br>add   [eax], al<br>mov   eax,原入口地址<br>jmp   eax</p>
-<hr>
-<p>12.伪装花花添加器(杀破浪)代码：<br>nop<br>mov   ebp, esp<br>push   -1<br>push   0<br>push   0<br>mov   eax, fs:[0]<br>push   eax<br>mov   fs:[0], esp<br>sub   esp, 68<br>push   ebx<br>push   esi<br>push   edi<br>pop   eax<br>pop   eax<br>pop   eax<br>add   esp, 68<br>pop   eax<br>mov   fs:[0], eax<br>pop   eax<br>pop   eax<br>pop   eax<br>pop   eax<br>mov   ebp, eax<br>mov   eax, 原入口地址<br>jmp   eax</p>
-<hr>
-<p>12.伪装花花添加器(痴情大圣)代码：<br>nop<br>……….省略N行nop<br>nop<br>push   ebp<br>mov   ebp, esp<br>add   esp, -0C<br>add   esp, 0C<br>mov   eax, 原入口地址<br>push   eax<br>retn</p>
-<hr>
-<p>13.伪装花花添加器(如果*爱)代码：<br>nop<br>……..省略N行nop<br>nop<br>push   ebp<br>mov   ebp, esp<br>inc   ecx<br>push   edx<br>nop<br>pop   edx<br>dec   ecx<br>pop   ebp<br>inc   ecx<br>mov   eax, 原入口地址<br>jmp   eax</p>
-<hr>
-<p>14.伪装PEtite 2.2 -&gt; Ian Luck代码：<br>mov eax,0040E000<br>push 004153F3<br>push dword ptr fs:[0]<br>mov dword ptr fs:[0],esp<br>pushfw<br>pushad<br>push eax<br>xor ebx,ebx<br>pop eax<br>popad<br>popfw<br>pop dword ptr fs:[0]<br>pop eax<br>jmp 原入口地址   &#39;执行到程序的原有OEP </p>
-<hr>
-<p>15.无效PE文件代码：<br>push ebp<br>mov ebp,esp<br>inc ecx<br>push edx<br>nop<br>pop edx<br>dec ecx<br>pop ebp<br>inc ecx<br>MOV DWORD PTR FS:[0],EAX   \<br>POP EAX   |<br>POP EAX   \<br>MOV DWORD PTR FS:[0],EAX   |（注意了。。花指令）<br>POP EAX   /<br>POP EAX   |<br>MOV DWORD PTR FS:[0],EAX   /<br>loop 原入口地址</p>
-<hr>
-<p>16.伪装防杀精灵终极防杀代码：<br>push ebp<br>mov ebp,esp<br>add esp,-0C<br>add esp,0C<br>push eax<br>jmp 原入口地址</p>
-<hr>
-<p>17.伪装木马彩衣(金色鱼锦衣)花代码<br>push ebp<br>mov ebp,esp<br>add esp,-0C<br>add esp,0C<br>mov eax,原入口地址<br>push eax<br>retn</p>
-<hr>
-<p>18.<br>在mov ebp,eax<br>后面加上<br>PUSH EAX<br>POP EAX</p>
-<hr>
-<p>19.伪装UPX花指令代码：</p>
-<p>pushad<br>mov esi,m.0044D000<br>lea edi,dword ptr ds:[esi+FFFB4000]<br>push edi<br>or ebp,FFFFFFFF<br>jmp short m.00477F2A</p>
-<hr>
-<p>20.<br>push ebp<br>mov ebp,esp<br>inc ecx<br>push edx<br>pop edx<br>dec ecx<br>pop ebp<br>inc ecx<br>jmp 原入口 </p>
-<p>21、<br>push ebp<br>nop<br>nop<br>mov ebp,esp<br>inc ecx<br>nop<br>push edx<br>nop<br>nop<br>pop edx<br>nop<br>pop ebp<br>inc ecx<br>loop A1地址<br>nop<br>nop</p>
-<p>A1：push ebp<br>mov ebp,esp<br>jo 原入口<br>jno 原入口</p>
-<hr>
-<p>【深层】伪装 WCRT Library (Visual C++) DLL Method 1 -&gt; Jibz<br>黑吧代码 + 汇编代码：<br>使用黑吧粘贴以下代码：</p>
-<p>55 8B EC 83 7D 0C 01 75 41 A1 C0 30 00 10 85 C0 74 0A FF D0 85 C0 75 04 6A FE EB 17 68 0C 30 00 10 68 08 30 00 10 E8 89 00 00 00 85 C0 59 59 74 08 6A FD FF 15 08 20 00 10 68 04 30 00 10 68 00 30 00 10 E8 52 00 00 00 59 59</p>
-<p>粘贴完毕后，再添加2行汇编语句：</p>
-<p>jmp 原入口地址   &#39;执行到程序的原有OEP </p>
-<p>retn 0C</p>
-<hr>
-<p>发布几个不常见的花指令</p>
-<p>B1 01   mov cl,1<br>2C 90   sub al,90<br>95   xchg eax,ebp<br>4D   dec ebp<br>65:42   inc edx<br>40   inc eax<br>20C4   and ah,al<br>8350 06 6E   adc dword ptr ds:[eax+6],6E<br>226A E4   and ch,byte ptr ds:[edx-1C]<br>E8 B15FBC5B   call 入口点</p>
-<p>55   push ebp<br>8BEC   mov ebp,esp<br>51   push ecx<br>53   push ebx<br>8BD8   mov ebx,eax<br>8BC3   mov eax,ebx<br>04 9F   add al,9F<br>2C 1A   sub al,1A<br>73 03   jnb 入口点</p>
-<p>JMP SHORT test.00414FB5 (EB 01)<br>NOP<br>JMP SHORT test.00414FB8 (EB 01)<br>NOP<br>JMP SHORT test.00414FBB (EB 01)<br>NOP<br>JMP test. (EB 01)</p>
-<p>90=c4</p>
-<p>PUSH EBP<br>MOVE EBP,ESP<br>inc ecx<br>push eax<br>pop eax<br>push edx<br>pop edx<br>dec ecx<br>sub eax,-2<br>ADD ESP,68<br>DEC eax<br>DEC eax<br>SUB ESP,68<br>JPE 入口<br>JPO 入口</p>
-<ol>
-<li><p>NOP：这个指令代表“无操作”，通常被用作占位符或在程序中创建延迟。</p>
-</li>
-<li><p>LEA：这个指令代表“加载有效地址”，将某个值的地址加载到一个寄存器中，而不是加载这个值本身。</p>
-</li>
-</ol>
-<h2 id="TEB"><a href="#TEB" class="headerlink" title="TEB"></a>TEB</h2><p>(Thread Environment Block，线程环境块) </p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>偏移<br><br>000 <br><br>004 <br><br>008 <br><br>00C <br><br>010 <br><br>014 <br><br>018 <br><br>020 <br><br>024 <br><br>02C <br><br>030</th>
-<th>说明<br><br>指向SEH链指针<br><br>线程堆栈顶部<br><br>线程堆栈底部<br><br>SubSystemTib<br><br>FiberData<br><br>ArbitraryUserPointer<br><br>FS段寄存器在内存中的镜像<br><br>进程PID<br><br>线程ID<br><br>指向线程局部存储指针<br><br>PEB结构地址（进程结构）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>034</td>
-<td>上个错误号</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="异常处理的优先级"><a href="#异常处理的优先级" class="headerlink" title="异常处理的优先级"></a>异常处理的优先级</h2><ol>
-<li>VEH  向量化异常处理 VectoredExceptionHandler </li>
-<li>SEH   结构化异常处理</li>
-<li>UEF   UnhandledExceptionFilter </li>
-<li>VCH   VectoredContinueHandler </li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yilang/p/11850734.html">https://www.cnblogs.com/yilang/p/11850734.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot17/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot17/" class="post-title-link" itemprop="url">借助遗传算法的语义搜索高效小样本学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-04-17 00:13:22" itemprop="dateCreated datePublished" datetime="2023-04-17T00:13:22+08:00">2023-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-14 16:00:32" itemprop="dateModified" datetime="2023-06-14T16:00:32+08:00">2023-06-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://github.com/hwxu20/gps">GPSCode-06</a></p>
-<ul>
-<li>Hanwei Xu, Yujun Chen, Yulun Du, Nan Shao, Wang Yanggang, Haiyu Li, and Zhilin Yang. 2022. <a target="_blank" rel="noopener" href="https://aclanthology.org/2022.emnlp-main.559">GPS: Genetic Prompt Search for Efficient Few-Shot Learning</a>. In <em>Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing</em>, pages 8162–8171, Abu Dhabi, United Arab Emirates. Association for Computational Linguistics.</li>
-</ul>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>用自然语言指令设置提示词，可以提高零样本设置中大型语言模型的任务性能。当前工作通过手动重写或基于梯度的调整来改进此类提示词。 然而，</p>
-<p>手动重写非常耗时并且需要主观解释，</p>
-<p>而基于梯度的调整对于大型模型的计算要求极高，并且需要完全访问模型权重，这对于基于 API 的模型可能不可用。</p>
-<p>基于提示词的方法有利于小样本泛化，但是之前的都是手动设置，与之前的T0等方法不同，本文将各种来源的提示词作为种子，用遗传算法去进行提示词搜索，无须参数、无须梯度。</p>
-<h2 id="术语介绍"><a href="#术语介绍" class="headerlink" title="术语介绍"></a>术语介绍</h2><p>intrinsic dimension(本征维)： 在多维信号的信号处理中，信号的本征维描述了生成信号的良好近似需要多少变量。 </p>
-<p>Ablation Study（消融实验）： 在深度学习论文中，ablation study往往是在论文最终提出的模型上，<strong>减少一些改进特征</strong>（如减少几层网络等），以验证相应改进特征的必要性。 </p>
-<p>LM-BFF <a href="Gao et al., 2021b">5</a>：： better few-shot fine-tuning of language models ，更好的适合小样本微调的语言模型。</p>
-<p>DINO[22]:通过指令获得数据集的方法，Datasets from Instructions</p>
-<p>T0:多任务encoder-decoder模型，针对不同下游任务，人为设计不同的提示词预训练后获得。</p>
-<p>T5LM-XXL :XXL(11B)级参数规模的T5语言模型，</p>
-<p><strong>soft prompts和hard prompts</strong>： 模板的制作分为手工创建模板和自动化生成模板，而自动化生成模板又分为离散提示（又叫做硬提示）和连续提示（又叫做软提示） </p>
-<h3 id="以下均为需要微调参数的方法"><a href="#以下均为需要微调参数的方法" class="headerlink" title="以下均为需要微调参数的方法"></a>以下均为需要微调参数的方法</h3><p>BBT(Black-Box Tuning)： 无梯度的微调方法，搜索连续空间中的最佳软<strong>提示词嵌入</strong>，而不是搜索离散的文本提示词。</p>
-<p>MT(Model Tuning)：在<strong>每个任务上对整个</strong>预训练语言<strong>模型</strong>进行微调的通用范式</p>
-<p>PT(Prompt Tuning)：预训练模型被冻结，<strong>只训练额外的连续软提示词</strong>的梯度引导的微调方法</p>
-<h3 id="无须微调参数的方法"><a href="#无须微调参数的方法" class="headerlink" title="无须微调参数的方法"></a>无须微调参数的方法</h3><ul>
-<li><p>ICL(In-Context Learning):上下文学习，大规模预训练模型进行小样本学习的通用方法。</p>
-<p>由标注的样本和<strong>手动模板</strong>组成的<strong>范例</strong>被用来帮助模型理解test tasks的含义。</p>
-<p>缺陷：需要人工提供手动提示词，对标记数据敏感，表现不稳定。</p>
-</li>
-<li><p>GRIPS（  Gradient-free Instructional Prompt Search) ：无梯度指令提示搜索，基于编辑的优化提示词搜索方法，主要用于简单的基于编辑的操作（例如增、删、交换、释义）</p>
-</li>
-</ul>
-<h2 id="提示词重新生成方法"><a href="#提示词重新生成方法" class="headerlink" title="提示词重新生成方法"></a>提示词重新生成方法</h2><ul>
-<li>BT:回译(back translation)。将提示词从英语翻译到其他 11 种语言，然后将它们翻译回英语。包括中文、日语、韩语、法语、西班牙语、意大利语、俄语、德语、阿拉伯语、希腊语、粤语，</li>
-<li>完形填空（cloze）。利用LM-BFF[5]里的模板生成方法，使用T5（transformer）文本到文本预训练模型生成模板。对每个输入样例及其表达器（verbalizer）用占位符作为前缀和后缀生成模板，让T5去补全这些占位符。采用波束搜索(beam search)生成多个候选提示词。与论文[5]不同的是，本文的方法里是没有参数更新的，所以完型填空的效果并不好。所以本文中，使用人工提示词作为初始模板，用占位符代替一些随机的标记，然后让T5填空。选出在校验集（Ddev）时平均结果最好的提示词。</li>
-<li>SC:续写句子（sentence continuation）。采用和论文[22]中一样的根据指令生成数据集方法，采用模板“Write two sentences that mean the same thing. Sentence 1: Manual Prompt, Sentence 2:” 交给预训练模型去续写。采用了GPT2-XL (1.5B)和 T5LM-XXL (11B)作为提示词生成模型。</li>
-</ul>
-<p>这些方法不需要人工定义编辑规则，而且生成的提示词语义流畅。</p>
-<h3 id="提示词打分"><a href="#提示词打分" class="headerlink" title="提示词打分"></a>提示词打分</h3><p>Close: 按照[5]里的方法，用校验集(D_dev)上的平均对数打分；</p>
-<p>BT和SC：不适用平均对数，采用校验集(D_dev)上的准确率评价。</p>
-<h2 id="创新点：提示词遗传搜索算法"><a href="#创新点：提示词遗传搜索算法" class="headerlink" title="创新点：提示词遗传搜索算法"></a>创新点：提示词遗传搜索算法</h2><p>离散的词空间中找到高表现的硬提示词。</p>
-<p><img src="/categories/ML/Few-Shot17/1681822830925.png" alt="1681822830925"></p>
-<p><img src="/categories/ML/Few-Shot17/1681784514455.png" alt="1681784514455"></p>
-<p>​                                    Table4  五种小样本学习方法在四个评价指标上的比较</p>
-<blockquote>
-<p>这里的代价消耗是训练和提示词搜索的联合损失。</p>
-<p>MT缺乏服务效率，因为保存MT需要对于每个任务都保存整个模型，造成巨大的存储开销。所有参数都需要调整，其使用的Adam等优化器要求存储额外的动量和方差项。</p>
-<p>PT和BBT只需要调整提示词嵌入层。</p>
-<p>ICL使用很长的序列长度来串联例子，推理昂贵，尤其是在范例数目多的时候。那为什么这里的代价只是1x？？？</p>
-<p>可以看到，本文提出的方法GPS提供Serving Effiency、不需要参数更新、极大的减少了计算代价，还能取得接近于整个模型调优的效果。获得了60.12的准确率。</p>
-</blockquote>
-<h2 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h2><h3 id="数据集（NLP的）"><a href="#数据集（NLP的）" class="headerlink" title="数据集（NLP的）"></a>数据集（NLP的）</h3><blockquote>
-<p>T0语言模型的10个测试任务</p>
-</blockquote>
-<ul>
-<li><p>自然语言推理任务（natural language inference）：ANLI R1, ANLI R2, ANLI R3, CB, RTE</p>
-</li>
-<li><p>共指解析（coreference resolution）：WSC, Winogrande</p>
-</li>
-<li>语句补全（sentence completion）：COPA, HellaSwag</li>
-<li>词义消歧（word sense disambiguation）：WiC</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>参数设置</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PT</td>
-<td>Adafactor Optimizer，lr=0.05</td>
-</tr>
-<tr>
-<td>MT</td>
-<td>Adafactor Optimizer，,lr=5e-5=0.00005</td>
-</tr>
-<tr>
-<td>BBT</td>
-<td>本征维度=500，pop size=20，使用交叉熵损失；         软提示词标记数量为1 or 50时结果最好</td>
-</tr>
-<tr>
-<td>ICL</td>
-<td>每个task随机从训练集挑2个样本</td>
-</tr>
-<tr>
-<td>GRIPS</td>
-<td>复用arXiv:2203.07281.里的超参数，将初始提示词换成T0的</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><img src="/categories/ML/Few-Shot17/1681830294139.png" alt="1681830294139"></p>
-<p>T0、BBT、PT、MT采用相同的人工提示词集，GRIPS和GPS自己搜索提示词。</p>
-<p>实验结果是三种不同的数据划分方式的平均结果，脚注是一种方法在一个数据集的三种数据划分下的标准差。</p>
-<p>划线部分给出了小样本学习下参数微调得到的最好结果，加粗部分给出了参数冻结方法的最好结果。</p>
-<p><img src="/categories/ML/Few-Shot17/1681784982024.png" alt="1681784982024"></p>
-<p>​                                        Table3 GPS产生的提示词的解释 </p>
-<p>&gt;</p>
-<h2 id="我的未来工作"><a href="#我的未来工作" class="headerlink" title="我的未来工作"></a>我的未来工作</h2><p>GPT-3表明，在超大规模预训练语言模型上使用提示词进行小样本学习效果良好；</p>
-<blockquote>
-<p>Brown et al., Language models are few-shot learners. NIPS,2020</p>
-</blockquote>
-<p>但对于每个特定任务找到最优化的提示词很困难。</p>
-<p>To模型来源于这篇论文——Sanh et al., 2021. Multitask prompted training enables zero-shot task generalization.</p>
-<blockquote>
-<p>[2]Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel HerbertVoss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel Ziegler, Jeffrey Wu, Clemens Winter, Chris Hesse, Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark, Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever, and Dario Amodei. 2020. Language models are few-shot learners. In Advances in Neural Information Processing Systems, volume 33, pages 1877–1901. Curran Associates, Inc.</p>
-<p>[5]Tianyu Gao, Adam Fisch, and Danqi Chen. 2021b. Making pre-trained language models better few-shot learners. In Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers), pages 3816–3830, Online. Association for Computational Linguistics.</p>
-<p>[6]Xu Han, Weilin Zhao, Ning Ding, Zhiyuan Liu, and Maosong Sun. 2021. Ptr: Prompt tuning with rules for text classification.</p>
-<p>[17]Archiki Prasad, Peter Hase, Xiang Zhou, and Mohit Bansal. 2022. Grips: Gradient-free, edit-based instruction search for prompting large language models. arXiv preprint arXiv:2203.07281.</p>
-<p>[19]Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J. Liu. 2020. Exploring the limits of transfer learning with a unified text-totext transformer. Journal of Machine Learning Research, 21(140):1–67.</p>
-<p>[22]Timo Schick and Hinrich Schütze. 2021. Generating datasets with pretrained language models. Computing Research Repository, arXiv:2104.07540.</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/" class="post-title-link" itemprop="url">心理学效应</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-04-07 12:16:58 / Modified: 12:49:20" itemprop="dateCreated datePublished" datetime="2023-04-07T12:16:58+08:00">2023-04-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>理解和引导自己与朋友；</p>
-<p>心理暗示：使得人不自觉地按照一定的方式去行动，不加批判地接受一定的观念。</p>
-<h2 id="瓦伦达效应："><a href="#瓦伦达效应：" class="headerlink" title="瓦伦达效应："></a>瓦伦达效应：</h2><p>美国一个走钢丝演员在特别想成功的一场演出上失败了。</p>
-<p>做法：1、平常心  2、专注事情本身，而非其结果。 3、抗干扰，其他事情与我无关。4、用暗示性动作或者自己习惯的场景让自己处于一种适合做事的条件下，类似于条件概率，让大脑和身体习惯  5、熟练度max，即使干扰也不影响。</p>
-<p>4、5都是重复，更大的来说所有做法都是重复形成习惯。</p>
-<h2 id="酸葡萄-甜柠檬效应"><a href="#酸葡萄-甜柠檬效应" class="headerlink" title="酸葡萄/甜柠檬效应"></a>酸葡萄/甜柠檬效应</h2><p>狐狸想尽办法也吃不到葡萄。“嗯，那个葡萄一定非常酸.””</p>
-<p>实在得不到的，可以不要太执着，肯定是坏的，但是不要丢掉上进心；</p>
-<p>自卑时，自己拥有的是最好的，注意其中的度。</p>
-<h2 id="罗森塔尔效应"><a href="#罗森塔尔效应" class="headerlink" title="罗森塔尔效应"></a>罗森塔尔效应</h2><p>随机挑选孩子，对老师说这些学生是可造之才。</p>
-<p>权威的延誉会让周围的人对某个人的心理评价变高，通过日常行为体现出来，被期待的人受到这种鼓舞，成绩变得更好。</p>
-<p>反思：1.从朋友和老师亲人的正面评价中汲取力量 </p>
-<p>2.相信朋友会成长得越来越好，实现他的目标。</p>
-<p>3.对一个人的喜欢和赞赏，无须直接说话，从众多细节中可以体现出来。细细品味，你会发现身边人的态度。</p>
-<h2 id="飞轮效应"><a href="#飞轮效应" class="headerlink" title="飞轮效应"></a>飞轮效应</h2><p>万事开头难；惯性的作用，一开始会比较费劲，之后就轻松了，按部就班就可以。</p>
-<p>3.前面的努力，都会变成后面的推动力。永远相信付出的努力会在某一天给自己回报。</p>
-<p>4.增强回路的过程。因曾强果，果又反过来增强因，循环往复。重视反馈，给自己暗示的反馈，给自己找进步空间。</p>
-<h2 id="蘑菇效应"><a href="#蘑菇效应" class="headerlink" title="蘑菇效应"></a>蘑菇效应</h2><p>生长在阴暗角落的蘑菇，无人关注，没有阳光，常常自生自灭。只有自己长得高大了，才会被人发现，发挥出作用。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot16/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot16/" class="post-title-link" itemprop="url">Meta-Dataset: A Dataset of Datasets for Learning to Learn from Few Examples</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-03-22 00:13:22" itemprop="dateCreated datePublished" datetime="2023-03-22T00:13:22+08:00">2023-03-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-17 16:54:40" itemprop="dateModified" datetime="2023-04-17T16:54:40+08:00">2023-04-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>提供了一个Tensorflow实现的 新的基准数据集的训练和测试代码 。</p>
-<blockquote>
-<p>这篇论文和之前读过的Few-Shot13:《Learning a Universal Template for Few-shot Dataset Generalization》，<br>以及《CrossTransformers: spatially-aware few-shot transfer》的代码都是同一批作者的研究，</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/google-research/meta-dataset">Meta-Dataset-Code05</a></p>
-</blockquote>
-<p>《Self-Support Few-Shot Semantic Segmentation》，用自支持匹配获得更好的特征原型。<a target="_blank" rel="noopener" href="https://github.com/fanq15/SSP">Self-Support-Code06</a></p>
-<h2 id="度量学习"><a href="#度量学习" class="headerlink" title="度量学习"></a>度量学习</h2><p>(PN、MN、RN、CrossTransformerLearner），</p>
-<h2 id="优化学习"><a href="#优化学习" class="headerlink" title="优化学习"></a>优化学习</h2><p>1.proto_maml_fc</p>
-<p>2.BaselineFinetune</p>
-<p>3.proto</p>
-<p>最差的：关系网络。</p>
-<p>（、maml、almost-no-inner-loop、GenerativeClassifier），</p>
-<p>FLUTEFiLM</p>
-<h2 id="10个数据集"><a href="#10个数据集" class="headerlink" title="10个数据集"></a>10个数据集</h2><p><img src="/categories/ML/Few-Shot16/1680521958453.png" alt="1680521958453"></p>
-<h2 id="一些推荐参数"><a href="#一些推荐参数" class="headerlink" title="一些推荐参数"></a>一些推荐参数</h2><ul>
-<li>inner learning rate α=0.1</li>
-</ul>
-<h2 id="可继续研究的新问题"><a href="#可继续研究的新问题" class="headerlink" title="可继续研究的新问题"></a>可继续研究的新问题</h2><p>训练episode、校验、初始化的最优策略未明；</p>
-<p>在多个来源的数据</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1358,7 +1192,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1370,7 +1204,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
