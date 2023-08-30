@@ -156,6 +156,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders01/" class="post-title-link" itemprop="url">PE/COFF</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-05-12 14:58:58" itemprop="dateCreated datePublished" datetime="2023-05-12T14:58:58+08:00">2023-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-07-17 11:53:18" itemprop="dateModified" datetime="2023-07-17T11:53:18+08:00">2023-07-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>俞甲子等，《程序员的自我修养——链接、装载与库》，北京：电子工业出版社，2009年6月第2版。</p>
+</blockquote>
+<h2 id="1-5-程序的分段和分页"><a href="#1-5-程序的分段和分页" class="headerlink" title="1.5 程序的分段和分页"></a>1.5 程序的分段和分页</h2><p>解决三个问题：1.内存隔离。2.空间利用。3.重定位。</p>
+<p>本质上是增加了一个中间层，即虚存，这样就可以避免在编写程序时还要考虑详细的地址分配问题了。为了内存隔离，分段；为了细粒度的空间利用，分页。</p>
+<p>CPU-&gt;虚拟地址—&gt;MMU(Memory Management Unit，内存管理单元)—&gt;物理地址。</p>
+<h2 id="2-1-构建过程"><a href="#2-1-构建过程" class="headerlink" title="2.1 构建过程"></a>2.1 构建过程</h2><p>预编译：.cpp/.cxx.,.hpp——&gt;.i,.ii，处理所有的”#”预编译命令并递归插入和展开宏命令，删除注释，加入行号和文件名标识，保留#pragma编译器指令。</p>
+<p>编译：gcc -S/cc1 hello.c -o hello.s。完成词法分析和语法分析，生成中间代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;...&gt; search starts here:</span><br><span class="line">/usr/lib/gcc/x86_64-linux-gnu/11/include</span><br><span class="line">/usr/local/include</span><br><span class="line">/usr/include/x86_64-linux-gnu</span><br><span class="line">/usr/include</span><br></pre></td></tr></table></figure>
+<p>汇编：gcc -c /as hello.s -o hello.o。把汇编符号翻译为机器码。</p>
+<p>链接：ld，最终确定各个符号的绝对地址，完成对指令引用的符号地址的校正，需要一大堆文件。</p>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h2 id="2-2-编译原理概述"><a href="#2-2-编译原理概述" class="headerlink" title="2.2 编译原理概述"></a>2.2 编译原理概述</h2><p>词法分析，Scanner—&gt;Tokens，识别记号，同时叫标识符放到符号表(lex)。</p>
+<p>语法分析，Parser—&gt;Syntax tree，关于编译器的编译器(yacc)。</p>
+<p>语义分析：Semantic Analyzer—&gt;Commented Syntax Tree（注释语法树），只能分析静态语义：声明、类型匹配转换（在编译器可以确定的语义，其他的等待程序运行（除0异常）时才能确定）</p>
+<p>中间代码生成：使得编译器可以拆分为前后端。非常接近目标代码，但是跟目标机器与运行时环境无关。不包含数据尺寸、地址和寄存器名字。</p>
+<p>目标代码生成与优化：生成器和优化器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LEA,基址比例变址寻址（Load Effective Address），进行地址的计算后将算得的结果放入存储中，不会把结果地址的内存数据实际加载到寄存器里。用于高效地进行一些复杂的地址计算，例如数组索引、数据结构访问等，而无需实际读写内存</span><br></pre></td></tr></table></figure>
+<h2 id="2-3-链接器年龄比编译器更长"><a href="#2-3-链接器年龄比编译器更长" class="headerlink" title="2.3 链接器年龄比编译器更长"></a>2.3 链接器年龄比编译器更长</h2><p>纸带编程时，一些跳转都是绝对地址，需要人为计算，一旦指令间增删其他指令，所有目标地址都要重新人工计算<strong>（重定位，Relocation，每个要被修正的地方叫一个重定位入口，Relocation Entry)</strong>，一条纸带上的指令很麻烦，多条纸带间更是灾难。</p>
+<p>引入符号（对函数和变量位置的助记符），计算符号地址的过程让汇编器自动完成，方便程序的模块化。</p>
+<p>程序之间的接口就是这些符号，类似于拼图，我少这一部分，你恰好多这一部分，每个模块放到合适的位置，就是一幅完整的有意义的图。</p>
+<h2 id="2-4-静态链接是什么玩意？"><a href="#2-4-静态链接是什么玩意？" class="headerlink" title="2.4 静态链接是什么玩意？"></a>2.4 静态链接是什么玩意？</h2><p>详细介绍在第4章。</p>
+<p>链接过程包括：地址和空间分配、Symbol Resolution（符号决议：静态链接，绑定：动态链接）和重定位。</p>
+<p><strong>库：</strong>常用的代码编译成目标文件存放，例如运行时库。</p>
+<h2 id="5-2一些历史"><a href="#5-2一些历史" class="headerlink" title="5.2一些历史"></a>5.2一些历史</h2><p>DEC（Degital Equipment Corp.)被 康柏电脑 收购， 康柏电脑02年又被惠普（1939）收购。DEC推出的VAX/VMS（Virtual Address eXtension/System） ，是一个最先使用权限管理和容错机制的多任务OS， 提供高性能、可靠性和安全性 。微软开发Win NT时，最初成员来自于DEC的VAX/VMS小组，所以Windows的PE格式来自于DEC的VAX/VMS上的COFF（Common Object File Format）文件格式。</p>
+<p> 贝尔实验室 （Bell Telephone Laboratories， 1925 ）  —&gt;  肖克利半导体实验室（Shockley Semiconductor Laboratory，1955） —&gt; 仙童半导体（Fairchild Semiconductor，1957）  —&gt;AMD(1968)，Intel(1968) —&gt;Microsoft（操作系统，1975）。</p>
+<p> SGI（Silicon Graphics, Inc.，1982） —&gt;NVIDA（正在收购ARM（移动处理器），1993）， Netscape  （1994年，开源了 Netscape Navigator（打不过微软IE） ，发展成为 Mozilla Firefox 。</p>
+<p>Google （创建者为Stanford University博士，PageRank算法： Google搜索引擎的核心， 通过链接关系评估网页的重要性  ， 1998 ）</p>
+<p><strong>思路：</strong>链接多的代码块，也可以权重传递和赋予它高的权重值。</p>
+<ul>
+<li><p>COFF:VC++产生的目标文件格式。</p>
+</li>
+<li><p>PE：Win平台下的可执行文件格式，和ELF都是基于段的相同结构， 是COFF的一种扩展。对于64位系统，将PE中的32位字段改为64字段，叫做PE32+。</p>
+</li>
+<li><p>映像文件Image File：因为PE文件在装载时会被映射到进程的虚拟空间中运行，它是进程虚拟空间的映像，所以PE可执行文件又可称为映像文件。</p>
+</li>
+</ul>
+<h3 id="SMP与多核"><a href="#SMP与多核" class="headerlink" title="SMP与多核"></a>SMP与多核</h3><p>服务器要的是 并发吞吐 ，要CPU核数、要线程数、要大的L2/L3缓存。</p>
+<p>而PC要的是单核频率。</p>
+<p>截至2023年5月12日，至强的处理器基准频率基本在4GHz以下， 酷睿i9-13900KS 睿频最高为6GHz（受生产工艺影响）。出于性能需求发展出多处理器，SMP（symmetrical）是其中的常见形式，由于成本高，通过共用缓存，SMP发展成为多核处理器。</p>
+<h3 id="段名"><a href="#段名" class="headerlink" title="段名"></a>段名</h3><p>段名<strong>只具有提示作用</strong>，没有实际意义。不同编译器产生的段名不同，VC++用’.code’和’.data’。</p>
+<p>使用链接脚本来控制link时，段名含义一般是固定的。</p>
+<h2 id="自定义段"><a href="#自定义段" class="headerlink" title="自定义段"></a>自定义段</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//GCC，扩展属性，将变量或者函数放入自定义段中</span></span><br><span class="line">__atribute__((<span class="built_in">section</span>(<span class="string">&quot;name&quot;</span>)))</span><br><span class="line"><span class="comment">//要放入name段的全局变量或者函数</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">//VC++中，编译指示：把全局变量放到FOO段里</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> data_seg(<span class="string">&quot;FOO&quot;</span>)</span></span><br><span class="line"><span class="type">int</span> global =<span class="number">1</span>;</span><br><span class="line"><span class="comment">//把编译器指示换回来，此时开始，全局变量和局部变量恢复到放入.data中</span></span><br><span class="line"><span class="meta">#pragama data_seg(<span class="string">&quot;.data&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<p>使用VS Command Prompt，编译：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#编译，不调用链接器，禁用Microsoft C/C++语法扩展，生成标准的C/C++目标文件</span></span><br><span class="line">cl /c /Za SimpleSection.c</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/cpp/build/reference/microsoft-extensions-to-c-and-cpp?view=msvc-170">Microsoft C/C++语法扩展</a>，编译器会自动定义<code>__STDC__</code>这个宏。</p>
+<p>利用VS目标文件查看工具查看COFF格式或PE格式，详细/简介。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dumpbin  [/all,summary] hw2.obj &gt;hw2_section.txt</span><br></pre></td></tr></table></figure>
+<p> C runtime library (UCRT) </p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format">微软的PE文件格式定义</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CSnote1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1155,91 +1277,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%BF%83%E7%90%86%E5%92%A8%E8%AF%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/%E5%BF%83%E7%90%86%E5%92%A8%E8%AF%A2/" class="post-title-link" itemprop="url">安慰别人</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-02-01 11:48:58 / Modified: 14:47:46" itemprop="dateCreated datePublished" datetime="2023-02-01T11:48:58+08:00">2023-02-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="如何安慰别人"><a href="#如何安慰别人" class="headerlink" title="如何安慰别人"></a>如何安慰别人</h2><p>心理出现问题，是把一件事情扩大化，或者长期的负面情绪积累导致。</p>
-<p>对于扩大化的事情，例如失恋后的朋友，他们往往会有三种误区：</p>
-<ul>
-<li>1.认为<strong>别人</strong>不是这样</li>
-<li>2.认为自己<strong>永远</strong>不会再爱了，把阶段性的结果直接预估到未来</li>
-<li>3.认为<strong>本质上是自己</strong>的原因。</li>
-</ul>
-<p>安慰的三种策略：</p>
-<p>先要共情，做好倾听，对于对方也是一种情绪的宣泄，但是共情者要保持好自己的心情。</p>
-<p>1.安慰时不要指指点点。不要说如果我是你，而是陈述客观事实——是对方太强了。</p>
-<p>2.疑问句的方式，指出对方经验里或者认识的人也是有幸福结果的。</p>
-<p>3.指出对方的优点，可以在比<strong>较短</strong>的时间内获得<strong>正反馈</strong>，而非遥遥无期的大饼。</p>
-<h2 id="马斯洛自我实现理论"><a href="#马斯洛自我实现理论" class="headerlink" title="马斯洛自我实现理论"></a>马斯洛自我实现理论</h2><h3 id="马斯洛需要层次论"><a href="#马斯洛需要层次论" class="headerlink" title="马斯洛需要层次论."></a>马斯洛需要层次论.</h3><p>生理——安全——归属与爱——尊重——自我实现(潜力变成现实，有目标)。这个需求层次不一定前者满足了，后者才会出现。</p>
-<blockquote>
-<p>马斯洛说：自我实现的人，任何时候都不会感到 焦虑、空虚和寂寞。</p>
-</blockquote>
-<p>是这样，在我学习各种知识的时候，我会感觉到充实。寂寞感我已经很少再有；焦虑感会在任务被拖延后以及被父母提及未来工作后，产生一些；空虚感在我持续的浪费时间，没有目的度日时，经常感觉到。</p>
-<p>约拿情结：在很多人心里表现为一种抵制、惧怕自身的伟大之处；回避自己的自主命运；</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1311,7 +1348,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

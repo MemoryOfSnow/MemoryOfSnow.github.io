@@ -156,6 +156,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/rev01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/rev01/" class="post-title-link" itemprop="url">zer0pt chall题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-07-16 14:19:49 / Modified: 22:07:23" itemprop="dateCreated datePublished" datetime="2023-07-16T14:19:49+08:00">2023-07-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这道题是一道已知RC4的密文和密钥，反求明文的伪装成逆向的密码题。</p>
+<p><img src="/categories/CTF/rev01/1689514292270.png" alt="1689514292270"></p>
+<p>​                                                                    图1</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>反汇编时，要深入每个关键函数看一看，不能想当然。</p>
+<p>IDA给出的伪代码代码大部分时候还是十分正确的，直接看伪代码比反汇编代码正确率要来得高。</p>
+<h2 id="干扰项："><a href="#干扰项：" class="headerlink" title="干扰项："></a>干扰项：</h2><p><img src="/categories/CTF/rev01/1689514736957.png" alt="1689514736957"></p>
+<p>在IDA的反汇编界面看代码，会误以为密钥为key</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">key_rodata = b&quot;\xBE\xBA\xFE\xCA\xEF\xBE\xAD\xDE&quot;</span><br></pre></td></tr></table></figure>
+<p>也会误认为密文为enc</p>
+<p><img src="/categories/CTF/rev01/1689514809165.png" alt="1689514809165"></p>
+<p>不管任何一个弄错，都会使得结果错误。</p>
+<p>干扰原因：按照C调用约定，在call之前的部分应该是函数的参数部分，但是<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__int64 __usercall RC4_setkey@&lt;rax&gt;(__int64 RC4_key@&lt;r12&gt;, __int64 RC4_keytable@&lt;r13&gt;)</span><br><span class="line">char __usercall memcmp@&lt;al&gt;(unsigned int a1@&lt;edx&gt;, __int64 a2@&lt;r14&gt;)</span><br></pre></td></tr></table></figure></p>
+<p>这里是作者自定义的call行为，call之前的内容并不全是函数的参数。</p>
+<p>对于RC4_setkey，其真正的RC4_key是r12,。</p>
+<p><img src="/categories/CTF/rev01/1689515709788.png" alt="1689515709788"></p>
+<p>而r12早就被赋予了值，其值为val，在got表中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">main         push    rbp</span><br><span class="line">main+1      sub     rsp, 200h</span><br><span class="line">main+8      mov     ecx, 200h</span><br><span class="line">main+D      xor     eax, eax</span><br><span class="line">main+F      mov     rdi, rsp</span><br><span class="line">main+12     repne stosb</span><br><span class="line">main+14     mov     ebx, 6</span><br><span class="line">main+19     lea     rbp, flag       ; &quot;FLAG: &quot;</span><br><span class="line">main+20     lea     r12, val</span><br><span class="line">main+27     mov     r15, rsp</span><br><span class="line">main+2A     lea     r14, [r15+80h]</span><br><span class="line">main+31     lea     r13, [r15+100h]</span><br></pre></td></tr></table></figure>
+<p>对于memcmp，也类似，在其函数内部，再次修改rsi，其真正比较的是dat和r14.</p>
+<p><img src="/categories/CTF/rev01/1689516066778.png" alt="1689516066778"></p>
+<p>正确的密钥和密文都在got表里</p>
+<p>如图1所示，密钥应该为图1所示的val所对应的内容，密文应该为dat对应内容。</p>
+<p><img src="/categories/CTF/rev01/1689515029709.png" alt="1689515029709"></p>
+<h2 id="密文获取"><a href="#密文获取" class="headerlink" title="密文获取"></a>密文获取</h2><p><code>memcmp</code>里返回dat数组和传入的结果数组的比较情况，真正的密文应该是dat数组。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result |= *((_BYTE *)&amp;dat + v3) ^ *(_BYTE *)(a2 + v3);</span><br></pre></td></tr></table></figure>
+<p>点击第一处字节后，按下(Alt+L)，再点击最后一处字节，就可以选定待导出的密文部分。</p>
+<p><img src="/categories/CTF/rev01/1689513948497.png" alt="1689513948497"></p>
+<p>Shift+E，导出Array数组，复制粘贴到python代码里。</p>
+<p><img src="/categories/CTF/rev01/1689513831064.png" alt="1689513831064"></p>
+<h2 id="解密代码："><a href="#解密代码：" class="headerlink" title="解密代码："></a>解密代码：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 已知的密钥表和加密文本</span></span><br><span class="line">RC4_key=     <span class="string">b&quot;\x31\x09\x81\x19\x19\x14\x45\x11&quot;</span></span><br><span class="line">cmp_data =<span class="built_in">bytes</span>([</span><br><span class="line">  <span class="number">0x78</span>, <span class="number">0xCF</span>, <span class="number">0xC4</span>, <span class="number">0x85</span>, <span class="number">0xDC</span>, <span class="number">0x33</span>, <span class="number">0x07</span>, <span class="number">0x4C</span>, <span class="number">0x93</span>, <span class="number">0x35</span>, </span><br><span class="line">  <span class="number">0xFB</span>, <span class="number">0x7C</span>, <span class="number">0x10</span>, <span class="number">0x8E</span>, <span class="number">0xBE</span>, <span class="number">0x93</span>, <span class="number">0x28</span>, <span class="number">0xE6</span>, <span class="number">0x2E</span>, <span class="number">0x75</span>, </span><br><span class="line">  <span class="number">0xDA</span>, <span class="number">0x5E</span>, <span class="number">0x85</span>, <span class="number">0xC5</span>, <span class="number">0x91</span>, <span class="number">0x15</span>, <span class="number">0x75</span>, <span class="number">0x89</span>, <span class="number">0x48</span>, <span class="number">0x0E</span>, </span><br><span class="line">  <span class="number">0x29</span>, <span class="number">0xA4</span>, <span class="number">0xF9</span>, <span class="number">0xA6</span>, <span class="number">0x3A</span>, <span class="number">0x6E</span>, <span class="number">0x1F</span>, <span class="number">0x84</span>, <span class="number">0xF7</span>, <span class="number">0x42</span>, </span><br><span class="line">  <span class="number">0xB0</span>, <span class="number">0x93</span>, <span class="number">0x31</span>, <span class="number">0xF0</span>, <span class="number">0x68</span>, <span class="number">0xC0</span>, <span class="number">0x43</span>, <span class="number">0x38</span>, <span class="number">0x07</span>, <span class="number">0x32</span>, </span><br><span class="line">  <span class="number">0x09</span>, <span class="number">0x57</span>, <span class="number">0xDA</span>, <span class="number">0x32</span>, <span class="number">0x44</span>, <span class="number">0xCF</span>, <span class="number">0xCD</span>, <span class="number">0x8F</span>, <span class="number">0xE5</span>, <span class="number">0xBF</span>, </span><br><span class="line">  <span class="number">0xE3</span>, <span class="number">0xD6</span>, <span class="number">0xBB</span>, <span class="number">0x59</span>, <span class="number">0x9A</span>, <span class="number">0x6A</span>, <span class="number">0x84</span>, <span class="number">0x85</span>, <span class="number">0xD3</span>, <span class="number">0x22</span>, </span><br><span class="line">  <span class="number">0xA9</span>, <span class="number">0x8E</span>, <span class="number">0xB5</span>, <span class="number">0xEA</span>, <span class="number">0xBD</span>, <span class="number">0x57</span>, <span class="number">0xDE</span>, <span class="number">0xB1</span>, <span class="number">0x6C</span>, <span class="number">0x93</span>, </span><br><span class="line">  <span class="number">0xE4</span>, <span class="number">0x74</span>, <span class="number">0x70</span>, <span class="number">0xAC</span>, <span class="number">0x1A</span>, <span class="number">0x03</span>, <span class="number">0xD9</span>, <span class="number">0x16</span>, <span class="number">0x9F</span>, <span class="number">0xBC</span>, </span><br><span class="line">  <span class="number">0x97</span>, <span class="number">0xFB</span>, <span class="number">0x85</span>, <span class="number">0xD9</span>, <span class="number">0xA6</span>, <span class="number">0x9E</span>, <span class="number">0xD4</span>, <span class="number">0xD6</span>, <span class="number">0x02</span>, <span class="number">0x59</span>, </span><br><span class="line">  <span class="number">0xD5</span>, <span class="number">0x28</span>, <span class="number">0xB3</span>, <span class="number">0x93</span>, <span class="number">0x16</span>, <span class="number">0xB6</span>, <span class="number">0xC4</span>, <span class="number">0x78</span>, <span class="number">0xC4</span>, <span class="number">0xA2</span>, </span><br><span class="line">  <span class="number">0x12</span>, <span class="number">0xD2</span>, <span class="number">0xEF</span>, <span class="number">0xB1</span>, <span class="number">0x54</span>, <span class="number">0x18</span>, <span class="number">0xFD</span>, <span class="number">0x76</span>, <span class="number">0x51</span>, <span class="number">0xA3</span>, </span><br><span class="line">  <span class="number">0x5E</span>, <span class="number">0x57</span>, <span class="number">0xB8</span>, <span class="number">0x58</span>, <span class="number">0x4B</span>, <span class="number">0x1E</span>, <span class="number">0xE2</span>, <span class="number">0x41</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">RC4_setkey</span>(<span class="params">key, keytable</span>):</span><br><span class="line">    keytable_length = <span class="number">256</span><span class="comment">#len(keytable)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化密钥表</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(keytable_length):</span><br><span class="line">        keytable[i] = i</span><br><span class="line"></span><br><span class="line">    <span class="comment"># KSA (密钥调度算法)</span></span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(keytable_length):</span><br><span class="line">        j = (j + keytable[i] + key[i % <span class="built_in">len</span>(key)]) % keytable_length</span><br><span class="line">        keytable[i], keytable[j] = keytable[j], keytable[i]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> keytable</span><br><span class="line"></span><br><span class="line"><span class="comment">#zer0pts要求的字符范围</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">filter_printable_chars</span>(<span class="params">flag</span>):</span><br><span class="line">    filtered_flag = <span class="built_in">bytearray</span>()</span><br><span class="line">    <span class="keyword">for</span> byte <span class="keyword">in</span> flag:</span><br><span class="line">        <span class="keyword">if</span> <span class="number">0x20</span> &lt;= byte &lt;= <span class="number">0x7E</span>:</span><br><span class="line">            filtered_flag.append(byte)</span><br><span class="line">        <span class="comment">#else:</span></span><br><span class="line">            <span class="comment">#print(&quot;ERROR&quot;)</span></span><br><span class="line">            <span class="comment">#break</span></span><br><span class="line">    <span class="keyword">return</span> filtered_flag</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gen_keytable</span>(<span class="params">keytable, enc_text</span>):</span><br><span class="line">    flag_length = <span class="built_in">len</span>(enc_text)</span><br><span class="line">    v4 = <span class="number">0</span></span><br><span class="line">    v5 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> v3 <span class="keyword">in</span> <span class="built_in">range</span>(flag_length):</span><br><span class="line">        v4 = (v4 + <span class="number">1</span>) % <span class="number">256</span></span><br><span class="line">        v5 = (keytable[v4] + v5) % <span class="number">256</span></span><br><span class="line">        keytable[v4], keytable[v5] = keytable[v5], keytable[v4]</span><br><span class="line">        <span class="comment">#flag[v3] = enc_text[v3] ^ keytable[(keytable[v5] + keytable[v4]) % 256]</span></span><br><span class="line">    <span class="keyword">return</span> v4,v5</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">RC4_decrypt</span>(<span class="params">keytable, enc_text,v4,v5</span>):</span><br><span class="line">    flag_length = <span class="built_in">len</span>(enc_text)</span><br><span class="line">    flag = <span class="built_in">bytearray</span>([<span class="number">0</span>] * flag_length)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> v3 <span class="keyword">in</span> <span class="built_in">range</span>(flag_length-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>):</span><br><span class="line">        flag[v3] = enc_text[v3] ^ keytable[(keytable[v5] + keytable[v4]) % <span class="number">256</span>]</span><br><span class="line">        keytable[v4], keytable[v5] = keytable[v5], keytable[v4]</span><br><span class="line">        v5 = (v5-keytable[v4]) % <span class="number">256</span></span><br><span class="line">        v4 = (v4 - <span class="number">1</span>) % <span class="number">256</span> </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> flag</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获得密钥表</span></span><br><span class="line">RC4_keytable = <span class="built_in">bytearray</span>([<span class="number">0</span>] * <span class="number">520</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置密钥表</span></span><br><span class="line">RC4_setkey(RC4_key, RC4_keytable)</span><br><span class="line">hex_string = <span class="string">&#x27; &#x27;</span>.join([<span class="string">f&#x27;\\x<span class="subst">&#123;byte:02X&#125;</span>&#x27;</span> <span class="keyword">for</span> byte <span class="keyword">in</span> RC4_keytable])</span><br><span class="line"><span class="comment"># 打印密钥表</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;密钥表:\n&quot;</span>, hex_string)</span><br><span class="line"></span><br><span class="line"><span class="comment">#获得解密需要的初始值</span></span><br><span class="line">v4,v5=gen_keytable(RC4_keytable,cmp_data)</span><br><span class="line">hex_string = <span class="string">&#x27; &#x27;</span>.join([<span class="string">f&#x27;\\x<span class="subst">&#123;byte:02X&#125;</span>&#x27;</span> <span class="keyword">for</span> byte <span class="keyword">in</span> RC4_keytable])</span><br><span class="line"><span class="comment"># 打印密钥表</span></span><br><span class="line"><span class="comment">#print(&quot;密钥表:\n&quot;, hex_string)</span></span><br><span class="line"><span class="built_in">print</span>(v4,v5)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解密获取flag</span></span><br><span class="line">flag = RC4_decrypt(RC4_keytable, cmp_data,v4,v5)</span><br><span class="line">filtered_flag=filter_printable_chars(flag)</span><br><span class="line"><span class="comment"># 打印flag</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Flag:&quot;</span>, filtered_flag.decode())</span><br></pre></td></tr></table></figure>
+<p>最终结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Flag: zer0pts&#123;d0n&#x27;7_4lw4y5_7ru57_d3c0mp1l3r&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Windows01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1007,128 +1105,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Linkers&Loaders01/" class="post-title-link" itemprop="url">PE/COFF</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-05-12 14:58:58" itemprop="dateCreated datePublished" datetime="2023-05-12T14:58:58+08:00">2023-05-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-07-17 11:53:18" itemprop="dateModified" datetime="2023-07-17T11:53:18+08:00">2023-07-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>俞甲子等，《程序员的自我修养——链接、装载与库》，北京：电子工业出版社，2009年6月第2版。</p>
-</blockquote>
-<h2 id="1-5-程序的分段和分页"><a href="#1-5-程序的分段和分页" class="headerlink" title="1.5 程序的分段和分页"></a>1.5 程序的分段和分页</h2><p>解决三个问题：1.内存隔离。2.空间利用。3.重定位。</p>
-<p>本质上是增加了一个中间层，即虚存，这样就可以避免在编写程序时还要考虑详细的地址分配问题了。为了内存隔离，分段；为了细粒度的空间利用，分页。</p>
-<p>CPU-&gt;虚拟地址—&gt;MMU(Memory Management Unit，内存管理单元)—&gt;物理地址。</p>
-<h2 id="2-1-构建过程"><a href="#2-1-构建过程" class="headerlink" title="2.1 构建过程"></a>2.1 构建过程</h2><p>预编译：.cpp/.cxx.,.hpp——&gt;.i,.ii，处理所有的”#”预编译命令并递归插入和展开宏命令，删除注释，加入行号和文件名标识，保留#pragma编译器指令。</p>
-<p>编译：gcc -S/cc1 hello.c -o hello.s。完成词法分析和语法分析，生成中间代码。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;...&gt; search starts here:</span><br><span class="line">/usr/lib/gcc/x86_64-linux-gnu/11/include</span><br><span class="line">/usr/local/include</span><br><span class="line">/usr/include/x86_64-linux-gnu</span><br><span class="line">/usr/include</span><br></pre></td></tr></table></figure>
-<p>汇编：gcc -c /as hello.s -o hello.o。把汇编符号翻译为机器码。</p>
-<p>链接：ld，最终确定各个符号的绝对地址，完成对指令引用的符号地址的校正，需要一大堆文件。</p>
-<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h2 id="2-2-编译原理概述"><a href="#2-2-编译原理概述" class="headerlink" title="2.2 编译原理概述"></a>2.2 编译原理概述</h2><p>词法分析，Scanner—&gt;Tokens，识别记号，同时叫标识符放到符号表(lex)。</p>
-<p>语法分析，Parser—&gt;Syntax tree，关于编译器的编译器(yacc)。</p>
-<p>语义分析：Semantic Analyzer—&gt;Commented Syntax Tree（注释语法树），只能分析静态语义：声明、类型匹配转换（在编译器可以确定的语义，其他的等待程序运行（除0异常）时才能确定）</p>
-<p>中间代码生成：使得编译器可以拆分为前后端。非常接近目标代码，但是跟目标机器与运行时环境无关。不包含数据尺寸、地址和寄存器名字。</p>
-<p>目标代码生成与优化：生成器和优化器。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LEA,基址比例变址寻址（Load Effective Address），进行地址的计算后将算得的结果放入存储中，不会把结果地址的内存数据实际加载到寄存器里。用于高效地进行一些复杂的地址计算，例如数组索引、数据结构访问等，而无需实际读写内存</span><br></pre></td></tr></table></figure>
-<h2 id="2-3-链接器年龄比编译器更长"><a href="#2-3-链接器年龄比编译器更长" class="headerlink" title="2.3 链接器年龄比编译器更长"></a>2.3 链接器年龄比编译器更长</h2><p>纸带编程时，一些跳转都是绝对地址，需要人为计算，一旦指令间增删其他指令，所有目标地址都要重新人工计算<strong>（重定位，Relocation，每个要被修正的地方叫一个重定位入口，Relocation Entry)</strong>，一条纸带上的指令很麻烦，多条纸带间更是灾难。</p>
-<p>引入符号（对函数和变量位置的助记符），计算符号地址的过程让汇编器自动完成，方便程序的模块化。</p>
-<p>程序之间的接口就是这些符号，类似于拼图，我少这一部分，你恰好多这一部分，每个模块放到合适的位置，就是一幅完整的有意义的图。</p>
-<h2 id="2-4-静态链接是什么玩意？"><a href="#2-4-静态链接是什么玩意？" class="headerlink" title="2.4 静态链接是什么玩意？"></a>2.4 静态链接是什么玩意？</h2><p>详细介绍在第4章。</p>
-<p>链接过程包括：地址和空间分配、Symbol Resolution（符号决议：静态链接，绑定：动态链接）和重定位。</p>
-<p><strong>库：</strong>常用的代码编译成目标文件存放，例如运行时库。</p>
-<h2 id="5-2一些历史"><a href="#5-2一些历史" class="headerlink" title="5.2一些历史"></a>5.2一些历史</h2><p>DEC（Degital Equipment Corp.)被 康柏电脑 收购， 康柏电脑02年又被惠普（1939）收购。DEC推出的VAX/VMS（Virtual Address eXtension/System） ，是一个最先使用权限管理和容错机制的多任务OS， 提供高性能、可靠性和安全性 。微软开发Win NT时，最初成员来自于DEC的VAX/VMS小组，所以Windows的PE格式来自于DEC的VAX/VMS上的COFF（Common Object File Format）文件格式。</p>
-<p> 贝尔实验室 （Bell Telephone Laboratories， 1925 ）  —&gt;  肖克利半导体实验室（Shockley Semiconductor Laboratory，1955） —&gt; 仙童半导体（Fairchild Semiconductor，1957）  —&gt;AMD(1968)，Intel(1968) —&gt;Microsoft（操作系统，1975）。</p>
-<p> SGI（Silicon Graphics, Inc.，1982） —&gt;NVIDA（正在收购ARM（移动处理器），1993）， Netscape  （1994年，开源了 Netscape Navigator（打不过微软IE） ，发展成为 Mozilla Firefox 。</p>
-<p>Google （创建者为Stanford University博士，PageRank算法： Google搜索引擎的核心， 通过链接关系评估网页的重要性  ， 1998 ）</p>
-<p><strong>思路：</strong>链接多的代码块，也可以权重传递和赋予它高的权重值。</p>
-<ul>
-<li><p>COFF:VC++产生的目标文件格式。</p>
-</li>
-<li><p>PE：Win平台下的可执行文件格式，和ELF都是基于段的相同结构， 是COFF的一种扩展。对于64位系统，将PE中的32位字段改为64字段，叫做PE32+。</p>
-</li>
-<li><p>映像文件Image File：因为PE文件在装载时会被映射到进程的虚拟空间中运行，它是进程虚拟空间的映像，所以PE可执行文件又可称为映像文件。</p>
-</li>
-</ul>
-<h3 id="SMP与多核"><a href="#SMP与多核" class="headerlink" title="SMP与多核"></a>SMP与多核</h3><p>服务器要的是 并发吞吐 ，要CPU核数、要线程数、要大的L2/L3缓存。</p>
-<p>而PC要的是单核频率。</p>
-<p>截至2023年5月12日，至强的处理器基准频率基本在4GHz以下， 酷睿i9-13900KS 睿频最高为6GHz（受生产工艺影响）。出于性能需求发展出多处理器，SMP（symmetrical）是其中的常见形式，由于成本高，通过共用缓存，SMP发展成为多核处理器。</p>
-<h3 id="段名"><a href="#段名" class="headerlink" title="段名"></a>段名</h3><p>段名<strong>只具有提示作用</strong>，没有实际意义。不同编译器产生的段名不同，VC++用’.code’和’.data’。</p>
-<p>使用链接脚本来控制link时，段名含义一般是固定的。</p>
-<h2 id="自定义段"><a href="#自定义段" class="headerlink" title="自定义段"></a>自定义段</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//GCC，扩展属性，将变量或者函数放入自定义段中</span></span><br><span class="line">__atribute__((<span class="built_in">section</span>(<span class="string">&quot;name&quot;</span>)))</span><br><span class="line"><span class="comment">//要放入name段的全局变量或者函数</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">//VC++中，编译指示：把全局变量放到FOO段里</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> data_seg(<span class="string">&quot;FOO&quot;</span>)</span></span><br><span class="line"><span class="type">int</span> global =<span class="number">1</span>;</span><br><span class="line"><span class="comment">//把编译器指示换回来，此时开始，全局变量和局部变量恢复到放入.data中</span></span><br><span class="line"><span class="meta">#pragama data_seg(<span class="string">&quot;.data&quot;</span>)</span></span><br></pre></td></tr></table></figure>
-<p>使用VS Command Prompt，编译：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#编译，不调用链接器，禁用Microsoft C/C++语法扩展，生成标准的C/C++目标文件</span></span><br><span class="line">cl /c /Za SimpleSection.c</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/cpp/build/reference/microsoft-extensions-to-c-and-cpp?view=msvc-170">Microsoft C/C++语法扩展</a>，编译器会自动定义<code>__STDC__</code>这个宏。</p>
-<p>利用VS目标文件查看工具查看COFF格式或PE格式，详细/简介。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dumpbin  [/all,summary] hw2.obj &gt;hw2_section.txt</span><br></pre></td></tr></table></figure>
-<p> C runtime library (UCRT) </p>
-<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format">微软的PE文件格式定义</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1200,7 +1176,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">158</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
