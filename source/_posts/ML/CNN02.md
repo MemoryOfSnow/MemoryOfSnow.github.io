@@ -12,7 +12,7 @@ tags: [CNN]
 
 ### Hyper parameter
 
-- f: filter size
+- f: filter size  小的卷积核捕获细微特征或局部信息，参数量相对较少。 
 - s: stride
 - type:Max or average pooling
 - 用的很少的：p=0--padding
@@ -31,7 +31,7 @@ tags: [CNN]
 
 收集后的特征表明该特诊原来存在于原来的特征集合；没有收集到的表明特征可能不存在或者比较小。
 
-### 输出大小
+### **输出大小**
 
 - Ouputsize: (n+2p-f)/s+1
 

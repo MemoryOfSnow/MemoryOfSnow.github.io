@@ -90,6 +90,7 @@ ELF Header，描述整个文件的文件属性，包括文件是否可执行、�
 | .debug            | 调试信息                                                     |
 | .line             | 调试时的行号表，源代码行号与编译后指令的对应表               |
 | .eh_frame         | 存储异常处理框架（Exception Handling Frame）的相关信息。包括异常处理函数的调用关系、异常处理函数的地址、堆栈展开信息等。 |
+| SHT               | 表示 "Section Header Table                                   |
 
 
 ![1684811465144](Linkers&Loaders02/1684811465144.png)

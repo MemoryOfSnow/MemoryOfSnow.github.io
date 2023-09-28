@@ -6,7 +6,9 @@ tags: [DeepLearning]
 mathjax: true
 ---
 
-# Logistic regression逻辑回归
+反向传播的一个比方，以猜数字为例，B手中有一张数字牌让A猜，首先A将随意给出一个数字，B反馈给A是大了还是小了，然后A经过修改，再次给出一个数字，B再反馈给A是否正确以及大小关系，经过数次猜测和反馈，最后得到正确答案。 
+
+## Logistic regression逻辑回归
 
 二分类算法；
 
