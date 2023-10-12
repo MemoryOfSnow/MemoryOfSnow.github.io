@@ -156,6 +156,666 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot17/" class="post-title-link" itemprop="url">借助遗传算法的语义搜索高效小样本学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-04-17 00:13:22" itemprop="dateCreated datePublished" datetime="2023-04-17T00:13:22+08:00">2023-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-06-14 16:00:32" itemprop="dateModified" datetime="2023-06-14T16:00:32+08:00">2023-06-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a target="_blank" rel="noopener" href="https://github.com/hwxu20/gps">GPSCode-06</a></p>
+<ul>
+<li>Hanwei Xu, Yujun Chen, Yulun Du, Nan Shao, Wang Yanggang, Haiyu Li, and Zhilin Yang. 2022. <a target="_blank" rel="noopener" href="https://aclanthology.org/2022.emnlp-main.559">GPS: Genetic Prompt Search for Efficient Few-Shot Learning</a>. In <em>Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing</em>, pages 8162–8171, Abu Dhabi, United Arab Emirates. Association for Computational Linguistics.</li>
+</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>用自然语言指令设置提示词，可以提高零样本设置中大型语言模型的任务性能。当前工作通过手动重写或基于梯度的调整来改进此类提示词。 然而，</p>
+<p>手动重写非常耗时并且需要主观解释，</p>
+<p>而基于梯度的调整对于大型模型的计算要求极高，并且需要完全访问模型权重，这对于基于 API 的模型可能不可用。</p>
+<p>基于提示词的方法有利于小样本泛化，但是之前的都是手动设置，与之前的T0等方法不同，本文将各种来源的提示词作为种子，用遗传算法去进行提示词搜索，无须参数、无须梯度。</p>
+<h2 id="术语介绍"><a href="#术语介绍" class="headerlink" title="术语介绍"></a>术语介绍</h2><p>intrinsic dimension(本征维)： 在多维信号的信号处理中，信号的本征维描述了生成信号的良好近似需要多少变量。 </p>
+<p>Ablation Study（消融实验）： 在深度学习论文中，ablation study往往是在论文最终提出的模型上，<strong>减少一些改进特征</strong>（如减少几层网络等），以验证相应改进特征的必要性。 </p>
+<p>LM-BFF <a href="Gao et al., 2021b">5</a>：： better few-shot fine-tuning of language models ，更好的适合小样本微调的语言模型。</p>
+<p>DINO[22]:通过指令获得数据集的方法，Datasets from Instructions</p>
+<p>T0:多任务encoder-decoder模型，针对不同下游任务，人为设计不同的提示词预训练后获得。</p>
+<p>T5LM-XXL :XXL(11B)级参数规模的T5语言模型，</p>
+<p><strong>soft prompts和hard prompts</strong>： 模板的制作分为手工创建模板和自动化生成模板，而自动化生成模板又分为离散提示（又叫做硬提示）和连续提示（又叫做软提示） </p>
+<h3 id="以下均为需要微调参数的方法"><a href="#以下均为需要微调参数的方法" class="headerlink" title="以下均为需要微调参数的方法"></a>以下均为需要微调参数的方法</h3><p>BBT(Black-Box Tuning)： 无梯度的微调方法，搜索连续空间中的最佳软<strong>提示词嵌入</strong>，而不是搜索离散的文本提示词。</p>
+<p>MT(Model Tuning)：在<strong>每个任务上对整个</strong>预训练语言<strong>模型</strong>进行微调的通用范式</p>
+<p>PT(Prompt Tuning)：预训练模型被冻结，<strong>只训练额外的连续软提示词</strong>的梯度引导的微调方法</p>
+<h3 id="无须微调参数的方法"><a href="#无须微调参数的方法" class="headerlink" title="无须微调参数的方法"></a>无须微调参数的方法</h3><ul>
+<li><p>ICL(In-Context Learning):上下文学习，大规模预训练模型进行小样本学习的通用方法。</p>
+<p>由标注的样本和<strong>手动模板</strong>组成的<strong>范例</strong>被用来帮助模型理解test tasks的含义。</p>
+<p>缺陷：需要人工提供手动提示词，对标记数据敏感，表现不稳定。</p>
+</li>
+<li><p>GRIPS（  Gradient-free Instructional Prompt Search) ：无梯度指令提示搜索，基于编辑的优化提示词搜索方法，主要用于简单的基于编辑的操作（例如增、删、交换、释义）</p>
+</li>
+</ul>
+<h2 id="提示词重新生成方法"><a href="#提示词重新生成方法" class="headerlink" title="提示词重新生成方法"></a>提示词重新生成方法</h2><ul>
+<li>BT:回译(back translation)。将提示词从英语翻译到其他 11 种语言，然后将它们翻译回英语。包括中文、日语、韩语、法语、西班牙语、意大利语、俄语、德语、阿拉伯语、希腊语、粤语，</li>
+<li>完形填空（cloze）。利用LM-BFF[5]里的模板生成方法，使用T5（transformer）文本到文本预训练模型生成模板。对每个输入样例及其表达器（verbalizer）用占位符作为前缀和后缀生成模板，让T5去补全这些占位符。采用波束搜索(beam search)生成多个候选提示词。与论文[5]不同的是，本文的方法里是没有参数更新的，所以完型填空的效果并不好。所以本文中，使用人工提示词作为初始模板，用占位符代替一些随机的标记，然后让T5填空。选出在校验集（Ddev）时平均结果最好的提示词。</li>
+<li>SC:续写句子（sentence continuation）。采用和论文[22]中一样的根据指令生成数据集方法，采用模板“Write two sentences that mean the same thing. Sentence 1: Manual Prompt, Sentence 2:” 交给预训练模型去续写。采用了GPT2-XL (1.5B)和 T5LM-XXL (11B)作为提示词生成模型。</li>
+</ul>
+<p>这些方法不需要人工定义编辑规则，而且生成的提示词语义流畅。</p>
+<h3 id="提示词打分"><a href="#提示词打分" class="headerlink" title="提示词打分"></a>提示词打分</h3><p>Close: 按照[5]里的方法，用校验集(D_dev)上的平均对数打分；</p>
+<p>BT和SC：不适用平均对数，采用校验集(D_dev)上的准确率评价。</p>
+<h2 id="创新点：提示词遗传搜索算法"><a href="#创新点：提示词遗传搜索算法" class="headerlink" title="创新点：提示词遗传搜索算法"></a>创新点：提示词遗传搜索算法</h2><p>离散的词空间中找到高表现的硬提示词。</p>
+<p><img src="/categories/ML/Few-Shot17/1681822830925.png" alt="1681822830925"></p>
+<p><img src="/categories/ML/Few-Shot17/1681784514455.png" alt="1681784514455"></p>
+<p>​                                    Table4  五种小样本学习方法在四个评价指标上的比较</p>
+<blockquote>
+<p>这里的代价消耗是训练和提示词搜索的联合损失。</p>
+<p>MT缺乏服务效率，因为保存MT需要对于每个任务都保存整个模型，造成巨大的存储开销。所有参数都需要调整，其使用的Adam等优化器要求存储额外的动量和方差项。</p>
+<p>PT和BBT只需要调整提示词嵌入层。</p>
+<p>ICL使用很长的序列长度来串联例子，推理昂贵，尤其是在范例数目多的时候。那为什么这里的代价只是1x？？？</p>
+<p>可以看到，本文提出的方法GPS提供Serving Effiency、不需要参数更新、极大的减少了计算代价，还能取得接近于整个模型调优的效果。获得了60.12的准确率。</p>
+</blockquote>
+<h2 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h2><h3 id="数据集（NLP的）"><a href="#数据集（NLP的）" class="headerlink" title="数据集（NLP的）"></a>数据集（NLP的）</h3><blockquote>
+<p>T0语言模型的10个测试任务</p>
+</blockquote>
+<ul>
+<li><p>自然语言推理任务（natural language inference）：ANLI R1, ANLI R2, ANLI R3, CB, RTE</p>
+</li>
+<li><p>共指解析（coreference resolution）：WSC, Winogrande</p>
+</li>
+<li>语句补全（sentence completion）：COPA, HellaSwag</li>
+<li>词义消歧（word sense disambiguation）：WiC</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>参数设置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PT</td>
+<td>Adafactor Optimizer，lr=0.05</td>
+</tr>
+<tr>
+<td>MT</td>
+<td>Adafactor Optimizer，,lr=5e-5=0.00005</td>
+</tr>
+<tr>
+<td>BBT</td>
+<td>本征维度=500，pop size=20，使用交叉熵损失；         软提示词标记数量为1 or 50时结果最好</td>
+</tr>
+<tr>
+<td>ICL</td>
+<td>每个task随机从训练集挑2个样本</td>
+</tr>
+<tr>
+<td>GRIPS</td>
+<td>复用arXiv:2203.07281.里的超参数，将初始提示词换成T0的</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="/categories/ML/Few-Shot17/1681830294139.png" alt="1681830294139"></p>
+<p>T0、BBT、PT、MT采用相同的人工提示词集，GRIPS和GPS自己搜索提示词。</p>
+<p>实验结果是三种不同的数据划分方式的平均结果，脚注是一种方法在一个数据集的三种数据划分下的标准差。</p>
+<p>划线部分给出了小样本学习下参数微调得到的最好结果，加粗部分给出了参数冻结方法的最好结果。</p>
+<p><img src="/categories/ML/Few-Shot17/1681784982024.png" alt="1681784982024"></p>
+<p>​                                        Table3 GPS产生的提示词的解释 </p>
+<p>&gt;</p>
+<h2 id="我的未来工作"><a href="#我的未来工作" class="headerlink" title="我的未来工作"></a>我的未来工作</h2><p>GPT-3表明，在超大规模预训练语言模型上使用提示词进行小样本学习效果良好；</p>
+<blockquote>
+<p>Brown et al., Language models are few-shot learners. NIPS,2020</p>
+</blockquote>
+<p>但对于每个特定任务找到最优化的提示词很困难。</p>
+<p>To模型来源于这篇论文——Sanh et al., 2021. Multitask prompted training enables zero-shot task generalization.</p>
+<blockquote>
+<p>[2]Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel HerbertVoss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel Ziegler, Jeffrey Wu, Clemens Winter, Chris Hesse, Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark, Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever, and Dario Amodei. 2020. Language models are few-shot learners. In Advances in Neural Information Processing Systems, volume 33, pages 1877–1901. Curran Associates, Inc.</p>
+<p>[5]Tianyu Gao, Adam Fisch, and Danqi Chen. 2021b. Making pre-trained language models better few-shot learners. In Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers), pages 3816–3830, Online. Association for Computational Linguistics.</p>
+<p>[6]Xu Han, Weilin Zhao, Ning Ding, Zhiyuan Liu, and Maosong Sun. 2021. Ptr: Prompt tuning with rules for text classification.</p>
+<p>[17]Archiki Prasad, Peter Hase, Xiang Zhou, and Mohit Bansal. 2022. Grips: Gradient-free, edit-based instruction search for prompting large language models. arXiv preprint arXiv:2203.07281.</p>
+<p>[19]Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J. Liu. 2020. Exploring the limits of transfer learning with a unified text-totext transformer. Journal of Machine Learning Research, 21(140):1–67.</p>
+<p>[22]Timo Schick and Hinrich Schütze. 2021. Generating datasets with pretrained language models. Computing Research Repository, arXiv:2104.07540.</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/%E5%BF%83%E7%90%86%E5%AD%A6%E6%95%88%E5%BA%94/" class="post-title-link" itemprop="url">心理学效应</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-04-07 12:16:58 / Modified: 12:49:20" itemprop="dateCreated datePublished" datetime="2023-04-07T12:16:58+08:00">2023-04-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>理解和引导自己与朋友；</p>
+<p>心理暗示：使得人不自觉地按照一定的方式去行动，不加批判地接受一定的观念。</p>
+<h2 id="瓦伦达效应："><a href="#瓦伦达效应：" class="headerlink" title="瓦伦达效应："></a>瓦伦达效应：</h2><p>美国一个走钢丝演员在特别想成功的一场演出上失败了。</p>
+<p>做法：1、平常心  2、专注事情本身，而非其结果。 3、抗干扰，其他事情与我无关。4、用暗示性动作或者自己习惯的场景让自己处于一种适合做事的条件下，类似于条件概率，让大脑和身体习惯  5、熟练度max，即使干扰也不影响。</p>
+<p>4、5都是重复，更大的来说所有做法都是重复形成习惯。</p>
+<h2 id="酸葡萄-甜柠檬效应"><a href="#酸葡萄-甜柠檬效应" class="headerlink" title="酸葡萄/甜柠檬效应"></a>酸葡萄/甜柠檬效应</h2><p>狐狸想尽办法也吃不到葡萄。“嗯，那个葡萄一定非常酸.””</p>
+<p>实在得不到的，可以不要太执着，肯定是坏的，但是不要丢掉上进心；</p>
+<p>自卑时，自己拥有的是最好的，注意其中的度。</p>
+<h2 id="罗森塔尔效应"><a href="#罗森塔尔效应" class="headerlink" title="罗森塔尔效应"></a>罗森塔尔效应</h2><p>随机挑选孩子，对老师说这些学生是可造之才。</p>
+<p>权威的延誉会让周围的人对某个人的心理评价变高，通过日常行为体现出来，被期待的人受到这种鼓舞，成绩变得更好。</p>
+<p>反思：1.从朋友和老师亲人的正面评价中汲取力量 </p>
+<p>2.相信朋友会成长得越来越好，实现他的目标。</p>
+<p>3.对一个人的喜欢和赞赏，无须直接说话，从众多细节中可以体现出来。细细品味，你会发现身边人的态度。</p>
+<h2 id="飞轮效应"><a href="#飞轮效应" class="headerlink" title="飞轮效应"></a>飞轮效应</h2><p>万事开头难；惯性的作用，一开始会比较费劲，之后就轻松了，按部就班就可以。</p>
+<p>3.前面的努力，都会变成后面的推动力。永远相信付出的努力会在某一天给自己回报。</p>
+<p>4.增强回路的过程。因曾强果，果又反过来增强因，循环往复。重视反馈，给自己暗示的反馈，给自己找进步空间。</p>
+<h2 id="蘑菇效应"><a href="#蘑菇效应" class="headerlink" title="蘑菇效应"></a>蘑菇效应</h2><p>生长在阴暗角落的蘑菇，无人关注，没有阳光，常常自生自灭。只有自己长得高大了，才会被人发现，发挥出作用。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot16/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot16/" class="post-title-link" itemprop="url">Meta-Dataset: A Dataset of Datasets for Learning to Learn from Few Examples</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-03-22 00:13:22" itemprop="dateCreated datePublished" datetime="2023-03-22T00:13:22+08:00">2023-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-17 16:54:40" itemprop="dateModified" datetime="2023-04-17T16:54:40+08:00">2023-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>提供了一个Tensorflow实现的 新的基准数据集的训练和测试代码 。</p>
+<blockquote>
+<p>这篇论文和之前读过的Few-Shot13:《Learning a Universal Template for Few-shot Dataset Generalization》，<br>以及《CrossTransformers: spatially-aware few-shot transfer》的代码都是同一批作者的研究，</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/google-research/meta-dataset">Meta-Dataset-Code05</a></p>
+</blockquote>
+<p>《Self-Support Few-Shot Semantic Segmentation》，用自支持匹配获得更好的特征原型。<a target="_blank" rel="noopener" href="https://github.com/fanq15/SSP">Self-Support-Code06</a></p>
+<h2 id="度量学习"><a href="#度量学习" class="headerlink" title="度量学习"></a>度量学习</h2><p>(PN、MN、RN、CrossTransformerLearner），</p>
+<h2 id="优化学习"><a href="#优化学习" class="headerlink" title="优化学习"></a>优化学习</h2><p>1.proto_maml_fc</p>
+<p>2.BaselineFinetune</p>
+<p>3.proto</p>
+<p>最差的：关系网络。</p>
+<p>（、maml、almost-no-inner-loop、GenerativeClassifier），</p>
+<p>FLUTEFiLM</p>
+<h2 id="10个数据集"><a href="#10个数据集" class="headerlink" title="10个数据集"></a>10个数据集</h2><p><img src="/categories/ML/Few-Shot16/1680521958453.png" alt="1680521958453"></p>
+<h2 id="一些推荐参数"><a href="#一些推荐参数" class="headerlink" title="一些推荐参数"></a>一些推荐参数</h2><ul>
+<li>inner learning rate α=0.1</li>
+</ul>
+<h2 id="可继续研究的新问题"><a href="#可继续研究的新问题" class="headerlink" title="可继续研究的新问题"></a>可继续研究的新问题</h2><p>训练episode、校验、初始化的最优策略未明；</p>
+<p>在多个来源的数据</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot15/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot15/" class="post-title-link" itemprop="url">元学习在网络空间安全方面的使用调查</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-03-19 20:15:22" itemprop="dateCreated datePublished" datetime="2023-03-19T20:15:22+08:00">2023-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-03 19:13:05" itemprop="dateModified" datetime="2023-04-03T19:13:05+08:00">2023-04-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>百度飞桨平台上关于元学习的部分  Code04<br><a target="_blank" rel="noopener" href="https://paddlepedia.readthedocs.io/en/latest/tutorials/meta_learning/">https://paddlepedia.readthedocs.io/en/latest/tutorials/meta_learning/</a></p>
+<p>了解匹配网络、关系网络、原型等基于度量的小样本学习方法的工作原理。</p>
+</blockquote>
+<p>元学习的五个研究方向：model-based, metric-based, optimization-based, <strong>online-learning-based：OML</strong>, and stacked ensemble-based models</p>
+<p>模型（model-based、）、数据、算法（包括optimization-based、metric-based、stacked ensemble-based models：Meta-learner）</p>
+<p>基于度量：HABPN</p>
+<p>基于优化</p>
+<p>基于模型：MANN、MetaGAN</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">wslubuntu的cuda安装</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-03-10 14:19:49" itemprop="dateCreated datePublished" datetime="2023-03-10T14:19:49+08:00">2023-03-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-18 11:27:53" itemprop="dateModified" datetime="2023-04-18T11:27:53+08:00">2023-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="1-新建环境"><a href="#1-新建环境" class="headerlink" title="1.新建环境"></a>1.新建环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n tf2.9 python=3.10</span><br></pre></td></tr></table></figure>
+<h2 id="2、激活环境"><a href="#2、激活环境" class="headerlink" title="2、激活环境"></a>2、激活环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate tf2.9</span><br></pre></td></tr></table></figure>
+<h2 id="3、查看电脑显卡驱动"><a href="#3、查看电脑显卡驱动" class="headerlink" title="3、查看电脑显卡驱动"></a>3、查看电脑显卡驱动</h2><p>打开控制面板，发现里面没有NVIDA控制面板选项的，大概率是没有NVIDA cuda驱动的，需要去NVIDA官方下载对应驱动。</p>
+<p><img src="/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678379450207.png" alt="1678379450207"></p>
+<h2 id="4-可选-NVIDA官方下载对应驱动"><a href="#4-可选-NVIDA官方下载对应驱动" class="headerlink" title="4.(可选)NVIDA官方下载对应驱动"></a>4.(可选)NVIDA官方下载对应驱动</h2><blockquote>
+<p>选择界面：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a></p>
+</blockquote>
+<p> <a target="_blank" rel="noopener" href="https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_531.14_windows.exe">cuda_12.1.0_531.14_windows.exe</a></p>
+<p>下载后双击安装，等待安装成功；</p>
+<h2 id="5-下载-tensorflow-gpu-2-9-0"><a href="#5-下载-tensorflow-gpu-2-9-0" class="headerlink" title="5.下载 tensorflow_gpu-2.9.0"></a>5.下载 tensorflow_gpu-2.9.0</h2><p>命令行打开到Computed-Tomography-AI目录，执行下面的命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(tf2.9) D:\DataSet\Github\Computed-Tomography-AI&gt;</span><br><span class="line">pip3 install -i http://pypi.douban.com/simple/ -r requirements.txt --trusted-host pypi.douban.com</span><br></pre></td></tr></table></figure>
+<p>安装其他版本，可以去 <a target="_blank" rel="noopener" href="https://tensorflow.google.cn/install/source_windows?hl=en#gpu">tf官网</a>查看tensorflow、python、tensorflow-gpui、cuda、cudnn的对应关系 。</p>
+<h2 id="6-在对应环境中安装CUDAToolkit"><a href="#6-在对应环境中安装CUDAToolkit" class="headerlink" title="6.在对应环境中安装CUDAToolkit"></a>6.在对应环境中安装CUDAToolkit</h2><h2 id="6-1conda挂代理或者换源"><a href="#6-1conda挂代理或者换源" class="headerlink" title="6.1conda挂代理或者换源"></a>6.1conda挂代理或者换源</h2><p>在这里进行换源，加速下载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+<h2 id="6-2-conda下载cudatoolkit"><a href="#6-2-conda下载cudatoolkit" class="headerlink" title="6.2 conda下载cudatoolkit"></a>6.2 conda下载cudatoolkit</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install cudatoolkit=11.2</span><br></pre></td></tr></table></figure>
+<h2 id="7-conda下载CuDnn"><a href="#7-conda下载CuDnn" class="headerlink" title="7.conda下载CuDnn"></a>7.conda下载CuDnn</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install cudnn=8.1</span><br></pre></td></tr></table></figure>
+<h2 id="8-可选-手动下载CudaToolKIt和CuDnn"><a href="#8-可选-手动下载CudaToolKIt和CuDnn" class="headerlink" title="8.(可选)手动下载CudaToolKIt和CuDnn"></a>8.(可选)手动下载CudaToolKIt和CuDnn</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://anaconda.org/conda-forge/cudatoolkit/11.2.2/download/win-64/cudatoolkit-11.2.2-h933977f_9.tar.bz2">https://anaconda.org/conda-forge/cudatoolkit/11.2.2/download/win-64/cudatoolkit-11.2.2-h933977f_9.tar.bz2</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install --use-local cudatoolkit-11.2.2-h933977f_9.tar.bz2</span><br></pre></td></tr></table></figure>
+<h2 id="9-验证是否安装成功"><a href="#9-验证是否安装成功" class="headerlink" title="9.验证是否安装成功"></a>9.验证是否安装成功</h2><p>命令行下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(tf2.9) D:\DataSet\Github\Computed-Tomography-AI&gt;python</span><br><span class="line">&gt;&gt;&gt;import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt;tf.test.is_gpu_available()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678380947188.png" alt="1678380947188"></p>
+<p> 返回true说明没有问题。 </p>
+<p>现在，所有的依赖项已经下载并配置成功。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot14/" class="post-title-link" itemprop="url">关于MC，持续学习的局限性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-02-22 00:13:22" itemprop="dateCreated datePublished" datetime="2023-02-22T00:13:22+08:00">2023-02-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-03 19:11:33" itemprop="dateModified" datetime="2023-04-03T19:11:33+08:00">2023-04-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>M. S. Rahman, S. E. Coull和M. Wright, 《On the Limitations of Continual Learning for Malware Classification》. arXiv, 2022年8月13日. 见于: 2022年12月8日. [在线]. 载于: <a target="_blank" rel="noopener" href="http://arxiv.org/abs/2208.06568">http://arxiv.org/abs/2208.06568</a></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/msrocean/continual-learning-malware/">持续学习-Code03</a></p>
+<h2 id="本文结论："><a href="#本文结论：" class="headerlink" title="本文结论："></a>本文结论：</h2><p>CL本应该适合于恶意软件每日的进化和数量级，但是本文实验数据说明持续学习在几乎所有场景下表现都不如数据的<em>Joint</em> 重放。选择性重放20%~50%的数据相比联合重放，可以在达到最佳训练效果的同时节省35-50%的时间。</p>
+<p><strong>在域增量学习（二元分类任务里，融合数据分布的迁移，适应新域的同时，保留先前学到的知识）情景下，CL表现都很差。</strong></p>
+<p>在任务增量学习时，几种CL方法表现相当好。</p>
+<h2 id="学到的"><a href="#学到的" class="headerlink" title="学到的"></a>学到的</h2><p><strong>多类别分类恶意软件时：可以基于其代码库、功能和整体结构特征。</strong></p>
+<p><strong>读论文方法：</strong>在对一个领域基本了解后，专注方法时，<strong>直接去看Introduction里的作者贡献</strong>即可。</p>
+<p>克服灾难性遗忘(catastrophic forgetting)：</p>
+<ul>
+<li>正则化：加入正则化损失函数，惩罚重要的权重变化</li>
+<li>适应性扩张<em>adaptive expansion</em></li>
+<li>重放：用具有代表性的旧数据补充每个新任务的训练数据。<ul>
+<li><strong>蒸馏损失、</strong>不遗忘学习. Learning without Forgetting </li>
+<li><strong>生成重放。用第二个模型去学习之前任务的数据分布，从分布中产生新数据重放。生成重放在旧数据不可用或受限时特别有用。</strong></li>
+</ul>
+</li>
+</ul>
+<p>用其他分析方法得到的辅助信息可以用来帮助恶意软件分类，如恶意软件种类、恶意行为、感染载体等，使得整个优化问题多了约束。</p>
+<h2 id="持续学习的训练策略"><a href="#持续学习的训练策略" class="headerlink" title="持续学习的训练策略"></a>持续学习的训练策略</h2><p>三组参数：任务间共享参数θ_s（除了分类层以外的层），先前任务参数θ_0（旧任务对应的权重和输出层），新任务参数θ_n（新任务的输出层）。</p>
+<ul>
+<li>Joint training:所有参数一起优化，基于所有数据的训练，得到的模型被认为是最好，但训练代价大。</li>
+<li>持续学习训练：对于每个新任务n，固定θ_0，每次优化θ_s和θ_n。无须旧数据可及，因此难度高，只是训练更快，可以频繁重训练。</li>
+</ul>
+<h2 id="参数调优"><a href="#参数调优" class="headerlink" title="参数调优"></a>参数调优</h2><p>层数、</p>
+<p>隐藏单元数</p>
+<p>激活函数</p>
+<p>优化函数  Adam  SGD</p>
+<p>学习率</p>
+<h2 id="评价策略"><a href="#评价策略" class="headerlink" title="评价策略"></a>评价策略</h2><p>Min指标：最弱的性能显示了一种技术可能不适合使用的程度。</p>
+<h2 id="处理数据集中字符串的技巧："><a href="#处理数据集中字符串的技巧：" class="headerlink" title="处理数据集中字符串的技巧："></a>处理数据集中字符串的技巧：</h2><p>用于大规模多任务学习的<strong>特征哈希</strong></p>
+<blockquote>
+<p>Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola, and Josh Attenberg. Feature hashing for large scale multitask learning. In <em>International Conference on Machine Learning (ICML)</em>, pp. 1113–1120, 2009. </p>
+</blockquote>
+<h2 id="术语约定"><a href="#术语约定" class="headerlink" title="术语约定"></a>术语约定</h2><p>持续学习：CL</p>
+<p>恶意软件分类：MC</p>
+<p>增量学习：incremental learning ，IL</p>
+<p>AV-Test的 可能有害的程序 ：potentially unwanted applications，PUA</p>
+<h2 id="本文内容"><a href="#本文内容" class="headerlink" title="本文内容"></a>本文内容</h2><p>11种CL技术*2种恶意软件数据集*MC的3种(任务、类别、域）的增量学习场景下；调研MC模型遭受灾难性遗忘(catastrophic forgetting)的程度。</p>
+<p>恶意软件：PE、Android、PDF文件、恶意URL。</p>
+<p>采用ML去解决MC，基于一个假设，模型可以泛化到新数据。但是恶意软件和良性软件都在更新升级，导致其软件内部不稳定。</p>
+<p>为适应数据分布随时间的迁移，模型需要经常重训练。而数据产生的太快，<strong>导致大的数据集</strong>（FSL不存在这个问题），训练困难。</p>
+<p><a target="_blank" rel="noopener" href="https://www.virustotal.com/gui/stats">VT的统计页面</a>显示，每天接收到的新文件有近百万个。面对如此大 的数据，防病毒公司的三个选择</p>
+<p>1）花费大代价在全体数据集上频繁的重训练</p>
+<p>2）砍掉一些老数据，造成老病毒被复用的危险；</p>
+<p>3）训练的不那么频繁。</p>
+<p>4）<strong>增量学习</strong></p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h2 id="计算机视觉领域数据集："><a href="#计算机视觉领域数据集：" class="headerlink" title="计算机视觉领域数据集："></a>计算机视觉领域数据集：</h2><p>MNIST, CIFAR10 and CIFAR100, and ImageNet</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%BF%83%E7%90%86%E5%92%A8%E8%AF%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -204,7 +864,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="如何安慰别人"><a href="#如何安慰别人" class="headerlink" title="如何安慰别人"></a>如何安慰别人</h2><p>心理出现问题，是把一件事情扩大化，或者长期的负面情绪积累导致。</p>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="如何安慰别人"><a href="#如何安慰别人" class="headerlink" title="如何安慰别人"></a>如何安慰别人</h2><p>心理出现问题，是把一件事情扩大化，或者长期的负面情绪积累导致。</p>
 <p>对于扩大化的事情，例如失恋后的朋友，他们往往会有三种误区：</p>
 <ul>
 <li>1.认为<strong>别人</strong>不是这样</li>
@@ -289,7 +949,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
 <p>反思：要学的东西尽快学，至少也要下载到本地，之后可能就找不到了。</p>
 </blockquote>
 <p>令基本模型从一开始就可以训练，在训练代数相同时，收敛更快验证损失更低！</p>
@@ -360,7 +1020,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>意义：更好地了解自己，了解他人。</p>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>意义：更好地了解自己，了解他人。</p>
 <h2 id="方法论"><a href="#方法论" class="headerlink" title="方法论"></a>方法论</h2><p>在对方没有察觉到的情况下，不断地<strong>重复</strong>或者<strong>强调</strong>话语、画面，声音、色彩、手部动作都可以作为暗示。</p>
 <blockquote>
 <p>暗示要被对方的感官所觉察到，声色味触觉都可；</p>
@@ -457,527 +1117,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
 <p>Triantafillou, E., Larochelle, H., Zemel, R.S., &amp; Dumoulin, V. (2021). Learning a Universal Template for Few-shot Dataset Generalization. <em>ArXiv**, abs/2105.07029</em>.</p>
 </blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Win-Rev01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Win-Rev01/" class="post-title-link" itemprop="url">Win_Rev01</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-01-09 11:00:12" itemprop="dateCreated datePublished" datetime="2023-01-09T11:00:12+08:00">2023-01-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-01-08 12:46:56" itemprop="dateModified" datetime="2023-01-08T12:46:56+08:00">2023-01-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="虎符-the-shellcode"><a href="#虎符-the-shellcode" class="headerlink" title="虎符_the_shellcode"></a>虎符_the_shellcode</h2><p><img src="/categories/CTF/Win-Rev01/1673151993119.png" alt="1673151993119"></p>
-<p>明显的循环结构；从开始直接结束的特征；</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>()</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2022-21882/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/CVE-2022-21882/" class="post-title-link" itemprop="url">Windows 权限提升漏洞cve-2022-21882</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-01-04 14:19:49" itemprop="dateCreated datePublished" datetime="2023-01-04T14:19:49+08:00">2023-01-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-27 18:51:44" itemprop="dateModified" datetime="2023-08-27T18:51:44+08:00">2023-08-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Win10版本；Win32k权限提升漏洞 </p>
-</blockquote>
-<p> 该漏洞是之前CVE-2021-1732漏洞补丁的绕过。CVE-2022-21882是一个本地权限提升漏洞，攻击者利用该漏洞可以在Windows 10系统上获得管理员权限、创建新的管理员账户、执行特权命令。</p>
-<p> <strong>由dump分析入手，到漏洞原理剖析，再到漏洞的重现利用手法，最后到分析漏洞的影响函数、修补方式等，完整重现“由dump到POC”的全过程。</strong> </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//k  栈追踪</span><br><span class="line">//b给出每个函数的前三个参数</span><br><span class="line"> kd&gt; kb </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">//u Address1 Address2，反汇编选定范围内的代码</span><br><span class="line"> kd&gt; u xxxDestroyWindow xxxDestroyWindow+34 </span><br><span class="line"> </span><br><span class="line"> //给出某个函数调用前的内容</span><br><span class="line"> kd&gt; u xxxMNCancel la</span><br><span class="line"> </span><br><span class="line"> //反汇编选定地址之前长度为Lnum的代码</span><br><span class="line"> kd&gt; ub xxxMNCancel+121 L5</span><br><span class="line"> //展示某个数据结构data type里的某个名称的对象</span><br><span class="line"> 0: kd&gt; dt tagPOPUPMENU -d spwndPopupMenu</span><br><span class="line"> win32k!tagPOPUPMENU</span><br><span class="line">   +0x008 spwndPopupMenu : Ptr32 tagWND</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-<p>xxxTrackPopupMenuEx的工作原理，熟悉界面编程的朋友都知道这是用于弹出一个Popup Menu的函数，那么在内核中它是如何工作的呢，这里笔者简单列出一下大概的工作的流程 ：</p>
-<p>(1). 创建Menu窗口对象： 根据HMENU等相关参数，创建最终弹出和展示的Menu窗口（通过xxxCreateWindowEx）</p>
-<p>(2). 分配和初始化当前线程的MenuState结构（xxxMNAllocMenuState）</p>
-<p>(3). 计算和设定Menu窗口的相关位置、属性等（通过FindBestPos/xxxSetWindowPos等）</p>
-<p>(4). 进入菜单循环，展示Menu并进入等待菜单选择的循环（xxxMNLoop），在进入循环前，会通过xxxWindowEvent来“播放”一个EVENT_SYSTEM_MENUPOPUPSTART的窗口事件，这个细节会在后面用到</p>
-<p>(5). 菜单被选择或取消，退出循环并销毁PopupMenu、Menu窗口对象和MenuState结构(xxxxxEndMenuLoop、xxxMNEndMenuState等)</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E8%90%A5%E9%94%80%E9%80%BB%E8%BE%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/%E8%90%A5%E9%94%80%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">营销逻辑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-28 17:08:58 / Modified: 18:53:10" itemprop="dateCreated datePublished" datetime="2022-12-28T17:08:58+08:00">2022-12-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>姜旭平</p>
-</blockquote>
-<p>营销的<strong>知识</strong>和方法是最重要的，工具手段是围绕目的服务的。</p>
-<h2 id="一-搜索引擎营销"><a href="#一-搜索引擎营销" class="headerlink" title="一.搜索引擎营销"></a>一.搜索引擎营销</h2><p>分析客户心理-&gt;关键词-&gt;客户根据关键词能够搜索出感兴趣的内容-&gt;客户点击后目的链接是精准的链接。</p>
-<p>客户搜索的关键词，反映出了他感<strong>兴趣</strong>的点；而他感兴趣的点，限制了他能够挑选的关键词的范围。</p>
-<h2 id="二-渠道和品牌"><a href="#二-渠道和品牌" class="headerlink" title="二.渠道和品牌"></a>二.渠道和品牌</h2><p>中国市场不缺客户，客户也在积极地寻找好的产品，所以重要的是渠道，让客户知道我的产品，知道我的产品的价值和利益。</p>
-<p>为建立渠道，关键是对<strong>人性</strong>的把握，给销售方一个理由卖你的产品而非友商的产品，不一定要让利，让它方便、提供服务、好的期望和市场反应都是谈判的稻草。（例如，以前通过送网络电话，让经销商卖自家瓜子；以前的三大运营商充话费送手机也算一点，但是要注意到社会发展的<strong>趋势</strong>，服务不能满足客户需求时，随着经济的发展，客户会办理多个电话卡）</p>
-<h3 id="品牌："><a href="#品牌：" class="headerlink" title="品牌："></a>品牌：</h3><p>品牌不是耳熟能详（例如恒源祥），而是一种理念的传播和价值认同。讲明白你的产品<strong>对客户的价值</strong>和利益，给客户一个购买的<strong>理由</strong>。</p>
-<p>现在的app或者网站上的锚点 ，可以收集足够多的数据，分析到<strong>客户的兴趣爱好和习惯</strong>。</p>
-<h2 id="三-引导消费"><a href="#三-引导消费" class="headerlink" title="三.引导消费"></a>三.引导消费</h2><p>推销当前社会已经不适用，<strong>多引导</strong>，让客户自己说服自己，自己体验到产品的价值。该买的人，一定会买。</p>
-<p>1.人的消费<strong>习惯</strong>不易逆转，由俭入奢易。（送质量更好的茶叶；花呗都是基于这样的原理）</p>
-<p>2.和气生财，多交朋友。(小利益的让出，会收获更大的利益。在合适的发展阶段，明白自己有多大的让利空间）</p>
-<p>3.多问一句来引导，而不是捆绑销售，把选择权留给客户（但是这个选择空间可以特殊设计，让客户最终选择我想要的）。(例如，卖牛肉面，问一句客户要鸡蛋、小菜吗？而不是直接设计为套餐给客户，当然事无绝对，这些附加的营收，会占据流水的很大份额)</p>
-<p>4.体验，比推荐更有杀伤力。(30天无理由退款，线下体验店基于此原理)</p>
-<p>5.讲清楚利益和价值，<strong>客户为什么买</strong>。找到客户关心的(例如，正例：强生公司在美国讲健康，在中国讲教育；反例：没人乐意当银行的垃圾邮件接收器，成为银行VIP得不到什么好处)。</p>
-<p>分析市场特点，找对客户关心的内容，与自己产品建立联系，没有联系也无妨，包含自己产品的内容非常重要，要和客户的兴趣点相对应，这些设计最终要实现目的：<strong>客户转化成利益</strong>。</p>
-<h2 id="四-自媒体时代"><a href="#四-自媒体时代" class="headerlink" title="四.自媒体时代"></a>四.自媒体时代</h2><p>两个特点：1.信息谁都可以发送和接收；2.会自动形成兴趣小组，群体会自动聚类；</p>
-<p>信息：每个人都可以创造性加工，也都可以选择性接受。</p>
-<p><strong>病毒式/社会化营销：4I s原则</strong>：Interesting 、Interests、Innovation、interactive，用户感兴趣是前提，价值观、逆向思维是核心，观点功能方法要创新，与客户互动、给客户创造秀的机会、让客户形成社群自己发热。</p>
-<p>典型案例：18年，Elon Mask就拿火箭发射汽车，借助<strong>社会化媒体</strong>自我宣传了；实际意义有的时候不重要，制造话题、并且话题能够和产品的特点有所融合，节省的广告费最终会是赚的。（例如：火箭的运输能力，汽车的高科技感的营造）</p>
-<h2 id="五-人性"><a href="#五-人性" class="headerlink" title="五.人性"></a>五.人性</h2><p>凑热闹，喜欢虚假的安全感，喜欢别人设计的意义。</p>
-<p>例如，褚橙：甄嬛体活动（蹭热度，制造热度），有一个就够了的广告词&lt;-&gt;与男女感情建立联系，只要打印这样的包装即可，产品不重要，营造出来的价值，符合冬天各种节日里的男女的需要；符合女士爱美、追求时尚的特征即可。</p>
-<h2 id="六-大数据"><a href="#六-大数据" class="headerlink" title="六.大数据"></a>六.大数据</h2><p>找到客户的兴趣点，瞄准其<strong>真实需求</strong>做产品。</p>
-<p>大量、多变、高频的数据，可以消除数据里的异常数据的干扰，获取到客户下意识的、真实的想法。</p>
-<h2 id="七-人力资源的思考"><a href="#七-人力资源的思考" class="headerlink" title="七.人力资源的思考"></a>七.人力资源的思考</h2><blockquote>
-<p>王雪莉</p>
-</blockquote>
-<p>1.人力资源既是成本，也是资产。考察一个人的成本，看工资是否合适，应该拿他创造的收益-工资。同样的，作为求职者，要创造价值，<strong>给公司带来大于工资的收益</strong>。</p>
-<p>2.眼界放开。公司限制竞业会跨越很多行业，同样的，求职范围不要局限于互联网，凡是有交叉的范围都可以去试试。</p>
-<p>3.物质激励效用递减时，当前的管理层给员工创造的是<strong>兴趣、意义、希望</strong>，让员工看到快速上升的希望。</p>
-<p>4.每一代人有每一代人的性格特点，管理永远是对人的，让他把力气发挥正确即可。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%8F%98%E6%80%81%E5%BF%83%E7%90%86%E5%AD%A601/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/%E5%8F%98%E6%80%81%E5%BF%83%E7%90%86%E5%AD%A601/" class="post-title-link" itemprop="url">变态心理学</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-27 17:08:58 / Modified: 22:07:33" itemprop="dateCreated datePublished" datetime="2022-12-27T17:08:58+08:00">2022-12-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>课程链接：北大 钱铭怡教授 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ZK41167vh">变态心理学</a></p>
-</blockquote>
-<h2 id="一-课程内容"><a href="#一-课程内容" class="headerlink" title="一.课程内容"></a>一.课程内容</h2><p>Abnormal Psychology异常心理发生、发展变化的规律和原因。</p>
-<ul>
-<li>描述：异常表现、与正常现象的区别、障碍、预后</li>
-<li>原因：考察生物、心理、社会方面的因素</li>
-<li>治疗：途径及效果等  （心理咨询、心理治疗、临床心理学课程里重点介绍；神经解剖：神经系统疾病）</li>
-</ul>
-<p>心理障碍继续加重、时间长了会变成精神病。（错，例如强迫症，需要看此人的症状表现是其他病比如分裂症的前期表现，还是仅仅为强迫症）</p>
-<h3 id="几个概念："><a href="#几个概念：" class="headerlink" title="几个概念："></a>几个概念：</h3><ul>
-<li>神经病(neuropathy)：神经系统出现障碍时表现出的疾病。例如：脊髓出现问题</li>
-<li>精神/心理障碍(mental disorders)：精神分裂、心境障碍、神经症、焦虑障碍、人格障碍、社交障碍等。</li>
-<li>精神病(psychosis)：患者的心理功能严重受损，自知力（例如幻听却不自知）缺失，不能应付日常生活要求并保持与现实 的接触的一组情况。例如精神分裂症。</li>
-<li>psychological disorders心理障碍:偏重于说明重 性精神病、器质性精神障碍以外的那些更多地由心理原因所致的障碍</li>
-</ul>
-<p>2009年，Phillips的调查就显示，中国成年人群精神障碍总现患率为17.5%；女性、40岁以上在心境障碍和焦虑障碍上都更严重；物质滥用尤其是酒依赖上，男性超过女性，农村超过城市。</p>
-<blockquote>
-<p>2012年，《中华人民共和国精神卫生法》通过。</p>
-</blockquote>
-<h3 id="正常和异常的判断"><a href="#正常和异常的判断" class="headerlink" title="正常和异常的判断"></a>正常和异常的判断</h3><p>1.患者自身认识，研究者主观判断；<br>2.社会文化传统；<br>3.心理测量学，以统计的视角判断离群情况，一般重点关注分布的两端；<br>4.病因和症状存在与否，现象学的标准（无法通过化验等精准手段判断）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/Notes/%E5%8F%98%E6%80%81%E5%BF%83%E7%90%86%E5%AD%A601/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/MC%E6%95%B0%E6%8D%AE%E9%9B%86%E7%94%9F%E6%88%90%E5%8A%9E%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/MC%E6%95%B0%E6%8D%AE%E9%9B%86%E7%94%9F%E6%88%90%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">给样本贴标签的办法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-24 14:12:58 / Modified: 20:40:44" itemprop="dateCreated datePublished" datetime="2022-12-24T14:12:58+08:00">2022-12-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="AVCLASS"><a href="#AVCLASS" class="headerlink" title="AVCLASS"></a>AVCLASS</h2><p>三大挑战：规范化（相对于使用AV提供的完整标签而言），通用标记删除，别名检测</p>
-<p>采取AV vendors多数投票，需要选择出一些打标签比较好的检测引擎，而检测引擎往往对于某一类准确率高，而对于另一类又比较差；也无法定量评估标签的质量。</p>
-<p>已知某些引擎会抄袭leader引擎的标签结果。</p>
-<p>AVCLASS可以代替聚类过程和给聚类结果打标签。</p>
-<h2 id="AVCLASS2"><a href="#AVCLASS2" class="headerlink" title="AVCLASS2"></a>AVCLASS2</h2><p>2020</p>
-<blockquote>
-<p>Silvia Sebastián, Juan Caballero. AVClass2: Massive Malware Tag Extraction from AV Labels. In proceedings of the Annual Computer Security Applications Conference, December 2020. </p>
-</blockquote>
-<p>AVLASS2借助VT的json可以获得下面的结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aca2d12934935b070df8f50e06a20539 33 CLASS:grayware|10,CLASS:grayware:adware|9,FILE:os:windows|8,FAM:adrotator|8,CLASS:downloader|3,FAM:zlob|2</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">对抗样本研究</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-12-21 18:14:53" itemprop="dateCreated datePublished" datetime="2022-12-21T18:14:53+08:00">2022-12-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-27 22:02:08" itemprop="dateModified" datetime="2022-12-27T22:02:08+08:00">2022-12-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://www.av-test.org/en/statistics/malware/">AV-Test</a></p>
-<blockquote>
-<p>乔延成</p>
-</blockquote>
-<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032568781.png" alt="1669032568781"></p>
-<h2 id="恶意代码对抗样本研究存在的困难"><a href="#恶意代码对抗样本研究存在的困难" class="headerlink" title="恶意代码对抗样本研究存在的困难"></a>恶意代码对抗样本研究存在的困难</h2><p>图像对抗样本<br>·数值是连续的<br>·限制:添加的扰动人类无法察觉恶意代码对抗样本<br>·字节数据、系统调用等特征数值是离散的(基于梯度的方法无法使用)·限制:添加的扰动不能影响恶意代码的原有功能</p>
-<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032652118.png" alt="1669032652118"></p>
-<ul>
-<li>恶意代码检测模型决策依据分析</li>
-<li>恶意代码对抗样本检测方法</li>
-<li>恶意代码对抗样本攻击方法</li>
-</ul>
-<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032908841.png" alt="1669032908841"></p>
 
       
     </div>
@@ -996,7 +1138,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1064,7 +1206,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">165</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

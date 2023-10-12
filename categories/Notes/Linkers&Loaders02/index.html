@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://blueinyou.com/categories/Notes/Linkers&Loaders02/1684810335918.png">
 <meta property="og:image" content="https://blueinyou.com/categories/Notes/Linkers&Loaders02/1684810503471.png">
 <meta property="article:published_time" content="2023-05-23T06:58:58.000Z">
-<meta property="article:modified_time" content="2023-08-09T14:18:45.521Z">
+<meta property="article:modified_time" content="2023-09-02T02:25:22.000Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="PE">
 <meta name="twitter:card" content="summary">
@@ -199,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-09 22:18:45" itemprop="dateModified" datetime="2023-08-09T22:18:45+08:00">2023-08-09</time>
+                <time title="Modified: 2023-09-02 10:25:22" itemprop="dateModified" datetime="2023-09-02T10:25:22+08:00">2023-09-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,7 +246,7 @@
 <p>3、在内存中有多个程序副本时，通过<strong>内存共享</strong>，节省内存空间。只读数据（指令；图像、文本资源）可以共享；而每个副本进程的数据区域不一样，是进程私有的，属于Private Bytes。</p>
 <p><img src="/categories/Notes/Linkers&Loaders02/1684807383776.png" alt="1684807383776"></p>
 <p>如图所示，Win7的exploer.exe在运行中，此刻占据的总虚存为338 740KB，它的私有数据部分占了51 360 KB，即共享部分数据占了287 380KB，也就是280多MB的空间，极大的节省了内存空间。</p>
-<h2 id="3-3-段概述"><a href="#3-3-段概述" class="headerlink" title="3.3 段概述"></a>3.3 段概述</h2><p>ELF Header，描述整个文件的文件属性，包括文件是否可执行、是静态链接还是动态链接还是可执行文件（给出入口地址)、目标硬件和目标操作系统，还包括一个段表 Section Table：一个描述各个段在文件中偏移位置及段的属性的数组。<br>|                   |                                                              |<br>| ————————- | —————————————————————————————— |<br>| .bss              | 为节省存储空间，只记录<strong>未初始化</strong>数据预留的空间大小，而不存储其内容，因为其默认全部为0. |<br>| .data             | <strong>初始化的</strong>全局变量和局部静态变量                           |<br>| .text、.code      | 代码段                                                       |<br>| .rodata、.rodata1 | 只读数据段，比如字符串常量、全局const变量                    |<br>| .comment          | 存放编译器版本信息，比如字符串：”GCC:(GNU) 4.2.0”            |<br>| .note             | 额外的编译器信息，程序公司名、发布版本号等                   |<br>| .debug            | 调试信息                                                     |<br>| .line             | 调试时的行号表，源代码行号与编译后指令的对应表               |<br>| .eh_frame         | 存储异常处理框架（Exception Handling Frame）的相关信息。包括异常处理函数的调用关系、异常处理函数的地址、堆栈展开信息等。 |</p>
+<h2 id="3-3-段概述"><a href="#3-3-段概述" class="headerlink" title="3.3 段概述"></a>3.3 段概述</h2><p>ELF Header，描述整个文件的文件属性，包括文件是否可执行、是静态链接还是动态链接还是可执行文件（给出入口地址)、目标硬件和目标操作系统，还包括一个段表 Section Table：一个描述各个段在文件中偏移位置及段的属性的数组。<br>|                   |                                                              |<br>| ————————- | —————————————————————————————— |<br>| .bss              | 为节省存储空间，只记录<strong>未初始化</strong>数据预留的空间大小，而不存储其内容，因为其默认全部为0. |<br>| .data             | <strong>初始化的</strong>全局变量和局部静态变量                           |<br>| .text、.code      | 代码段                                                       |<br>| .rodata、.rodata1 | 只读数据段，比如字符串常量、全局const变量                    |<br>| .comment          | 存放编译器版本信息，比如字符串：”GCC:(GNU) 4.2.0”            |<br>| .note             | 额外的编译器信息，程序公司名、发布版本号等                   |<br>| .debug            | 调试信息                                                     |<br>| .line             | 调试时的行号表，源代码行号与编译后指令的对应表               |<br>| .eh_frame         | 存储异常处理框架（Exception Handling Frame）的相关信息。包括异常处理函数的调用关系、异常处理函数的地址、堆栈展开信息等。 |<br>| SHT               | 表示 “Section Header Table                                   |</p>
 <p><img src="/categories/Notes/Linkers&Loaders02/1684811465144.png" alt="1684811465144"></p>
 <h3 id="其他段-got和-plt"><a href="#其他段-got和-plt" class="headerlink" title="其他段 .got和.plt"></a>其他段 .got和.plt</h3><div class="table-container">
 <table>
@@ -402,7 +402,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">165</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

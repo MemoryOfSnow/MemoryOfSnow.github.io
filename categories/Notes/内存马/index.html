@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758#通过模拟键盘的方式获取报告#参考https:&#x2F;&#x2F;blog.csdn.net&#x2F;yan_star&#x2F;article&#x2F;details&#x2F;113667094import osimport pyau">
+  <meta name="description" content="主打隐蔽，： 内存中，无文件落地到磁盘；  内核级别操作 rootkit 在内存中生成文件 反射式DLL注入：这是一种技术，它允许恶意软件在不使用硬盘上的文件的情况下，将DLL注入到进程的内存中。  进程注入：攻击者可以将自己的恶意进程注入到合法进程的地址空间中   DLL注入：恶意软件可以注入恶意动态链接库（DLL）到其他进程的内存中    Webshell的内存马分类：1.servlet-ap">
 <meta property="og:type" content="article">
-<meta property="og:title" content="根据sha256检查程序标签">
-<meta property="og:url" content="https://blueinyou.com/categories/virus%E6%A3%80%E6%9F%A5%E6%A0%87%E7%AD%BE/index.html">
+<meta property="og:title" content="Memory-resident Malware">
+<meta property="og:url" content="https://blueinyou.com/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758#通过模拟键盘的方式获取报告#参考https:&#x2F;&#x2F;blog.csdn.net&#x2F;yan_star&#x2F;article&#x2F;details&#x2F;113667094import osimport pyau">
+<meta property="og:description" content="主打隐蔽，： 内存中，无文件落地到磁盘；  内核级别操作 rootkit 在内存中生成文件 反射式DLL注入：这是一种技术，它允许恶意软件在不使用硬盘上的文件的情况下，将DLL注入到进程的内存中。  进程注入：攻击者可以将自己的恶意进程注入到合法进程的地址空间中   DLL注入：恶意软件可以注入恶意动态链接库（DLL）到其他进程的内存中    Webshell的内存马分类：1.servlet-ap">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-04-15T06:19:49.000Z">
-<meta property="article:modified_time" content="2022-06-03T19:03:56.462Z">
+<meta property="article:published_time" content="2023-09-25T01:58:58.000Z">
+<meta property="article:modified_time" content="2023-09-25T02:16:48.000Z">
 <meta property="article:author" content="Paul C">
-<meta property="article:tag" content="python">
+<meta property="article:tag" content="Virus">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blueinyou.com/categories/virus%E6%A3%80%E6%9F%A5%E6%A0%87%E7%AD%BE/">
+<link rel="canonical" href="https://blueinyou.com/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>根据sha256检查程序标签 | Paul C's Blog</title>
+  <title>Memory-resident Malware | Paul C's Blog</title>
   
 
 
@@ -162,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/virus%E6%A3%80%E6%9F%A5%E6%A0%87%E7%AD%BE/">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
@@ -175,7 +175,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          根据sha256检查程序标签
+          Memory-resident Malware
         </h1>
 
         <div class="post-meta">
@@ -184,23 +184,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2020-04-15 14:19:49" itemprop="dateCreated datePublished" datetime="2020-04-15T14:19:49+08:00">2020-04-15</time>
+              <time title="Created: 2023-09-25 09:58:58 / Modified: 10:16:48" itemprop="dateCreated datePublished" datetime="2023-09-25T09:58:58+08:00">2023-09-25</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
                 </span>
             </span>
 
@@ -215,7 +209,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#通过模拟键盘的方式获取报告</span></span><br><span class="line"><span class="comment">#参考https://blog.csdn.net/yan_star/article/details/113667094</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> pyautogui <span class="keyword">as</span> pag</span><br><span class="line"><span class="keyword">import</span> pyperclip</span><br><span class="line"><span class="keyword">import</span> win32clipboard <span class="keyword">as</span> w</span><br><span class="line"><span class="keyword">import</span> win32con<span class="comment">#下载pywin32包</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">address_bar=(<span class="number">1322</span>,<span class="number">107</span>)  <span class="comment">#地址栏坐标</span></span><br><span class="line">test_result=(<span class="number">142</span>,<span class="number">365</span>)   <span class="comment">#预测结果所在坐标</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">api_addr=<span class="string">&quot;https://www.virustotal.com/gui/file/&quot;</span></span><br><span class="line"></span><br><span class="line">samples_addr=<span class="string">&quot;E:\Linux_sh\malware\Linux-Malware-Samples&quot;</span><span class="comment">#样本需要提前计算sha256值</span></span><br><span class="line">report_addr=<span class="string">&quot;E:/Linux_sh/report_&quot;</span>+samples_addr+<span class="string">&quot;.txt&quot;</span></span><br><span class="line">test_str=<span class="string">&quot;00ae07c9fe63b080181b8a6d59c6b3b6f9913938858829e5a42ab90fb72edf7a&quot;</span></span><br><span class="line">url=api_addr+test_str</span><br><span class="line">flag=<span class="number">1</span><span class="comment">#flag==1为恶意</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_text</span>():</span><br><span class="line">  w.OpenClipboard()</span><br><span class="line">  d = w.GetClipboardData(win32con.CF_TEXT)</span><br><span class="line">  w.CloseClipboard()</span><br><span class="line">  <span class="keyword">return</span> d.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">examine</span>(<span class="params">file</span>):</span><br><span class="line">  <span class="comment">#输入网址</span></span><br><span class="line">  url=api_addr+file</span><br><span class="line">  pag.click(address_bar[<span class="number">0</span>],address_bar[<span class="number">1</span>],<span class="number">1</span>)</span><br><span class="line">  pag.hotkey(<span class="string">&#x27;alt&#x27;</span>,<span class="string">&#x27;d&#x27;</span>)</span><br><span class="line">  pyperclip.copy(url)</span><br><span class="line">  <span class="comment">#pyperclip.paste()</span></span><br><span class="line">  pag.hotkey(<span class="string">&#x27;ctrl&#x27;</span>,<span class="string">&#x27;v&#x27;</span>)</span><br><span class="line">  pag.keyDown(<span class="string">&#x27;enter&#x27;</span>)</span><br><span class="line">  pag.keyUp(<span class="string">&#x27;enter&#x27;</span>)</span><br><span class="line">  time.sleep(<span class="number">2</span>)</span><br><span class="line">  <span class="comment">#获取检测结果(142,365)</span></span><br><span class="line">  pag.click(test_result[<span class="number">0</span>],test_result[<span class="number">1</span>],<span class="number">2</span>)</span><br><span class="line">  pag.hotkey(<span class="string">&#x27;ctrl&#x27;</span>,<span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">  result=get_text()</span><br><span class="line">  <span class="keyword">if</span> result==<span class="string">&#x27;0&#x27;</span>:</span><br><span class="line">      flag=<span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">      flag=<span class="number">1</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;%s:%d\n&#x27;</span>%(test_str,flag))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">  path=samples_addr</span><br><span class="line">  samples=os.listdir(samples_addr)</span><br><span class="line">  <span class="keyword">for</span> file <span class="keyword">in</span> samples:</span><br><span class="line">    examine(file)</span><br></pre></td></tr></table></figure>
+        <p>主打隐蔽，：</p>
+<p>内存中，无文件落地到磁盘；</p>
+<ul>
+<li>内核级别操作 rootkit</li>
+<li>在内存中生成文件</li>
+<li><strong>反射式DLL注入</strong>：这是一种技术，它允许恶意软件在不使用硬盘上的文件的情况下，将DLL注入到进程的内存中。 </li>
+<li><p><strong>进程注入</strong>：攻击者可以将自己的恶意进程注入到合法进程的地址空间中 </p>
+</li>
+<li><p><strong>DLL注入</strong>：恶意软件可以注入恶意动态链接库（DLL）到其他进程的内存中 </p>
+</li>
+</ul>
+<h2 id="Webshell的内存马分类："><a href="#Webshell的内存马分类：" class="headerlink" title="Webshell的内存马分类："></a>Webshell的内存马分类：</h2><p>1.servlet-api型<br>通过命令执行等方式动态注册一个新的listener、filter或者servlet，从而实现命令执行等功能。特定框架、容器的内存马原理与此类似，如spring的controller内存马，tomcat的valve内存马</p>
+<p>2.字节码增强型<br>通过java的instrumentation动态修改已有代码，进而实现命令执行等功能。</p>
+<p>客户端—&gt;Listener—&gt;Filter—&gt;Servlet</p>
+<p> 在 web.xml 注册了一个 Filter 来对某个 Servlet 程序进行拦截处理 ；</p>
+<p> Filter.doFilter  —&gt; 调用 FilterChain.doFilter ( FilterChain Object)—&gt; 激活目标 Servlet 的 service  ；</p>
+<p> filter链<br>当多个filter同时存在的时候，组成了filter链。web服务器根据Filter在web.xml文件中的注册顺序，决定先调用哪个Filter。当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法，通过判断FilterChain中是否还有filter决定后面是否还调用filter。 </p>
 
     </div>
 
@@ -225,7 +235,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/Virus/" rel="tag"># Virus</a>
           </div>
 
         
@@ -234,12 +244,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/CTF/2to16/" rel="prev" title="2to16">
-      <i class="fa fa-chevron-left"></i> 2to16
+    <a href="/categories/Notes/Linkers&Loaders05/" rel="prev" title="Chap09-DLL">
+      <i class="fa fa-chevron-left"></i> Chap09-DLL
     </a></div>
       <div class="post-nav-item">
-    <a href="/categories/Diary/%E8%B5%B0%E5%90%A7%E6%AD%8C%E8%AF%8D/" rel="next" title="放下过去">
-      放下过去 <i class="fa fa-chevron-right"></i>
+    <a href="/categories/CTF/python_bypass/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -299,6 +309,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Webshell%E7%9A%84%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">Webshell的内存马分类：</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -314,7 +325,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">165</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

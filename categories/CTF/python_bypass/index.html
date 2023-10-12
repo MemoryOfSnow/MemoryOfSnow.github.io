@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="LessEQualmore123456&gt;nc chal-lessequalmore.chal.hitconctf.com 11111flag&amp;#123;1&amp;#125;*** Flag Checker ***You entered:flag&amp;#123;1&amp;#125;Sorry, wrong flag! Not just usbpcap鼠标协议  每一个数据包的数据区有四个字节， 第一个字节代表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paul C&#39;s Blog">
+<meta property="og:url" content="https://blueinyou.com/categories/CTF/python_bypass/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="LessEQualmore123456&gt;nc chal-lessequalmore.chal.hitconctf.com 11111flag&amp;#123;1&amp;#125;*** Flag Checker ***You entered:flag&amp;#123;1&amp;#125;Sorry, wrong flag! Not just usbpcap鼠标协议  每一个数据包的数据区有四个字节， 第一个字节代表">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/python_bypass/1694226682107.png">
+<meta property="article:published_time" content="2023-10-09T09:48:02.850Z">
+<meta property="article:modified_time" content="2023-09-09T03:14:24.000Z">
+<meta property="article:author" content="Paul C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/CTF/python_bypass/1694226682107.png">
+
+<link rel="canonical" href="https://blueinyou.com/categories/CTF/python_bypass/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/python_bypass/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-10-09 17:48:02" itemprop="dateCreated datePublished" datetime="2023-10-09T17:48:02+08:00">2023-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-09 11:14:24" itemprop="dateModified" datetime="2023-09-09T11:14:24+08:00">2023-09-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="LessEQualmore"><a href="#LessEQualmore" class="headerlink" title="LessEQualmore"></a>LessEQualmore</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;nc chal-lessequalmore.chal.hitconctf.com 11111</span><br><span class="line">flag&#123;1&#125;</span><br><span class="line">*** Flag Checker ***</span><br><span class="line">You entered:</span><br><span class="line">flag&#123;1&#125;</span><br><span class="line">Sorry, wrong flag!</span><br></pre></td></tr></table></figure>
+<h2 id="Not-just-usbpcap"><a href="#Not-just-usbpcap" class="headerlink" title="Not just usbpcap"></a>Not just usbpcap</h2><h3 id="鼠标协议"><a href="#鼠标协议" class="headerlink" title="鼠标协议"></a>鼠标协议</h3><pre><code>  每一个数据包的数据区有四个字节，
+</code></pre><p>第一个字节代表按键，当取 0x00 时，代表没有按键、为 0x01 时，代表按左键，为 0x02 时，代表当前按键为右键。第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正时，代表鼠标水平右移多少像素，为负时，代表水平左移多少像素。第三个字节与第二字节类似，代表垂直上下移动的偏移。 </p>
+<p>键盘数据包的数据长度为 8 个字节，击键信息集中在第 3 个字节 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tshark -r ./release.pcapng -T fields -e usb.capdata &gt;usbdata.txt</span><br><span class="line">python UsbKeyboardDataHacker.py ./release.pcapng</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">l USB UART  异步接收传送器</span><br><span class="line">l USB HID 交互式人性化接口</span><br><span class="line">l USB Memory  数据存储</span><br><span class="line">Audio/Video Distribution Transport Protocol）：</span><br><span class="line"></span><br><span class="line">AVDTP是一种蓝牙协议，用于传输音频和视频数据。它定义了在蓝牙设备之间传输多</span><br><span class="line">媒体数据流的规则和方法。AVDTP的作用是管理多媒体数据的流动，包括数据的传输、控制和同步。</span><br><span class="line">HCI_EVT（Host Controller Interface Event）：</span><br><span class="line"></span><br><span class="line">HCI_EVT是蓝牙协议栈中的一部分，用于管理与蓝牙硬件控制器之间的通信。它定义了一组事件和命令，允许主机设备与蓝牙硬件进行交互，包括连接、数据传输和配置等操作。</span><br><span class="line">USBHUB（USB Hub Protocol）：</span><br><span class="line"></span><br><span class="line">USBHUB是与USB（Universal Serial Bus）相关的协议，用于管理USB集线器（Hub）。USB集线器允许多个USB设备连接到单个USB端口，USBHUB协议定义了集线器的工作原理和与主机设备之间的通信方式。</span><br><span class="line">RTP（Real-time Transport Protocol）：</span><br><span class="line"></span><br><span class="line">RTP是一种用于实时数据传输的协议，通常用于音频和视频流的传输。它提供了时间同步、流标识和数据流传输的机制，以确保实时媒体数据能够以低延迟和高质量传输。RTP通常与RTCP（RTP Control Protocol）一起使用，后者用于监控和管理传输质量。</span><br></pre></td></tr></table></figure>
+<p> <code>Bus 002 Device 002</code> 代表 <code>usb</code> 设备正常连接， </p>
+<h3 id="蓝牙协议"><a href="#蓝牙协议" class="headerlink" title="蓝牙协议"></a>蓝牙协议</h3><h2 id="Misc1"><a href="#Misc1" class="headerlink" title="Misc1"></a>Misc1</h2><p><img src="/categories/CTF/python_bypass/1694226682107.png" alt="1694226682107"></p>
+<h3 id="后台仓库"><a href="#后台仓库" class="headerlink" title="后台仓库"></a>后台仓库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/QingdaoU/Judger</span><br></pre></td></tr></table></figure>
+<p>main.c</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">max_process_number</span><br><span class="line">max_output_size</span><br><span class="line">exe_path</span><br><span class="line">input_path &quot;/dev/stdin&quot;</span><br><span class="line">output_path</span><br><span class="line">error_path &quot;/dev/stderr&quot;</span><br><span class="line">args</span><br><span class="line"> env</span><br><span class="line"> log_path judger.log</span><br><span class="line"> seccomp_rule_name seccomp_rule_name-&gt;sval[0]</span><br><span class="line"> uid 65534</span><br><span class="line"> gid 65534</span><br></pre></td></tr></table></figure>
+<p>child.c  child_process</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proc = subprocess.Popen(proc_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">out, err = proc.communicate()</span><br><span class="line">return json.loads(out.decode(&quot;utf-8&quot;))</span><br></pre></td></tr></table></figure>
+<p>general.c</p>
+<ul>
+<li><p>socket、fork、vfork、kill；</p>
+<ul>
+<li>execveat</li>
+</ul>
+<p>禁止以w、rw使用open、openat；</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//c_cpp.c</span><br><span class="line"></span><br><span class="line">&#123;SCMP_SYS(read), SCMP_SYS(fstat),</span><br><span class="line">SCMP_SYS(mmap), SCMP_SYS(mprotect),</span><br><span class="line">SCMP_SYS(munmap), SCMP_SYS(uname),</span><br><span class="line">SCMP_SYS(arch_prctl), SCMP_SYS(brk),</span><br><span class="line">SCMP_SYS(access), SCMP_SYS(exit_group),</span><br><span class="line">SCMP_SYS(close), SCMP_SYS(readlink),</span><br><span class="line">SCMP_SYS(sysinfo), SCMP_SYS(write),</span><br><span class="line">SCMP_SYS(writev), SCMP_SYS(lseek),</span><br><span class="line">SCMP_SYS(clock_gettime), SCMP_SYS(pread64)&#125;; </span><br></pre></td></tr></table></figure>
+<p>  不让写文件时：</p>
+<p>禁止以w、rw使用open、openat；</p>
+<p>或者在允许写文件时：</p>
+<p> 允许进程调用 <code>open</code> 系统调用。 </p>
+<p> 允许进程调用 <code>openat</code> 系统调用，类似于 <code>open</code>，但可以指定文件的相对路径。 </p>
+<p> 允许进程调用 <code>dup2</code> 系统调用，用于复制文件描述符到指定的文件描述符号码。 </p>
+<p> 允许进程调用 <code>dup3</code> 系统调用，类似于 <code>dup2</code>，但支持更多选项 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">max_memory=1024 * 1024 * 128, max_stack=32 * 1024 * 1024,</span><br><span class="line">                   max_process_number=200, max_output_size=10000, exe_path=&quot;1.out&quot;,</span><br><span class="line">                   input_path=&quot;1.in&quot;, output_path=&quot;1.out&quot;, error_path=&quot;1.out&quot;,</span><br><span class="line">                   args=args, env=[&quot;a=&quot;], log_path=&quot;1.log&quot;,</span><br><span class="line">                   seccomp_rule_name=&quot;1.so&quot;, uid=0, gid=0)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#base.py</span><br><span class="line">   config = &#123;&quot;max_cpu_time&quot;: 1000,</span><br><span class="line">                  &quot;max_real_time&quot;: 3000,</span><br><span class="line">                  &quot;max_memory&quot;: 128 * 1024 * 1024,</span><br><span class="line">                  &quot;max_stack&quot;: 32 * 1024 * 1024,</span><br><span class="line">                  &quot;max_process_number&quot;: 10,</span><br><span class="line">                  &quot;max_output_size&quot;: 1024 * 1024,</span><br><span class="line">                  &quot;exe_path&quot;: &quot;/bin/ls&quot;,</span><br><span class="line">                  &quot;input_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;output_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;error_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;args&quot;: [],</span><br><span class="line">                  &quot;env&quot;: [&quot;env=judger_test&quot;, &quot;test=judger&quot;],</span><br><span class="line">                  &quot;log_path&quot;: &quot;judger_test.log&quot;,</span><br><span class="line">                  &quot;seccomp_rule_name&quot;: None,</span><br><span class="line">                  &quot;uid&quot;: 0,</span><br><span class="line">                  &quot;gid&quot;: 0&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="文件路径"><a href="#文件路径" class="headerlink" title="文件路径"></a>文件路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def init_workspace(self, language):</span><br><span class="line">    base_workspace = &quot;/tmp&quot;</span><br><span class="line">    workspace = os.path.join(base_workspace, language)</span><br><span class="line">    shutil.rmtree(workspace, ignore_errors=True)</span><br><span class="line">    os.makedirs(workspace)</span><br><span class="line">    return workspace</span><br><span class="line"></span><br><span class="line">def tearDown(self):</span><br><span class="line">    shutil.rmtree(self.workspace, ignore_errors=True)</span><br><span class="line"></span><br><span class="line">def rand_str(self):</span><br><span class="line">    return &quot;&quot;.join([random.choice(&quot;123456789abcdef&quot;) for _ in range(12)])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>相当于12位密码，难以预测。</p>
+<h2 id="Lisp-js"><a href="#Lisp-js" class="headerlink" title="Lisp.js"></a>Lisp.js</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/" rel="prev" title="Memory-resident Malware">
+      <i class="fa fa-chevron-left"></i> Memory-resident Malware
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/ycb01/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LessEQualmore"><span class="nav-number">1.</span> <span class="nav-text">LessEQualmore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Not-just-usbpcap"><span class="nav-number">2.</span> <span class="nav-text">Not just usbpcap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BC%A0%E6%A0%87%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.1.</span> <span class="nav-text">鼠标协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.2.</span> <span class="nav-text">蓝牙协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc1"><span class="nav-number">3.</span> <span class="nav-text">Misc1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E5%8F%B0%E4%BB%93%E5%BA%93"><span class="nav-number">3.1.</span> <span class="nav-text">后台仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="nav-number">3.2.</span> <span class="nav-text">文件路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lisp-js"><span class="nav-number">4.</span> <span class="nav-text">Lisp.js</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

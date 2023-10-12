@@ -216,7 +216,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>首先，在github网页端的控制界面从master分出一个分支hexo；</p>
+        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>首先，在github网页端的控制界面从master分出一个分支hexo；</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#指定hexo分支clone到本地，并重命名为blog</span></span><br><span class="line">git <span class="built_in">clone</span> -b hexo git@github.com:MemoryOfSnow/MemoryOfSnow.github.io.git blog</span><br><span class="line"><span class="comment">#添加用户名配置</span></span><br><span class="line">git config --global user.email <span class="string">&quot;you@example.com&quot;</span></span><br><span class="line">git config --global user.name <span class="string">&quot;MemoryOfSnow&quot;</span></span><br><span class="line"><span class="comment"># 强行覆盖远程的hexo分支</span></span><br><span class="line">git push --set-upstream origin hexo --force</span><br><span class="line"><span class="comment">#本地切换分支</span></span><br><span class="line">git checkout -b hexo</span><br></pre></td></tr></table></figure>
 <p>hexo的_config.yml将分支设置为master，而整个文件夹设置为hexo分支，这样就可以实现多设备共同维护博客了。</p>
 <span id="more"></span>
@@ -324,7 +324,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">165</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

