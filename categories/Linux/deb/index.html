@@ -28,7 +28,7 @@
 <meta property="og:description" content="根据deb-bundle安装MySQL服务器类型：SMP Debian 4.9.189-3+deb9u2 (2019-11-11) x86_64 GNU&#x2F;Linux">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-03-17T06:19:49.000Z">
-<meta property="article:modified_time" content="2022-06-03T19:03:56.325Z">
+<meta property="article:modified_time" content="2022-06-03T19:03:58.000Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="sh脚本">
 <meta property="article:tag" content="mysql">
@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-04 03:03:56" itemprop="dateModified" datetime="2022-06-04T03:03:56+08:00">2022-06-04</time>
+                <time title="Modified: 2022-06-04 03:03:58" itemprop="dateModified" datetime="2022-06-04T03:03:58+08:00">2022-06-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,7 +216,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="根据deb-bundle安装MySQL"><a href="#根据deb-bundle安装MySQL" class="headerlink" title="根据deb-bundle安装MySQL"></a>根据deb-bundle安装MySQL</h2><p>服务器类型：SMP Debian 4.9.189-3+deb9u2 (2019-11-11) x86_64 GNU/Linux</p>
+        <h2 id="根据deb-bundle安装MySQL"><a href="#根据deb-bundle安装MySQL" class="headerlink" title="根据deb-bundle安装MySQL"></a>根据deb-bundle安装MySQL</h2><p>服务器类型：SMP Debian 4.9.189-3+deb9u2 (2019-11-11) x86_64 GNU/Linux</p>
 <span id="more"></span>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#下载对应的deb-bundle包</span></span><br><span class="line"> wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-server_8.0.19-1debian9_amd64.deb-bundle.tar</span><br><span class="line"><span class="comment">#解压</span></span><br><span class="line">tar zvf mysql-server_8.0.19-1debian9_amd64.deb-bundle.tar</span><br><span class="line"><span class="comment">#得到如下文件</span></span><br><span class="line">libmysqlclient-dev_8.0.19-1debian9_amd64.deb</span><br><span class="line">libmysqlclient21_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-client_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-common_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-client-core_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-client_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-server-core_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-server-debug_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-server_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-test-debug_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-community-test_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-server_8.0.19-1debian9_amd64.deb</span><br><span class="line">mysql-testsuite_8.0.19-1debian9_amd64.deb</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="根据实践，得到以下依赖关系"><a href="#根据实践，得到以下依赖关系" class="headerlink" title="根据实践，得到以下依赖关系"></a>根据实践，得到以下依赖关系</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"># 按照安装mysql过程中的命令执行先后排序</span></span><br><span class="line"> <span class="comment"># 排除错误</span></span><br><span class="line"> <span class="built_in">touch</span> /etc/mysql/my.cnf.fallback</span><br><span class="line"> <span class="comment"># 安装通用文件</span></span><br><span class="line"> dpkg -i mysql-common_8.0.19-1debian9_amd64.deb </span><br><span class="line"> <span class="comment">#安装依赖库</span></span><br><span class="line"> dpkg -i libmysqlclient21_8.0.19-1debian9_amd64.deb </span><br><span class="line"> dpkg -i libmysqlclient-dev_8.0.19-1debian9_amd64.deb </span><br><span class="line"> <span class="comment">#安装core</span></span><br><span class="line">dpkg -i mysql-community-server-core_8.0.19-1debian9_amd64.deb </span><br><span class="line"> </span><br><span class="line"> <span class="comment">#安装mysql-client</span></span><br><span class="line">dpkg -i mysql-community-client-core_8.0.19-1debian9_amd64.deb </span><br><span class="line">dpkg -i mysql-community-client_8.0.19-1debian9_amd64.deb</span><br><span class="line">dpkg -i mysql-client_8.0.19-1debian9_amd64.deb </span><br><span class="line"></span><br><span class="line"><span class="comment">#安装mysql-community-server</span></span><br><span class="line">dpkg -i mysql-community-server_8.0.19-1debian9_amd64.deb </span><br><span class="line"><span class="comment"># 安装mysql-server</span></span><br><span class="line">dpkg -i mysql-server_8.0.19-1debian9_amd64.deb </span><br><span class="line"><span class="comment"># 最后一步，增加依赖项安装</span></span><br><span class="line">apt --fix-broken install</span><br><span class="line"><span class="comment">#done!</span></span><br></pre></td></tr></table></figure>
@@ -252,8 +252,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/Tools/%E5%A2%9E%E5%8A%A0%E6%97%B6%E9%97%B4%E6%88%B3/" rel="prev" title="增加时间戳脚本">
-      <i class="fa fa-chevron-left"></i> 增加时间戳脚本
+    <a href="/categories/Tools/jupyter%E5%A2%9E%E5%8A%A0%E5%86%85%E6%A0%B8/" rel="prev" title="jupyter增加内核">
+      <i class="fa fa-chevron-left"></i> jupyter增加内核
     </a></div>
       <div class="post-nav-item">
     <a href="/categories/CTF/%E9%92%93%E9%B1%BC/" rel="next" title="NKUVPN钓鱼">

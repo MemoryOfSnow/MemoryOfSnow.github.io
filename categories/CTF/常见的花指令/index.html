@@ -28,7 +28,7 @@
 <meta property="og:description" content="去混淆工具使用使用下面这条命令快速去混淆。 Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk 1234567891011121314151617181920Import-Module .\Revoke-Obfuscation.psd1下列命令可以针对EID 4104脚本块日志执行分析检测：">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-07T06:19:49.000Z">
-<meta property="article:modified_time" content="2023-06-20T08:14:10.455Z">
+<meta property="article:modified_time" content="2023-06-20T08:14:12.000Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="逆向">
 <meta name="twitter:card" content="summary">
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-20 16:14:10" itemprop="dateModified" datetime="2023-06-20T16:14:10+08:00">2023-06-20</time>
+                <time title="Modified: 2023-06-20 16:14:12" itemprop="dateModified" datetime="2023-06-20T16:14:12+08:00">2023-06-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -215,7 +215,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="去混淆工具使用"><a href="#去混淆工具使用" class="headerlink" title="去混淆工具使用"></a>去混淆工具使用</h2><p>使用下面这条命令快速去混淆。</p>
+        <h2 id="去混淆工具使用"><a href="#去混淆工具使用" class="headerlink" title="去混淆工具使用"></a>去混淆工具使用</h2><p>使用下面这条命令快速去混淆。</p>
 <p>Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Import-Module .\Revoke-Obfuscation.psd1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">下列命令可以针对EID 4104脚本块日志执行分析检测：</span><br><span class="line"></span><br><span class="line">Get-RvoScriptBlock -Path &#x27;C:\Windows\System32\Winevt\Logs\Microsoft-Windows-PowerShell%4Operational.evtx&#x27; -Verbose</span><br><span class="line"></span><br><span class="line">Get-ChildItem .\Demo\demo.evtx | Get-RvoScriptBlock -Verbose</span><br><span class="line"></span><br><span class="line">Get-WinEvent -LogName Microsoft-Windows-PowerShell/Operational | Get-RvoScriptBlock -Verbose</span><br><span class="line">下列命令可以针对demo.evtx中的数据记录执行完整检测：</span><br><span class="line"></span><br><span class="line">$obfResults = Get-WinEvent -Path .\Demo\demo.evtx | Get-RvoScriptBlock | Measure-RvoObfuscation -OutputToDisk -Verbose</span><br><span class="line">下列命令可以对本地或远程托管的测试脚本执行检测：</span><br><span class="line"></span><br><span class="line">Measure-RvoObfuscation -Url &#x27;http://bit.ly/DBOdemo1&#x27; -Verbose -OutputToDisk</span><br><span class="line"></span><br><span class="line">Get-Content .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</span><br><span class="line"></span><br><span class="line">Get-ChildItem .\Demo\DBOdemo*.ps1 | Measure-RvoObfuscation -Verbose -OutputToDisk</span><br></pre></td></tr></table></figure>
 <p>1.伪装vc++5.0代码：<br>PUSH EBP<br>MOV EBP,ESP<br>PUSH -1<br>push 111111   -___<br>PUSH 111111   -/   在这段代码中类似这样的操作数可以乱填<br>MOV EAX,DWORD PTR FS:[0]<br>PUSH EAX<br>MOV DWORD PTR FS:[0],ESP<br>ADD ESP,-6C<br>PUSH EBX<br>PUSH ESI<br>PUSH EDI<br>nop<br>jmp 原入口地址</p>

