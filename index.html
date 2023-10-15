@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot20/">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Untitled%201/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
@@ -170,7 +170,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/categories/ML/Few-Shot20/" class="post-title-link" itemprop="url">使用节表分布信息的基于图像的恶意软件分类</a>
+            <a href="/categories/CTF/Untitled%201/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -179,10 +179,73 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-10-12 16:13:22 / Modified: 11:58:51" itemprop="dateCreated datePublished" datetime="2023-10-12T16:13:22+08:00">2023-10-12</time>
+              <time title="Created: 2023-10-15 15:22:08" itemprop="dateCreated datePublished" datetime="2023-10-15T15:22:08+08:00">2023-10-15</time>
             </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/MC01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/MC01/" class="post-title-link" itemprop="url">使用节表分布信息的基于图像的恶意软件分类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-10-12 16:13:22" itemprop="dateCreated datePublished" datetime="2023-10-12T16:13:22+08:00">2023-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-13 11:18:15" itemprop="dateModified" datetime="2023-10-13T11:18:15+08:00">2023-10-13</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -207,6 +270,7 @@
           <blockquote>
 <p>Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.</p>
 </blockquote>
+<p>本文不是小样本,第20篇论文。</p>
 <h2 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h2><p>虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。</p>
 <p>作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。</p>
 <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>已有的灰度图里，相同家族的样本具有相似的二级制内容和图片纹理。</p>
@@ -217,17 +281,19 @@
 <h2 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h2><h3 id="灰度图评价"><a href="#灰度图评价" class="headerlink" title="灰度图评价"></a>灰度图评价</h3><p>PE文件里由于文件对齐，会有大量的填充数据（0或其他值），而各个样本填充的位数不一致。</p>
 <p>如下图所示，灰度图里的界限和实际的界限对应得并不是很好。</p>
 <p>已有的灰度图里能够判断出一部分节表信息，但是会有很多错误 。</p>
-<p><img src="/categories/ML/Few-Shot20/1697080673588.png" alt="1697080673588"></p>
+<p><img src="/categories/ML/MC01/1697080673588.png" alt="1697080673588"></p>
 <h3 id="作者提出的-算法"><a href="#作者提出的-算法" class="headerlink" title="作者提出的 算法"></a>作者提出的 算法</h3><p>图片定宽256（16的倍数，hex视图），高度跟随文件大小变化。用于对节表分界的<strong>行厚度要发生变化</strong>，</p>
-<p><img src="/categories/ML/Few-Shot20/1697081574246.png" alt="1697081574246"></p>
-<p><img src="/categories/ML/Few-Shot20/1697081604215.png" alt="1697081604215"></p>
-<p><img src="/categories/ML/Few-Shot20/1697081631521.png" alt="1697081631521"></p>
+<p><img src="/categories/ML/MC01/1697081574246.png" alt="1697081574246"></p>
+<p><img src="/categories/ML/MC01/1697081604215.png" alt="1697081604215"></p>
+<p><img src="/categories/ML/MC01/1697081631521.png" alt="1697081631521"></p>
 <h3 id="最后分类模型的选取"><a href="#最后分类模型的选取" class="headerlink" title="最后分类模型的选取"></a>最后分类模型的选取</h3><p>25088的数据维度，维度诅咒以及数据稀疏。</p>
 <p>SVM适合处理高维数据，它的计算复杂度取决于它的支持向量数，而不是空间维度。</p>
 <p>SVM处理大规模数据效果也很好。</p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>VXV：<a target="_blank" rel="noopener" href="https://archive.org/download/vxheavens-2010-05-18">VX-Heaven</a> VirusShare</p>
 <p>BIG-2015微软恶意软件分类数据集</p>
-<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><p><img src="/categories/ML/Few-Shot20/1697083130560.png" alt="1697083130560"></p>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><h3 id="皮尔逊相关性系数"><a href="#皮尔逊相关性系数" class="headerlink" title="皮尔逊相关性系数"></a>皮尔逊相关性系数</h3><p>衡量两个向量的线性相关性。</p>
+<p><img src="/categories/ML/MC01/1697083130560.png" alt="1697083130560"></p>
+<p>采用平均PCC去衡量一个家族内的样本用某一种形式表示时的相似度。</p>
 
       
     </div>
@@ -874,85 +940,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Windows03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Windows03/" class="post-title-link" itemprop="url">Windows信息搜集</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-08-29 14:19:49" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-30 12:45:24" itemprop="dateModified" datetime="2023-08-30T12:45:24+08:00">2023-08-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文记录那些windows中的敏感目录和信息。</p>
-<p>最近访问的文件、关键文件目录、操作系统配置、进程列表和常见目录等系统信息 </p>
-<h2 id="利用目录"><a href="#利用目录" class="headerlink" title="利用目录"></a>利用目录</h2><p>开机启动项目</p>
-<p>%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</p>
-<p> <strong>%TEMP%/</strong></p>
-<p><strong>%RARTMPDIR%</strong> </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1024,7 +1011,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">167</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

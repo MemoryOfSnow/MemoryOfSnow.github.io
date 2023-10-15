@@ -156,6 +156,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Windows03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/Windows03/" class="post-title-link" itemprop="url">Windows信息搜集</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-29 14:19:49" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-30 12:45:24" itemprop="dateModified" datetime="2023-08-30T12:45:24+08:00">2023-08-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文记录那些windows中的敏感目录和信息。</p>
+<p>最近访问的文件、关键文件目录、操作系统配置、进程列表和常见目录等系统信息 </p>
+<h2 id="利用目录"><a href="#利用目录" class="headerlink" title="利用目录"></a>利用目录</h2><p>开机启动项目</p>
+<p>%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</p>
+<p> <strong>%TEMP%/</strong></p>
+<p><strong>%RARTMPDIR%</strong> </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/OfficeMacro01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1133,131 +1212,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Linkers&Loaders03/" class="post-title-link" itemprop="url">Chap6-可执行文件的装载和进程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-08-03 14:58:58" itemprop="dateCreated datePublished" datetime="2023-08-03T14:58:58+08:00">2023-08-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-18 21:58:38" itemprop="dateModified" datetime="2023-08-18T21:58:38+08:00">2023-08-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>假设程序都是静态链接的，先从整体上把握程序的装载过程，下一章将把程序拆成模块来观察。</p>
-</blockquote>
-<p>Linux下的分段故障<code>Segmentation fault</code>与Windows的“进程因非法操作需要关闭，很多时候是因为进程访问了未经允许的地址。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**Linux操作系统</span></span><br><span class="line"><span class="comment"> * |----------------------------------|</span></span><br><span class="line"><span class="comment"> * |              操作系统空间         | 1G</span></span><br><span class="line"><span class="comment"> * |----------------------------------| 0xC0000000</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  | </span></span><br><span class="line"><span class="comment"> * |             用户进程空间          |   3G</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |__________________________________| 0x00000000</span></span><br><span class="line"><span class="comment"> * WinXP默认操作系统占据2G内存，可以调整使其只占1G内存。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="PAE"><a href="#PAE" class="headerlink" title="PAE"></a>PAE</h3><p>(Physical Address Extension)，是针对32位CPU内存不足的一种修补。类似的，针对16位CPU，借助段偏移寻址能够达到1MB，每次读块只能读64KB，使用XMS(一种中断处理技术)读取大于1MB内存的地方。</p>
-<p>OS采用36位地址线\内存地址时，程序使用的最大虚拟地址空间仍旧不会超过4GB，但是它程序的虚拟地址空间可以映射到的物理内存的范围扩大到64GB。</p>
-<p>通过这种页或块映射在Win下访存的操作方式叫地址窗口映射扩展AWE(Address Windowing Extension)；在Linu下通过mmap()系统调用来实现。</p>
-<h3 id="装载的方式"><a href="#装载的方式" class="headerlink" title="装载的方式"></a>装载的方式</h3><ul>
-<li>overlay覆盖装入，适合内存受限场景比如木马或者嵌入式设备；</li>
-</ul>
-<p>保证调用路径上的块都在内存；禁止跨树间调用。</p>
-<p>编写程序时将程序分块，写一小段辅助代码，管理模块在内存的驻留和更替。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                 Overlay Manager (几十Bytes)        |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                  Main (1024 bytes)                 | </span></span><br><span class="line"><span class="comment"> * |											    |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |      A 模块 (512 bytes)    |   B 模块 (256 bytes)   |</span></span><br><span class="line"><span class="comment"> * |						 |----------------------- |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-<p>如上图所示，A和B模块互不依赖，都被Main模块调用时，则可以采用Overlay的方式，使得需要的内存空间节省256Bytes。</p>
-<ul>
-<li>Paging页映射 和页替换算法  MMU的地址映射</li>
-</ul>
-<h2 id="从操作系统可执行文件的装载"><a href="#从操作系统可执行文件的装载" class="headerlink" title="从操作系统可执行文件的装载"></a>从操作系统可执行文件的装载</h2><h3 id="进程的建立"><a href="#进程的建立" class="headerlink" title="进程的建立"></a>进程的建立</h3><ul>
-<li>1.创建虚拟地址空间（只创建映射函数需要的数据结构，并不实际创建空间）<ul>
-<li>Linux i386中是分配一个页目录，不设置页映射关系，在后面程序发生页错误的时候才设置）</li>
-</ul>
-</li>
-<li>2.读取可执行文件头，建立虚拟空间与可执行文件的映射关系。（装载）</li>
-</ul>
-<p>(Linux中)</p>
-<ul>
-<li><p>3.令EIP=EOP of Executable File</p>
-<p>​    内核堆栈和用户堆栈的切换、CPU运行权限切换</p>
-</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">页面可执行文件的偏移&lt;----（装载）----&gt;虚拟存储空间&lt;-----------&gt;物理内存</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-<p>Linux将进程虚拟空间中的一个段叫VMA(Virtual Mempry Area)，包括</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start address;size;Attributes(RWE);State;Type;</span><br></pre></td></tr></table></figure>
-<p>对于相同权限状态的节Section，把它们<strong>合并到一起</strong>作为一个段Segment映射。这样在进程虚拟空间中只有一个VMA而不是多个，可以减少页面内部碎片，节省内存空间。</p>
-<h3 id="页错误"><a href="#页错误" class="headerlink" title="页错误"></a>页错误</h3><p>程序执行时进程虚拟空间中发生Page Fault，控制权从进程转移到OS；</p>
-<p>根据数据结构找到VMA，计算页面在磁盘文件中的偏移，</p>
-<p>然后物理内存分配物理页，读取该磁盘块到物理页中，</p>
-<p>将发生页错误的虚拟页与物理页之间建立映射关系。</p>
-<p>控制权归还给进程，从发生页错误的位置继续执行。</p>
-<h2 id="ELF文件"><a href="#ELF文件" class="headerlink" title="ELF文件"></a>ELF文件</h2><p>从链接角度(Linking View)看，elf文件按照节section存储，描述它的结构叫做节表Section Headers；</p>
-<p>从装载角度或者执行视图(Execution View)看，elf文件可以按照段segment划分，描述它的结构叫做程序头Program Header；</p>
-<p>elf可执行文件和共享库文件处于装载的需要，比目标文件多一个程序头表(Program Header Table)。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 程序头表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    Elf32_Word p_type;      <span class="comment">// 段的类型，如LOAD:1.DYNAMIC,INTERP</span></span><br><span class="line">    Elf32_Addr p_offset;    <span class="comment">// 段在文件中的偏移量</span></span><br><span class="line">    Elf32_Addr p_vaddr;     <span class="comment">// 段在内存中的虚拟地址</span></span><br><span class="line">    Elf32_Addr p_paddr;     <span class="comment">// 段在物理内存中的地址（对于嵌入式系统可能有用）</span></span><br><span class="line">    Elf32_Word p_filesz;    <span class="comment">// 段在文件中的大小，可能是0</span></span><br><span class="line">    Elf32_Word p_memsz;     <span class="comment">// 段在进程虚拟地址空间中占用的大小，可能是0</span></span><br><span class="line">    Elf32_Word p_flags;     <span class="comment">// 段的属性标志，如可读、可写、可执行等</span></span><br><span class="line">    Elf32_Word p_align;     <span class="comment">// 字节按照2^p_align次方对齐</span></span><br><span class="line">&#125; Elf32_Phdr;</span><br></pre></td></tr></table></figure>
-<p>对于LOAD类型的Segment，p_memsz一定&gt;=p_filesz（bss被合并在数据类型的段里，存放那些未被初始化的数据）。</p>
-<h2 id="PE文件的装载"><a href="#PE文件的装载" class="headerlink" title="PE文件的装载"></a>PE文件的装载</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>PE文件可以装载到任何内存位置。PE文件中选用RVA，因为RVA可以始终保持一致。</p>
-<p>1.读取文件第一个页，获取到DOS头、PE头、段表。</p>
-<p>2.选择装载地址。检查进程空间地址里，目标地址是否可用。若不可用，则另外选择装载地址。</p>
-<p>3.段映射。使用段表将PE文件中的段，映射到进程内存空间地址。—&gt;若装载地址≠目标地址，Rebasing。</p>
-<p>4.装载所需要的dll文件—&gt;解析PE文件中的导入符号——&gt;</p>
-<p>5.建立初始化栈和堆—&gt;建立主线程并启动进程</p>
-<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">coffHeader&#123;</span><br><span class="line">    optionalHeader&#123;</span><br><span class="line">        ...</span><br><span class="line">        u32 addressofEntryPoint;<span class="comment">//装载后PE文件第一个指令的RVA,病毒感染PE文件后要修改入口点，篡改执行流程。</span></span><br><span class="line">        u32 SectionAlignment;<span class="comment">//内存中段对齐粒度，默认是4K=4096字节</span></span><br><span class="line">        u32 FileAlignMent;<span class="comment">//文件中段对齐粒度，默认是512字节</span></span><br><span class="line">        u32 baseofCode;</span><br><span class="line">        u32 baseofData;<span class="comment">//数据段起始RVA</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="6-4-进程虚存空间分布"><a href="#6-4-进程虚存空间分布" class="headerlink" title="6.4 进程虚存空间分布"></a>6.4 进程虚存空间分布</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1329,7 +1283,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">167</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

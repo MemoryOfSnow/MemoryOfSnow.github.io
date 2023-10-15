@@ -156,6 +156,233 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/xsb2023Py/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/xsb2023Py/" class="post-title-link" itemprop="url">XSB2023 Py</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-06 14:19:49" itemprop="dateCreated datePublished" datetime="2023-08-06T14:19:49+08:00">2023-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-15 18:19:46" itemprop="dateModified" datetime="2023-10-15T18:19:46+08:00">2023-10-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Hello-Py"><a href="#Hello-Py" class="headerlink" title="Hello Py"></a>Hello Py</h2><p>字符串搜索特征字符串，</p>
+<p>比如flag、right、wrong、!，然后找到了如下的代码、</p>
+<p><img src="/categories/CTF/xsb2023Py/1697355018934.png" alt="1697355018934"></p>
+<p>p1的值决定了flag是否正确。</p>
+<p>确定关键虚拟函数。</p>
+<p><img src="/categories/CTF/xsb2023Py/1697354656767.png" alt="1697354656767"></p>
+<p>关键逻辑check在Python代码；</p>
+<p>Lcom/chaquo/python/PyObject;看了一圈什么内容都没有，py文件应该在其他文件里；</p>
+<p>使用jax反编译，然后在AndroidPlatform.java文件里，发现有释放文件和删除文件操作。</p>
+<p><img src="/categories/CTF/xsb2023Py/1697358679328.png" alt="1697358679328"></p>
+<p>修改smali代码，让它不要删文件。</p>
+<p><img src="/categories/CTF/xsb2023Py/1697360565261.png" alt="1697360565261"></p>
+<p>发现编译失败，我的环境不行；</p>
+<p>没办法，去资源目录里，突然看到app.yml居然没有被删除，可以直接读取，把它修改为zip后缀，然后解压得到hello.py文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> struct <span class="comment">#line:3</span></span><br><span class="line"><span class="keyword">import</span> ctypes <span class="comment">#line:4</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">MX</span> (arg1 ,arg2 ,arg3 ,arg4 ,arg5 ,arg6 ):<span class="comment">#line:7</span></span><br><span class="line">    temp =(arg1 .value &gt;&gt;<span class="number">5</span> ^arg2 .value &lt;&lt;<span class="number">2</span> )+(arg2 .value &gt;&gt;<span class="number">3</span> ^arg1 .value &lt;&lt;<span class="number">4</span> )<span class="comment">#line:8</span></span><br><span class="line">    OOO0OOOOOO0O0OO00 =(arg3 .value ^arg2 .value )+(arg4 [(arg5 &amp;<span class="number">3</span> )^arg6 .value ]^arg1 .value )<span class="comment">#line:9</span></span><br><span class="line">    <span class="keyword">return</span> ctypes .c_uint32 (temp ^OOO0OOOOOO0O0OO00 )<span class="comment">#line:11</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encrypt</span> (arg1 ,arg2 ,arg3 ):<span class="comment">#line:14</span></span><br><span class="line">    delta =<span class="number">0x9e3779b9</span> <span class="comment">#line:15</span></span><br><span class="line">    rounds =<span class="number">6</span> +<span class="number">52</span> //arg1 <span class="comment">#line:16</span></span><br><span class="line">    O00OO00000O0OO00O =ctypes .c_uint32 (<span class="number">0</span> )<span class="comment">#line:18</span></span><br><span class="line">    OO0OOOO0O0O0O0OO0 =ctypes .c_uint32 (arg2 [arg1 -<span class="number">1</span> ])<span class="comment">#line:19</span></span><br><span class="line">    OOOOO00000OOOOOOO =ctypes .c_uint32 (<span class="number">0</span> )<span class="comment">#line:20</span></span><br><span class="line">    <span class="keyword">while</span> rounds &gt;<span class="number">0</span> :<span class="comment">#line:22</span></span><br><span class="line">        O00OO00000O0OO00O .value +=delta <span class="comment">#line:23</span></span><br><span class="line">        OOOOO00000OOOOOOO .value =(O00OO00000O0OO00O .value &gt;&gt;<span class="number">2</span> )&amp;<span class="number">3</span> <span class="comment">#line:24</span></span><br><span class="line">        <span class="keyword">for</span> OO0O0OOO000O0000O <span class="keyword">in</span> <span class="built_in">range</span> (arg1 -<span class="number">1</span> ):<span class="comment">#line:25</span></span><br><span class="line">            OOO0OO00O0OO0O000 =ctypes .c_uint32 (arg2 [OO0O0OOO000O0000O +<span class="number">1</span> ])<span class="comment">#line:26</span></span><br><span class="line">            arg2 [OO0O0OOO000O0000O ]=ctypes .c_uint32 (arg2 [OO0O0OOO000O0000O ]+MX (OO0OOOO0O0O0O0OO0 ,OOO0OO00O0OO0O000 ,O00OO00000O0OO00O ,arg3 ,OO0O0OOO000O0000O ,OOOOO00000OOOOOOO ).value ).value <span class="comment">#line:27</span></span><br><span class="line">            OO0OOOO0O0O0O0OO0 .value =arg2 [OO0O0OOO000O0000O ]<span class="comment">#line:28</span></span><br><span class="line">        OOO0OO00O0OO0O000 =ctypes .c_uint32 (arg2 [<span class="number">0</span> ])<span class="comment">#line:29</span></span><br><span class="line">        arg2 [arg1 -<span class="number">1</span> ]=ctypes .c_uint32 (arg2 [arg1 -<span class="number">1</span> ]+MX (OO0OOOO0O0O0O0OO0 ,OOO0OO00O0OO0O000 ,O00OO00000O0OO00O ,arg3 ,arg1 -<span class="number">1</span> ,OOOOO00000OOOOOOO ).value ).value <span class="comment">#line:30</span></span><br><span class="line">        OO0OOOO0O0O0O0OO0 .value =arg2 [arg1 -<span class="number">1</span> ]<span class="comment">#line:31</span></span><br><span class="line">        rounds -=<span class="number">1</span> <span class="comment">#line:32</span></span><br><span class="line">    <span class="keyword">return</span> arg2 <span class="comment">#line:34</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check</span> (O0000000000O0O0O0 ):<span class="comment">#line:63</span></span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;checking~~~: &quot;</span>+O0000000000O0O0O0 )<span class="comment">#line:64</span></span><br><span class="line">    O0000000000O0O0O0 =<span class="built_in">str</span> (O0000000000O0O0O0 )<span class="comment">#line:65</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span> (O0000000000O0O0O0 )!=<span class="number">36</span> :<span class="comment">#line:66</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span><span class="comment">#line:67</span></span><br><span class="line">    O00OO00000OO0OOOO =[]<span class="comment">#line:69</span></span><br><span class="line">    <span class="keyword">for</span> O0O0OOOOO0OOO0OOO <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">0</span> ,<span class="number">36</span> ,<span class="number">4</span> ):<span class="comment">#line:70</span></span><br><span class="line">        OO0OO0OOO000OO0O0 =O0000000000O0O0O0 [O0O0OOOOO0OOO0OOO :O0O0OOOOO0OOO0OOO +<span class="number">4</span> ].encode (<span class="string">&#x27;latin-1&#x27;</span>)<span class="comment">#line:71</span></span><br><span class="line">        O00OO00000OO0OOOO .append (OO0OO0OOO000OO0O0 )<span class="comment">#line:72</span></span><br><span class="line">    _O00OO0OOOOO00O00O =[]<span class="comment">#line:73</span></span><br><span class="line">    <span class="keyword">for</span> O0O0OOOOO0OOO0OOO <span class="keyword">in</span> O00OO00000OO0OOOO :<span class="comment">#line:74</span></span><br><span class="line">        _O00OO0OOOOO00O00O .append (struct .unpack (<span class="string">&quot;&lt;I&quot;</span>,O0O0OOOOO0OOO0OOO )[<span class="number">0</span> ])<span class="comment">#line:75</span></span><br><span class="line">    <span class="built_in">print</span> (_O00OO0OOOOO00O00O )<span class="comment">#line:77</span></span><br><span class="line">    OO0OO0OOO000OO0O0 =encrypt (<span class="number">9</span> ,_O00OO0OOOOO00O00O ,[<span class="number">12345678</span> ,<span class="number">12398712</span> ,<span class="number">91283904</span> ,<span class="number">12378192</span> ])<span class="comment">#line:78  n=9</span></span><br><span class="line">    OOOOO0OOO0OO00000 =[<span class="number">689085350</span> ,<span class="number">626885696</span> ,<span class="number">1894439255</span> ,<span class="number">1204672445</span> ,<span class="number">1869189675</span> ,<span class="number">475967424</span> ,<span class="number">1932042439</span> ,<span class="number">1280104741</span> ,<span class="number">2808893494</span> ]<span class="comment">#line:85</span></span><br><span class="line">    <span class="keyword">for</span> O0O0OOOOO0OOO0OOO <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">9</span> ):<span class="comment">#line:86</span></span><br><span class="line">        <span class="keyword">if</span> OOOOO0OOO0OO00000 [O0O0OOOOO0OOO0OOO ]!=OO0OO0OOO000OO0O0 [O0O0OOOOO0OOO0OOO ]:<span class="comment">#line:87</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span><span class="comment">#line:88</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span><span class="comment">#line:90</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sayHello</span> ():<span class="comment">#line:92</span></span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;hello from py&quot;</span>)<span class="comment">#line:93</span></span><br></pre></td></tr></table></figure>
+<p>一开始想手写解密脚本，不知道为什么总是出错，解密出的值都是不可见字符，放弃。去csdn上找了一个公开的脚本：</p>
+<p>链接如下：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/A951860555/article/details/120120400">https://blog.csdn.net/A951860555/article/details/120120400</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">     </span><br><span class="line"> </span><br><span class="line">from ctypes import c_uint32, c_int32</span><br><span class="line"> </span><br><span class="line">def MX(z, y, total, key, p, e):</span><br><span class="line">    temp1 = (z.value&gt;&gt;5 ^ y.value&lt;&lt;2) + (y.value&gt;&gt;3 ^ z.value&lt;&lt;4)</span><br><span class="line">    temp2 = (total.value ^ y.value) + (key[(p&amp;3) ^ e.value] ^ z.value)</span><br><span class="line">    </span><br><span class="line">    return c_uint32(temp1 ^ temp2)</span><br><span class="line"> </span><br><span class="line">def decrypt(n, v, key):</span><br><span class="line">    delta = 0x9e3779b9</span><br><span class="line">    rounds = 6 + 52//n </span><br><span class="line">    </span><br><span class="line">    total = c_uint32(rounds * delta)</span><br><span class="line">    y = c_uint32(v[0])</span><br><span class="line">    e = c_uint32(0)</span><br><span class="line"></span><br><span class="line">    while rounds &gt; 0:</span><br><span class="line">        e.value = (total.value &gt;&gt; 2) &amp; 3</span><br><span class="line">        for p in range(n-1, 0, -1):</span><br><span class="line">            z = c_uint32(v[p-1])</span><br><span class="line">            v[p] = c_uint32((v[p] - MX(z,y,total,key,p,e).value)).value</span><br><span class="line">            y.value = v[p]</span><br><span class="line">        z = c_uint32(v[n-1])  </span><br><span class="line">        v[0] = c_uint32(v[0] - MX(z,y,total,key,0,e).value).value</span><br><span class="line">        y.value = v[0]  </span><br><span class="line">        total.value -= delta</span><br><span class="line">        rounds -= 1</span><br><span class="line"></span><br><span class="line">    return v </span><br><span class="line">    n=9</span><br><span class="line">v=[689085350 ,626885696 ,1894439255 ,1204672445 ,1869189675 ,475967424 ,1932042439 ,1280104741 ,2808893494 ]</span><br><span class="line">k=[12345678 ,12398712 ,91283904 ,12378192 ]</span><br><span class="line">result= decrypt(n,v,k)</span><br><span class="line">print([hex(x) for x in result])</span><br><span class="line">b_result=b&#x27;&#x27;.join(struct.pack(&#x27;&lt;I&#x27;,x) for x in result)</span><br><span class="line">s_result=b_result#.decode(&#x27;latin-1&#x27;)</span><br><span class="line">print(&#x27;flag&#123;&#x27;+str(s_result)+&#x27;&#125;&#x27;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>得到最终flag,b’c1f8ace6-4b46-4931-b25b-a1010a89c592’</p>
+<h2 id="URL从哪儿来"><a href="#URL从哪儿来" class="headerlink" title="URL从哪儿来"></a>URL从哪儿来</h2><p><img src="/categories/CTF/xsb2023Py/1697355949764.png" alt="1697355949764"></p>
+<p>不想在自己电脑上运行，丢沙箱里，结果沙箱不给文件。没办法，自己下Api断点，获取文件。</p>
+<p><img src="/categories/CTF/xsb2023Py/1697356824626.png" alt="1697356824626"></p>
+<p>获取到文件后，strings发现有base64特征，动态加载后观察，发现关键判断函数。</p>
+<p><img src="/categories/CTF/xsb2023Py/1697357644874.png" alt="1697357644874"></p>
+<p>001DF654  |006D7838  ASCII “ZmxhZ3s2NDY5NjE2ZS02MzY5LTYyNmYtNzE2OS03NDYxNzA2MTc3NjF9”</p>
+<p>尝试b64解码，</p>
+<p>flag{6469616e-6369-626f-7169-746170617761}</p>
+<p>发现里面有flag，提交成功。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders03/" class="post-title-link" itemprop="url">Chap6-可执行文件的装载和进程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-03 14:58:58" itemprop="dateCreated datePublished" datetime="2023-08-03T14:58:58+08:00">2023-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-18 21:58:38" itemprop="dateModified" datetime="2023-08-18T21:58:38+08:00">2023-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>假设程序都是静态链接的，先从整体上把握程序的装载过程，下一章将把程序拆成模块来观察。</p>
+</blockquote>
+<p>Linux下的分段故障<code>Segmentation fault</code>与Windows的“进程因非法操作需要关闭，很多时候是因为进程访问了未经允许的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**Linux操作系统</span></span><br><span class="line"><span class="comment"> * |----------------------------------|</span></span><br><span class="line"><span class="comment"> * |              操作系统空间         | 1G</span></span><br><span class="line"><span class="comment"> * |----------------------------------| 0xC0000000</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  | </span></span><br><span class="line"><span class="comment"> * |             用户进程空间          |   3G</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |__________________________________| 0x00000000</span></span><br><span class="line"><span class="comment"> * WinXP默认操作系统占据2G内存，可以调整使其只占1G内存。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="PAE"><a href="#PAE" class="headerlink" title="PAE"></a>PAE</h3><p>(Physical Address Extension)，是针对32位CPU内存不足的一种修补。类似的，针对16位CPU，借助段偏移寻址能够达到1MB，每次读块只能读64KB，使用XMS(一种中断处理技术)读取大于1MB内存的地方。</p>
+<p>OS采用36位地址线\内存地址时，程序使用的最大虚拟地址空间仍旧不会超过4GB，但是它程序的虚拟地址空间可以映射到的物理内存的范围扩大到64GB。</p>
+<p>通过这种页或块映射在Win下访存的操作方式叫地址窗口映射扩展AWE(Address Windowing Extension)；在Linu下通过mmap()系统调用来实现。</p>
+<h3 id="装载的方式"><a href="#装载的方式" class="headerlink" title="装载的方式"></a>装载的方式</h3><ul>
+<li>overlay覆盖装入，适合内存受限场景比如木马或者嵌入式设备；</li>
+</ul>
+<p>保证调用路径上的块都在内存；禁止跨树间调用。</p>
+<p>编写程序时将程序分块，写一小段辅助代码，管理模块在内存的驻留和更替。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                 Overlay Manager (几十Bytes)        |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                  Main (1024 bytes)                 | </span></span><br><span class="line"><span class="comment"> * |											    |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |      A 模块 (512 bytes)    |   B 模块 (256 bytes)   |</span></span><br><span class="line"><span class="comment"> * |						 |----------------------- |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>如上图所示，A和B模块互不依赖，都被Main模块调用时，则可以采用Overlay的方式，使得需要的内存空间节省256Bytes。</p>
+<ul>
+<li>Paging页映射 和页替换算法  MMU的地址映射</li>
+</ul>
+<h2 id="从操作系统可执行文件的装载"><a href="#从操作系统可执行文件的装载" class="headerlink" title="从操作系统可执行文件的装载"></a>从操作系统可执行文件的装载</h2><h3 id="进程的建立"><a href="#进程的建立" class="headerlink" title="进程的建立"></a>进程的建立</h3><ul>
+<li>1.创建虚拟地址空间（只创建映射函数需要的数据结构，并不实际创建空间）<ul>
+<li>Linux i386中是分配一个页目录，不设置页映射关系，在后面程序发生页错误的时候才设置）</li>
+</ul>
+</li>
+<li>2.读取可执行文件头，建立虚拟空间与可执行文件的映射关系。（装载）</li>
+</ul>
+<p>(Linux中)</p>
+<ul>
+<li><p>3.令EIP=EOP of Executable File</p>
+<p>​    内核堆栈和用户堆栈的切换、CPU运行权限切换</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">页面可执行文件的偏移&lt;----（装载）----&gt;虚拟存储空间&lt;-----------&gt;物理内存</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>Linux将进程虚拟空间中的一个段叫VMA(Virtual Mempry Area)，包括</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start address;size;Attributes(RWE);State;Type;</span><br></pre></td></tr></table></figure>
+<p>对于相同权限状态的节Section，把它们<strong>合并到一起</strong>作为一个段Segment映射。这样在进程虚拟空间中只有一个VMA而不是多个，可以减少页面内部碎片，节省内存空间。</p>
+<h3 id="页错误"><a href="#页错误" class="headerlink" title="页错误"></a>页错误</h3><p>程序执行时进程虚拟空间中发生Page Fault，控制权从进程转移到OS；</p>
+<p>根据数据结构找到VMA，计算页面在磁盘文件中的偏移，</p>
+<p>然后物理内存分配物理页，读取该磁盘块到物理页中，</p>
+<p>将发生页错误的虚拟页与物理页之间建立映射关系。</p>
+<p>控制权归还给进程，从发生页错误的位置继续执行。</p>
+<h2 id="ELF文件"><a href="#ELF文件" class="headerlink" title="ELF文件"></a>ELF文件</h2><p>从链接角度(Linking View)看，elf文件按照节section存储，描述它的结构叫做节表Section Headers；</p>
+<p>从装载角度或者执行视图(Execution View)看，elf文件可以按照段segment划分，描述它的结构叫做程序头Program Header；</p>
+<p>elf可执行文件和共享库文件处于装载的需要，比目标文件多一个程序头表(Program Header Table)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 程序头表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    Elf32_Word p_type;      <span class="comment">// 段的类型，如LOAD:1.DYNAMIC,INTERP</span></span><br><span class="line">    Elf32_Addr p_offset;    <span class="comment">// 段在文件中的偏移量</span></span><br><span class="line">    Elf32_Addr p_vaddr;     <span class="comment">// 段在内存中的虚拟地址</span></span><br><span class="line">    Elf32_Addr p_paddr;     <span class="comment">// 段在物理内存中的地址（对于嵌入式系统可能有用）</span></span><br><span class="line">    Elf32_Word p_filesz;    <span class="comment">// 段在文件中的大小，可能是0</span></span><br><span class="line">    Elf32_Word p_memsz;     <span class="comment">// 段在进程虚拟地址空间中占用的大小，可能是0</span></span><br><span class="line">    Elf32_Word p_flags;     <span class="comment">// 段的属性标志，如可读、可写、可执行等</span></span><br><span class="line">    Elf32_Word p_align;     <span class="comment">// 字节按照2^p_align次方对齐</span></span><br><span class="line">&#125; Elf32_Phdr;</span><br></pre></td></tr></table></figure>
+<p>对于LOAD类型的Segment，p_memsz一定&gt;=p_filesz（bss被合并在数据类型的段里，存放那些未被初始化的数据）。</p>
+<h2 id="PE文件的装载"><a href="#PE文件的装载" class="headerlink" title="PE文件的装载"></a>PE文件的装载</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>PE文件可以装载到任何内存位置。PE文件中选用RVA，因为RVA可以始终保持一致。</p>
+<p>1.读取文件第一个页，获取到DOS头、PE头、段表。</p>
+<p>2.选择装载地址。检查进程空间地址里，目标地址是否可用。若不可用，则另外选择装载地址。</p>
+<p>3.段映射。使用段表将PE文件中的段，映射到进程内存空间地址。—&gt;若装载地址≠目标地址，Rebasing。</p>
+<p>4.装载所需要的dll文件—&gt;解析PE文件中的导入符号——&gt;</p>
+<p>5.建立初始化栈和堆—&gt;建立主线程并启动进程</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">coffHeader&#123;</span><br><span class="line">    optionalHeader&#123;</span><br><span class="line">        ...</span><br><span class="line">        u32 addressofEntryPoint;<span class="comment">//装载后PE文件第一个指令的RVA,病毒感染PE文件后要修改入口点，篡改执行流程。</span></span><br><span class="line">        u32 SectionAlignment;<span class="comment">//内存中段对齐粒度，默认是4K=4096字节</span></span><br><span class="line">        u32 FileAlignMent;<span class="comment">//文件中段对齐粒度，默认是512字节</span></span><br><span class="line">        u32 baseofCode;</span><br><span class="line">        u32 baseofData;<span class="comment">//数据段起始RVA</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-4-进程虚存空间分布"><a href="#6-4-进程虚存空间分布" class="headerlink" title="6.4 进程虚存空间分布"></a>6.4 进程虚存空间分布</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1015,228 +1242,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Pediy01/" class="post-title-link" itemprop="url">微信多实例运行</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-07-10 14:19:49" itemprop="dateCreated datePublished" datetime="2023-07-10T14:19:49+08:00">2023-07-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-02 16:31:10" itemprop="dateModified" datetime="2023-08-02T16:31:10+08:00">2023-08-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> ADVAPI.dll  提供高级系统功能,Advanced，如 注册表、安全性、事件日志、服务管理等 ；</p>
-<p>查看API对应的源代码路径：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um</span><br></pre></td></tr></table></figure>
-<h2 id="只运行一个实例"><a href="#只运行一个实例" class="headerlink" title="只运行一个实例"></a>只运行一个实例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CreateMutexA</span><br><span class="line">FindWindowA</span><br><span class="line">使用共享Section</span><br></pre></td></tr></table></figure>
-<p>5.1节的Serial.exe只能运行一个实例。</p>
-<p><img src="/categories/Notes/Pediy01/1688962133346.png" alt="1688962133346"></p>
-<p><img src="/categories/Notes/Pediy01/1688963259744.png" alt="1688963259744"></p>
-<p>修改FindWindow后面的判断逻辑即可。一开始改为了75(jnz)</p>
-<p>此时可以运行多个，但是运行前需要找到已存在的一个窗口才能继续创建，再次修改程序，把jz改成jmp。</p>
-<h2 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h2><p>先根据break定位关闭微信的函数<code>CloseWechat</code>，进而找到关键函数sub_405FD0，它控制着返回结果。</p>
-<p><img src="/categories/Notes/Pediy01/1688970540191.png" alt="1688970540191"></p>
-<p>关键函数<code>int __stdcall sub_405FD0(DWORD a1, int a2, int a3, int a4)</code></p>
-<p>跟进去后，可以看到一开始检查注册表语言配置和更新配置。</p>
-<p><img src="/categories/Notes/Pediy01/1688968867614.png" alt="1688968867614"></p>
-<p>微信整体打开，靠WechatWin.dl里的函数。</p>
-<p><img src="/categories/Notes/Pediy01/1688969199372.png" alt="1688969199372"></p>
-<p>打开WechatWin.dll，发现其导入表里存在实例判断函数。</p>
-<p><img src="/categories/Notes/Pediy01/1688969733507.png" alt="1688969733507"></p>
-<p><img src="/categories/Notes/Pediy01/1688969749959.png" alt="1688969749959"></p>
-<p>双击进入后，等待库加载完成，需要几分钟，之后x查看两个函数的上下文：</p>
-<p>注意这里一定要多等一会，不然调用<code>CreateMutex</code>的地址可能检索不全。</p>
-<p><img src="/categories/Notes/Pediy01/1688970084672.png" alt="1688970084672"></p>
-<p>调用<code>FindWindowW</code>函数的上下文十分明显：</p>
-<p><img src="/categories/Notes/Pediy01/1688971265497.png" alt="1688971265497"></p>
-<p>对于上图尾行的这个大跳，是一个经典的判断Mutex是否存在的代码段。</p>
-<blockquote>
-<p>Mutex存在，则GetLastError返回 <code>ERROR_ALREADY_EXISTS</code>.，不存在时，返回0.</p>
-</blockquote>
-<p><img src="/categories/Notes/Pediy01/1688971805972.png" alt="1688971805972"></p>
-<p>把jnz StartNewInstance改变成为jmp。</p>
-<p>爆破成功。</p>
-<p><img src="/categories/Notes/Pediy01/1688972258464.png" alt="1688972258464"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">QQ Elevation复现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-07-03 14:19:49 / Modified: 14:52:20" itemprop="dateCreated datePublished" datetime="2023-07-03T14:19:49+08:00">2023-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>利用QQProtect.exe提权，获得NT Authority\SYSTEM权限。</p>
-</blockquote>
-<h2 id="漏洞成因："><a href="#漏洞成因：" class="headerlink" title="漏洞成因："></a>漏洞成因：</h2><p>QQProtect.exe没有使用ASLR保护，篡改函数指针，利用ROP链（Ret Oriented Programming，即修改函数返回指针)实现了任意代码执行。</p>
-<p>1.QQProtect.exe+0x40c9f8处，有<code>任意地址写漏洞</code>。</p>
-<p>待添加自己的截图，网络截图可见：</p>
-<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image0.png" alt="image0"></p>
-<p>可以在任意地址写入DWORD(1)。</p>
-<p>2.QQProtectEngine.dll+0x3B4F6处，</p>
-<p>待添加自己的截图，网络截图可见：</p>
-<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image1.png" alt="image1"></p>
-<p>可以完成对任意地址的指针ptr，偏移2个ptr指针类型大小的位置处，赋值为(unsigned int )(ptr+3)。</p>
-<p>Affected Products:</p>
-<ul>
-<li>QQ 9.7.1.28940 ~ 9.7.8.29039</li>
-<li>TIM 3.4.5.22071 ~ 3.4.7.22084</li>
-</ul>
-<p>Affected Components:</p>
-<ul>
-<li>QQProtect.exe 4.5.0.9424 (in TIM 3.4.5.22071)</li>
-<li>QQProtect.exe 4.5.0.9426 (in QQ 9.7.1.28940)</li>
-<li>QQProtectEngine.dll 4.5.0.9424 (in TIM 3.4.5.22071)</li>
-<li>QQProtectEngine.dll 4.5.0.9426 (in QQ 9.7.1.28940)</li>
-</ul>
-<h2 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h2><p>POC整体用rust构建，先来解析配置文件里的内容。</p>
-<h3 id="1-配置文件解析"><a href="#1-配置文件解析" class="headerlink" title="1.配置文件解析"></a>1.配置文件解析</h3><p>针对32位系统使用静态链接的C运行时，构建可执行文件。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo +stable-i686-pc-windows-msvc build --release --config <span class="string">&quot;build.rustflags = [\&quot;-C\&quot;, \&quot;target-feature=+crt-static\&quot;]&quot;</span></span><br></pre></td></tr></table></figure>
-<p>对应的toml文件</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[profile.release]</span></span><br><span class="line"><span class="attr">opt-level</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="section">[profile.release.overrides.&#x27;cfg(target_os = &quot;windows&quot;)&#x27;]</span></span><br><span class="line"><span class="attr">rustflags</span> = [<span class="string">&quot;-C&quot;</span>, <span class="string">&quot;target-feature=+crt-static&quot;</span>]</span><br></pre></td></tr></table></figure>
-<p>此时，只需要<code>cargo build --release</code>即可。</p>
-<p>开发过程中，要利用一些依赖库，来调用Windows API、服务和命令行参数。</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[dependencies.rhexdump]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.44.0&quot;</span></span><br><span class="line"><span class="attr">features</span> = [</span><br><span class="line">    <span class="string">&quot;Win32_Foundation&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_LibraryLoader&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Threading&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_SystemServices&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Console&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-service]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.5.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-args]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.2.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成动态链接库，即dll文件</span></span><br><span class="line"><span class="section">[lib]</span></span><br><span class="line"><span class="attr">crate-type</span> = [<span class="string">&quot;cdylib&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>2.定义的<code>src\lib.def</code>文件中的导出符号。</p>
-<h3 id="C-名称修饰规则"><a href="#C-名称修饰规则" class="headerlink" title="C++名称修饰规则"></a>C++名称修饰规则</h3><p> C++ 的名称修饰规则，也称为名称重整（name mangling）。用于编译器生成符号表，会因平台和编译器有所不同。它将函数和变量的名称、参数类型、返回类型等信息编码成一个唯一的符号。 </p>
-<p>名称修饰的目的是确保在<strong>链接阶段可以正确地解析函数和变量的符号，避免符号冲突和重复定义的问题。</strong>  为了实现不同编程语言之间的互操作性，可以使用 <code>extern &quot;C&quot;</code> 来指定使用 C 风格的符号。</p>
-<blockquote>
-<p>导出符号的格式是 <code>?SymbolName@ClassName@@FunctionSignature=_alias@0</code> </p>
-</blockquote>
-<p>下面的文件规定了导出的类和符号命，并 将所有导出符号重命名为 <code>_die</code>。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY</span><br><span class="line">EXPORTS</span><br><span class="line">    ?NextSiblingElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ?FirstChildElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ??1TiXmlDocument@@UAE@XZ=_die@0</span><br><span class="line">    ?RootElement@TiXmlDocument@@QAEPAVTiXmlElement@@XZ=_die@0</span><br><span class="line">    ?GetText@TiXmlElement@@QBEPBDXZ=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBD@Z=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBDPAH@Z=_die@0</span><br><span class="line">    ?LoadXML@TiXmlDocument@@QAE_NPADHW4TiXmlEncoding@@@Z=_die@0</span><br><span class="line">    ??0TiXmlDocument@@QAE@XZ=_die@0</span><br><span class="line">    DllMain</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p> <code>QAE</code> 指示该构造函数是一个非静态成员函数，</p>
-<ul>
-<li><code>QB</code> 表示该函数是一个非静态成员函数，并且返回一个指针。</li>
-<li><code>EPBD</code> 表示函数的第一个参数是一个 <code>const char*</code> 类型的指针。</li>
-<li><code>PAH</code> 表示函数的第二个参数是一个 <code>int*</code> 类型的指针。</li>
-<li><code>PAVTiXmlElement 表示返回类型是一个指向</code>TiXmlElement` 类的指针。 </li>
-<li><code>0TiXmlDocument@@QAE@XZ</code>中0表示该类的默认构造函数</li>
-<li><code>@Z</code>：函数参数的结尾标记 ，<code>XZ</code> 表示该构造函数不接受任何参数。 </li>
-</ul>
-<h3 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">CreateProcessAsUserW</span>(token2, <span class="literal">None</span>, <span class="title function_ invoke__">PWSTR</span>(<span class="string">&quot;cmd.exe&quot;</span>.<span class="title function_ invoke__">encode_utf16</span>().<span class="title function_ invoke__">chain</span>(<span class="title function_ invoke__">Some</span>(<span class="number">0</span>)).collect::&lt;<span class="type">Vec</span>&lt;<span class="type">u16</span>&gt;&gt;().<span class="title function_ invoke__">as_mut_ptr</span>()), <span class="literal">None</span>, <span class="literal">None</span>, FALSE, <span class="title function_ invoke__">PROCESS_CREATION_FLAGS</span>(<span class="number">0</span>), <span class="literal">None</span>, <span class="literal">None</span>, &amp;si, &amp;<span class="keyword">mut</span> pi).<span class="title function_ invoke__">ok</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1308,7 +1313,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">167</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

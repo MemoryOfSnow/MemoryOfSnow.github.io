@@ -20,26 +20,26 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.  Idea虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。 作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。 动机已有的灰度图里，相同家族的样本具有">
+  <meta name="description" content="Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.  本文不是小样本,第20篇论文。 Idea虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。 作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。 动机已">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用节表分布信息的基于图像的恶意软件分类">
-<meta property="og:url" content="https://blueinyou.com/categories/ML/Few-Shot20/index.html">
+<meta property="og:url" content="https://blueinyou.com/categories/ML/MC01/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.  Idea虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。 作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。 动机已有的灰度图里，相同家族的样本具有">
+<meta property="og:description" content="Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.  本文不是小样本,第20篇论文。 Idea虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。 作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。 动机已">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot20/1697080673588.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot20/1697081574246.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot20/1697081604215.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot20/1697081631521.png">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/Few-Shot20/1697083130560.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/MC01/1697080673588.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/MC01/1697081574246.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/MC01/1697081604215.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/MC01/1697081631521.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/MC01/1697083130560.png">
 <meta property="article:published_time" content="2023-10-12T08:13:22.000Z">
-<meta property="article:modified_time" content="2023-10-12T03:58:51.173Z">
+<meta property="article:modified_time" content="2023-10-13T03:18:15.945Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="FSL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueinyou.com/categories/ML/Few-Shot20/1697080673588.png">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/MC01/1697080673588.png">
 
-<link rel="canonical" href="https://blueinyou.com/categories/ML/Few-Shot20/">
+<link rel="canonical" href="https://blueinyou.com/categories/ML/MC01/">
 
 
 <script id="page-configurations">
@@ -168,7 +168,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot20/">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/MC01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
@@ -190,10 +190,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-10-12 16:13:22 / Modified: 11:58:51" itemprop="dateCreated datePublished" datetime="2023-10-12T16:13:22+08:00">2023-10-12</time>
+              <time title="Created: 2023-10-12 16:13:22" itemprop="dateCreated datePublished" datetime="2023-10-12T16:13:22+08:00">2023-10-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-13 11:18:15" itemprop="dateModified" datetime="2023-10-13T11:18:15+08:00">2023-10-13</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -218,6 +224,7 @@
         <blockquote>
 <p>Image-based malware classification using section distribution information,发表在B刊，Computers&amp;Security,2021.</p>
 </blockquote>
+<p>本文不是小样本,第20篇论文。</p>
 <h2 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h2><p>虽然需要大量的计算，但是输入数据里选取的数据的信息越多，准确率越高。</p>
 <p>作者的想法和我的想法：节表的分布信息能够更好的表征恶意软件。</p>
 <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>已有的灰度图里，相同家族的样本具有相似的二级制内容和图片纹理。</p>
@@ -228,17 +235,19 @@
 <h2 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h2><h3 id="灰度图评价"><a href="#灰度图评价" class="headerlink" title="灰度图评价"></a>灰度图评价</h3><p>PE文件里由于文件对齐，会有大量的填充数据（0或其他值），而各个样本填充的位数不一致。</p>
 <p>如下图所示，灰度图里的界限和实际的界限对应得并不是很好。</p>
 <p>已有的灰度图里能够判断出一部分节表信息，但是会有很多错误 。</p>
-<p><img src="/categories/ML/Few-Shot20/1697080673588.png" alt="1697080673588"></p>
+<p><img src="/categories/ML/MC01/1697080673588.png" alt="1697080673588"></p>
 <h3 id="作者提出的-算法"><a href="#作者提出的-算法" class="headerlink" title="作者提出的 算法"></a>作者提出的 算法</h3><p>图片定宽256（16的倍数，hex视图），高度跟随文件大小变化。用于对节表分界的<strong>行厚度要发生变化</strong>，</p>
-<p><img src="/categories/ML/Few-Shot20/1697081574246.png" alt="1697081574246"></p>
-<p><img src="/categories/ML/Few-Shot20/1697081604215.png" alt="1697081604215"></p>
-<p><img src="/categories/ML/Few-Shot20/1697081631521.png" alt="1697081631521"></p>
+<p><img src="/categories/ML/MC01/1697081574246.png" alt="1697081574246"></p>
+<p><img src="/categories/ML/MC01/1697081604215.png" alt="1697081604215"></p>
+<p><img src="/categories/ML/MC01/1697081631521.png" alt="1697081631521"></p>
 <h3 id="最后分类模型的选取"><a href="#最后分类模型的选取" class="headerlink" title="最后分类模型的选取"></a>最后分类模型的选取</h3><p>25088的数据维度，维度诅咒以及数据稀疏。</p>
 <p>SVM适合处理高维数据，它的计算复杂度取决于它的支持向量数，而不是空间维度。</p>
 <p>SVM处理大规模数据效果也很好。</p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>VXV：<a target="_blank" rel="noopener" href="https://archive.org/download/vxheavens-2010-05-18">VX-Heaven</a> VirusShare</p>
 <p>BIG-2015微软恶意软件分类数据集</p>
-<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><p><img src="/categories/ML/Few-Shot20/1697083130560.png" alt="1697083130560"></p>
+<h3 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h3><h3 id="皮尔逊相关性系数"><a href="#皮尔逊相关性系数" class="headerlink" title="皮尔逊相关性系数"></a>皮尔逊相关性系数</h3><p>衡量两个向量的线性相关性。</p>
+<p><img src="/categories/ML/MC01/1697083130560.png" alt="1697083130560"></p>
+<p>采用平均PCC去衡量一个家族内的样本用某一种形式表示时的相似度。</p>
 
     </div>
 
@@ -260,7 +269,10 @@
     <a href="/categories/Notes/Linkers&Loaders06/" rel="prev" title="Chap11-glibc入口函数">
       <i class="fa fa-chevron-left"></i> Chap11-glibc入口函数
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/Untitled%201/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -319,7 +331,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Idea"><span class="nav-number">1.</span> <span class="nav-text">Idea</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">4.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E8%8A%82"><span class="nav-number">5.</span> <span class="nav-text">细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%B0%E5%BA%A6%E5%9B%BE%E8%AF%84%E4%BB%B7"><span class="nav-number">5.1.</span> <span class="nav-text">灰度图评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E8%80%85%E6%8F%90%E5%87%BA%E7%9A%84-%E7%AE%97%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">作者提出的 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">5.3.</span> <span class="nav-text">最后分类模型的选取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">6.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">6.2.</span> <span class="nav-text">实验设置</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Idea"><span class="nav-number">1.</span> <span class="nav-text">Idea</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">4.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E8%8A%82"><span class="nav-number">5.</span> <span class="nav-text">细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%B0%E5%BA%A6%E5%9B%BE%E8%AF%84%E4%BB%B7"><span class="nav-number">5.1.</span> <span class="nav-text">灰度图评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E8%80%85%E6%8F%90%E5%87%BA%E7%9A%84-%E7%AE%97%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">作者提出的 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">5.3.</span> <span class="nav-text">最后分类模型的选取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">6.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">6.2.</span> <span class="nav-text">实验设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9A%AE%E5%B0%94%E9%80%8A%E7%9B%B8%E5%85%B3%E6%80%A7%E7%B3%BB%E6%95%B0"><span class="nav-number">6.3.</span> <span class="nav-text">皮尔逊相关性系数</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -335,7 +347,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">165</span>
+          <span class="site-state-item-count">167</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
