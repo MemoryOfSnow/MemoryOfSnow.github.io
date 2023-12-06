@@ -27,11 +27,13 @@
 <meta property="og:site_name" content="Paul C&#39;s Blog">
 <meta property="og:description" content="0x01 简介1.各种段的作用 ELF .plt:库函数插桩所在； ELF .got:输入符号指针 .bss：未初始化 数据； 2.mmap缺点 1.分配字节数必须是4096字节的倍数，只能以内存页为单元管理内存，经过内核很慢。   3.按需分配内存，  dllmaloc，Doug Lea开发并发布到公共社区；  Linux的glibc里的ptmalloc(Posix Thred aware fo">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueinyou.com/categories/CTF/heap01/1701862220756.png">
 <meta property="article:published_time" content="2023-12-06T11:19:49.000Z">
-<meta property="article:modified_time" content="2023-12-06T11:22:33.485Z">
+<meta property="article:modified_time" content="2023-12-06T11:30:23.119Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="Pwn">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueinyou.com/categories/CTF/heap01/1701862220756.png">
 
 <link rel="canonical" href="https://blueinyou.com/categories/CTF/heap01/">
 
@@ -186,7 +188,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-12-06 19:19:49 / Modified: 19:22:33" itemprop="dateCreated datePublished" datetime="2023-12-06T19:19:49+08:00">2023-12-06</time>
+              <time title="Created: 2023-12-06 19:19:49 / Modified: 19:30:23" itemprop="dateCreated datePublished" datetime="2023-12-06T19:19:49+08:00">2023-12-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,6 +270,8 @@
 <h2 id="0x02-Dynamic-Allocator-Misuse"><a href="#0x02-Dynamic-Allocator-Misuse" class="headerlink" title="0x02 Dynamic Allocator Misuse"></a>0x02 Dynamic Allocator Misuse</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zW4y1f7cB">https://www.bilibili.com/video/BV1zW4y1f7cB</a></p>
 </blockquote>
+<p>任何分配器、库和函数的使用都有开销overhead，分配器开发者为了速度引入optimization和cache，只保证速度，正确的使用堆由程序员确保，由此便带来安全问题。</p>
+<p><img src="/categories/CTF/heap01/1701862220756.png" alt="1701862220756"></p>
 
     </div>
 
