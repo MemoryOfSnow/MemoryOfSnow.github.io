@@ -20,21 +20,21 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="1.新建环境1conda create -n tf2.9 python&#x3D;3.10 2、激活环境1conda activate tf2.9 3、查看电脑显卡驱动打开控制面板，发现里面没有NVIDA控制面板选项的，大概率是没有NVIDA cuda驱动的，需要去NVIDA官方下载对应驱动。  4.(可选)NVIDA官方下载对应驱动 选择界面：https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cu">
+  <meta name="description" content="0.(可选)NVIDA官方下载对应驱动 选择界面：https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cuda-downloads   cuda_12.1.0_531.14_windows.exe 下载后双击安装，等待安装成功；查看当前的cuda驱动版本。 12C:\Users\22154&gt;nvidia-smi       CUDA Version: 12.1     | 1.安装cu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="wslubuntu的cuda安装">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="1.新建环境1conda create -n tf2.9 python&#x3D;3.10 2、激活环境1conda activate tf2.9 3、查看电脑显卡驱动打开控制面板，发现里面没有NVIDA控制面板选项的，大概率是没有NVIDA cuda驱动的，需要去NVIDA官方下载对应驱动。  4.(可选)NVIDA官方下载对应驱动 选择界面：https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cu">
+<meta property="og:description" content="0.(可选)NVIDA官方下载对应驱动 选择界面：https:&#x2F;&#x2F;developer.nvidia.com&#x2F;cuda-downloads   cuda_12.1.0_531.14_windows.exe 下载后双击安装，等待安装成功；查看当前的cuda驱动版本。 12C:\Users\22154&gt;nvidia-smi       CUDA Version: 12.1     | 1.安装cu">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678379450207.png">
+<meta property="og:image" content="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1700483321638.png">
 <meta property="og:image" content="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678380947188.png">
 <meta property="article:published_time" content="2023-03-10T06:19:49.000Z">
-<meta property="article:modified_time" content="2023-04-18T03:27:54.000Z">
+<meta property="article:modified_time" content="2023-11-20T13:25:41.011Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678379450207.png">
+<meta name="twitter:image" content="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1700483321638.png">
 
 <link rel="canonical" href="https://blueinyou.com/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/">
 
@@ -195,7 +195,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-04-18 11:27:54" itemprop="dateModified" datetime="2023-04-18T11:27:54+08:00">2023-04-18</time>
+                <time title="Modified: 2023-11-20 21:25:41" itemprop="dateModified" datetime="2023-11-20T21:25:41+08:00">2023-11-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -218,16 +218,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="1-新建环境"><a href="#1-新建环境" class="headerlink" title="1.新建环境"></a>1.新建环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n tf2.9 python=3.10</span><br></pre></td></tr></table></figure>
-<h2 id="2、激活环境"><a href="#2、激活环境" class="headerlink" title="2、激活环境"></a>2、激活环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate tf2.9</span><br></pre></td></tr></table></figure>
-<h2 id="3、查看电脑显卡驱动"><a href="#3、查看电脑显卡驱动" class="headerlink" title="3、查看电脑显卡驱动"></a>3、查看电脑显卡驱动</h2><p>打开控制面板，发现里面没有NVIDA控制面板选项的，大概率是没有NVIDA cuda驱动的，需要去NVIDA官方下载对应驱动。</p>
-<p><img src="/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678379450207.png" alt="1678379450207"></p>
-<h2 id="4-可选-NVIDA官方下载对应驱动"><a href="#4-可选-NVIDA官方下载对应驱动" class="headerlink" title="4.(可选)NVIDA官方下载对应驱动"></a>4.(可选)NVIDA官方下载对应驱动</h2><blockquote>
+        <h2 id="0-可选-NVIDA官方下载对应驱动"><a href="#0-可选-NVIDA官方下载对应驱动" class="headerlink" title="0.(可选)NVIDA官方下载对应驱动"></a>0.(可选)NVIDA官方下载对应驱动</h2><blockquote>
 <p>选择界面：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a></p>
 </blockquote>
 <p> <a target="_blank" rel="noopener" href="https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_531.14_windows.exe">cuda_12.1.0_531.14_windows.exe</a></p>
-<p>下载后双击安装，等待安装成功；</p>
-<h2 id="5-下载-tensorflow-gpu-2-9-0"><a href="#5-下载-tensorflow-gpu-2-9-0" class="headerlink" title="5.下载 tensorflow_gpu-2.9.0"></a>5.下载 tensorflow_gpu-2.9.0</h2><p>命令行打开到Computed-Tomography-AI目录，执行下面的命令。</p>
+<p>下载后双击安装，等待安装成功；查看当前的cuda驱动版本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\22154&gt;nvidia-smi</span><br><span class="line">       CUDA Version: 12.1     |</span><br></pre></td></tr></table></figure>
+<h2 id="1-安装cuda"><a href="#1-安装cuda" class="headerlink" title="1.安装cuda"></a>1.安装cuda</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-12-1-1-download-archive?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=WSL-Ubuntu&amp;target_version=2.0&amp;target_type=deb_local">WSL-Ubuntu-cuda下载，注意cuda版本和之前Windows上的对齐</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin</span><br><span class="line">sudo mv cuda-wsl-ubuntu.pin /etc/apt/preferences.d/cuda-repository-pin-600</span><br><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda-repo-wsl-ubuntu-12-1-local_12.1.1-1_amd64.deb</span><br><span class="line">sudo dpkg -i cuda-repo-wsl-ubuntu-12-1-local_12.1.1-1_amd64.deb</span><br><span class="line">sudo cp /var/cuda-repo-wsl-ubuntu-12-1-local/cuda-*-keyring.gpg /usr/share/keyrings/</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt --fix-broken install</span><br><span class="line">sudo apt-get -y install cuda</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装conda并新建环境"><a href="#2-安装conda并新建环境" class="headerlink" title="2.安装conda并新建环境"></a>2.安装conda并新建环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n tf2.9 python=3.10</span><br></pre></td></tr></table></figure>
+<h2 id="3、激活环境"><a href="#3、激活环境" class="headerlink" title="3、激活环境"></a>3、激活环境</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate tf2.9</span><br></pre></td></tr></table></figure>
+<h2 id="4-安装Pytorch"><a href="#4-安装Pytorch" class="headerlink" title="4.安装Pytorch"></a>4.安装Pytorch</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/get-started/locally/">https://pytorch.org/get-started/locally/</a></p>
+</blockquote>
+<p><img src="/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1700483321638.png" alt="1700483321638"></p>
+<p>复制粘贴上面的命令去Linux下运行即可。</p>
+<p>···</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install torch torchvision torchaudio</span><br></pre></td></tr></table></figure>
+<h2 id="5-下载-tensorflow-gpu-2-9-0-（根据需求选择）"><a href="#5-下载-tensorflow-gpu-2-9-0-（根据需求选择）" class="headerlink" title="5.下载 tensorflow_gpu-2.9.0 （根据需求选择）"></a>5.下载 tensorflow_gpu-2.9.0 （根据需求选择）</h2><p>命令行打开到Computed-Tomography-AI目录，执行下面的命令。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(tf2.9) D:\DataSet\Github\Computed-Tomography-AI&gt;</span><br><span class="line">pip3 install -i http://pypi.douban.com/simple/ -r requirements.txt --trusted-host pypi.douban.com</span><br></pre></td></tr></table></figure>
 <p>安装其他版本，可以去 <a target="_blank" rel="noopener" href="https://tensorflow.google.cn/install/source_windows?hl=en#gpu">tf官网</a>查看tensorflow、python、tensorflow-gpui、cuda、cudnn的对应关系 。</p>
 <h2 id="6-在对应环境中安装CUDAToolkit"><a href="#6-在对应环境中安装CUDAToolkit" class="headerlink" title="6.在对应环境中安装CUDAToolkit"></a>6.在对应环境中安装CUDAToolkit</h2><h2 id="6-1conda挂代理或者换源"><a href="#6-1conda挂代理或者换源" class="headerlink" title="6.1conda挂代理或者换源"></a>6.1conda挂代理或者换源</h2><p>在这里进行换源，加速下载：</p>
@@ -239,10 +249,14 @@
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install --use-local cudatoolkit-11.2.2-h933977f_9.tar.bz2</span><br></pre></td></tr></table></figure>
 <h2 id="9-验证是否安装成功"><a href="#9-验证是否安装成功" class="headerlink" title="9.验证是否安装成功"></a>9.验证是否安装成功</h2><p>命令行下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">py310paulc@BlackGame:~$ python</span><br><span class="line">Python 3.10.13 (main, Sep 11 2023, 13:44:35) [GCC 11.2.0] on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import torch</span><br><span class="line">&gt;&gt;&gt; torch.cuda.is_available()</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<p>或者</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(tf2.9) D:\DataSet\Github\Computed-Tomography-AI&gt;python</span><br><span class="line">&gt;&gt;&gt;import tensorflow as tf</span><br><span class="line">&gt;&gt;&gt;tf.test.is_gpu_available()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><img src="/categories/ML/Tensorflow2.9-gpu%E9%85%8D%E7%BD%AE/1678380947188.png" alt="1678380947188"></p>
 <p> 返回true说明没有问题。 </p>
 <p>现在，所有的依赖项已经下载并配置成功。</p>
+<h2 id="安装pwndbg"><a href="#安装pwndbg" class="headerlink" title="安装pwndbg"></a>安装pwndbg</h2><p>Ubuntu18会缺少各种依赖，直接用它编译好的最快。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/pwndbg/pwndbg/releases/download/2023.07.17-pkgs/pwndbg_2023.07.17_amd64.deb</span><br><span class="line">sudo dpkg -i pwndbg_2023.07.17_amd64.deb</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -326,7 +340,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">1.新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">2、激活环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%9F%A5%E7%9C%8B%E7%94%B5%E8%84%91%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="nav-number">3.</span> <span class="nav-text">3、查看电脑显卡驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%AF%E9%80%89-NVIDA%E5%AE%98%E6%96%B9%E4%B8%8B%E8%BD%BD%E5%AF%B9%E5%BA%94%E9%A9%B1%E5%8A%A8"><span class="nav-number">4.</span> <span class="nav-text">4.(可选)NVIDA官方下载对应驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%8B%E8%BD%BD-tensorflow-gpu-2-9-0"><span class="nav-number">5.</span> <span class="nav-text">5.下载 tensorflow_gpu-2.9.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%9C%A8%E5%AF%B9%E5%BA%94%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%AE%89%E8%A3%85CUDAToolkit"><span class="nav-number">6.</span> <span class="nav-text">6.在对应环境中安装CUDAToolkit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1conda%E6%8C%82%E4%BB%A3%E7%90%86%E6%88%96%E8%80%85%E6%8D%A2%E6%BA%90"><span class="nav-number">7.</span> <span class="nav-text">6.1conda挂代理或者换源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-conda%E4%B8%8B%E8%BD%BDcudatoolkit"><span class="nav-number">8.</span> <span class="nav-text">6.2 conda下载cudatoolkit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-conda%E4%B8%8B%E8%BD%BDCuDnn"><span class="nav-number">9.</span> <span class="nav-text">7.conda下载CuDnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%8F%AF%E9%80%89-%E6%89%8B%E5%8A%A8%E4%B8%8B%E8%BD%BDCudaToolKIt%E5%92%8CCuDnn"><span class="nav-number">10.</span> <span class="nav-text">8.(可选)手动下载CudaToolKIt和CuDnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">11.</span> <span class="nav-text">9.验证是否安装成功</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E5%8F%AF%E9%80%89-NVIDA%E5%AE%98%E6%96%B9%E4%B8%8B%E8%BD%BD%E5%AF%B9%E5%BA%94%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.</span> <span class="nav-text">0.(可选)NVIDA官方下载对应驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85cuda"><span class="nav-number">2.</span> <span class="nav-text">1.安装cuda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85conda%E5%B9%B6%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">3.</span> <span class="nav-text">2.安装conda并新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83"><span class="nav-number">4.</span> <span class="nav-text">3、激活环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%89%E8%A3%85Pytorch"><span class="nav-number">5.</span> <span class="nav-text">4.安装Pytorch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%8B%E8%BD%BD-tensorflow-gpu-2-9-0-%EF%BC%88%E6%A0%B9%E6%8D%AE%E9%9C%80%E6%B1%82%E9%80%89%E6%8B%A9%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">5.下载 tensorflow_gpu-2.9.0 （根据需求选择）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%9C%A8%E5%AF%B9%E5%BA%94%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%AE%89%E8%A3%85CUDAToolkit"><span class="nav-number">7.</span> <span class="nav-text">6.在对应环境中安装CUDAToolkit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1conda%E6%8C%82%E4%BB%A3%E7%90%86%E6%88%96%E8%80%85%E6%8D%A2%E6%BA%90"><span class="nav-number">8.</span> <span class="nav-text">6.1conda挂代理或者换源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-conda%E4%B8%8B%E8%BD%BDcudatoolkit"><span class="nav-number">9.</span> <span class="nav-text">6.2 conda下载cudatoolkit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-conda%E4%B8%8B%E8%BD%BDCuDnn"><span class="nav-number">10.</span> <span class="nav-text">7.conda下载CuDnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%8F%AF%E9%80%89-%E6%89%8B%E5%8A%A8%E4%B8%8B%E8%BD%BDCudaToolKIt%E5%92%8CCuDnn"><span class="nav-number">11.</span> <span class="nav-text">8.(可选)手动下载CudaToolKIt和CuDnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">12.</span> <span class="nav-text">9.验证是否安装成功</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85pwndbg"><span class="nav-number">13.</span> <span class="nav-text">安装pwndbg</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -342,7 +356,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">172</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -354,7 +368,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

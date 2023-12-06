@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .  思路本文提出了一种在LO背景下的数据集压缩和原型生成技术。 借助软标签，k近邻分类器来生成软标签     工作和发现分析这些决策">
+  <meta name="description" content="Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .  Inspiration软标签比硬标签携带更多信息，可以适用于LO场景。 ​    - 软标签可以标注样本间的共同特征，进而以这种">
 <meta property="og:type" content="article">
 <meta property="og:title" content="少于单样本的学习：从比类别数还小的样本集学习">
 <meta property="og:url" content="https://blueinyou.com/categories/ML/Few-Shot20/index.html">
 <meta property="og:site_name" content="Paul C&#39;s Blog">
-<meta property="og:description" content="Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .  思路本文提出了一种在LO背景下的数据集压缩和原型生成技术。 借助软标签，k近邻分类器来生成软标签     工作和发现分析这些决策">
+<meta property="og:description" content="Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .  Inspiration软标签比硬标签携带更多信息，可以适用于LO场景。 ​    - 软标签可以标注样本间的共同特征，进而以这种">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-17T08:13:22.000Z">
-<meta property="article:modified_time" content="2023-11-17T09:17:59.418Z">
+<meta property="article:modified_time" content="2023-11-28T10:42:01.941Z">
 <meta property="article:author" content="Paul C">
 <meta property="article:tag" content="FSL">
 <meta name="twitter:card" content="summary">
@@ -184,10 +184,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-11-17 16:13:22 / Modified: 17:17:59" itemprop="dateCreated datePublished" datetime="2023-11-17T16:13:22+08:00">2023-11-17</time>
+              <time title="Created: 2023-11-17 16:13:22" itemprop="dateCreated datePublished" datetime="2023-11-17T16:13:22+08:00">2023-11-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-28 18:42:01" itemprop="dateModified" datetime="2023-11-28T18:42:01+08:00">2023-11-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -212,14 +218,22 @@
         <blockquote>
 <p>Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .</p>
 </blockquote>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>本文提出了一种在LO背景下的数据集压缩和原型生成技术。</p>
-<p>借助软标签，k近邻分类器来生成软标签    </p>
-<h2 id="工作和发现"><a href="#工作和发现" class="headerlink" title="工作和发现"></a>工作和发现</h2><p>分析这些决策景观，得出使用 M &lt; N 软标签样本分离 N 个类别的理论下限，并研究所得系统的稳健性。</p>
+<h2 id="Inspiration"><a href="#Inspiration" class="headerlink" title="Inspiration"></a>Inspiration</h2><p>软标签比硬标签携带更多信息，可以适用于LO场景。</p>
+<p>​    - 软标签可以标注样本间的共同特征，进而以这种方式增加信息密度和维度  </p>
+<p>​    - <strong>目标：</strong>训练样本足够少的情况下，模型还能够以足够的精度识别尽可能多的类别  </p>
+<h2 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h2><p>prototypes: soft-labelled synthetic images</p>
+<p>unrestricted soft label:各个元素可以是任何值，包括负数。</p>
+<p>soft\probabilistic  label：一个样本在各个类上的概率分布，各个类上的概率之和为1，可以使用softmax函数得到。</p>
+<p>hard label:在soft label上使用argmax得到。</p>
+<p>soft-label prototype (SLaP)：(X,Y)，特征向量和它对应的软标签。</p>
+<h2 id="Corollary"><a href="#Corollary" class="headerlink" title="Corollary"></a>Corollary</h2><p>推论</p>
+<h2 id="Work-amp-Finding"><a href="#Work-amp-Finding" class="headerlink" title="Work&amp; Finding"></a>Work&amp; Finding</h2><p>hard label prototype Distance-weighted kNN is the special case of SLaPkNN(基于距离度量的软标签原型KNN)</p>
+<p>分析这些决策景观，得出使用 M &lt; N 软标签样本分离 N 个类别的理论下限，并研究所得系统的稳健性。</p>
 <p>1.分析创建的决策边界鲁棒性和稳定性的方法；</p>
 <p>2.软标签表征 训练集用于区分，比起硬标签使用的原型更少。理想情况，是O(N^2)降低到O(1)。</p>
-<h2 id="创新点"><a href="#创新点" class="headerlink" title="创新点"></a>创新点</h2><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="一种有趣的提法"><a href="#一种有趣的提法" class="headerlink" title="一种有趣的提法"></a>一种有趣的提法</h3><p>通过描述，我们可以用犀牛 、马两类样本获得除犀牛、马以外 的独角兽的分类。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="一种有趣的提法"><a href="#一种有趣的提法" class="headerlink" title="一种有趣的提法"></a>一种有趣的提法</h3><p>通过描述，我们可以用犀牛 、马两类样本获得除犀牛、马以外 的独角兽的分类。</p>
 <p>FSL让模型更加样本有效。</p>
-<h2 id="分析的过去工作"><a href="#分析的过去工作" class="headerlink" title="分析的过去工作"></a>分析的过去工作</h2><h3 id="都在想办法对数据集进行蒸馏，"><a href="#都在想办法对数据集进行蒸馏，" class="headerlink" title="都在想办法对数据集进行蒸馏，"></a>都在想办法对数据集进行蒸馏，</h3><p>1.2019，软标签数据集蒸馏</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><h3 id="都在想办法对数据集进行蒸馏，"><a href="#都在想办法对数据集进行蒸馏，" class="headerlink" title="都在想办法对数据集进行蒸馏，"></a>都在想办法对数据集进行蒸馏，</h3><p>1.2019，软标签数据集蒸馏</p>
 <p>Sucholutsky, I.; and Schonlau, M. 2019. Soft-Label Dataset Distillation and Text Dataset Distillation. arXiv preprint arXiv:1910.02551 .</p>
 <p>2.2006，动态数据冻结</p>
 <p>Ruta, D. 2006. Dynamic data condensation for classification. In International Conference on Artificial Intelligence and Soft Computing, 672–681. Springer.</p>
@@ -262,7 +276,10 @@
     <a href="/categories/CTF/DASCTF02/" rel="prev" title="">
       <i class="fa fa-chevron-left"></i> 
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/categories/CTF/xsbAWDP/" rel="next" title="XSB2023 Py">
+      XSB2023 Py <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -321,7 +338,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%92%8C%E5%8F%91%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">工作和发现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E6%96%B0%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">创新点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%A7%8D%E6%9C%89%E8%B6%A3%E7%9A%84%E6%8F%90%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">一种有趣的提法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%9A%84%E8%BF%87%E5%8E%BB%E5%B7%A5%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">分析的过去工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%BD%E5%9C%A8%E6%83%B3%E5%8A%9E%E6%B3%95%E5%AF%B9%E6%95%B0%E6%8D%AE%E9%9B%86%E8%BF%9B%E8%A1%8C%E8%92%B8%E9%A6%8F%EF%BC%8C"><span class="nav-number">5.1.</span> <span class="nav-text">都在想办法对数据集进行蒸馏，</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E7%9A%84%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">5.2.</span> <span class="nav-text">经典的小样本学习网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%86%85%E5%AE%B9"><span class="nav-number">5.3.</span> <span class="nav-text">其他内容</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Inspiration"><span class="nav-number">1.</span> <span class="nav-text">Inspiration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Terms"><span class="nav-number">2.</span> <span class="nav-text">Terms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Corollary"><span class="nav-number">3.</span> <span class="nav-text">Corollary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Work-amp-Finding"><span class="nav-number">4.</span> <span class="nav-text">Work&amp; Finding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">6.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%A7%8D%E6%9C%89%E8%B6%A3%E7%9A%84%E6%8F%90%E6%B3%95"><span class="nav-number">6.1.</span> <span class="nav-text">一种有趣的提法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%BD%E5%9C%A8%E6%83%B3%E5%8A%9E%E6%B3%95%E5%AF%B9%E6%95%B0%E6%8D%AE%E9%9B%86%E8%BF%9B%E8%A1%8C%E8%92%B8%E9%A6%8F%EF%BC%8C"><span class="nav-number">7.1.</span> <span class="nav-text">都在想办法对数据集进行蒸馏，</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E7%9A%84%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">7.2.</span> <span class="nav-text">经典的小样本学习网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%86%85%E5%AE%B9"><span class="nav-number">7.3.</span> <span class="nav-text">其他内容</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -337,7 +354,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">172</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -349,7 +366,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

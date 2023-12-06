@@ -156,6 +156,423 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot03/" class="post-title-link" itemprop="url">A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-23 20:43:22" itemprop="dateCreated datePublished" datetime="2022-09-23T20:43:22+08:00">2022-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-05-09 08:38:54" itemprop="dateModified" datetime="2023-05-09T08:38:54+08:00">2023-05-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/350960578">下载链接</a> 用多原型模型做未知家族识别的全新小样本恶意代码分类方法</p>
+</blockquote>
+<p>Peng Wang,《A Novel Few-Shot Malware Classification Approach for Unknown Family Recognition with Multi-Prototype Modeling》,Compyter&amp;Securitty,April,2021. </p>
+<h3 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h3><p>样本少，识别新家族需要重训练。</p>
+<ul>
+<li>scarce samples：新发现家族的样本收集困难，而用小批量样本，模型会过拟合，或者激烈振荡（ oscillate drastically）不收敛；</li>
+<li>dynamic recognition：动态识别问题，旧分类器缺乏增量识别新家族的能力，要求从头开始重训练。</li>
+<li>signature-based analysis：需要专家设计签名，无法识别变形或者多态的样本（polymorphic or metamorphic）</li>
+<li>Open Set Recognition Problem (OSR)开放集识别问题，对新样本需要保持快速响应能力，从已经收集的样本中构建对应的分类器。</li>
+</ul>
+<p><img src="/categories/ML/Few-Shot03/1668858454381.png" alt="1668858454381"></p>
+<h2 id="单模态方法和最近邻"><a href="#单模态方法和最近邻" class="headerlink" title="单模态方法和最近邻"></a>单模态方法和最近邻</h2><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>多序列比对Multiple Sequence Alignment</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>meta learning based few-shot learning (FSL)基于元学习的小样本学习</p>
+<p>模型名：SIMPLE (Supervised Infifinite Mixture Prototypes LEarning)监督无限混合原型系统</p>
+<p><strong>设计：</strong>基于从动态分析中获得的API调用序列（API invocation sequences），引入多原型建模来为每个家族生成多个原型。以增强泛化能力。</p>
+<p><strong>idea来源：</strong>同家族的行为有相同，也有不同，即经常会匹配多个子模式并满足多模态数据分布。</p>
+<h2 id="模型结构："><a href="#模型结构：" class="headerlink" title="模型结构："></a>模型结构：</h2><p>API invocation sequences—-&gt;word embedding—-&gt;LSTM（保留序列信息）——&gt; clustering（聚类）—-&gt;每个恶意家族的多原型表示。</p>
+<p>​                                                                        少量样本的监督标签信息<br>                                                                                 ↓<br><a href="K. R. Allen, E. Shelhamer, H. Shin, J. B. Tenenbaum, Infifinite mixture prototypes for few-shot learning, in: 36th International Conference on Machine Learning, ICML 2019, Vol. 2019-June, 2019, pp. 348–357. arXiv:1902.04552.">无限混合原型IMP(infifinite mixture prototypes)</a>：聚类数目无需事先确定，模型容量能够根据任务数据自适应推断以平衡简单和复杂的数据分布。↓</p>
+<p>​                                                                            更合理的恶意样本家族的原型</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/categories/ML/Few-Shot03/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/GAN01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/GAN01/" class="post-title-link" itemprop="url">GAN01</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-09-08 20:43:22 / Modified: 17:54:56" itemprop="dateCreated datePublished" datetime="2022-09-08T20:43:22+08:00">2022-09-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="生成模型"><a href="#生成模型" class="headerlink" title="生成模型"></a>生成模型</h2><p>输入Z和一个x，输出一个分布(dustribution)范围Y。让输出具有一点创造性。</p>
+<p>例如语音聊天机器人，需要一个范围。</p>
+<h2 id="Generative-Adversarial-Network-GAN"><a href="#Generative-Adversarial-Network-GAN" class="headerlink" title="Generative Adversarial Network(GAN)"></a>Generative Adversarial Network(GAN)</h2><p>以生成动漫头像为例。</p>
+<p>Generator和Discriminator互相对抗。</p>
+<p>Generator</p>
+<p>Discriminator（一个NN，输出一个标量值(0~1)，值越接近1，表示生成的内容越有可能是一张动漫图片。</p>
+<blockquote>
+<p>用来分辨Generator的输出与真正的图片有何不同。</p>
+</blockquote>
+<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>1.G初始化参数，生成杂讯。</p>
+<p>2.固定G，更新D；（经过训练，D学到真正的和生成的之间的差异：把真正的人脸当做1,把训练出的图片当做0；或者是回归问题)</p>
+<p>3.固定D(鉴别器)，更新G(生成器生成在D中得分高的样本)</p>
+<p>重复步骤2,3</p>
+<h2 id="Progressive-GAN可以产生人脸"><a href="#Progressive-GAN可以产生人脸" class="headerlink" title="Progressive GAN可以产生人脸"></a>Progressive GAN可以产生人脸</h2><p>Interpolation内插可以融合两张图片，做男女性别互转的照片。</p>
+<h2 id="Divergence"><a href="#Divergence" class="headerlink" title="Divergence"></a>Divergence</h2><p>散度 表征空间各点矢量场发散的强弱程度 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/CNN&GIN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/CNN&GIN/" class="post-title-link" itemprop="url">CNN&GIN</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-28 20:43:22" itemprop="dateCreated datePublished" datetime="2022-08-28T20:43:22+08:00">2022-08-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-18 16:52:00" itemprop="dateModified" datetime="2023-09-18T16:52:00+08:00">2023-09-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="卷积核的作用"><a href="#卷积核的作用" class="headerlink" title="卷积核的作用"></a>卷积核的作用</h2><ul>
+<li><p>一个图像矩阵经过一个卷积核的卷积操作后，得到了另一个矩阵，这个矩阵叫做特征映射（feature map）。 </p>
+</li>
+<li><p>每一个卷积核都可以提取特定的特征，不同的卷积核提取不同的特征 </p>
+</li>
+</ul>
+<p>利用附录里的<a href="#卷积核效果测试代码">卷积核测试代码</a>，</p>
+<p>借助图中的三个卷积核，</p>
+<p><img src="/categories/ML/CNN&GIN/1693193110387.png" alt="1693193110387"></p>
+<p>分别可以提取X的左上右下、中间和右上左下特征。将图片X用三个卷积核计算，得到三个 特征矩阵 。</p>
+<p>获得下面的热力图。</p>
+<p><img src="/categories/ML/CNN&GIN/1693192781178.png" alt="1693192781178"></p>
+<p>可以发现， 其中的值，</p>
+<ul>
+<li><p>越接近为1表示对应位置和卷积核代表的特征越接近，</p>
+</li>
+<li><p>越是接近-1，表示对应位置和卷积核代表的反向特征越匹配，</p>
+</li>
+<li><p>而值接近0的表示对应位置没有任何匹配或者说没有什么关联。 </p>
+</li>
+</ul>
+<h2 id="GIN模型"><a href="#GIN模型" class="headerlink" title="GIN模型"></a>GIN模型</h2><h3 id="1-模型结构"><a href="#1-模型结构" class="headerlink" title="1.模型结构"></a>1.模型结构</h3><h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="卷积核效果测试代码"><a href="#卷积核效果测试代码" class="headerlink" title="卷积核效果测试代码"></a>卷积核效果测试代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="comment">#热图用处</span></span><br><span class="line"><span class="comment">#相关性矩阵: 查看多个变量之间的关系。颜色可以帮助你快速识别哪些变量之间有强烈的正相关（例如，显示为深红色）或强烈的负相关（例如，显示为深蓝色）。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#混淆矩阵: 分类任务中，混淆矩阵表示出模型在每个类别上的表现。使用热图可以更容易地识别模型在哪些类别上表现不佳。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#数据密度: 如果你有两个维度的大量数据点，可以使用热图来查看哪些区域的数据点最多，哪些区域的数据点最少。</span></span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> signal</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个简单的示例图像</span></span><br><span class="line">image = -<span class="number">1</span> * np.ones((<span class="number">9</span>, <span class="number">9</span>), dtype=<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将主对角线上的元素设置为1</span></span><br><span class="line">np.fill_diagonal(image, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将副对角线上的元素设置为1</span></span><br><span class="line">np.fill_diagonal(np.fliplr(image), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义三个卷积核</span></span><br><span class="line">kernel1 = np.array([</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>,  <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">]) /<span class="number">9</span> <span class="comment"># \边缘检测</span></span><br><span class="line">kernel2 = np.array([</span><br><span class="line">    [-<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>,  <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>]</span><br><span class="line">]) /<span class="number">9</span> <span class="comment"># \边缘检测</span></span><br><span class="line">kernel3 = np.array([</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [-<span class="number">1</span>,  <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, -<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">])/<span class="number">9</span>  <span class="comment"># X边缘检测</span></span><br><span class="line"></span><br><span class="line">kernel4 = np.array([</span><br><span class="line">    [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">    [-<span class="number">1</span>, <span class="number">1</span>, -<span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">]) /<span class="number">9</span> <span class="comment"># 锐化</span></span><br><span class="line"></span><br><span class="line">kernel5 = np.array([</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">]) / <span class="number">9</span>  <span class="comment"># 平均/模糊</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对图像进行卷积操作</span></span><br><span class="line">conv_image1 = signal.convolve2d(image, kernel1, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">conv_image2 = signal.convolve2d(image, kernel2, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line">conv_image3 = signal.convolve2d(image, kernel3, mode=<span class="string">&#x27;same&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化结果</span></span><br><span class="line">fig, axarr = plt.subplots(<span class="number">1</span>, <span class="number">4</span>, figsize=(<span class="number">20</span>, <span class="number">5</span>))</span><br><span class="line"><span class="comment">#annot=True表示单元格中显示数据值	</span></span><br><span class="line">sns.heatmap(image, ax=axarr[<span class="number">0</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">0</span>].set_title(<span class="string">&quot;Original Image&quot;</span>)</span><br><span class="line"></span><br><span class="line">sns.heatmap(conv_image1, ax=axarr[<span class="number">1</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">1</span>].set_title(<span class="string">&quot;Convolved with Kernel 1&quot;</span>)</span><br><span class="line"></span><br><span class="line">sns.heatmap(conv_image2, ax=axarr[<span class="number">2</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">2</span>].set_title(<span class="string">&quot;Convolved with Kernel 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">sns.heatmap(conv_image3, ax=axarr[<span class="number">3</span>], annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">axarr[<span class="number">3</span>].set_title(<span class="string">&quot;Convolved with Kernel 3&quot;</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="GIN模型代码"><a href="#GIN模型代码" class="headerlink" title="GIN模型代码"></a>GIN模型代码</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/oldmao_2001/article/details/118853262">CSDN小班课笔记专栏</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> dgl.nn.pytorch.conv <span class="keyword">import</span> GINConv</span><br><span class="line"><span class="keyword">from</span> dgl.nn.pytorch.glob <span class="keyword">import</span> SumPooling, AvgPooling, MaxPooling</span><br><span class="line"></span><br><span class="line"><span class="comment">#自定义节点更新特征的方式，这里是mlp+bn+relu，实际是对应原文公式4.1第一项</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ApplyNodeFunc</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Update the node feature hv with MLP, BN and ReLU.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, mlp</span>):</span><br><span class="line">        <span class="built_in">super</span>(ApplyNodeFunc, self).__init__()</span><br><span class="line">        self.mlp = mlp</span><br><span class="line">        self.bn = nn.BatchNorm1d(self.mlp.output_dim)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, h</span>):</span><br><span class="line">        h = self.mlp(h)</span><br><span class="line">        h = self.bn(h)</span><br><span class="line">        h = F.relu(h)</span><br><span class="line">        <span class="keyword">return</span> h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MLP</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;MLP with linear output&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment">#num_layers:共有多少层</span></span><br><span class="line">    <span class="comment">#input_dim：输入维度</span></span><br><span class="line">    <span class="comment">#hidden_dim：隐藏层维度，所有隐藏层维度都一样</span></span><br><span class="line">    <span class="comment">#hidden_dim：输出维度</span></span><br><span class="line"><span class="comment">#...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GIN</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;GIN model初始化&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_layers, num_mlp_layers, input_dim, hidden_dim,</span></span><br><span class="line"><span class="params">                 output_dim, final_dropout, learn_eps, graph_pooling_type,</span></span><br><span class="line"><span class="params">                 neighbor_pooling_type</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;model parameters setting</span></span><br><span class="line"><span class="string">        Paramters</span></span><br><span class="line"><span class="string">        ---------</span></span><br><span class="line"><span class="string">        num_layers: int这个是GIN的层数</span></span><br><span class="line"><span class="string">            The number of linear layers in the neural network</span></span><br><span class="line"><span class="string">        num_mlp_layers: intMLP的层数</span></span><br><span class="line"><span class="string">            The number of linear layers in mlps</span></span><br><span class="line"><span class="string">        input_dim: int</span></span><br><span class="line"><span class="string">            The dimensionality of input features</span></span><br><span class="line"><span class="string">        hidden_dim: int</span></span><br><span class="line"><span class="string">            The dimensionality of hidden units at ALL layers</span></span><br><span class="line"><span class="string">        output_dim: int</span></span><br><span class="line"><span class="string">            The number of classes for prediction</span></span><br><span class="line"><span class="string">        final_dropout: float最后一层的抓爆率</span></span><br><span class="line"><span class="string">            dropout ratio on the final linear layer</span></span><br><span class="line"><span class="string">        learn_eps: boolean在学习epsilon参数时是否区分节点本身和邻居节点</span></span><br><span class="line"><span class="string">            If True, learn epsilon to distinguish center nodes from neighbors</span></span><br><span class="line"><span class="string">            If False, aggregate neighbors and center nodes altogether.</span></span><br><span class="line"><span class="string">        neighbor_pooling_type: str邻居汇聚方式，原文公式4.1的后半部分</span></span><br><span class="line"><span class="string">            how to aggregate neighbors (sum, mean, or max)</span></span><br><span class="line"><span class="string">        graph_pooling_type: str全图汇聚方式，和上面的邻居汇聚方式可以不一样</span></span><br><span class="line"><span class="string">            how to aggregate entire nodes in a graph (sum, mean or max)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(GIN, self).__init__()</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line">        self.learn_eps = learn_eps</span><br><span class="line"></span><br><span class="line">        <span class="comment"># List of MLPs</span></span><br><span class="line">        self.ginlayers = torch.nn.ModuleList()</span><br><span class="line">        self.batch_norms = torch.nn.ModuleList()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="built_in">range</span>(self.num_layers - <span class="number">1</span>):<span class="comment">#GIN有几层，除了最后一层每层都定义一个MLP（num_mlp_layers层）来进行COMBINE</span></span><br><span class="line">            <span class="keyword">if</span> layer == <span class="number">0</span>:<span class="comment">#第一层GIN，注意输入维度，</span></span><br><span class="line">                mlp = MLP(num_mlp_layers, input_dim, hidden_dim, hidden_dim)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mlp = MLP(num_mlp_layers, hidden_dim, hidden_dim, hidden_dim)</span><br><span class="line"></span><br><span class="line">            <span class="comment">#更新特征的方式是ApplyNodeFunc，邻居汇聚方式为neighbor_pooling_type</span></span><br><span class="line">            <span class="comment">#具体参考：https://docs.dgl.ai/api/python/nn.pytorch.html#ginconv</span></span><br><span class="line">            self.ginlayers.append(</span><br><span class="line">                GINConv(ApplyNodeFunc(mlp), neighbor_pooling_type, <span class="number">0</span>, self.learn_eps))</span><br><span class="line">            self.batch_norms.append(nn.BatchNorm1d(hidden_dim))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Linear function for graph poolings of output of each layer</span></span><br><span class="line">        <span class="comment"># which maps the output of different layers into a prediction score</span></span><br><span class="line">        self.linears_prediction = torch.nn.ModuleList()</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#以下代码是将每一层点的表征保存下来，然后作为最后的图的表征计算</span></span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="built_in">range</span>(num_layers):</span><br><span class="line">            <span class="keyword">if</span> layer == <span class="number">0</span>:</span><br><span class="line">                self.linears_prediction.append(</span><br><span class="line">                    nn.Linear(input_dim, output_dim))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.linears_prediction.append(</span><br><span class="line">                    nn.Linear(hidden_dim, output_dim))</span><br><span class="line"></span><br><span class="line">        self.drop = nn.Dropout(final_dropout)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#图表征消息汇聚的方式</span></span><br><span class="line">        <span class="keyword">if</span> graph_pooling_type == <span class="string">&#x27;sum&#x27;</span>:</span><br><span class="line">            self.pool = SumPooling()</span><br><span class="line">        <span class="keyword">elif</span> graph_pooling_type == <span class="string">&#x27;mean&#x27;</span>:</span><br><span class="line">            self.pool = AvgPooling()</span><br><span class="line">        <span class="keyword">elif</span> graph_pooling_type == <span class="string">&#x27;max&#x27;</span>:</span><br><span class="line">            self.pool = MaxPooling()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> NotImplementedError</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot02/" class="post-title-link" itemprop="url">小样本学习与其他相似概念的区分</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-25 20:43:22" itemprop="dateCreated datePublished" datetime="2022-08-25T20:43:22+08:00">2022-08-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-18 02:34:58" itemprop="dateModified" datetime="2022-11-18T02:34:58+08:00">2022-11-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Et4y1i7pu">Shusen Wang</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1a5411P7vF">小样本学习研究综述-赵凯琳,靳小龙,王元卓-中国科学院-…</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TU4y1e7R5">有限元笔记10-个人的有限元学习经验分享</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qv411571z">迁移学习</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV12U4y1N7ha">智源LIVE第4期│李文斌:基于局部表征学习的小样本学…</a></p>
+<p>注：元学习不等同于小样本学习；虽然有人把它们混用。 meta learning 是学习如何学习，few-shot learning 是要达到的目标，后者常常借助前者，以至于有人说Few-shot Learning 是 Meta Learning 在监督学习领域的应用。，但实际上少样本学习包含的范围比较大，两者更准确地说属于有交集但不完全重合的关系。</p>
+</blockquote>
+<h2 id="参数概念"><a href="#参数概念" class="headerlink" title="参数概念"></a>参数概念</h2><blockquote>
+<p>知乎-<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/84290146">小样本学习中的一些基本概念</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44422920/article/details/124229002">元学习(meta learning)和小样本学习(few-shot learning)</a></p>
+</blockquote>
+<p> 在 FSL 中，经常用到的一类方法被称为 Meta-learning。 </p>
+<p><img src="/categories/ML/Few-Shot02/1668706082696.png" alt="1668706082696"></p>
+<blockquote>
+<p>（1）<strong>support set</strong> :每次训练的样本集合很小，的数据集，用以提供参考信息，不足以训练大型神经网络。<br> （2）<strong>query set</strong> :用于与训练样本比对的样本，一般来说query set就是一个样本。Query data的类别属于support data中的类别，Q的类别可以在S中看到，但在训练数据集里看不到。 </p>
+<p>（3）在support set中，如果有n个种类，每个种类有k个样本，那么这个训练过程叫n -way k-shot ，如下图就是5-way 1-shot。 </p>
+</blockquote>
+<p>FSL 通常会被分成 N-way k-shot 问题，特指 <strong>Meta-testing </strong>中的Support Set S’的情况，对于训练过程中的S和Q没有任何要求。</p>
+<p><img src="/categories/ML/Few-Shot02/1668707106138.png" alt="1668707106138"></p>
+<p>对于训练过程，要根据query set S，每次放入一个样本得到其预估分类，和真实标签做损失后更新模型；</p>
+<p>其中，N 指的是 <strong>Meta-testing 过程中的样本类别数</strong>，k 指的是 Meta-testing 的过程中每一类有多少个样本，</p>
+<p><img src="/categories/ML/Few-Shot02/1668706589070.png" alt="1668706589070"><br> S’ 和 Q’ 是如何得到的？如上图所示，假设 Testing data 所代表的大的矩形框对应着原始的测试数据，这些数据可能包含有很多类。现在，我们从中随机选出 N 个类，每个类都可能含有很多个样本。然后，我们再从这 N 个类中，每类都随机选出 k+x 个样本（x 代表可以选任意个，但必须满足 k+x 不超过每个类最大的样本个数），其中的 k 个样本将被用作 Support set S’，另外的 x 个样本将被用作 Query set Q’。由此，我们便得到了 Meta-testing 过程中需要用到的两个数据集。</p>
+<blockquote>
+<ul>
+<li><p>测试数据的样本规模 N*(k+x)，x为任意值。</p>
+</li>
+<li><p>S 与 Q 中的样本通常是不会重合的，S’ 与 Q’ 亦然。 </p>
+</li>
+</ul>
+</blockquote>
+<h2 id="元学习Meta-learning"><a href="#元学习Meta-learning" class="headerlink" title="元学习Meta learning"></a>元学习Meta learning</h2><p>传统监督学习： 对于一个给定训练数据集，通过训练使模型可以识别训练数据集，并将其泛化到测试数据集中。要求测试数据集中数据标签类别包含在训练数据集中。<br>meta learning： 目的是让模型learn to learn，使模型可以区分不同的事物。意思是让模型自己学会学习。通过一张待测试图像，其类别不包含在训练数据集中，但包含在support set中，通过待测试图像与support set中每张图像计算他们之间的相似度，将与support set中相似度最高的类别作为query图像的类别，完成模型的预测。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/334641593">https://zhuanlan.zhihu.com/p/334641593</a></p>
+</blockquote>
+<h2 id="多任务学习（MTL）："><a href="#多任务学习（MTL）：" class="headerlink" title="多任务学习（MTL）："></a><strong>多任务学习（MTL）：</strong></h2><p><strong>一般来说，优化多个损失函数就等同于进行多任务学习（与单任务学习相反）。</strong></p>
+<p>联合学习（joint learning）、自主学习（learning to learn）和带有辅助任务的学习（learning with auxiliary task）等都可以指 MTL。</p>
+<h2 id="迁移学习："><a href="#迁移学习：" class="headerlink" title="迁移学习："></a><strong>迁移学习：</strong></h2><blockquote>
+<p>将相关任务的训练数据中的可泛化知识迁移到目标任务上。<br>也就是不同领域的知识迁移的过程，源领域——&gt;目标领域。<br>领域指的是一个样本空间(x,y)(x,y)及其数据分布p(x,y)p(x,y)。只要三者中有不同，就是不同领域。<br>说人话就是，<strong>输入-输出-数据分布相同</strong>，才是两个相同的标准机器学习任务。换句话说就是一个数据集你用不同模型跑跑。</p>
+</blockquote>
+<p>源域有大量标注好的数据，目标域没有数据，这时候就用源域训练好的模型去直接test目标域。</p>
+<h2 id="一些处理数据和标签噪声与不平衡-的误差函数"><a href="#一些处理数据和标签噪声与不平衡-的误差函数" class="headerlink" title="一些处理数据和标签噪声与不平衡 的误差函数"></a>一些处理数据和标签噪声与不平衡 的误差函数</h2><p><img src="/categories/ML/Few-Shot02/1668331346921.png" alt="1668331346921"></p>
+<h2 id="元学习模型"><a href="#元学习模型" class="headerlink" title="元学习模型"></a>元学习模型</h2><p>借助训练时的元知识</p>
+<p><a href="Santoro, A.; Bartunov, S.; Botvinick, M.; Wierstra, D.; Lillicrap, T. Meta-learning with memory-augmented  neural networks. In Proceedings of the 33rd International Conference on International Conference on Machine Learning, New York, NY, USA, 19–24 June 2016; Volume 48, pp. 1842–1850.">A. Santoro,神经图灵机变种</a></p>
+<p><a href>O.Vinyals,Matching Network</a> </p>
+<p><a href>G. Koch et al.,孪生网络</a></p>
+<blockquote>
+<p>基于小样本学习的图像分类技术综述,刘颖等,自动化学报,2021,47(2):297-315</p>
+</blockquote>
+<p>以建模方式为标准，分类为  卷积神经网络模型 和 图神经网络模型。</p>
+<ul>
+<li>卷积网络模型<ul>
+<li>迁移学习  基于特征;基于关系;基于共享参数</li>
+<li>元学习  基于度量;基于优化;基于模型</li>
+<li>对偶学习  自<strong>编码</strong>机</li>
+<li>贝叶斯学习</li>
+</ul>
+</li>
+<li>图神经网络模型<ul>
+<li>非欧几里得数据—&gt;应用于欧几里得数据</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -684,501 +1101,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">数据分析概述</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-06-07 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-07T14:17:22+08:00">2022-06-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-14 19:28:06" itemprop="dateModified" datetime="2022-07-14T19:28:06+08:00">2022-07-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-相关库"><a href="#1-相关库" class="headerlink" title="1.相关库"></a>1.相关库</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321094551847.png" alt="image-20220321094551847"></p>
-<h2 id="2-数据等级"><a href="#2-数据等级" class="headerlink" title="2.数据等级"></a>2.数据等级</h2><ul>
-<li>非结构化—&gt;结构化数据</li>
-</ul>
-<p>结构化数据要从定类别开始，—&gt;定序(引入比较与排序)—&gt;定距(可以加减)—&gt;定比(引入绝对零度,增加乘除)</p>
-<h2 id="3-数据分析"><a href="#3-数据分析" class="headerlink" title="3.数据分析"></a>3.数据分析</h2><h3 id="1-数据质量分析"><a href="#1-数据质量分析" class="headerlink" title="1.数据质量分析"></a>1.数据质量分析</h3><p>缺失值  80%数据全部丢失，30%的缺失（做填充）</p>
-<p>异常值  均值填充</p>
-<p>一致性分析    （训练集和测试集的逻辑分布要是一致的）</p>
-<h3 id="2-数据特征分析"><a href="#2-数据特征分析" class="headerlink" title="2.数据特征分析"></a>2.数据特征分析</h3><ul>
-<li>分布分析     数据要选分布宽度比较低的</li>
-<li>对比分析     均值、方差</li>
-<li>统计量分析  sum</li>
-<li>周期性分析   一般用在时间序列上</li>
-<li>贡献度分析  </li>
-<li>相关度分析  </li>
-</ul>
-<h3 id="3-函数工具"><a href="#3-函数工具" class="headerlink" title="3.函数工具"></a>3.函数工具</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数功能</th>
-<th>所属扩展库</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>interpolate</td>
-<td>一维、高维数据插值</td>
-<td>Scipy</td>
-</tr>
-<tr>
-<td>unique</td>
-<td>去除数据中的重复元素，得到单值元素列表，它是对象的方法名（此功能可以用集合的办法去重）</td>
-<td>Pandas/Numpy</td>
-</tr>
-<tr>
-<td>isnull</td>
-<td>判断是否空值</td>
-<td>Pandas</td>
-</tr>
-<tr>
-<td>notnull</td>
-<td>判断是否为非空值</td>
-<td>Pandas</td>
-</tr>
-<tr>
-<td>PCA</td>
-<td>对指标变量矩阵进行主成分分析</td>
-<td>Scikit-Learn</td>
-</tr>
-<tr>
-<td>random</td>
-<td>生成随机矩阵</td>
-<td>Numpy</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="4-数据规约"><a href="#4-数据规约" class="headerlink" title="4.数据规约"></a>4.数据规约</h2><p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321102046509.png" alt="image-20220321102046509"></p>
-<h3 id="属性规约"><a href="#属性规约" class="headerlink" title="属性规约"></a>属性规约</h3><p>属性的合并、提取和删除、归纳、主成分分析</p>
-<ul>
-<li>合并  {A1,A2,A3}—-&gt;{A};{B1,B2.B3}—-&gt;{B}  <strong>数据降维</strong></li>
-<li>逐步向前选择   从空属性集开始 ，每次从原属性集中选一个当前最优的属性加到现在的集合中，直到无法选择出最优属性或满足一定阈值约束为止。</li>
-<li>逐步向后删除  从全属性集开始，…(与逐步向前选择恰好相反)</li>
-<li>决策树归纳  用决策树对初始数据进行分类归纳学习，决策树上没有的属性可以认为是无关属性，删除之。</li>
-<li>PCA，用较少的变量去解释原始数据中的大部分变量，即将很多相关性很高的变量降低相关性，变为不相关或者独立的变量</li>
-</ul>
-<h3 id="数值规约"><a href="#数值规约" class="headerlink" title="数值规约"></a>数值规约</h3><p>​    数据标准化</p>
-<h2 id="5-数据变换"><a href="#5-数据变换" class="headerlink" title="5.数据变换"></a>5.数据变换</h2><ul>
-<li>简单函数变换</li>
-<li>规范化   把数据变成0，1，数据标准化减少噪声的影响</li>
-<li>连续属性离散化</li>
-<li>属性构造</li>
-<li>小波变换</li>
-<li>傅里叶变换</li>
-</ul>
-<h2 id="6-数据集成"><a href="#6-数据集成" class="headerlink" title="6.数据集成"></a>6.数据集成</h2><p>合并多个数据源的数据，让数据没有偏见</p>
-<ul>
-<li>实体属性识别</li>
-<li>冗余属性识别</li>
-</ul>
-<h2 id="7-数据清洗"><a href="#7-数据清洗" class="headerlink" title="7.数据清洗"></a>7.数据清洗</h2><p>删除原始数据集中的无关数据、重复数据，平滑噪声数据，筛选值与挖掘主题无关的数据，处理缺失值、异常值等。</p>
-<p><img src="/categories/ML/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A6%82%E8%BF%B0/image-20220321205617659.png" alt="image-20220321205617659"></p>
-<h3 id="缺失值处理"><a href="#缺失值处理" class="headerlink" title="缺失值处理"></a>缺失值处理</h3><ul>
-<li>均值、中位数、众数</li>
-<li>使用固定值</li>
-<li>最近邻插补</li>
-<li>回归方法</li>
-<li><p>插值法</p>
-<ul>
-<li>拉格朗日插值                                                                                                                                                                                                                                                                                                                                                                          </li>
-<li>牛顿插值<h3 id="异常值处理"><a href="#异常值处理" class="headerlink" title="异常值处理"></a>异常值处理</h3></li>
-</ul>
-</li>
-<li><p>删除</p>
-</li>
-<li>视为缺失</li>
-<li>平均值</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/%E7%BA%BF%E6%80%A7SVM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/%E7%BA%BF%E6%80%A7SVM/" class="post-title-link" itemprop="url">SVM</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-06-07 14:17:22" itemprop="dateCreated datePublished" datetime="2022-06-07T14:17:22+08:00">2022-06-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-23 01:24:20" itemprop="dateModified" datetime="2022-06-23T01:24:20+08:00">2022-06-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>学习策略：间隔最大化。</strong>形式化为一个凸二次规划(convex quadratic programming)问题，等价于正则式的合页损失函数的最小化问题。</p>
-<p>由简到繁：</p>
-<ul>
-<li>线性可分——&gt;学习线性的分类器——&gt;线性可分（硬间隔）支持向量机；</li>
-<li>数据近似线性可分—&gt;软间隔最大化—&gt;学习线性的分类器—&gt;线性支持向量机；</li>
-<li>数据线性不可分—&gt;kernel trick+软间隔最大化—&gt;非线性支持向量机（等价于在高维空间中学习线性支持向量机)；</li>
-</ul>
-<h2 id="1-超平面："><a href="#1-超平面：" class="headerlink" title="1.超平面："></a>1.超平面：</h2><p><img src="/categories/ML/%E7%BA%BF%E6%80%A7SVM/image-20220526234208124.png" alt="image-20220526234208124"></p>
-<h2 id="2-函数间隔和几何间隔"><a href="#2-函数间隔和几何间隔" class="headerlink" title="2.函数间隔和几何间隔"></a>2.函数间隔和几何间隔</h2><p>因为超平面wx+b=0，所以对于点(xi,yi)，(wxi+bi)能够表示点距离超平面的远近，其与yi的乘积的符号可以用来表示分类的正确性(-1表示分类错误，分类正确时)。</p>
-<p>所以ri=yi(wxi+bi)定义为超平面关于样本点(xi,yi)的函数间隔；超平面关于训练集T的函数间隔为所有超平面关于每个样本点的函数间隔的最小值。</p>
-<p>r’=min(ri)</p>
-<p>函数间隔规范化（<strong>确保超平面不变的时候，间隔也是确定的</strong>）后，即w=w/||w||,b=b/||w||，函数间隔<code>r&#39;</code>变为<strong>几何间隔</strong><code>r</code>。</p>
-<p><strong>约束优化问题为：</strong>求解能够正确划分训练数据集并且使得几何间隔最大的<strong>分离超平面</strong>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/ML/%E7%BA%BF%E6%80%A7SVM/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">最优化问题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-18 09:57:22" itemprop="dateCreated datePublished" datetime="2022-05-18T09:57:22+08:00">2022-05-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-22 17:10:32" itemprop="dateModified" datetime="2022-06-22T17:10:32+08:00">2022-06-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>subject to  s.t.  约束为</p>
-<p><strong>最优化问题= 目标函数+约束函数</strong></p>
-<p>运筹学里的一种</p>
-<ul>
-<li><p>无约束优化/约束优化 </p>
-</li>
-<li><p>线性/非线性优化   目标函数+约束函数有非线性函数</p>
-</li>
-<li><p>连续优化（股票投资比例）/离散优化 （如整数规化：路径选择、生产车辆）</p>
-</li>
-<li><p>单目标优化/多目标优化（考虑多个方面，比如租房）</p>
-</li>
-<li><p>动态规划</p>
-</li>
-<li><p>随机规划</p>
-</li>
-<li><p>鲁棒优化</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/categories/Algo/%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/LSTM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/LSTM/" class="post-title-link" itemprop="url">LSTM</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-05-18 09:57:22" itemprop="dateCreated datePublished" datetime="2022-05-18T09:57:22+08:00">2022-05-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-16 19:29:08" itemprop="dateModified" datetime="2022-06-16T19:29:08+08:00">2022-06-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>RNN是一个链式结构，每个<strong>时间片</strong>使用的是<strong>相同的参数</strong>。常用的是LSTM和GLU。</p>
-<p>输入数据要序列化；</p>
-<p>具有记忆性、时间维度上权值共享且图灵完备，能够以极高的效率学习序列中的非线性特征。</p>
-<p><img src="/categories/ML/LSTM/image-20220518102240209.png" alt="image-20220518102240209" style="zoom:50%;"></p>
-<p>​                                                                            1-1   循环神经网络示例</p>
-<p><img src="/categories/ML/LSTM/image-20220518102352284.png" alt="image-20220518102352284"></p>
-<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h<span class="built_in">_</span>&#123;t&#125;=<span class="keyword">\sigma</span><span class="keyword">\left</span>(x<span class="built_in">_</span>&#123;t&#125; <span class="keyword">\times</span> w<span class="built_in">_</span>&#123;x t&#125;+h<span class="built_in">_</span>&#123;t-1&#125; <span class="keyword">\times</span> w<span class="built_in">_</span>&#123;h t&#125;+b<span class="keyword">\right</span>)</span><br></pre></td></tr></table></figure>
-<p>其中，w_{h t}，为状态权重。</p>
-<h3 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h3><p><strong>长期依赖问题</strong>：</p>
-<p>隐藏状态h_t只能存储有限的信息，当记忆单元存储内容多时，它会逐渐以往之前所学到的知识（着数据时间片的增加，RNN丧失了连接相隔较远的层之间信息的能力）。</p>
-<p>长期依赖的现象也会产生很小的梯度。</p>
-<p><strong>梯度消失。梯度爆炸</strong></p>
-<p>权值矩阵循环相乘导致。因为RNN中每个时间片使用相同的权值矩阵，相同函数的多次组合会导致极端的非线性行为。</p>
-<ul>
-<li>处理梯度爆炸可以采用梯度截断的方法。所谓梯度截断是指将梯度值超过阈值\theta的梯度手动降到\theta 。虽然梯度截断会一定程度上改变梯度的方向，但梯度截断的方向依旧是朝向损失函数减小的方向。</li>
-<li>处理梯度消失？？</li>
-</ul>
-<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>引入门控机制，选择性遗忘一些无用信息，从而控制信息的累积。</p>
-<h2 id="LSTM总结"><a href="#LSTM总结" class="headerlink" title="LSTM总结"></a>LSTM总结</h2><blockquote>
-<p>参考<a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/lstm/">https://easyai.tech/ai-definition/lstm/</a></p>
-</blockquote>
-<p>1997年由Hochreiter &amp; Schmidhuber提出</p>
-<blockquote>
-<p>Hochreiter, S, and J. Schmidhuber. “Long short-term memory.” Neural Computation 9.8(1997):1735-1780.</p>
-</blockquote>
-<h2 id><a href="#" class="headerlink" title=" "></a> </h2><p><img src="/categories/ML/LSTM/image-20220526171733768.png" alt="image-20220526171733768"></p>
-<p><img src="/categories/ML/LSTM/image-20220526174100054.png" alt="image-20220526174100054"></p>
-<h2 id="LSTM详细内容"><a href="#LSTM详细内容" class="headerlink" title="LSTM详细内容"></a>LSTM详细内容</h2><p>5月26日</p>
-<h3 id="1-门-F、I、O"><a href="#1-门-F、I、O" class="headerlink" title="1.门(F、I、O)"></a>1.门(F、I、O)</h3><p>LSTM 可以通过所谓“门”的精细结构向细胞状态添加或移除信息。</p>
-<p><img src="/categories/ML/LSTM/2019-07-05-men.png" alt="LSTM 可以通过所谓“门”的精细结构向细胞状态添加或移除信息"></p>
-<p>门可以<strong>选择性地以让信息通过</strong>。它们由 S 形神经网络层和逐点乘法运算组成。</p>
-<p>S 形网络的输出值介于 0 和 1 之间，表示有多大比例的信息通过。0 值表示“没有信息通过”，1 值表示“所有信息通过”。</p>
-<p>一个 LSTM 有三种这样的门用来保持和控制细胞状态。</p>
-<ul>
-<li>忘记门(Forget gate)：将值朝0减少。</li>
-<li>输入门(Input gate)：决定是否忽略掉输入数据；</li>
-<li>输出门(Output gate)：决定是否使用隐状态；</li>
-</ul>
-<p><img src="/categories/ML/LSTM/image-20220526173429277.png" alt="image-20220526173429277"></p>
-<p><img src="/categories/ML/LSTM/image-20220526173647329.png" alt="image-20220526173647329"></p>
-<h3 id="2-候选记忆单元（增加的部分）"><a href="#2-候选记忆单元（增加的部分）" class="headerlink" title="2.候选记忆单元（增加的部分）"></a>2.候选记忆单元（增加的部分）</h3><p><strong>没有用到任何Gate</strong></p>
-<p>读法：C_tilda</p>
-<p><img src="/categories/ML/LSTM/image-20220526173509561.png" alt="image-20220526173509561"></p>
-<p><img src="/categories/ML/LSTM/image-20220526173323589.png" alt="image-20220526173323589"></p>
-<h3 id="3-记忆单元Ct"><a href="#3-记忆单元Ct" class="headerlink" title="3.记忆单元Ct"></a>3.<strong>记忆单元</strong>Ct</h3><p><img src="/categories/ML/LSTM/2019-07-05-xibao.png" alt="LSTM 的关键是细胞状态，即图中上方的水平线" style="zoom:50%;"></p>
-<p>Ct的范围比较大，需要tanh规范到-1到1之间。</p>
-<p>LSTM 的关键是细胞状态，即图中上方的水平线。</p>
-<p>细胞状态有点像传送带。它贯穿整个链条，只有一些次要的线性交互作用。信息很容易以不变的方式流过。</p>
-<p><img src="/categories/ML/LSTM/image-20220526172126536.png" alt="image-20220526172126536"></p>
-<h3 id="4-隐状态Ht"><a href="#4-隐状态Ht" class="headerlink" title="4.隐状态Ht"></a>4.隐状态Ht</h3><p>让隐藏状态放在+1到-1之间，避免梯度爆炸，降低模型复杂度。</p>
-<p><img src="/categories/ML/LSTM/image-20220526173904253.png" alt="image-20220526173904253"></p>
-<p><img src="/categories/ML/LSTM/image-20220526174148608.png" alt="image-20220526174148608"></p>
-<h2 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h2><h3 id="1-计算模型占用显存"><a href="#1-计算模型占用显存" class="headerlink" title="1.计算模型占用显存"></a>1.计算模型占用显存</h3><p>取决于调用的库，对框架的优化，所以最好直接查看实际GPU占用；</p>
-<h2 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1246,7 +1172,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">172</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1258,7 +1184,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

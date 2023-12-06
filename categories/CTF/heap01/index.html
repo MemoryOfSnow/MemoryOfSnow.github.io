@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueinyou.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="0x01 简介1.各种段的作用 ELF .plt:库函数插桩所在； ELF .got:输入符号指针 .bss：未初始化 数据； 2.mmap缺点 1.分配字节数必须是4096字节的倍数，只能以内存页为单元管理内存，经过内核很慢。   3.按需分配内存，  dllmaloc，Doug Lea开发并发布到公共社区；  Linux的glibc里的ptmalloc(Posix Thred aware fo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="堆">
+<meta property="og:url" content="https://blueinyou.com/categories/CTF/heap01/index.html">
+<meta property="og:site_name" content="Paul C&#39;s Blog">
+<meta property="og:description" content="0x01 简介1.各种段的作用 ELF .plt:库函数插桩所在； ELF .got:输入符号指针 .bss：未初始化 数据； 2.mmap缺点 1.分配字节数必须是4096字节的倍数，只能以内存页为单元管理内存，经过内核很慢。   3.按需分配内存，  dllmaloc，Doug Lea开发并发布到公共社区；  Linux的glibc里的ptmalloc(Posix Thred aware fo">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-06T11:19:49.000Z">
+<meta property="article:modified_time" content="2023-12-06T11:22:33.485Z">
+<meta property="article:author" content="Paul C">
+<meta property="article:tag" content="Pwn">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blueinyou.com/categories/CTF/heap01/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>堆 | Paul C's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Paul C's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">To be funny,to grow up!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/heap01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          堆
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-12-06 19:19:49 / Modified: 19:22:33" itemprop="dateCreated datePublished" datetime="2023-12-06T19:19:49+08:00">2023-12-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>1.<a href="../Notes/Linkers&amp;Loaders02/">各种段的作用</a></p>
+<p>ELF .plt:库函数插桩所在；</p>
+<p>ELF .got:输入符号指针</p>
+<p>.bss：<strong>未初始化</strong> 数据；</p>
+<h3 id="2-mmap缺点"><a href="#2-mmap缺点" class="headerlink" title="2.mmap缺点"></a>2.mmap缺点</h3><ul>
+<li>1.分配字节数必须是4096字节的倍数，只能以内存页为单元管理内存，经过内核很慢。 </li>
+</ul>
+<p>3.按需分配内存，</p>
+<ul>
+<li><p>dllmaloc，Doug Lea开发并发布到公共社区；</p>
+</li>
+<li><p>Linux的glibc里的<strong>ptmalloc</strong>(Posix Thred aware fork of dllmalloc),</p>
+<p>malloc的多线程实现</p>
+</li>
+<li><p>FreeBSD里的jemalloc(被用在Firefox,Android)</p>
+</li>
+<li><p>Windows里的Segment heap,NT heap</p>
+</li>
+<li><p>kmalloc(linux内核内存分配器)，kalloc(ios内存分配器)</p>
+</li>
+</ul>
+<p>有动态分配器管理的内存—&gt;堆。</p>
+<p>C++程序，函数scanf、printf都要使用堆。</p>
+<h3 id="4-ptmalloc-glibc提供的对堆的管理函数"><a href="#4-ptmalloc-glibc提供的对堆的管理函数" class="headerlink" title="4.ptmalloc/glibc提供的对堆的管理函数"></a>4.ptmalloc/glibc提供的对堆的管理函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">malloc() 分配内存</span><br><span class="line">free() 释放之前申请的内存块</span><br><span class="line">realloc() 分配后改变分配的尺寸</span><br><span class="line">calloc()分配并把内存清零</span><br></pre></td></tr></table></figure>
+<p>为什么要有calloc？因为未初始化的数据可能导致data disclosure。</p>
+<h3 id="5-现代化的技术"><a href="#5-现代化的技术" class="headerlink" title="5.现代化的技术"></a>5.现代化的技术</h3><p>ASLR(Adress Space Layout Randomlization, 地址空间布局随机化)</p>
+<p>NX</p>
+<p>PIE</p>
+<p>RELRO</p>
+<p>Stack Canary</p>
+<h3 id="6-Data-Segment"><a href="#6-Data-Segment" class="headerlink" title="6.Data Segment"></a>6.Data Segment</h3><ul>
+<li><p>ptmalloc在分配小内存时不使用mmap，用另一种内存管理方法brk() ；在大片分配时使用mmap；</p>
+</li>
+<li><p>一开始从零开始</p>
+</li>
+<li>由系统调用<code>brk</code>和<code>sbrk</code>管理，或许这两个 系统调用不再遵循POSIX标准。<ul>
+<li>sbrk(NULL) return 数据段的当前末尾</li>
+<li>sbrk(num)  扩充当前数据段num个字节</li>
+<li>brk(addr ) 扩充当前数据段一直到addr位置</li>
+</ul>
+</li>
+</ul>
+<p>写一段测试代码，捕捉malloc的场景，不要使用printf和puts，因为其内部可能会使用malloc；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> msg[]=<span class="string">&quot;Start malloc()!&quot;</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>** argv)</span>&#123;</span><br><span class="line">        write(<span class="number">1</span>,msg,<span class="built_in">strlen</span>(msg));</span><br><span class="line">        <span class="built_in">malloc</span>(<span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="7-为什么堆带来了危险？"><a href="#7-为什么堆带来了危险？" class="headerlink" title="7.为什么堆带来了危险？"></a>7.为什么堆带来了危险？</h3><p>程序员：</p>
+<p>忘记释放内存？</p>
+<p>忘记指针所指；</p>
+<p>忘记已经释放的内存有哪些；</p>
+<p>堆管理器：追求性能，安全之后再考虑。</p>
+<h3 id="8-一些检测和防御手段"><a href="#8-一些检测和防御手段" class="headerlink" title="8.一些检测和防御手段"></a>8.一些检测和防御手段</h3><p>Valgrind使用测试样例找到一些通常 错误，比如忘记释放内存，资源耗尽；</p>
+<p>glibc的严格模式：  会让程序变慢</p>
+<ul>
+<li>export MALLOC_CHECK=1</li>
+<li>export MALLOC_PERTURB=1</li>
+<li>export MALLOC_MMAP_THRESHOLD=1 #所有内存分配都通过，仍旧可以绕过</li>
+</ul>
+<h2 id="0x02-Dynamic-Allocator-Misuse"><a href="#0x02-Dynamic-Allocator-Misuse" class="headerlink" title="0x02 Dynamic Allocator Misuse"></a>0x02 Dynamic Allocator Misuse</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1zW4y1f7cB">https://www.bilibili.com/video/BV1zW4y1f7cB</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pwn/" rel="tag"># Pwn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/categories/ML/Few-Shot21/" rel="prev" title="Are LSTMs Good Few-Shot Learners?">
+      <i class="fa fa-chevron-left"></i> Are LSTMs Good Few-Shot Learners?
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">0x01 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-mmap%E7%BC%BA%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">2.mmap缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ptmalloc-glibc%E6%8F%90%E4%BE%9B%E7%9A%84%E5%AF%B9%E5%A0%86%E7%9A%84%E7%AE%A1%E7%90%86%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">4.ptmalloc&#x2F;glibc提供的对堆的管理函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%8E%B0%E4%BB%A3%E5%8C%96%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="nav-number">1.3.</span> <span class="nav-text">5.现代化的技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Data-Segment"><span class="nav-number">1.4.</span> <span class="nav-text">6.Data Segment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A0%86%E5%B8%A6%E6%9D%A5%E4%BA%86%E5%8D%B1%E9%99%A9%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">7.为什么堆带来了危险？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E4%B8%80%E4%BA%9B%E6%A3%80%E6%B5%8B%E5%92%8C%E9%98%B2%E5%BE%A1%E6%89%8B%E6%AE%B5"><span class="nav-number">1.6.</span> <span class="nav-text">8.一些检测和防御手段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-Dynamic-Allocator-Misuse"><span class="nav-number">2.</span> <span class="nav-text">0x02 Dynamic Allocator Misuse</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Paul C"
+      src="https://blueinyou.com/photos/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Paul C</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/memoryofsnow" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;memoryofsnow" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2215489940@qq.com" title="E-Mail → mailto:2215489940@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/jiyi_guoshu" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;jiyi_guoshu" rel="noopener" target="_blank"><i class="fab fa-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Paul C</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
