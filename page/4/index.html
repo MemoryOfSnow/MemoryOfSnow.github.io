@@ -156,6 +156,564 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/rev02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/CTF/rev02/" class="post-title-link" itemprop="url">SYCTF2306 babyThread题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-06 14:19:49 / Modified: 22:13:04" itemprop="dateCreated datePublished" datetime="2023-08-06T14:19:49+08:00">2023-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="本题难点"><a href="#本题难点" class="headerlink" title="本题难点"></a>本题难点</h2><p>1.这道题要给线程下断点，</p>
+<p>2.而且还要跳过一个IsDebuggerPresent的反调试，</p>
+<p>3.在进入线程后，输入阶段也有一个跳转需要修改。</p>
+<h2 id="静态反汇编，"><a href="#静态反汇编，" class="headerlink" title="静态反汇编，"></a>静态反汇编，</h2><p>一路跟踪跳转关系，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">Main_func</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  sub_41141A();                                 <span class="comment">// 给函数指针赋值</span></span><br><span class="line">  <span class="keyword">return</span> sub_412A90();                          <span class="comment">// 得到flag</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//sub_412A90() line 36</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//int sub_412D60() line 9</span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">Key_func</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  CreateThread(<span class="number">0</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)StartAddress, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  hHandle = (HANDLE)sub_41127B();</span><br><span class="line">  CreateThread(<span class="number">0</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)sub_411316, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">//sub_411316 line3</span></span><br><span class="line"><span class="comment">//定位到关键函数</span></span><br><span class="line">__int64 __stdcall <span class="title function_">sub_411B80</span><span class="params">(<span class="type">int</span> a1)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> v1; <span class="comment">// edx</span></span><br><span class="line">  __int64 v2; <span class="comment">// ST08_8</span></span><br><span class="line">  <span class="type">char</span> v4; <span class="comment">// [esp+0h] [ebp-13Ch]</span></span><br><span class="line">  <span class="type">size_t</span> Size; <span class="comment">// [esp+D0h] [ebp-6Ch]</span></span><br><span class="line">  <span class="type">char</span> Buf2; <span class="comment">// [esp+DCh] [ebp-60h]</span></span><br><span class="line">  <span class="type">int</span> v7_32; <span class="comment">// [esp+108h] [ebp-34h]</span></span><br><span class="line">  <span class="type">char</span> flag; <span class="comment">// [esp+114h] [ebp-28h]</span></span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+13Ch] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_41137F((<span class="type">int</span>)&amp;unk_41D0F4);</span><br><span class="line">  WaitForSingleObject(hObject, <span class="number">0xFFFFFFFF</span>);</span><br><span class="line">  Check_Run_Error(&amp;v4 == &amp;v4);</span><br><span class="line">  Print_str((<span class="type">int</span>)<span class="string">&quot;please input your flag:&quot;</span>, v4);</span><br><span class="line">  Input_str(<span class="string">&quot;%32s&quot;</span>, (<span class="type">unsigned</span> <span class="type">int</span>)&amp;flag);</span><br><span class="line">  v7_32 = j_strlen(&amp;flag);</span><br><span class="line">  Enc_str(<span class="number">16</span>, (<span class="type">int</span>)&amp;flag, v7_32, (<span class="type">int</span>)&amp;Buf2);</span><br><span class="line">  Size = <span class="number">32</span>;</span><br><span class="line">  <span class="keyword">if</span> ( !j_memcmp(&amp;unk_41B018, &amp;Buf2, <span class="number">32u</span>) )</span><br><span class="line">    Print_str((<span class="type">int</span>)<span class="string">&quot;you win!&quot;</span>, v4);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    Print_str((<span class="type">int</span>)<span class="string">&quot;you lose!&quot;</span>, v4);</span><br><span class="line">  SetEvent(hObject);</span><br><span class="line">  Check_Run_Error(&amp;v4 == &amp;v4);</span><br><span class="line">  HIDWORD(v2) = v1;</span><br><span class="line">  LODWORD(v2) = <span class="number">1</span>;</span><br><span class="line">  sub_411217((<span class="type">int</span>)&amp;savedregs, (<span class="type">int</span>)&amp;dword_411C7C);</span><br><span class="line">  <span class="keyword">return</span> v2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​    猜测memcmp比较的：unk_41B018是程序的密文，Buf2存储根据输入生成的密文。</p>
+<p>跟入前面的处理函数，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> __int64 __cdecl <span class="title function_">sub_411DA0</span><span class="params">(<span class="type">int</span> a1_16, <span class="type">int</span> flag, <span class="type">int</span> a3_32, <span class="type">int</span> cipher)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">size_t</span> v4; <span class="comment">// eax</span></span><br><span class="line">  __int64 v5; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">char</span> v6; <span class="comment">// STEB_1</span></span><br><span class="line">  <span class="type">unsigned</span> __int8 v7; <span class="comment">// STDF_1</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v8; <span class="comment">// ST04_8</span></span><br><span class="line">  <span class="type">char</span> v10[<span class="number">264</span>]; <span class="comment">// [esp+E8h] [ebp-16Ch]</span></span><br><span class="line">  <span class="type">int</span> v11; <span class="comment">// [esp+1F0h] [ebp-64h]</span></span><br><span class="line">  <span class="type">int</span> v12; <span class="comment">// [esp+1F4h] [ebp-60h]</span></span><br><span class="line">  <span class="type">int</span> v13; <span class="comment">// [esp+1F8h] [ebp-5Ch]</span></span><br><span class="line">  <span class="type">int</span> v14; <span class="comment">// [esp+1FCh] [ebp-58h]</span></span><br><span class="line">  <span class="type">int</span> v15; <span class="comment">// [esp+200h] [ebp-54h]</span></span><br><span class="line">  <span class="type">int</span> v16; <span class="comment">// [esp+20Ch] [ebp-48h]</span></span><br><span class="line">  <span class="type">int</span> j; <span class="comment">// [esp+218h] [ebp-3Ch]</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [esp+224h] [ebp-30h]</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v19; <span class="comment">// [esp+230h] [ebp-24h]</span></span><br><span class="line">  <span class="type">char</span> v20; <span class="comment">// [esp+23Ch] [ebp-18h]</span></span><br><span class="line">  <span class="type">char</span> v21; <span class="comment">// [esp+23Dh] [ebp-17h]</span></span><br><span class="line">  <span class="type">char</span> v22; <span class="comment">// [esp+23Eh] [ebp-16h]</span></span><br><span class="line">  <span class="type">char</span> v23[<span class="number">21</span>]; <span class="comment">// [esp+23Fh] [ebp-15h]</span></span><br><span class="line">  <span class="type">int</span> savedregs; <span class="comment">// [esp+254h] [ebp+0h]</span></span><br><span class="line"></span><br><span class="line">  sub_41137F((<span class="type">int</span>)&amp;unk_41D0F4);</span><br><span class="line">  v11 = <span class="number">1</span>;</span><br><span class="line">  v12 = <span class="number">0x55</span>;</span><br><span class="line">  v13 = <span class="number">0x1C39</span>;</span><br><span class="line">  v14 = <span class="number">0x95EED</span>;</span><br><span class="line">  v15 = <span class="number">0x31C84B1</span>;</span><br><span class="line">  v19 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; ; i += <span class="number">4</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    v4 = j_strlen(Dest);</span><br><span class="line">    <span class="keyword">if</span> ( v19 &gt;= v4 )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    v16 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; <span class="number">5</span>; ++j )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( Dest[j + v19] == <span class="number">0x7A</span> )</span><br><span class="line">        *(&amp;v20 + j + i) = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        v16 += *(&amp;v11 + <span class="number">4</span> - j) * (Dest[j + v19] - <span class="number">33</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    v23[i] = v16;</span><br><span class="line">    *(&amp;v22 + i) = BYTE1(v16);</span><br><span class="line">    *(&amp;v21 + i) = BYTE2(v16);</span><br><span class="line">    *(&amp;v20 + i) = HIBYTE(v16);</span><br><span class="line">    v19 += <span class="number">5</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  v5 = sub_411127((<span class="type">int</span>)&amp;v20, a1_16, (<span class="type">int</span>)v10);</span><br><span class="line">  v19 = <span class="number">0</span>;</span><br><span class="line">  i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; a3_32; ++j )</span><br><span class="line">  &#123;</span><br><span class="line">    v19 = (<span class="type">signed</span> <span class="type">int</span>)(v19 + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">    i = (i + (<span class="type">unsigned</span> __int8)v10[v19]) % <span class="number">256</span>;</span><br><span class="line">    v6 = v10[v19];</span><br><span class="line">    v10[v19] = v10[i];</span><br><span class="line">    v10[i] = v6;</span><br><span class="line">    v7 = v10[((<span class="type">unsigned</span> __int8)v10[i] + (<span class="type">unsigned</span> __int8)v10[v19]) % <span class="number">256</span>];</span><br><span class="line">    HIDWORD(v5) = v7;</span><br><span class="line">    *(_BYTE *)(j + cipher) = v7 ^ *(_BYTE *)(j + flag);<span class="comment">// cipher[j]=v7^flag[j]</span></span><br><span class="line">  &#125;</span><br><span class="line">  v8 = __PAIR__(HIDWORD(v5), j);</span><br><span class="line">  Check_Stack((<span class="type">int</span>)&amp;savedregs, (<span class="type">int</span>)&amp;dword_411FF8);</span><br><span class="line">  <span class="keyword">return</span> v8;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到前面根据一系列操作，生成了v7，然后用v7和flag异或得到了正确的cipher。</p>
+<h2 id="所以动态调试，"><a href="#所以动态调试，" class="headerlink" title="所以动态调试，"></a>所以动态调试，</h2><p>1.先搜索字符串，下好断点，一个是输入位置，一个是比较位置。</p>
+<p><img src="/categories/CTF/rev02/1691327074344.png" alt="1691327074344"></p>
+<h3 id="考点1"><a href="#考点1" class="headerlink" title="考点1"></a>考点1</h3><p>多线程下好断点。</p>
+<p><img src="/categories/CTF/rev02/1691326897356.png" alt="1691326897356"></p>
+<h3 id="考点2"><a href="#考点2" class="headerlink" title="考点2"></a>考点2</h3><p>2.一开始直接<code>jmp F12E10</code>。</p>
+<p><img src="/categories/CTF/rev02/1691325095601.png" alt="1691325095601"></p>
+<p>3.进入到F12A90。</p>
+<p>F9运行，断到了线程函数执行前。</p>
+<p><img src="/categories/CTF/rev02/1691327641950.png" alt="1691327641950"></p>
+<p>按几下F9，成功断到了关键函数处。</p>
+<p><img src="/categories/CTF/rev02/1691328283702.png" alt="1691328283702"></p>
+<p>此时的线程状态：</p>
+<p><img src="/categories/CTF/rev02/1691328244877.png" alt="1691328244877"></p>
+<h3 id="考点3"><a href="#考点3" class="headerlink" title="考点3"></a>考点3</h3><p>跟入F11037，在F12860的跳转处，强制让其不跳转。</p>
+<p><img src="/categories/CTF/rev02/1691329006039.png" alt="1691329006039"></p>
+<p>断在输入位置0x411BDE位置，</p>
+<p><img src="/categories/CTF/rev02/1691329286256.png" alt="1691329286256"></p>
+<p>先随便输入32个1，根据对比函数里的栈地址，找到密文unk_41B018，</p>
+<p><img src="/categories/CTF/rev02/1691329776133.png" alt="1691329776133"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">00F1B018  DE 1C 22 27 1D AE AD 65 AD EF 6E 41 4C 34 75 F1  ?&quot;&#x27;enAL4u?</span><br><span class="line">00F1B028  16 50 50 D4 48 69 6D 93 36 1C 86 3B BB D0 4C 91  PP訦im??恍L?</span><br></pre></td></tr></table></figure>
+<p>整理如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DE1C22271DAEAD65ADEF6E414C3475F1165050D448696D93361C863BBBD04C91</span><br></pre></td></tr></table></figure>
+<p>再次运行程序，先断到长度函数处。</p>
+<p><img src="/categories/CTF/rev02/1691330092818.png" alt="1691330092818"></p>
+<p>修改这里的输入值，将前面的密文输入进去。</p>
+<p><img src="/categories/CTF/rev02/1691330196880.png" alt="1691330196880"></p>
+<p>再断到加密函数位置处：</p>
+<p><img src="/categories/CTF/rev02/1691330953276.png" alt="1691330953276"></p>
+<p>经过异或处理后，此时memcmp的Buf2里, 就是flag值。</p>
+<h2 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h2><p><img src="/categories/CTF/rev02/1691330848182.png" alt="1691330848182"></p>
+<p><img src="/categories/CTF/rev02/1691330936363.png" alt="1691330936363"></p>
+<h3 id="Run跟踪"><a href="#Run跟踪" class="headerlink" title="Run跟踪"></a>Run跟踪</h3><ul>
+<li>跟踪一个call运行了哪些代码，有递归所有call和只对一层call的方法，操作方式分别是CTRL+F11和CTRL+F12。 </li>
+</ul>
+<h3 id="给线程下断的另一种方式"><a href="#给线程下断的另一种方式" class="headerlink" title="给线程下断的另一种方式"></a>给线程下断的另一种方式</h3><p><img src="/categories/CTF/rev02/1691331179709.png" alt="1691331179709"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Linkers&Loaders03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Linkers&Loaders03/" class="post-title-link" itemprop="url">Chap6-可执行文件的装载和进程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-03 14:58:58" itemprop="dateCreated datePublished" datetime="2023-08-03T14:58:58+08:00">2023-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-08-18 21:58:38" itemprop="dateModified" datetime="2023-08-18T21:58:38+08:00">2023-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>假设程序都是静态链接的，先从整体上把握程序的装载过程，下一章将把程序拆成模块来观察。</p>
+</blockquote>
+<p>Linux下的分段故障<code>Segmentation fault</code>与Windows的“进程因非法操作需要关闭，很多时候是因为进程访问了未经允许的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**Linux操作系统</span></span><br><span class="line"><span class="comment"> * |----------------------------------|</span></span><br><span class="line"><span class="comment"> * |              操作系统空间         | 1G</span></span><br><span class="line"><span class="comment"> * |----------------------------------| 0xC0000000</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  | </span></span><br><span class="line"><span class="comment"> * |             用户进程空间          |   3G</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |                                  |</span></span><br><span class="line"><span class="comment"> * |__________________________________| 0x00000000</span></span><br><span class="line"><span class="comment"> * WinXP默认操作系统占据2G内存，可以调整使其只占1G内存。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="PAE"><a href="#PAE" class="headerlink" title="PAE"></a>PAE</h3><p>(Physical Address Extension)，是针对32位CPU内存不足的一种修补。类似的，针对16位CPU，借助段偏移寻址能够达到1MB，每次读块只能读64KB，使用XMS(一种中断处理技术)读取大于1MB内存的地方。</p>
+<p>OS采用36位地址线\内存地址时，程序使用的最大虚拟地址空间仍旧不会超过4GB，但是它程序的虚拟地址空间可以映射到的物理内存的范围扩大到64GB。</p>
+<p>通过这种页或块映射在Win下访存的操作方式叫地址窗口映射扩展AWE(Address Windowing Extension)；在Linu下通过mmap()系统调用来实现。</p>
+<h3 id="装载的方式"><a href="#装载的方式" class="headerlink" title="装载的方式"></a>装载的方式</h3><ul>
+<li>overlay覆盖装入，适合内存受限场景比如木马或者嵌入式设备；</li>
+</ul>
+<p>保证调用路径上的块都在内存；禁止跨树间调用。</p>
+<p>编写程序时将程序分块，写一小段辅助代码，管理模块在内存的驻留和更替。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                 Overlay Manager (几十Bytes)        |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |                  Main (1024 bytes)                 | </span></span><br><span class="line"><span class="comment"> * |											    |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> * |      A 模块 (512 bytes)    |   B 模块 (256 bytes)   |</span></span><br><span class="line"><span class="comment"> * |						 |----------------------- |</span></span><br><span class="line"><span class="comment"> * |----------------------------------------------------|</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>如上图所示，A和B模块互不依赖，都被Main模块调用时，则可以采用Overlay的方式，使得需要的内存空间节省256Bytes。</p>
+<ul>
+<li>Paging页映射 和页替换算法  MMU的地址映射</li>
+</ul>
+<h2 id="从操作系统可执行文件的装载"><a href="#从操作系统可执行文件的装载" class="headerlink" title="从操作系统可执行文件的装载"></a>从操作系统可执行文件的装载</h2><h3 id="进程的建立"><a href="#进程的建立" class="headerlink" title="进程的建立"></a>进程的建立</h3><ul>
+<li>1.创建虚拟地址空间（只创建映射函数需要的数据结构，并不实际创建空间）<ul>
+<li>Linux i386中是分配一个页目录，不设置页映射关系，在后面程序发生页错误的时候才设置）</li>
+</ul>
+</li>
+<li>2.读取可执行文件头，建立虚拟空间与可执行文件的映射关系。（装载）</li>
+</ul>
+<p>(Linux中)</p>
+<ul>
+<li><p>3.令EIP=EOP of Executable File</p>
+<p>​    内核堆栈和用户堆栈的切换、CPU运行权限切换</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">页面可执行文件的偏移&lt;----（装载）----&gt;虚拟存储空间&lt;-----------&gt;物理内存</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>Linux将进程虚拟空间中的一个段叫VMA(Virtual Mempry Area)，包括</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start address;size;Attributes(RWE);State;Type;</span><br></pre></td></tr></table></figure>
+<p>对于相同权限状态的节Section，把它们<strong>合并到一起</strong>作为一个段Segment映射。这样在进程虚拟空间中只有一个VMA而不是多个，可以减少页面内部碎片，节省内存空间。</p>
+<h3 id="页错误"><a href="#页错误" class="headerlink" title="页错误"></a>页错误</h3><p>程序执行时进程虚拟空间中发生Page Fault，控制权从进程转移到OS；</p>
+<p>根据数据结构找到VMA，计算页面在磁盘文件中的偏移，</p>
+<p>然后物理内存分配物理页，读取该磁盘块到物理页中，</p>
+<p>将发生页错误的虚拟页与物理页之间建立映射关系。</p>
+<p>控制权归还给进程，从发生页错误的位置继续执行。</p>
+<h2 id="ELF文件"><a href="#ELF文件" class="headerlink" title="ELF文件"></a>ELF文件</h2><p>从链接角度(Linking View)看，elf文件按照节section存储，描述它的结构叫做节表Section Headers；</p>
+<p>从装载角度或者执行视图(Execution View)看，elf文件可以按照段segment划分，描述它的结构叫做程序头Program Header；</p>
+<p>elf可执行文件和共享库文件处于装载的需要，比目标文件多一个程序头表(Program Header Table)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 程序头表</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    Elf32_Word p_type;      <span class="comment">// 段的类型，如LOAD:1.DYNAMIC,INTERP</span></span><br><span class="line">    Elf32_Addr p_offset;    <span class="comment">// 段在文件中的偏移量</span></span><br><span class="line">    Elf32_Addr p_vaddr;     <span class="comment">// 段在内存中的虚拟地址</span></span><br><span class="line">    Elf32_Addr p_paddr;     <span class="comment">// 段在物理内存中的地址（对于嵌入式系统可能有用）</span></span><br><span class="line">    Elf32_Word p_filesz;    <span class="comment">// 段在文件中的大小，可能是0</span></span><br><span class="line">    Elf32_Word p_memsz;     <span class="comment">// 段在进程虚拟地址空间中占用的大小，可能是0</span></span><br><span class="line">    Elf32_Word p_flags;     <span class="comment">// 段的属性标志，如可读、可写、可执行等</span></span><br><span class="line">    Elf32_Word p_align;     <span class="comment">// 字节按照2^p_align次方对齐</span></span><br><span class="line">&#125; Elf32_Phdr;</span><br></pre></td></tr></table></figure>
+<p>对于LOAD类型的Segment，p_memsz一定&gt;=p_filesz（bss被合并在数据类型的段里，存放那些未被初始化的数据）。</p>
+<h2 id="PE文件的装载"><a href="#PE文件的装载" class="headerlink" title="PE文件的装载"></a>PE文件的装载</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>PE文件可以装载到任何内存位置。PE文件中选用RVA，因为RVA可以始终保持一致。</p>
+<p>1.读取文件第一个页，获取到DOS头、PE头、段表。</p>
+<p>2.选择装载地址。检查进程空间地址里，目标地址是否可用。若不可用，则另外选择装载地址。</p>
+<p>3.段映射。使用段表将PE文件中的段，映射到进程内存空间地址。—&gt;若装载地址≠目标地址，Rebasing。</p>
+<p>4.装载所需要的dll文件—&gt;解析PE文件中的导入符号——&gt;</p>
+<p>5.建立初始化栈和堆—&gt;建立主线程并启动进程</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">coffHeader&#123;</span><br><span class="line">    optionalHeader&#123;</span><br><span class="line">        ...</span><br><span class="line">        u32 addressofEntryPoint;<span class="comment">//装载后PE文件第一个指令的RVA,病毒感染PE文件后要修改入口点，篡改执行流程。</span></span><br><span class="line">        u32 SectionAlignment;<span class="comment">//内存中段对齐粒度，默认是4K=4096字节</span></span><br><span class="line">        u32 FileAlignMent;<span class="comment">//文件中段对齐粒度，默认是512字节</span></span><br><span class="line">        u32 baseofCode;</span><br><span class="line">        u32 baseofData;<span class="comment">//数据段起始RVA</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-4-进程虚存空间分布"><a href="#6-4-进程虚存空间分布" class="headerlink" title="6.4 进程虚存空间分布"></a>6.4 进程虚存空间分布</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/Notes/Pediy02/" class="post-title-link" itemprop="url">CPU体系架构回顾</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-08-02 14:19:49 / Modified: 17:50:28" itemprop="dateCreated datePublished" datetime="2023-08-02T14:19:49+08:00">2023-08-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.kanxue.com/chm.htm?id=13855&amp;pid=node1000002">https://www.kanxue.com/chm.htm?id=13855&amp;pid=node1000002</a></p>
+</blockquote>
+<h2 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h2><ul>
+<li><p>MIPS  长度固定的指令，是RISC，处理器通过硬连线实现 </p>
+</li>
+<li><p>x86(IA-32)，长度变化，用CISC的指令集，CISC的处理器需要用微指令配合运行。但是当下Intel实际处理器的结构都已经变成了risc结构了，risc的结构实现流水线等特性比较容易。 </p>
+</li>
+</ul>
+<p> cisc的寄存器数量较少，指令能够实现一些比较特殊的功能，例如Win32汇编语言对应的8086的一些寄存器： AX-DX，CS、DS、ES、SS。</p>
+<p>GNU编译的elf文件对应到RISC的寄存器，会有很多通用寄存器。</p>
+<p> 虚拟模式需要使用一些特殊的寄存器、为了支持分页需要使用页表寄存器等，为了加速内存的访问需要使用TLB，加速数据和指令的访问而使用data cache和instruction cache等 </p>
+<blockquote>
+<p>jmp $是为了让程序停在这一行，防止程序跑飞（跑飞的程序危害很大！有可能把数据当代码或者把代码当数据！）</p>
+</blockquote>
+<h3 id="仿真工具"><a href="#仿真工具" class="headerlink" title="仿真工具"></a>仿真工具</h3><p> 用synplify综合的电路，然后用debussy+modelsim仿真 </p>
+<h2 id="IA-32的指令格式"><a href="#IA-32的指令格式" class="headerlink" title="IA-32的指令格式"></a>IA-32的指令格式</h2><p><img src="/categories/Notes/Pediy02/1690965899478.png" alt="1690965899478"></p>
+<p>前缀部分可选，分为四个group。</p>
+<p> 操作数前缀用于设置 锁总线和重复前缀 、段重写和分支预测、操作数宽度、地址宽度。</p>
+<h3 id="Opcode"><a href="#Opcode" class="headerlink" title="Opcode"></a>Opcode</h3><ol>
+<li><p>x86的opcode最短是1个字节，最长是3个字节。 </p>
+</li>
+<li><p>x86对于源操作数和目的操作数是暗含在opcode里面的。 </p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">88 11 BL(011) CL(001)     88 D9 MOV CL, BL               MR   </span><br><span class="line">8A 11 011 001             8A D9 MOV BL(011),CL(001)      R&lt;--M</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>二字节通用opcode是0fh+一字节的编码；但是二字节的SIMD opcode是三字节长度，即一个强制前缀+0fh+一字节的操作码。 </p>
+</li>
+<li><p>同样的，三字节的通用opcode，是0fh+二字节的编码。SIMD opcode格式是强制前缀+0FH+二字节编码。 </p>
+<p>5.个别的SIMD指令不需要强制前缀来引导，比如addps(0FH+58H) </p>
+</li>
+</ol>
+<blockquote>
+<p> <code>addps</code>指令中，<code>ps</code>代表”packed single-precision floating-point” 。</p>
+<p>XMM （eXtended MultiMedia ） 寄存器是SSE（Streaming SIMD Extensions）指令集中的一种寄存器。</p>
+<p>它可以同时存储4个单精度浮点数，每个数占用32位，总共128位。</p>
+<p>对应的，MM寄存器是64位的。</p>
+<p><code>addps</code>指令将分别对应位置上的单精度浮点数相加，并将结果存储回目标XMM寄存器中。 </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0F 58 01  addps xmm0,xmmword ptr[ecx] //从内存位置ecx处取128位单精度浮点数值加到xmm0 寄存器中的128位单精度浮点数上</span><br></pre></td></tr></table></figure>
+<h3 id="Mod-R-M"><a href="#Mod-R-M" class="headerlink" title="Mod R/M"></a>Mod R/M</h3><p>切分为3个位域，233.</p>
+<p> mod:提供寻址模式，11=寄存器寻址 其余都是内存寻址<br> reg/opcode：<br>  两种作用，第一种是提供寄存器寻址；另一种为某些opcode提供补充说明。<br> R/M：<br>  结合MOD位域，提供内存/寄存器寻址。 </p>
+<p> R/M=100&amp; MOD≠11 作为SIB的转义码 。</p>
+<p>例如，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">编码mov eax(000)，ebx(011)</span><br><span class="line">89H       11        011    000  89 D8                MR</span><br><span class="line">8BH       11        000    011  8B C3                RM</span><br><span class="line">//x86把源和目的操作数隐藏在opcode里面</span><br></pre></td></tr></table></figure>
+<p><img src="/categories/Notes/Pediy02/1690969519285.png" alt="1690969519285"></p>
+<h3 id="SIB"><a href="#SIB" class="headerlink" title="SIB"></a>SIB</h3><p> 同modr/m类似，SIB字节也是采用233切分成三个位域，名字分别叫Scale、Index、Base。SIB的名字也来自这三个位域名字的首字母缩写。<br> SIB字节由 R/M=100&amp; MOD≠11 引导出来。<br>1.SIB确定的寻址方式是[base+Index* Scale +disp]， </p>
+<blockquote>
+<p>esp作为index时候，index自动被忽略,即此时scale因子视为0 ， 寻址计算方法是[base+disp] </p>
+</blockquote>
+<p>2.disp意思是后面尾随的若干个displacement字节。 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mov eax，[0x1]可以编码为以下形式：</span><br><span class="line">a）采用moffs32编码</span><br><span class="line">   opcode moffs32</span><br><span class="line">   A1    01 00 00 00</span><br><span class="line">   A1    40H</span><br><span class="line">b）采用MODR/M引导的disp</span><br><span class="line">  opcode   mod   reg   r/m  displacement</span><br><span class="line">  8B       00    000   101  01 00 00 00H</span><br><span class="line">  8B       05H              01 00 00 00H</span><br><span class="line">c）采用SIB引导的disp</span><br><span class="line">  opcode   mod   reg   r/m  scale    index  base   displacement</span><br><span class="line">  8B       00    000   100    01     100    101  01 00 00 00H</span><br><span class="line">  8B       04H                65H                01 00 00 00H</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/APT02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/APT02/" class="post-title-link" itemprop="url">一些论文问题的总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-07-31 17:13:22 / Modified: 17:18:50" itemprop="dateCreated datePublished" datetime="2023-07-31T17:13:22+08:00">2023-07-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-数据不平衡问题"><a href="#1-数据不平衡问题" class="headerlink" title="1.数据不平衡问题"></a>1.数据不平衡问题</h2><h2 id="2-数据饥饿问题"><a href="#2-数据饥饿问题" class="headerlink" title="2.数据饥饿问题"></a>2.数据饥饿问题</h2><h2 id="3-静态检测时混淆加密手段的干扰"><a href="#3-静态检测时混淆加密手段的干扰" class="headerlink" title="3.静态检测时混淆加密手段的干扰"></a>3.静态检测时混淆加密手段的干扰</h2><h2 id="4-运行崩溃的解决"><a href="#4-运行崩溃的解决" class="headerlink" title="4.运行崩溃的解决"></a>4.运行崩溃的解决</h2><h2 id="5-样本中特征不足导致矩阵全0"><a href="#5-样本中特征不足导致矩阵全0" class="headerlink" title="5.样本中特征不足导致矩阵全0"></a>5.样本中特征不足导致矩阵全0</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/APT01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
+      <meta itemprop="name" content="Paul C">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Paul C's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/categories/ML/APT01/" class="post-title-link" itemprop="url">面向 APT 家族分析的攻击路径预测方法研究</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-07-31 16:13:22 / Modified: 17:51:50" itemprop="dateCreated datePublished" datetime="2023-07-31T16:13:22+08:00">2023-07-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>面向 APT 家族分析的攻击路径预测方法研究，信息学报，陈伟翔 1, 任怡彤 1, 肖岩军 2, 侯 锐 3, 田志宏 1 </p>
+</blockquote>
+<p>IDS需要关联 APT 生命周期内的数 个阶段, 以此提高检测攻击能力。</p>
+<h2 id="1-要解决的问题"><a href="#1-要解决的问题" class="headerlink" title="1.要解决的问题"></a>1.要解决的问题</h2><p>基因库—可靠数据获取方法</p>
+<p>HMM——预测的攻击路径的可解释性</p>
+<h2 id="2-概念"><a href="#2-概念" class="headerlink" title="2.概念"></a>2.概念</h2><h3 id="攻击行为概述"><a href="#攻击行为概述" class="headerlink" title="攻击行为概述"></a>攻击行为概述</h3><p>“寻找入口点”、“C2 通信”、“权限提升”、“资 产发现”、“数据过滤”、</p>
+<h3 id="APT-攻击路径的可见状态集"><a href="#APT-攻击路径的可见状态集" class="headerlink" title="APT 攻击路径的可见状态集"></a>APT 攻击路径的可见状态集</h3><h4 id="注册表-amp-服务"><a href="#注册表-amp-服务" class="headerlink" title="注册表&amp;服务"></a>注册表&amp;服务</h4><p>CS(create-service): 创建服务</p>
+<p>MRV(modify-registry-value): 修 改注册表的行为; </p>
+<p>DRKV(delete-registry-key-value): 删除注册表关键信息的行为; </p>
+<h4 id="内核"><a href="#内核" class="headerlink" title="内核"></a>内核</h4><p>CKO(create-kernelobject): 创建内核对象的行为;  </p>
+<p>MMP(modify-memory-property): 修 改内存权限的行为; </p>
+<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>CP(create-process): 创建进程;</p>
+<p>LL(load-library): 加载 库 ;</p>
+<p>ESI(execshellcode-instr): 执行 shellcode 指令; </p>
+<p>EHI(exec-heapinstr): 执行堆指令;</p>
+<p>WTPM(write-to-process-memory): 写入进程内存;</p>
+<p> ERI(exec-ret-instr): 执行 ret 指令;</p>
+<p> EEI(exec-esp-instr): 执行 esp 指令;</p>
+<p> CT(create-thread): 创建线程; </p>
+<h4 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h4><p>SDQ(send-dnsquery): 发送 DNS 请求行为;</p>
+<p>SNP(send-network-packet): 发送网络数据包;</p>
+<p>LOP(listen-on-port): 监听端口。</p>
+<p>CTS(connect-to-socket): 连接 socket;</p>
+<h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><p>CF(create-process): 创 建文件的行为;</p>
+<p> WTF(write-to-file): 写入文件的行为;</p>
+<h3 id="动态分析工具"><a href="#动态分析工具" class="headerlink" title="动态分析工具"></a>动态分析工具</h3><p>Anubis、Norman、Joebox</p>
+<h3 id="基因库"><a href="#基因库" class="headerlink" title="基因库"></a>基因库</h3><p>基因(序列)：(MD5,env,object_1,object_2,action_name)按照时间排序</p>
+<p>object_1 与 object_2 分别代表软件执行动作的对象 和路径</p>
+<p>同一个 APT 家族下恶意软件基因集合, 称为一个 APT 家族的基 因库。</p>
+<h3 id="钻石模型"><a href="#钻石模型" class="headerlink" title="钻石模型"></a>钻石模型</h3><p>一个 APT 攻击包含“攻击者”、 “受害者”、 “能力”和“基础设施”4 个核心元 素。</p>
+<p>“能力”是攻击者使用的工具或技术, 从 探查到最终目的达成, “技术”存在于每一个攻击阶 段, 每一个恶意动作对应的技术细节可体现出相应 战略意图。</p>
+<p>“基础设施”是攻击者维持权限控制的通 道或者载体。</p>
+<h2 id="3-方法"><a href="#3-方法" class="headerlink" title="3.方法"></a>3.方法</h2><h2 id="Smith-waterman算法"><a href="#Smith-waterman算法" class="headerlink" title="Smith waterman算法+"></a>Smith waterman算法+</h2><p>相似的公共子序列一定是得分最高的那一条。</p>
+<p> <strong>比对序列为：A=GGTTGACTA，B=TGTTACGG</strong> </p>
+<p>则两序列的长度分别为len(A) = n，Len(B)=m；<br>s(a,b)：字符a和字符b的相似分数，这里设置为3，不相等则为-3；</p>
+<p>W1 = 2 ：一个空位罚分，这里设置为2（可根据需要设置） </p>
+<p>H：匹配分数矩阵如下。</p>
+<p><img src="/categories/ML/APT01/1690796434417.png" alt="1690796434417"></p>
+<ol>
+<li>初始化算法分数矩阵H。A是列向量，B是行向量。使行i表示字符ai，列j表示字符bj；</li>
+<li></li>
+</ol>
+<p><img src="/categories/ML/APT01/1690796255740.png" alt="1690796255740"></p>
+<ol>
+<li>回溯，从矩阵H中分数最大的一项开始：<br>若ai=bj，则回溯到左上角单元格<br>若ai≠bj，回溯到左上角、上边、左边中值最大的单元格，若有相同最大值的单元格，优先级按照左上角、上边、左边的顺序</li>
+<li>根据回溯路径，写出匹配字符串：<br>若回溯到左上角单元格，将ai添加到匹配字串A‘，将bj添加到匹配字串B’；<br>若回溯往上走，此时A走了，B没走。将ai添加到匹配字串A’，将_添加到匹配字串B’；<br>若回溯到左边单元格，B走了，A没走。将_添加到匹配字串A’，将bj添加到匹配字串B’。</li>
+<li>得到局部最优匹配序列，结束</li>
+</ol>
+<h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h3><p>1.<strong>APT基因库</strong>要去重、去无效、去冗余（Smith-waterman局部序列对比算法去除相似基因，阈值为80%）。</p>
+<p>-&gt;节省存储、简化算法复杂度</p>
+<p>基因个体不重要，基因行为才重要。：(MD5,env,object_1,object_2,action_name)，去除md5，env作关键词替换，object1只保留可执行文件。</p>
+<p>2.<strong>公共基因：</strong>对所有APT基因库中的基因进行相似度检测，相似度90%以上的基因序列作为公共基因。</p>
+<p>恶意软件的通用动作。</p>
+<p>3.<strong>恶意行为基因库</strong>：各个家族APT基因库-公共基因，之后合并各个家族基因库。</p>
+<p>4.可观测状态集：<strong>恶意软件行为可观测链：</strong>恶意软件基因序列,与恶意行为基因库进行比较。保留相似度 Thres_hold 在 90%以上的基因序列的基因尾的动作名称，不包含基因段属性信息，从而保证可观测状态可计算属性。</p>
+<h4 id="缺陷1："><a href="#缺陷1：" class="headerlink" title="缺陷1："></a>缺陷1：</h4><p>恶意行为基因库进 行可观测链提取, 而这些基因序列来自于软件行为。</p>
+<p>只能使用基因中 包含 C2 通信的部分进行关联和提取, 基因库的使用 率不足 30%,</p>
+<p>5.隐藏状态集 资产发现 数据过滤 寻找入口 C2 通信</p>
+<p>将测试集 中的样本放入各自的 APT 家族的 HMM 中计算下一 时刻攻击路径的隐藏状态和可观测状态的概率</p>
+<h3 id="展示结果时"><a href="#展示结果时" class="headerlink" title="展示结果时"></a>展示结果时</h3><p>将各个家族样本按照编号排序，把得分取对数，构成下面的得分图。</p>
+<p><img src="/categories/ML/APT01/1690793540423.png" alt="1690793540423"></p>
+<h2 id="4-优势"><a href="#4-优势" class="headerlink" title="4.优势"></a>4.优势</h2><h3 id="1-精准定位到具体基因"><a href="#1-精准定位到具体基因" class="headerlink" title="1.精准定位到具体基因"></a>1.精准定位到具体基因</h3><hr>
+<p>能精准定位到具体基因, 能在一定程度上应对 恶意软件变种, 能在一定程度上应对 恶意软件变种</p>
+<h3 id="2-可同时对隐藏状态和可观测状态展开预测"><a href="#2-可同时对隐藏状态和可观测状态展开预测" class="headerlink" title="2.可同时对隐藏状态和可观测状态展开预测"></a>2.可同时对隐藏状态和可观测状态展开预测</h3><h3 id="3-在进行最终结果判定时-将多个观测值作为判定结果"><a href="#3-在进行最终结果判定时-将多个观测值作为判定结果" class="headerlink" title="3.在进行最终结果判定时, 将多个观测值作为判定结果"></a>3.在进行最终结果判定时, 将多个观测值作为判定结果</h3><p>只要结果在观测值组里，就正确，可以提高实验表现，也能提供参考。</p>
+<h2 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h2><p>隐藏状态只有四个；</p>
+<p>在 数据质量方面, 若一条观测链在多个模型下均展现 出极少或是单一的 APT 阶段, 就会严重影响 HMM 的构建。</p>
+<p>在多个路径时，基因检测的识别准确率不如 HMM 检测法, 但是</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/Few-Shot19/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -693,480 +1251,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/Notes/Pediy01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/Notes/Pediy01/" class="post-title-link" itemprop="url">微信多实例运行</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-07-10 14:19:49" itemprop="dateCreated datePublished" datetime="2023-07-10T14:19:49+08:00">2023-07-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-02 16:31:10" itemprop="dateModified" datetime="2023-08-02T16:31:10+08:00">2023-08-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p> ADVAPI.dll  提供高级系统功能,Advanced，如 注册表、安全性、事件日志、服务管理等 ；</p>
-<p>查看API对应的源代码路径：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um</span><br></pre></td></tr></table></figure>
-<h2 id="只运行一个实例"><a href="#只运行一个实例" class="headerlink" title="只运行一个实例"></a>只运行一个实例</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CreateMutexA</span><br><span class="line">FindWindowA</span><br><span class="line">使用共享Section</span><br></pre></td></tr></table></figure>
-<p>5.1节的Serial.exe只能运行一个实例。</p>
-<p><img src="/categories/Notes/Pediy01/1688962133346.png" alt="1688962133346"></p>
-<p><img src="/categories/Notes/Pediy01/1688963259744.png" alt="1688963259744"></p>
-<p>修改FindWindow后面的判断逻辑即可。一开始改为了75(jnz)</p>
-<p>此时可以运行多个，但是运行前需要找到已存在的一个窗口才能继续创建，再次修改程序，把jz改成jmp。</p>
-<h2 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h2><p>先根据break定位关闭微信的函数<code>CloseWechat</code>，进而找到关键函数sub_405FD0，它控制着返回结果。</p>
-<p><img src="/categories/Notes/Pediy01/1688970540191.png" alt="1688970540191"></p>
-<p>关键函数<code>int __stdcall sub_405FD0(DWORD a1, int a2, int a3, int a4)</code></p>
-<p>跟进去后，可以看到一开始检查注册表语言配置和更新配置。</p>
-<p><img src="/categories/Notes/Pediy01/1688968867614.png" alt="1688968867614"></p>
-<p>微信整体打开，靠WechatWin.dl里的函数。</p>
-<p><img src="/categories/Notes/Pediy01/1688969199372.png" alt="1688969199372"></p>
-<p>打开WechatWin.dll，发现其导入表里存在实例判断函数。</p>
-<p><img src="/categories/Notes/Pediy01/1688969733507.png" alt="1688969733507"></p>
-<p><img src="/categories/Notes/Pediy01/1688969749959.png" alt="1688969749959"></p>
-<p>双击进入后，等待库加载完成，需要几分钟，之后x查看两个函数的上下文：</p>
-<p>注意这里一定要多等一会，不然调用<code>CreateMutex</code>的地址可能检索不全。</p>
-<p><img src="/categories/Notes/Pediy01/1688970084672.png" alt="1688970084672"></p>
-<p>调用<code>FindWindowW</code>函数的上下文十分明显：</p>
-<p><img src="/categories/Notes/Pediy01/1688971265497.png" alt="1688971265497"></p>
-<p>对于上图尾行的这个大跳，是一个经典的判断Mutex是否存在的代码段。</p>
-<blockquote>
-<p>Mutex存在，则GetLastError返回 <code>ERROR_ALREADY_EXISTS</code>.，不存在时，返回0.</p>
-</blockquote>
-<p><img src="/categories/Notes/Pediy01/1688971805972.png" alt="1688971805972"></p>
-<p>把jnz StartNewInstance改变成为jmp。</p>
-<p>爆破成功。</p>
-<p><img src="/categories/Notes/Pediy01/1688972258464.png" alt="1688972258464"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">QQ Elevation复现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-07-03 14:19:49 / Modified: 14:52:20" itemprop="dateCreated datePublished" datetime="2023-07-03T14:19:49+08:00">2023-07-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>利用QQProtect.exe提权，获得NT Authority\SYSTEM权限。</p>
-</blockquote>
-<h2 id="漏洞成因："><a href="#漏洞成因：" class="headerlink" title="漏洞成因："></a>漏洞成因：</h2><p>QQProtect.exe没有使用ASLR保护，篡改函数指针，利用ROP链（Ret Oriented Programming，即修改函数返回指针)实现了任意代码执行。</p>
-<p>1.QQProtect.exe+0x40c9f8处，有<code>任意地址写漏洞</code>。</p>
-<p>待添加自己的截图，网络截图可见：</p>
-<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image0.png" alt="image0"></p>
-<p>可以在任意地址写入DWORD(1)。</p>
-<p>2.QQProtectEngine.dll+0x3B4F6处，</p>
-<p>待添加自己的截图，网络截图可见：</p>
-<p><img src="/categories/CTF/QQ%E6%8F%90%E5%8F%96%E6%BC%8F%E6%B4%9E/image1.png" alt="image1"></p>
-<p>可以完成对任意地址的指针ptr，偏移2个ptr指针类型大小的位置处，赋值为(unsigned int )(ptr+3)。</p>
-<p>Affected Products:</p>
-<ul>
-<li>QQ 9.7.1.28940 ~ 9.7.8.29039</li>
-<li>TIM 3.4.5.22071 ~ 3.4.7.22084</li>
-</ul>
-<p>Affected Components:</p>
-<ul>
-<li>QQProtect.exe 4.5.0.9424 (in TIM 3.4.5.22071)</li>
-<li>QQProtect.exe 4.5.0.9426 (in QQ 9.7.1.28940)</li>
-<li>QQProtectEngine.dll 4.5.0.9424 (in TIM 3.4.5.22071)</li>
-<li>QQProtectEngine.dll 4.5.0.9426 (in QQ 9.7.1.28940)</li>
-</ul>
-<h2 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h2><p>POC整体用rust构建，先来解析配置文件里的内容。</p>
-<h3 id="1-配置文件解析"><a href="#1-配置文件解析" class="headerlink" title="1.配置文件解析"></a>1.配置文件解析</h3><p>针对32位系统使用静态链接的C运行时，构建可执行文件。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo +stable-i686-pc-windows-msvc build --release --config <span class="string">&quot;build.rustflags = [\&quot;-C\&quot;, \&quot;target-feature=+crt-static\&quot;]&quot;</span></span><br></pre></td></tr></table></figure>
-<p>对应的toml文件</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[profile.release]</span></span><br><span class="line"><span class="attr">opt-level</span> = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="section">[profile.release.overrides.&#x27;cfg(target_os = &quot;windows&quot;)&#x27;]</span></span><br><span class="line"><span class="attr">rustflags</span> = [<span class="string">&quot;-C&quot;</span>, <span class="string">&quot;target-feature=+crt-static&quot;</span>]</span><br></pre></td></tr></table></figure>
-<p>此时，只需要<code>cargo build --release</code>即可。</p>
-<p>开发过程中，要利用一些依赖库，来调用Windows API、服务和命令行参数。</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[dependencies.rhexdump]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.44.0&quot;</span></span><br><span class="line"><span class="attr">features</span> = [</span><br><span class="line">    <span class="string">&quot;Win32_Foundation&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_LibraryLoader&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Threading&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_SystemServices&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Win32_System_Console&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-service]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.5.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies.windows-args]</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.2.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#生成动态链接库，即dll文件</span></span><br><span class="line"><span class="section">[lib]</span></span><br><span class="line"><span class="attr">crate-type</span> = [<span class="string">&quot;cdylib&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>2.定义的<code>src\lib.def</code>文件中的导出符号。</p>
-<h3 id="C-名称修饰规则"><a href="#C-名称修饰规则" class="headerlink" title="C++名称修饰规则"></a>C++名称修饰规则</h3><p> C++ 的名称修饰规则，也称为名称重整（name mangling）。用于编译器生成符号表，会因平台和编译器有所不同。它将函数和变量的名称、参数类型、返回类型等信息编码成一个唯一的符号。 </p>
-<p>名称修饰的目的是确保在<strong>链接阶段可以正确地解析函数和变量的符号，避免符号冲突和重复定义的问题。</strong>  为了实现不同编程语言之间的互操作性，可以使用 <code>extern &quot;C&quot;</code> 来指定使用 C 风格的符号。</p>
-<blockquote>
-<p>导出符号的格式是 <code>?SymbolName@ClassName@@FunctionSignature=_alias@0</code> </p>
-</blockquote>
-<p>下面的文件规定了导出的类和符号命，并 将所有导出符号重命名为 <code>_die</code>。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY</span><br><span class="line">EXPORTS</span><br><span class="line">    ?NextSiblingElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ?FirstChildElement@TiXmlNode@@QAEPAVTiXmlElement@@PBD@Z=_die@0</span><br><span class="line">    ??1TiXmlDocument@@UAE@XZ=_die@0</span><br><span class="line">    ?RootElement@TiXmlDocument@@QAEPAVTiXmlElement@@XZ=_die@0</span><br><span class="line">    ?GetText@TiXmlElement@@QBEPBDXZ=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBD@Z=_die@0</span><br><span class="line">    ?Attribute@TiXmlElement@@QBEPBDPBDPAH@Z=_die@0</span><br><span class="line">    ?LoadXML@TiXmlDocument@@QAE_NPADHW4TiXmlEncoding@@@Z=_die@0</span><br><span class="line">    ??0TiXmlDocument@@QAE@XZ=_die@0</span><br><span class="line">    DllMain</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p> <code>QAE</code> 指示该构造函数是一个非静态成员函数，</p>
-<ul>
-<li><code>QB</code> 表示该函数是一个非静态成员函数，并且返回一个指针。</li>
-<li><code>EPBD</code> 表示函数的第一个参数是一个 <code>const char*</code> 类型的指针。</li>
-<li><code>PAH</code> 表示函数的第二个参数是一个 <code>int*</code> 类型的指针。</li>
-<li><code>PAVTiXmlElement 表示返回类型是一个指向</code>TiXmlElement` 类的指针。 </li>
-<li><code>0TiXmlDocument@@QAE@XZ</code>中0表示该类的默认构造函数</li>
-<li><code>@Z</code>：函数参数的结尾标记 ，<code>XZ</code> 表示该构造函数不接受任何参数。 </li>
-</ul>
-<h3 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">CreateProcessAsUserW</span>(token2, <span class="literal">None</span>, <span class="title function_ invoke__">PWSTR</span>(<span class="string">&quot;cmd.exe&quot;</span>.<span class="title function_ invoke__">encode_utf16</span>().<span class="title function_ invoke__">chain</span>(<span class="title function_ invoke__">Some</span>(<span class="number">0</span>)).collect::&lt;<span class="type">Vec</span>&lt;<span class="type">u16</span>&gt;&gt;().<span class="title function_ invoke__">as_mut_ptr</span>()), <span class="literal">None</span>, <span class="literal">None</span>, FALSE, <span class="title function_ invoke__">PROCESS_CREATION_FLAGS</span>(<span class="number">0</span>), <span class="literal">None</span>, <span class="literal">None</span>, &amp;si, &amp;<span class="keyword">mut</span> pi).<span class="title function_ invoke__">ok</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/ML/AI%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%A3%8E%E9%99%A9/" class="post-title-link" itemprop="url">AI与大数据风险近5年论文摘要汇</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-06-29 14:17:22 / Modified: 11:27:40" itemprop="dateCreated datePublished" datetime="2023-06-29T14:17:22+08:00">2023-06-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>大数据在医疗、金融、安全、管理等方面都有很多应用，可以用来化解这些领域中出现的风险；而大数据的应用本身又带来一系列安全隐患，需要靠机器学习技术去解决或缓解。</p>
-<p>Prompt:本篇论文采用了{}机器学习技术，对大数据的{}{}特征进行建模，处理{分类}任务，达成了{}效果，在{}领域有所应用。</p>
-<h3 id="大数据应用"><a href="#大数据应用" class="headerlink" title="大数据应用"></a>大数据应用</h3><p>大数据的一些应用,推荐系统、辅助决策、异常检测、关联分析</p>
-<ol>
-<li>数据驱动的决策：大数据分析可以提供大量的实时和历史数据，帮助组织做出更准确的决策。通过对海量数据进行挖掘和分析，可以发现隐藏的关联和趋势，从而指导业务决策和战略规划。</li>
-<li>个性化服务和推荐系统：基于大数据分析的个性化服务和推荐系统可以根据用户的历史行为和偏好，提供定制化的产品和服务。这使得用户能够更好地满足其需求，提升用户体验。</li>
-<li>预测和趋势分析：通过对大数据进行分析，可以预测未来趋势和行业发展方向。这对于市场营销、销售预测、风险管理等领域具有重要意义，可以帮助组织做出战略决策和规划。</li>
-<li>预测和趋势分析：数据挖掘可以通过分析历史数据，发现潜在的趋势和模式，从而进行未来的预测。这在市场预测、销售预测、天气预测等领域具有重要应用。</li>
-<li>客户细分和市场分析：通过对客户行为和偏好的分析，可以将客户划分为不同的细分群体，了解他们的需求和行为模式，并制定针对性的市场策略和营销活动。</li>
-<li>金融欺诈检测：数据挖掘可以帮助金融机构检测异常交易和欺诈行为。通过分析大量的金融交易数据，可以识别潜在的欺诈模式和指标，及时采取相应的措施。</li>
-<li>社交网络分析：数据挖掘可以揭示社交网络中的关系和影响力。通过分析社交媒体数据、用户之间的互动和信息传播，可以了解社交网络中的关键人物、群体动态和舆论趋势。</li>
-<li>生物信息学：数据挖掘在生物信息学中发挥重要作用，例如基因表达数据的分析、蛋白质结构预测、基因组序列分析等，有助于理解生物学的复杂性和进行基因研究。</li>
-<li>物流和供应链优化：通过对物流和供应链数据的挖掘和分析，可以优化物流路径、减少库存成本、提高配送效率，并优化供应链的整体运作。</li>
-<li>医疗诊断和治疗：数据挖掘可以帮助医疗领域进行疾病诊断、药物选择和治疗计划的优化。通过分析医疗数据和患者病历，可以发现潜在的疾病模式和个体化的治疗方案。</li>
-</ol>
-<h2 id="大数据在风险管理领域的应用"><a href="#大数据在风险管理领域的应用" class="headerlink" title="大数据在风险管理领域的应用"></a>大数据在风险管理领域的应用</h2><h3 id="可靠性方面"><a href="#可靠性方面" class="headerlink" title="可靠性方面"></a>可靠性方面</h3><p> 基于新能源汽车大数据平台 ，研究电动汽车的锂离子电池可靠性问题， 电池故障诊断与健康状态预估 </p>
-<p>[1]李放,闵永军,张涌.基于大数据的动力锂电池可靠性关键技术研究综述[J].储能科学与技术,2023,12(06):1981-1994.DOI:10.19799/j.cnki.2095-4239.2023.0316.</p>
-<h3 id="医疗"><a href="#医疗" class="headerlink" title="医疗"></a>医疗</h3><p>在医疗领域，大数据的应用可以带来以下益处：</p>
-<ol>
-<li>疾病预测和诊断：通过分析大规模的医疗数据，可以发现潜在的疾病风险因素和诊断模式，提前进行疾病预测和诊断，从而提高治疗效果和患者生存率。</li>
-<li>药物研发和治疗方案优化：大数据分析可以加速药物研发过程，帮助科学家识别潜在的药物靶点和候选化合物。此外，通过分析大量的患者数据，可以优化治疗方案，提供更个性化和有效的治疗。</li>
-</ol>
-<h3 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h3><ol>
-<li>风险管理和欺诈检测：通过分析大数据，可以识别金融交易中的异常模式和风险指标，帮助金融机构及时发现潜在的欺诈行为，并采取相应措施进行风险管理。</li>
-<li>个人信用评估和贷款决策：利用大数据分析个人的消费行为、信用记录和其他相关数据，可以更准确地评估个人的信用状况，并基于此做出贷款决策和利率定价。</li>
-</ol>
-<h2 id><a href="#" class="headerlink" title=" "></a> </h2><h3 id="计算机"><a href="#计算机" class="headerlink" title="计算机"></a>计算机</h3><p>隐私保护</p>
-<p>[1]方滨兴,贾焰,李爱平等.大数据隐私保护技术综述[J].大数据,2016,2(01):1-18.</p>
-<h3 id="环境、资源等其他方面"><a href="#环境、资源等其他方面" class="headerlink" title="环境、资源等其他方面"></a>环境、资源等其他方面</h3><h2 id="大数据带来的风险"><a href="#大数据带来的风险" class="headerlink" title="大数据带来的风险"></a>大数据带来的风险</h2><p> 大数据由于需要从网络等多个渠道收集数据，别有用心的攻击者可以进行数据投毒，污染模型，从而导致模型有后门生成。因此，大数据可能带来数据投毒风险。 </p>
-<ol>
-<li>数据隐私和安全：大数据涉及大量的个人敏感信息和机密数据，如个人身份信息、医疗记录、财务数据等。如果这些数据未经适当保护，可能会导致隐私泄露和滥用，甚至成为黑客攻击的目标。</li>
-<li>偏见和歧视：大数据分析依赖于大量的历史数据，而这些数据可能反映了现实社会的偏见和歧视。如果不加以适当的处理，分析结果可能具有偏见性，导致不公平的结果和决策。</li>
-<li>数据质量问题：大数据分析对数据的质量和准确性要求很高。如果数据存在错误、缺失或不完整，分析结果可能不准确或误导性，影响决策的可靠性。</li>
-<li>安全漏洞和数据泄露：大数据系统中可能存在安全漏洞和弱点，攻击者可以利用这些漏洞来获取敏感数据或操纵分析结果。此外，数据共享和合作过程中的数据传输也可能面临被窃取或泄露的风险。</li>
-</ol>
-<h2 id="AI对大数据风险的解决"><a href="#AI对大数据风险的解决" class="headerlink" title="AI对大数据风险的解决"></a>AI对大数据风险的解决</h2><p>社交图谱、差分隐私、安全计算。</p>
-<h2 id="金融-1"><a href="#金融-1" class="headerlink" title="金融"></a>金融</h2><h2 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h2><h2 id="计算机-1"><a href="#计算机-1" class="headerlink" title="计算机"></a>计算机</h2><p>隐私保护</p>
-<h2 id="环境、资源等其他方面-1"><a href="#环境、资源等其他方面-1" class="headerlink" title="环境、资源等其他方面"></a>环境、资源等其他方面</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">CTF里的常用加密算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-06-27 14:19:49" itemprop="dateCreated datePublished" datetime="2023-06-27T14:19:49+08:00">2023-06-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-20 16:53:38" itemprop="dateModified" datetime="2023-06-20T16:53:38+08:00">2023-06-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h2><h3 id="对RSA的攻击："><a href="#对RSA的攻击：" class="headerlink" title="对RSA的攻击："></a>对RSA的攻击：</h3><h2 id="AES"><a href="#AES" class="headerlink" title="AES"></a>AES</h2><h2 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h2><h2 id="RC4"><a href="#RC4" class="headerlink" title="RC4"></a>RC4</h2><p> 流密码 ， 一次一个字节地加密消息 ，速度快。</p>
-<p><img src="/categories/CTF/CTF%E9%87%8C%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%AE%97%E6%B3%95/1687250986520.png" alt="1687250986520"></p>
-<h3 id="对RC4的攻击："><a href="#对RC4的攻击：" class="headerlink" title="对RC4的攻击："></a>对RC4的攻击：</h3><h2 id="ECC"><a href="#ECC" class="headerlink" title="ECC"></a>ECC</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blueinyou.com/categories/CTF/%E6%9C%80%E6%96%B0%E6%B7%B7%E6%B7%86%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://blueinyou.com/photos/avatar.jpg">
-      <meta itemprop="name" content="Paul C">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Paul C's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/categories/CTF/%E6%9C%80%E6%96%B0%E6%B7%B7%E6%B7%86%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">TEB-PEB-SEH</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-06-20 14:19:49" itemprop="dateCreated datePublished" datetime="2023-06-20T14:19:49+08:00">2023-06-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-28 15:28:50" itemprop="dateModified" datetime="2023-08-28T15:28:50+08:00">2023-08-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="多态字符串混淆、"><a href="#多态字符串混淆、" class="headerlink" title="多态字符串混淆、"></a>多态字符串混淆、</h2><h2 id="基于哈希的导入解析"><a href="#基于哈希的导入解析" class="headerlink" title="基于哈希的导入解析"></a>基于哈希的导入解析</h2><h2 id="运行时常量计算"><a href="#运行时常量计算" class="headerlink" title="运行时常量计算"></a>运行时常量计算</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1238,7 +1322,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-count">177</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
